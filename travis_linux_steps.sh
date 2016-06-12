@@ -1,6 +1,6 @@
 #!/bin/bash
 # Travis steps for Linux
-set -e
+set -ex
 
 BUILD_SCRIPT=${BUILD_SCRIPT:-/io/manylinux/build_package.sh}
 
