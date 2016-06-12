@@ -27,7 +27,7 @@ function build_wheels {
     git fetch origin
     git checkout $BUILD_COMMIT
     git clean -fxd
-    if [-n "$BUILD_DEPENDS" ]; then pip install $BUILD_DEPENDS; fi
+    if [ -n "$BUILD_DEPENDS" ]; then pip install $BUILD_DEPENDS; fi
     pip wheel -w $WHEELHOUSE --no-deps .
     cd ..
     pip install delocate

@@ -45,13 +45,13 @@ function build_plat_wheels {
     docker pull $docker_image
     if [ "$plat" == "i686" ]; then local intro_cmd=linux32; fi
     docker run --rm \
-        -e UTIL_DIR=$UTIL_DIR \
-        -e PYTHON_VERSION=$TRAVIS_PYTHON_VERSION \
-        -e UNICODE_WIDTHS=$UNICODE_WIDTHS \
-        -e BUILD_DEPENDS=$BUILD_DEPENDS \
-        -e BUILD_COMMIT=$BUILD_COMMIT \
-        -e BUILD_PRE_SCRIPT=$BUILD_PRE_SCRIPT \
-        -e REPO_DIR=$REPO_DIR \
+        -e UTIL_DIR="$UTIL_DIR" \
+        -e PYTHON_VERSION="$TRAVIS_PYTHON_VERSION" \
+        -e UNICODE_WIDTHS="$UNICODE_WIDTHS" \
+        -e BUILD_DEPENDS="$BUILD_DEPENDS" \
+        -e BUILD_COMMIT="$BUILD_COMMIT" \
+        -e BUILD_PRE_SCRIPT="$BUILD_PRE_SCRIPT" \
+        -e REPO_DIR="$REPO_DIR" \
         -v $PWD:/io \
         $docker_image $intro_cmd $BUILD_SCRIPT
 }
