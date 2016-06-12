@@ -1,8 +1,9 @@
 #!/bin/bash
+# Install and wheel building steps on OSX
 set -e
 
 # Get needed utilities
-ROOT_DIR=$(dirname "$BASH_SOURCE[0]}")
+ROOT_DIR=$(dirname "${BASH_SOURCE[0]}")
 TERRYFY_DIR=$ROOT_DIR/terryfy
 source $TERRYFY_DIR/travis_tools.sh
 

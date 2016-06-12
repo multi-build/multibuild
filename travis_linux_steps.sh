@@ -1,8 +1,10 @@
 #!/bin/bash
 # Travis steps for Linux
-set -ex
+set -e
 
-BUILD_SCRIPT=${BUILD_SCRIPT:-/io/manylinux/build_package.sh}
+ROOT_DIR=$(dirname "${BASH_SOURCE[0]}")
+UTIL_DIR=${UTIL_DIR:-${ROOT_DIR}/manylinux}
+BUILD_SCRIPT=${BUILD_SCRIPT:-/io/$UTIL_DIR/build_package.sh}
 
 function before_install {
     virtualenv --python=python venv
@@ -43,6 +45,7 @@ function build_plat_wheels {
     docker pull $docker_image
     if [ "$plat" == "i686" ]; then local intro_cmd=linux32; fi
     docker run --rm \
+        -e UTIL_DIR=$UTIL_DIR \
         -e PYTHON_VERSION=$TRAVIS_PYTHON_VERSION \
         -e UNICODE_WIDTHS=$UNICODE_WIDTHS \
         -e BUILD_DEPENDS=$BUILD_DEPENDS \
