@@ -22,7 +22,7 @@ function build_wheels {
     #  BUILD_COMMIT
     #  BUILD_PRE_SCRIPT
     #  BUILD_SCRIPT
-    #  REPO_DIR
+    #  REPO_DIR | PKG_SPEC
     #  TRAVIS_PYTHON_VERSION
     #
     # Build both 32- and 64-bit
@@ -58,7 +58,7 @@ function build_plat_wheels {
     #  BUILD_COMMIT
     #  BUILD_PRE_SCRIPT  (can be empty)
     #  BUILD_SCRIPT
-    #  REPO_DIR
+    #  REPO_DIR | PKG_SPEC
     #  TRAVIS_PYTHON_VERSION
     local plat=${1:-x86_64}
     local docker_image=quay.io/pypa/manylinux1_$plat
@@ -72,6 +72,7 @@ function build_plat_wheels {
         -e BUILD_DEPENDS="$BUILD_DEPENDS" \
         -e BUILD_COMMIT="$BUILD_COMMIT" \
         -e BUILD_PRE_SCRIPT="$BUILD_PRE_SCRIPT" \
+        -e PKG_SPEC="$PKG_SPEC" \
         -e REPO_DIR="$REPO_DIR" \
         -v $PWD:/io \
         $docker_image $intro_cmd $BUILD_SCRIPT

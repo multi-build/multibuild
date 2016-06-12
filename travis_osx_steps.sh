@@ -19,17 +19,21 @@ function build_wheels {
     # Builds wheel, puts into $WHEELHOUSE
     #
     # Depends on
-    #  REPO_DIR
+    #  REPO_DIR | PKG_SPEC
     #  BUILD_DEPENDS
     #  BUILD_COMMIT
     #  WHEELHOUSE
-    cd $REPO_DIR
-    git fetch origin
-    git checkout $BUILD_COMMIT
-    git clean -fxd
-    if [ -n "$BUILD_DEPENDS" ]; then pip install $BUILD_DEPENDS; fi
-    pip wheel -w $WHEELHOUSE --no-deps .
-    cd ..
+    if [-n "$BUILD_DEPENDS" ]; then pip install $BUILD_DEPENDS; fi
+    if [ -n "$REPO_DIR" ]; then
+        cd $REPO_DIR
+        git fetch origin
+        git checkout $BUILD_COMMIT
+        git clean -fxd
+        pip wheel -w $WHEELHOUSE --no-deps .
+        cd ..
+    else
+        pip wheel -w $WHEELHOUSE --no-deps $PKG_SPEC
+    fi
     pip install delocate
     delocate-listdeps $WHEELHOUSE/*.whl # lists library dependencies
     delocate-wheel $WHEELHOUSE/*.whl # copies library dependencies into wheel
