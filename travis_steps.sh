@@ -6,7 +6,7 @@ WHEELHOUSE=$PWD/wheelhouse
 
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 
-if [ !-d $WHEELHOUSE ]; then mkdir wheelhouse; fi
+if [ ! -d "$WHEELHOUSE" ]; then mkdir $WHEELHOUSE; fi
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     source $MULTIBUILD_DIR/travis_osx_steps.sh
     whl_tail="*.whl"
