@@ -2,7 +2,7 @@ env:
     global:
         - REPO_DIR=tornado
         - BUILD_COMMIT=v4.3.0
-        - BUILD_DEPENDS=
+        - BUILD_DEPENDS=tornado
         - TEST_DEPENDS=
 
 sudo: required
