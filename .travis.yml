@@ -1,0 +1,44 @@
+env:
+    global:
+        - REPO_DIR=tornado
+        - BUILD_COMMIT=v4.3.0
+        - BUILD_DEPENDS=
+        - TEST_DEPENDS=
+
+sudo: required
+dist: trusty
+services:
+  - docker
+language:
+  - python
+
+matrix:
+  include:
+    - os: linux
+      python: 2.7
+    - os: linux
+      python: 3.4
+    - os: linux
+      python: 3.5
+    - os: osx
+      language: objective-c
+      env: TRAVIS_PYTHON_VERSION=2.7
+    - os: osx
+      language: objective-c
+      env: TRAVIS_PYTHON_VERSION=3.4
+    - os: osx
+      language: objective-c
+      env: TRAVIS_PYTHON_VERSION=3.5
+
+before_install:
+    - source travis_steps.sh
+    - before_install
+
+install:
+    - git clone https://github.com/facebook/tornado
+    - build_wheels
+    - install_wheel
+
+script:
+    - ls wheelhouse
+    - python -c 'import tornado; print(tornado.__file__)'
