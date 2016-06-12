@@ -41,7 +41,7 @@ function build_plat_wheels {
     local plat=${1:-x86_64}
     local docker_image=quay.io/pypa/manylinux1_$plat
     docker pull $docker_image
-    if [ "$PLAT" == "i686" ]; then local intro_cmd=linux32; fi
+    if [ "$plat" == "i686" ]; then local intro_cmd=linux32; fi
     docker run --rm \
         -e PYTHON_VERSION=$TRAVIS_PYTHON_VERSION \
         -e UNICODE_WIDTHS=$UNICODE_WIDTHS \
