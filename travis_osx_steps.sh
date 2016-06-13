@@ -23,7 +23,7 @@ function build_wheels {
     #  BUILD_DEPENDS
     #  BUILD_COMMIT
     #  WHEELHOUSE
-    if [-n "$BUILD_DEPENDS" ]; then pip install $BUILD_DEPENDS; fi
+    if [ -n "$BUILD_DEPENDS" ]; then pip install $BUILD_DEPENDS; fi
     if [ -n "$REPO_DIR" ]; then
         cd $REPO_DIR
         git fetch origin
