@@ -1,11 +1,12 @@
 #!/bin/bash
-# Travis steps for Linux
+# Wheel build, install, run test steps on Linux
 set -e
 
-ROOT_DIR=$(dirname "${BASH_SOURCE[0]}")
-UTIL_DIR=${UTIL_DIR:-${ROOT_DIR}/manylinux}
+# Get needed utilities
+MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
+UTIL_DIR=${UTIL_DIR:-${MULTIBUILD_DIR}/manylinux}
 BUILD_SCRIPT=${BUILD_SCRIPT:-/io/$UTIL_DIR/build_package.sh}
-UNICODE_WIDTHS=${UNICODE_WIDTHS:-32}
+UNICODE_WIDTH=${UNICODE_WIDTH:-32}
 
 function before_install {
     virtualenv --python=python venv
@@ -14,10 +15,11 @@ function before_install {
     pip install --upgrade pip wheel
 }
 
-function build_wheels {
-    # Builds wheel, puts into $WHEELHOUSE
+function build_wheel {
+    # Builds wheel, puts into $WHEEL_SDIR
     #
     # Depends on
+    #  PLAT
     #  BUILD_DEPENDS
     #  BUILD_COMMIT
     #  BUILD_PRE_SCRIPT
@@ -25,50 +27,14 @@ function build_wheels {
     #  REPO_DIR | PKG_SPEC
     #  TRAVIS_PYTHON_VERSION
     #
-    # Build both 32- and 64-bit
-    build_plat_wheels i686
-    build_plat_wheels x86_64
-}
-
-function valid_unicode_widths {
-    local py_ver=${1:-$TRAVIS_PYTHON_VERSION}
-    local ok_widths=""
-    if [ "${py_ver:0:1}" == 2 ]; then local py2=1; fi
-    for width in ${@:2}; do
-        if [ "$width" == 32 ]; then
-            ok_widths="$ok_widths 32"
-        elif [ "$width" == 16 ]; then
-            if [ -n "$py2" ]; then
-                ok_widths="$ok_widths 16"
-            fi
-        else
-            echo "Invalid unicode width $width"
-            exit 1
-        fi
-    done
-    echo $ok_widths
-}
-
-function build_plat_wheels {
-    # Builds wheels
-    #
-    # Depends on
-    #
-    #  BUILD_DEPENDS  (can be empty)
-    #  BUILD_COMMIT
-    #  BUILD_PRE_SCRIPT  (can be empty)
-    #  BUILD_SCRIPT
-    #  REPO_DIR | PKG_SPEC
-    #  TRAVIS_PYTHON_VERSION
-    local plat=${1:-x86_64}
+    local plat=${1:-$PLAT}
     local docker_image=quay.io/pypa/manylinux1_$plat
     docker pull $docker_image
     if [ "$plat" == "i686" ]; then local intro_cmd=linux32; fi
-    local widths=$(valid_unicode_widths $TRAVIS_PYTHON_VERSION $UNICODE_WIDTHS)
     docker run --rm \
-        -e UTIL_DIR="$UTIL_DIR" \
         -e PYTHON_VERSION="$TRAVIS_PYTHON_VERSION" \
-        -e UNICODE_WIDTHS="$widths" \
+        -e UNICODE_WIDTH="$UNICODE_WIDTH" \
+        -e WHEEL_SDIR="$WHEEL_SDIR" \
         -e BUILD_DEPENDS="$BUILD_DEPENDS" \
         -e BUILD_COMMIT="$BUILD_COMMIT" \
         -e BUILD_PRE_SCRIPT="$BUILD_PRE_SCRIPT" \
@@ -76,4 +42,30 @@ function build_plat_wheels {
         -e REPO_DIR="$REPO_DIR" \
         -v $PWD:/io \
         $docker_image $intro_cmd $BUILD_SCRIPT
+}
+
+function relpath {
+    python -c "import os.path; print(os.path.relpath('$1','${2:-$PWD}'))"
+}
+
+function install_run {
+    local run_tests_script=${1:-$RUN_TESTS_SCRIPT}
+    local plat=${2:-$PLAT}
+    if [ "$plat" == "i686" ]; then
+        local bitness=32
+    else
+        local bitness=64
+    fi
+    local docker_image="matthewbrett/trusty:$bitness"
+    local multibuild_sdir=$(relpath $MULTIBUILD_DIR)
+    docker pull $docker_image
+    docker run --rm \
+        -e PYTHON_VERSION="$TRAVIS_PYTHON_VERSION" \
+        -e UNICODE_WIDTH="$UNICODE_WIDTH" \
+        -e WHEEL_SDIR="$WHEEL_SDIR" \
+        -e RUN_TESTS_SCRIPT="$run_tests_script" \
+        -e MANYLINUX_URL="$MANYLINUX_URL" \
+        -e TEST_DEPENDS="$TEST_DEPENDS" \
+        -v $PWD:/io \
+        $docker_image /io/$multibuild_sdir/docker_install_run.sh
 }

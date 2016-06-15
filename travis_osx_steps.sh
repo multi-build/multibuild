@@ -1,11 +1,11 @@
 #!/bin/bash
-# Install and wheel building steps on OSX
+# Wheel build, install, run test steps on OSX
 set -e
 
 # Get needed utilities
-ROOT_DIR=$(dirname "${BASH_SOURCE[0]}")
-TERRYFY_DIR=$ROOT_DIR/terryfy
-source $TERRYFY_DIR/travis_tools.sh
+MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
+source $MULTIBUILD_DIR/terryfy/travis_tools.sh
+source $MULTIBUILD_DIR/common_utils.sh
 
 function before_install {
     export CC=clang
@@ -15,27 +15,28 @@ function before_install {
     pip install --upgrade pip wheel
 }
 
-function build_wheels {
-    # Builds wheel, puts into $WHEELHOUSE
+function build_wheel {
+    # Builds wheel, puts into $WHEEL_SDIR
     #
     # Depends on
-    #  REPO_DIR | PKG_SPEC
+    #  WHEEL_SDIR
     #  BUILD_DEPENDS
+    #  REPO_DIR | PKG_SPEC
     #  BUILD_COMMIT
-    #  WHEELHOUSE
+    local wheelhouse=$PWD/$WHEEL_SDIR
     if [ -n "$BUILD_DEPENDS" ]; then pip install $BUILD_DEPENDS; fi
     if [ -n "$REPO_DIR" ]; then
         cd $REPO_DIR
         git fetch origin
         git checkout $BUILD_COMMIT
         git clean -fxd
-        pip wheel -w $WHEELHOUSE --no-deps .
+        pip wheel -w $wheelhouse --no-deps .
         cd ..
     else
-        pip wheel -w $WHEELHOUSE --no-deps $PKG_SPEC
+        pip wheel -w $wheelhouse --no-deps $PKG_SPEC
     fi
     pip install delocate
-    delocate-listdeps $WHEELHOUSE/*.whl # lists library dependencies
-    delocate-wheel $WHEELHOUSE/*.whl # copies library dependencies into wheel
-    delocate-addplat --rm-orig -x 10_9 -x 10_10 $WHEELHOUSE/*.whl
+    delocate-listdeps $wheelhouse/*.whl # lists library dependencies
+    delocate-wheel $wheelhouse/*.whl # copies library dependencies into wheel
+    delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
 }
