@@ -24,6 +24,7 @@ function build_wheel {
     #  REPO_DIR | PKG_SPEC
     #  BUILD_COMMIT
     local wheelhouse=$PWD/$WHEEL_SDIR
+    if [ -n "$BUILD_PRE_SCRIPT" ]; then source $BUILD_PRE_SCRIPT; fi
     if [ -n "$BUILD_DEPENDS" ]; then pip install $BUILD_DEPENDS; fi
     if [ -n "$REPO_DIR" ]; then
         cd $REPO_DIR
