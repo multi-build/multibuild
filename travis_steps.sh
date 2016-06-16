@@ -3,9 +3,10 @@
 git submodule update --init --recursive
 
 WHEEL_SDIR=${WHEEL_SDIR:-wheelhouse}
-MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 MANYLINUX_URL=${MANYLINUX_URL:-https://nipy.bic.berkeley.edu/manylinux}
-RUN_TESTS_SCRIPT=${RUN_TESTS_SCRIPT:-install_test.sh}
+MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
+# Get utilities common to OSX and Linux
+source $MULTIBUILD_DIR/common_utils.sh
 
 # Specify REPO_DIR to build from directory in this repository.
 # Specify PKG_SPEC to build from pip requirement (e.g numpy==1.7.1)

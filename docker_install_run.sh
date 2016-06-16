@@ -6,4 +6,4 @@ set -e
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 source $MULTIBUILD_DIR/common_utils.sh
 
-install_run $RUN_TESTS_SCRIPT
+install_run
