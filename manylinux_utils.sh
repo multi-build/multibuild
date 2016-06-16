@@ -1,7 +1,7 @@
 # Useful defines common across manylinux1 builds
 
-# Width of Python unicode digits in bits
-UNICODE_WIDTH=${UNICODE_WIDTH:-32}
+# UNICODE_WIDTH selects "32"=wide (UCS4) or "16"=narrow (UCS2/UTF16) builds
+UNICODE_WIDTH="${UNICODE_WIDTH:-32}"
 
 function gh-clone {
     git clone https://github.com/$1
