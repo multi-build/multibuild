@@ -14,6 +14,10 @@ function relpath {
     python -c "import os.path; print(os.path.relpath('$1','${2:-$PWD}'))"
 }
 
+function realpath {
+    python -c "import os; print(os.path.realpath('$1'))"
+}
+
 function get_root {
     abspath $MULTIBUILD_DIR/..
 }

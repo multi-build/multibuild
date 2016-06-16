@@ -4,7 +4,7 @@ set -e
 
 # Get needed utilities
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
-source $MULTIBUILD_DIR/terryfy/travis_tools.sh
+source $MULTIBUILD_DIR/osx_utils.sh
 
 # Local configuration may define custom pre-build, source patching
 source $PWD/config_funcs.sh
@@ -12,7 +12,7 @@ source $PWD/config_funcs.sh
 function before_install {
     export CC=clang
     export CXX=clang++
-    get_python_environment macpython $TRAVIS_PYTHON_VERSION venv
+    get_macpython_environment $TRAVIS_PYTHON_VERSION venv
     source venv/bin/activate
     pip install --upgrade pip wheel
 }

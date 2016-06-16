@@ -1,9 +1,8 @@
 #!/bin/bash
-# Update submodules
-git submodule update --init --recursive
 
 WHEEL_SDIR=${WHEEL_SDIR:-wheelhouse}
 MANYLINUX_URL=${MANYLINUX_URL:-https://nipy.bic.berkeley.edu/manylinux}
+
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 # Get utilities common to OSX and Linux
 source $MULTIBUILD_DIR/common_utils.sh

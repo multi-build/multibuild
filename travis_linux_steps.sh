@@ -49,7 +49,7 @@ function relpath {
 }
 
 function install_run {
-    local plat=${2:-$PLAT}
+    local plat=${1:-$PLAT}
     bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
     local docker_image="matthewbrett/trusty:$bitness"
     local multibuild_sdir=$(relpath $MULTIBUILD_DIR)
