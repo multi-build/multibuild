@@ -6,8 +6,7 @@ set -e
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 source $MULTIBUILD_DIR/osx_utils.sh
 
-# Local configuration may define custom pre-build, source patching
-source $PWD/config_funcs.sh
+# NB - config_funcs.sh sourced at end of this function
 
 function before_install {
     export CC=clang
@@ -15,6 +14,14 @@ function before_install {
     get_macpython_environment $TRAVIS_PYTHON_VERSION venv
     source venv/bin/activate
     pip install --upgrade pip wheel
+}
+
+function delocate_wheel {
+    local wheelhouse=$PWD/$WHEEL_SDIR
+    pip install delocate
+    delocate-listdeps $wheelhouse/*.whl # lists library dependencies
+    delocate-wheel $wheelhouse/*.whl # copies library dependencies into wheel
+    delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
 }
 
 function build_wheel {
@@ -35,8 +42,16 @@ function build_wheel {
     else
         pip wheel -w $wheelhouse --no-deps $PKG_SPEC
     fi
-    pip install delocate
-    delocate-listdeps $wheelhouse/*.whl # lists library dependencies
-    delocate-wheel $wheelhouse/*.whl # copies library dependencies into wheel
-    delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
+    delocate_wheel
 }
+
+function install_run {
+    # Depend on function `run_tests` defined in `config_funcs.sh`
+    install_wheel
+    mkdir tmp_for_test
+    (cd tmp_for_test && run_tests)
+}
+
+# Local configuration may define custom pre-build, source patching.
+# It can also overwrite the functions above
+source $PWD/config_funcs.sh

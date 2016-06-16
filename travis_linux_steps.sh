@@ -1,5 +1,14 @@
 #!/bin/bash
 # Wheel build, install, run test steps on Linux
+#
+# In fact the main work is to wrap up the real functions in docker commands.
+# The real work is in the BUILD_SCRIPT (which builds the wheel) and
+# `docker_install_run.sh`, which can be configured with `config_funcs.sh`.
+#
+# Must define
+#  before_install
+#  build_wheel
+#  install_run
 set -e
 
 # Get our own location on this filesystem
@@ -11,6 +20,7 @@ BUILD_SCRIPT=${BUILD_SCRIPT:-${MULTIBUILD_DIR}/docker_build_package.sh}
 UNICODE_WIDTH=${UNICODE_WIDTH:-32}
 
 function before_install {
+    # Install a virtualenv to work in.
     virtualenv --python=python venv
     source venv/bin/activate
     python --version # just to check
@@ -42,10 +52,6 @@ function build_wheel {
         -e REPO_DIR="$REPO_DIR" \
         -v $PWD:/io \
         $docker_image /io/$BUILD_SCRIPT
-}
-
-function relpath {
-    python -c "import os.path; print(os.path.relpath('$1','${2:-$PWD}'))"
 }
 
 function install_run {

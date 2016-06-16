@@ -59,12 +59,3 @@ function install_wheel {
     pip install --find-links $MANYLINUX_URL $@ \
         $(python $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
 }
-
-function install_run {
-    # Depend on function `run_tests` defined in `config_funcs.sh`
-    install_wheel
-    # Configuration for this package
-    source $(get_root)/config_funcs.sh
-    mkdir tmp_for_test
-    (cd tmp_for_test && run_tests)
-}
