@@ -44,6 +44,19 @@ function rm_mkdir {
     mkdir $path
 }
 
+function clean_code {
+    local repo_dir=${1:-$REPO_DIR}
+    local build_commit=${2:-$BUILD_COMMIT}
+    [ -z "$repo_dir" ] && echo "repo_dir not defined" && exit 1
+    [ -z "$build_commit" ] && echo "build_commit not defined" && exit 1
+    (cd $repo_dir \
+        && git fetch origin \
+        && git checkout $build_commit \
+        && git clean -fxd \
+        && git reset --hard \
+        && git submodule update --init --recursive)
+}
+
 function build_wheel {
     # Builds wheel, puts into $WHEEL_SDIR
     #
@@ -57,7 +70,7 @@ function build_wheel {
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
     if [ -n $(is_function "pre_build") ]; then pre_build; fi
     if [ -n "$BUILD_DEPENDS" ]; then pip install $(pip_opts) $BUILD_DEPENDS; fi
-    (cd $repo_dir  && pip wheel $(pip_opts) -w $wheelhouse --no-deps .)
+    (cd $repo_dir && pip wheel $(pip_opts) -w $wheelhouse --no-deps .)
     repair_wheelhouse $wheelhouse
 }
 
