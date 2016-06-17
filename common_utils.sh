@@ -1,8 +1,8 @@
 #!/bin/bash
 # Utilities for both OSX and Docker
+# Python should be on the PATH
 set -e
 
-# Get our own location on this filesystem
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 
 function abspath {
@@ -16,10 +16,6 @@ function relpath {
 
 function realpath {
     python -c "import os; print(os.path.realpath('$1'))"
-}
-
-function get_root {
-    abspath $MULTIBUILD_DIR/..
 }
 
 function lex_ver {
@@ -36,26 +32,53 @@ function is_function {
     set -e
 }
 
-function clean_fix_source {
-    git checkout $1
-    git clean -fxd
-    git reset --hard
-    git submodule update --init --recursive
-    if [ -n $(is_function "patch_source") ]; then patch_source; fi
+function gh-clone {
+    git clone https://github.com/$1
+}
+
+function rm_mkdir {
+    # Remove directory if present, then make directory
+    local path=$1
+    [ -z "$path" ] && echo "Need not-empty path" && exit 1
+    [ -d "$path" ] && rm -rf $path
+    mkdir $path
+}
+
+function build_wheel {
+    # Builds wheel, puts into $WHEEL_SDIR
+    #
+    # Depends on
+    #     REPO_DIR  (or via input argument)
+    #     WHEEL_SDIR  (optional, default "wheelhouse")
+    #     BUILD_DEPENDS (optional, default "")
+    #     MANYLINUX_URL (optional, default "") (via pip_opts function)
+    local repo_dir=${1:-$REPO_DIR}
+    [ -z "$repo_dir" ] && echo "repo_dir not defined" && exit 1
+    local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
+    if [ -n $(is_function "pre_build") ]; then pre_build; fi
+    if [ -n "$BUILD_DEPENDS" ]; then pip install $(pip_opts) $BUILD_DEPENDS; fi
+    (cd $repo_dir  && pip wheel $(pip_opts) -w $wheelhouse --no-deps .)
+    repair_wheelhouse $wheelhouse
+}
+
+function pip_opts {
+    [ -n "$MANYLINUX_URL" ] && echo "--find-links $MANYLINUX_URL"
 }
 
 function install_wheel {
     # Install test dependencies and built wheel
+    #
     # Pass any input flags to pip install steps
+    #
     # Depends on:
-    #     MANYLINUX_URL
-    #     WHEEL_SDIR
-    #     TEST_DEPENDS  (optional)
-    local wheelhouse=$(get_root)/$WHEEL_SDIR
+    #     WHEEL_SDIR  (optional, default "wheelhouse")
+    #     TEST_DEPENDS  (optional, default "")
+    #     MANYLINUX_URL (optional, default "") (via pip_opts function)
+    local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
     if [ -n "$TEST_DEPENDS" ]; then
-        pip install --find-links $MANYLINUX_URL $@ $TEST_DEPENDS
+        pip install $(pip_opts) $@ $TEST_DEPENDS
     fi
     # Install compatible wheel
-    pip install --find-links $MANYLINUX_URL $@ \
+    pip install $(pip_opts) $@ \
         $(python $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
 }

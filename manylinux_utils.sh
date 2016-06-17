@@ -1,33 +1,10 @@
-# Useful defines common across manylinux1 builds
+# Useful utilities common across manylinux1 builds
+
+MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
+source $MULTIBUILD_DIR/common_utils.sh
 
 # UNICODE_WIDTH selects "32"=wide (UCS4) or "16"=narrow (UCS2/UTF16) builds
 UNICODE_WIDTH="${UNICODE_WIDTH:-32}"
-
-function gh-clone {
-    git clone https://github.com/$1
-}
-
-function rm_mkdir {
-    # Remove directory if present, then make directory
-    local path=$1
-    if [ -d "$path" ]; then
-        rm -rf $path
-    fi
-    mkdir $path
-}
-
-function lex_ver {
-    # Echoes dot-separated version string padded with zeros
-    # Thus:
-    # 3.2.1 -> 003002001
-    # 3     -> 003000000
-    echo $1 | awk -F "." '{printf "%03d%03d%03d", $1, $2, $3}'
-}
-
-function strip_dots {
-    # Strip "." characters from string
-    echo $1 | sed "s/\.//g"
-}
 
 function cpython_path {
     # Return path to cpython given
@@ -48,30 +25,16 @@ function cpython_path {
         echo "Incorrect u_width value $u_width"
         exit 1
     fi
-    local no_dots=$(strip_dots $py_ver)
+    local no_dots=$(echo $py_ver | tr -d .)
     echo "/opt/python/cp${no_dots}-cp${no_dots}m${u_suff}"
-}
-
-
-function gh-clone {
-    git clone https://github.com/$1
-}
-
-function rm_mkdir {
-    # Remove directory if present, then make directory
-    local path=$1
-    if [ -d "$path" ]; then
-        rm -rf $path
-    fi
-    mkdir $path
 }
 
 function repair_wheelhouse {
     local in_dir=$1
-    local out_dir=$2
+    local out_dir=${2:-$in_dir}
     for whl in $in_dir/*.whl; do
         if [[ $whl == *none-any.whl ]]; then
-            cp $whl $out_dir
+            [ "$in_dir" == "$out_dir" ] || cp $whl $out_dir
         else
             auditwheel repair $whl -w $out_dir/
         fi

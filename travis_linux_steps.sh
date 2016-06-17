@@ -3,7 +3,7 @@
 #
 # In fact the main work is to wrap up the real functions in docker commands.
 # The real work is in the BUILD_SCRIPT (which builds the wheel) and
-# `docker_install_run.sh`, which can be configured with `config_funcs.sh`.
+# `docker_install_run.sh`, which can be configured with `config.sh`.
 #
 # Must define
 #  before_install
@@ -11,13 +11,10 @@
 #  install_run
 set -e
 
+MANYLINUX_URL=${MANYLINUX_URL:-https://nipy.bic.berkeley.edu/manylinux}
+
 # Get our own location on this filesystem
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
-
-# Docker build script
-BUILD_SCRIPT=${BUILD_SCRIPT:-${MULTIBUILD_DIR}/docker_build_package.sh}
-
-UNICODE_WIDTH=${UNICODE_WIDTH:-32}
 
 function before_install {
     # Install a virtualenv to work in.
@@ -30,15 +27,19 @@ function before_install {
 function build_wheel {
     # Builds wheel, puts into $WHEEL_SDIR
     #
+    # In fact wraps the actual work which happens in the container.
+    #
     # Depends on
-    #  PLAT
-    #  BUILD_DEPENDS
-    #  BUILD_COMMIT
-    #  BUILD_PRE_SCRIPT
-    #  BUILD_SCRIPT
-    #  REPO_DIR | PKG_SPEC
-    #  TRAVIS_PYTHON_VERSION
-    local plat=${1:-$PLAT}
+    #     REPO_DIR  (or via input argument)
+    #     PLAT (can be passed in as argument)
+    #     TRAVIS_PYTHON_VERSION
+    #     UNICODE_WIDTH (optional)
+    #     BUILD_DEPENDS (optional)
+    #     MANYLINUX_URL (optional)
+    #     WHEEL_SDIR (optional)
+    local repo_dir=${1:-$REPO_DIR}
+    [ -z "$repo_dir" ] && echo "repo_dir not defined" && exit 1
+    local plat=${2:-$PLAT}
     local docker_image=quay.io/pypa/manylinux1_$plat
     docker pull $docker_image
     docker run --rm \
@@ -47,18 +48,26 @@ function build_wheel {
         -e WHEEL_SDIR="$WHEEL_SDIR" \
         -e MANYLINUX_URL="$MANYLINUX_URL" \
         -e BUILD_DEPENDS="$BUILD_DEPENDS" \
-        -e BUILD_COMMIT="$BUILD_COMMIT" \
-        -e PKG_SPEC="$PKG_SPEC" \
-        -e REPO_DIR="$REPO_DIR" \
+        -e REPO_DIR="$repo_dir" \
         -v $PWD:/io \
-        $docker_image /io/$BUILD_SCRIPT
+        $docker_image /io/$MULTIBUILD_DIR/docker_build_wrap.sh
 }
 
 function install_run {
+    # Install wheel, run tests
+    #
+    # In fact wraps the actual work which happens in the container.
+    #
+    # Depends on
+    #  PLAT (can be passed in as argument)
+    #  TRAVIS_PYTHON_VERSION
+    #  UNICODE_WIDTH (optional)
+    #  WHEEL_SDIR (optional)
+    #  MANYLINUX_URL (optional)
+    #  TEST_DEPENDS  (optional)
     local plat=${1:-$PLAT}
     bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
     local docker_image="matthewbrett/trusty:$bitness"
-    local multibuild_sdir=$(relpath $MULTIBUILD_DIR)
     docker pull $docker_image
     docker run --rm \
         -e PYTHON_VERSION="$TRAVIS_PYTHON_VERSION" \
@@ -67,5 +76,5 @@ function install_run {
         -e MANYLINUX_URL="$MANYLINUX_URL" \
         -e TEST_DEPENDS="$TEST_DEPENDS" \
         -v $PWD:/io \
-        $docker_image /io/$multibuild_sdir/docker_install_run.sh
+        $docker_image /io/$MULTIBUILD_DIR/docker_test_wrap.sh
 }

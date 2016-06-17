@@ -13,9 +13,6 @@ XZ_VERSION="${XZ_VERSION:-5.2.2}"
 LIBYAML_VERSION="${LIBYAML_VERSION:-0.1.5}"
 OPENBLAS_VERSION="${OPENBLAS_VERSION:-0.2.18}"
 
-# Get needed utilities
-MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
-source ${MULTIBUILD_DIR}/manylinux_utils.sh
 
 function build_simple {
     local name=$1
