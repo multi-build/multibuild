@@ -17,7 +17,7 @@ WHEEL_SDIR=${WHEEL_SDIR:-wheelhouse}
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 # This next also sources common utils.
 source $MULTIBUILD_DIR/manylinux_utils.sh
-source $MULTIBUILD_DIR/docker_lib_builders.sh
+source $MULTIBUILD_DIR/library_builders.sh
 
 # Set PATH for chosen Python, Unicode width
 export PATH="$(cpython_path $PYTHON_VERSION $UNICODE_WIDTH)/bin:$PATH"

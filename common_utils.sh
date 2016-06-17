@@ -4,6 +4,7 @@
 set -e
 
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
+if [ $(uname) == "Darwin" ]; then IS_OSX=1; fi
 
 function abspath {
     python -c "import os.path; print(os.path.abspath('$1'))"

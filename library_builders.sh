@@ -13,6 +13,11 @@ XZ_VERSION="${XZ_VERSION:-5.2.2}"
 LIBYAML_VERSION="${LIBYAML_VERSION:-0.1.5}"
 OPENBLAS_VERSION="${OPENBLAS_VERSION:-0.2.18}"
 
+if [ $(uname) == "Darwin" ]; then
+    ARCH_FLAGS=${ARCH_FLAGS:-"-arch i386 -arch x86_64"}
+    export CFLAGS="${CFLAGS} $ARCH_FLAGS"
+    IS_OSX=1
+fi
 
 function build_simple {
     local name=$1
@@ -42,7 +47,8 @@ function build_openblas {
 function build_zlib {
     # Gives an old but safe version
     if [ -e zlib-stamp ]; then return; fi
-    yum install -y zlib-devel
+    # OSX has zlib already
+    if [ -z "$IS_OSX" ]; then yum install -y zlib-devel; fi
     touch zlib-stamp
 }
 
@@ -82,7 +88,11 @@ function build_tiff {
 
 function build_openjpeg {
     if [ -e openjpeg-stamp ]; then return; fi
-    yum install -y cmake28
+    if [ -n "$IS_OSX" ]; then
+        brew install cmake
+    else
+        yum install -y cmake28
+    fi
     curl -LO https://github.com/uclouvain/openjpeg/archive/version.${OPENJPEG_VERSION}.tar.gz
     tar zxf version.${OPENJPEG_VERSION}.tar.gz
     (cd openjpeg-version.${OPENJPEG_VERSION} && cmake28 . && make install)
