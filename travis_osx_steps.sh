@@ -18,13 +18,7 @@ function before_install {
 }
 
 # build_wheel function defined in common_utils (via osx_utils)
-
-function install_run {
-    # Depends on function `run_tests` defined in `config.sh`
-    install_wheel
-    mkdir tmp_for_test
-    (cd tmp_for_test && run_tests)
-}
+# install_run function defined in common_utils
 
 # Local configuration may define custom pre-build, source patching.
 # It can also overwrite the functions above.

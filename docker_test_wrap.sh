@@ -14,5 +14,4 @@ cd /io
 # It must define `run_tests`.
 source config.sh
 
-install_wheel
-run_tests
+install_run

@@ -96,3 +96,10 @@ function install_wheel {
     pip install $(pip_opts) $@ \
         $(python $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
 }
+
+function install_run {
+    # Depends on function `run_tests` defined in `config.sh`
+    install_wheel
+    mkdir tmp_for_test
+    (cd tmp_for_test && run_tests)
+}
