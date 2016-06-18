@@ -58,21 +58,56 @@ function clean_code {
         && git submodule update --init --recursive)
 }
 
-function build_wheel {
-    # Builds wheel, puts into $WHEEL_SDIR
+function build_wheel_cmd {
+    # Builds wheel with named command, puts into $WHEEL_SDIR
+    #
+    # Parameters:
+    #     cmd  (optional, default "pip_wheel_cmd"
+    #        Name of command for builing wheel
+    #     repo_dir  (optional, default $REPO_DIR)
     #
     # Depends on
     #     REPO_DIR  (or via input argument)
     #     WHEEL_SDIR  (optional, default "wheelhouse")
     #     BUILD_DEPENDS (optional, default "")
     #     MANYLINUX_URL (optional, default "") (via pip_opts function)
-    local repo_dir=${1:-$REPO_DIR}
+    local cmd=${1:-pip_wheel_cmd}
+    local repo_dir=${2:-$REPO_DIR}
     [ -z "$repo_dir" ] && echo "repo_dir not defined" && exit 1
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
     if [ -n $(is_function "pre_build") ]; then pre_build; fi
-    if [ -n "$BUILD_DEPENDS" ]; then pip install $(pip_opts) $BUILD_DEPENDS; fi
-    (cd $repo_dir && pip wheel $(pip_opts) -w $wheelhouse --no-deps .)
+    if [ -n "$BUILD_DEPENDS" ]; then
+        pip install $(pip_opts) $BUILD_DEPENDS
+    fi
+    (cd $repo_dir && $cmd $wheelhouse)
     repair_wheelhouse $wheelhouse
+}
+
+function pip_wheel_cmd {
+    local abs_wheelhouse=$1
+    pip wheel $(pip_opts) -w $abs_wheelhouse --no-deps .
+}
+
+function bdist_wheel_cmd {
+    # Builds wheel with bdist_wheel, puts into wheelhouse
+    #
+    # It may sometimes be useful to use bdist_wheel for the wheel building
+    # process.  For example, versioneer has problems with versions which are
+    # fixed with bdist_wheel:
+    # https://github.com/warner/python-versioneer/issues/121
+    local abs_wheelhouse=$1
+    python setup.py bdist_wheel
+    cp dist/*.whl $abs_wheelhouse
+}
+
+function build_wheel {
+    # Standard wheel building command with pip wheel
+    build_wheel_cmd "pip_wheel_cmd" $@
+}
+
+function build_bdist_wheel {
+    # Wheel building with bdist_wheel. See bdist_wheel_cmd
+    build_wheel_cmd "bdist_wheel_cmd" $@
 }
 
 function pip_opts {
