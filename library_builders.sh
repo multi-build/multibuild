@@ -4,7 +4,7 @@ ZLIB_VERSION="${ZLIB_VERSION:-1.2.8}"
 LIBPNG_VERSION="${LIBPNG_VERSION:-1.6.21}"
 BZIP2_VERSION="${BZIP2_VERSION:-1.0.6}"
 FREETYPE_VERSION="${FREETYPE_VERSION:-2.6.3}"
-TIFF_VERSION="${FREETYPE_VERSION:-4.0.6}"
+TIFF_VERSION="${TIFF_VERSION:-4.0.6}"
 OPENJPEG_VERSION="${OPENJPEG_VERSION:-2.1}"
 LCMS2_VERSION="${LCMS2_VERSION:-2.7}"
 GIFLIB_VERSION="${GIFLIB_VERSION:-5.1.3}"
@@ -83,7 +83,7 @@ function build_tiff {
     build_jpeg
     build_openjpeg
     build_xz
-    build_simple tiff $TIFF_VERSION ftp://ftp.remotesensing.org/pub/libtiff
+    build_simple tiff $TIFF_VERSION http://download.osgeo.org/libtiff
 }
 
 function build_openjpeg {
