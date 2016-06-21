@@ -6,6 +6,11 @@ source $MULTIBUILD_DIR/common_utils.sh
 # UNICODE_WIDTH selects "32"=wide (UCS4) or "16"=narrow (UCS2/UTF16) builds
 UNICODE_WIDTH="${UNICODE_WIDTH:-32}"
 
+function get_platform {
+    # Report platform as given by uname
+    python -c 'import platform; print(platform.uname()[4])'
+}
+
 function cpython_path {
     # Return path to cpython given
     # * version (of form "2.7")
