@@ -1,4 +1,5 @@
 # Recipes for building some libaries
+OPENBLAS_VERSION="${OPENBLAS_VERSION:-0.2.18}"
 # We use system zlib by default - see build_new_zlib
 ZLIB_VERSION="${ZLIB_VERSION:-1.2.8}"
 LIBPNG_VERSION="${LIBPNG_VERSION:-1.6.21}"
@@ -11,7 +12,8 @@ GIFLIB_VERSION="${GIFLIB_VERSION:-5.1.3}"
 LIBWEBP_VERSION="${LIBWEBP_VERSION:-0.5.0}"
 XZ_VERSION="${XZ_VERSION:-5.2.2}"
 LIBYAML_VERSION="${LIBYAML_VERSION:-0.1.5}"
-OPENBLAS_VERSION="${OPENBLAS_VERSION:-0.2.18}"
+SZIP_VERSION="${SZIP_VERSION:-2.1}"
+HDF5_VERSION="${HDF5_VERSION:-1.8.17}"
 
 if [ $(uname) == "Darwin" ]; then
     ARCH_FLAGS=${ARCH_FLAGS:-"-arch i386 -arch x86_64"}
@@ -133,4 +135,31 @@ function build_freetype {
 
 function build_libyaml {
     build_simple yaml $LIBYAML_VERSION http://pyyaml.org/download/libyaml
+}
+
+function build_szip {
+    # Build szip without encoding (patent restrictions)
+    if [ -e szip-stamp ]; then return; fi
+    build_zlib
+    local szip_url=https://www.hdfgroup.org/ftp/lib-external/szip/
+    curl -sLO ${szip_url}/$SZIP_VERSION/src/szip-$SZIP_VERSION.tar.gz
+    tar zxf szip-$SZIP_VERSION.tar.gz
+    (cd szip-$SZIP_VERSION \
+        && ./configure --enable-encoding=no \
+        && make \
+        && make install)
+    touch szip-stamp
+}
+
+function build_hdf5 {
+    if [ -e hdf5-stamp ]; then return; fi
+    build_szip
+    local hdf5_url=https://www.hdfgroup.org/ftp/HDF5/releases
+    curl -sLO $hdf5_url/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.gz
+    tar zxf hdf5-$HDF5_VERSION.tar.gz
+    (cd hdf5-$HDF5_VERSION \
+        && ./configure --prefix=/usr/local --with-szlib=/usr/local \
+        && make \
+        && make install)
+    touch hdf5-stamp
 }
