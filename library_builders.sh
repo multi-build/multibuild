@@ -160,7 +160,7 @@ function build_hdf5 {
     curl -sLO $hdf5_url/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.gz
     tar zxf hdf5-$HDF5_VERSION.tar.gz
     (cd hdf5-$HDF5_VERSION \
-        && ./configure --with-szlib \
+        && ./configure --prefix=/usr/local --with-szlib=/usr/local \
         && make \
         && make install)
     touch hdf5-stamp
