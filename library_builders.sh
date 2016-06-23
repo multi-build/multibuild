@@ -14,6 +14,7 @@ XZ_VERSION="${XZ_VERSION:-5.2.2}"
 LIBYAML_VERSION="${LIBYAML_VERSION:-0.1.5}"
 SZIP_VERSION="${SZIP_VERSION:-2.1}"
 HDF5_VERSION="${HDF5_VERSION:-1.8.17}"
+LIBAEC_VERSION="${LIBAEC_VERSION:-0.3.3}"
 
 if [ $(uname) == "Darwin" ]; then
     ARCH_FLAGS=${ARCH_FLAGS:-"-arch i386 -arch x86_64"}
@@ -153,13 +154,28 @@ function build_szip {
 
 function build_hdf5 {
     if [ -e hdf5-stamp ]; then return; fi
-    build_szip
+    # libaec is a drop-in replacement for szip
+    build_libaec
     local hdf5_url=https://www.hdfgroup.org/ftp/HDF5/releases
     curl -sLO $hdf5_url/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.gz
     tar zxf hdf5-$HDF5_VERSION.tar.gz
     (cd hdf5-$HDF5_VERSION \
-        && ./configure --prefix=/usr/local --with-szlib=/usr/local \
+        && ./configure --with-szlib \
         && make \
         && make install)
     touch hdf5-stamp
+}
+
+function build_libaec {
+    if [ -e libaec-stamp ]; then return; fi
+    local root_name=libaec-0.3.3
+    local tar_name=${root_name}.tar.gz
+    # Note URL will change for each version
+    curl -LO https://gitlab.dkrz.de/k202009/libaec/uploads/48398bd5b7bc05a3edb3325abfeac864/${tar_name}
+    tar zxf $tar_name
+    (cd $root_name \
+        && ./configure \
+        && make \
+        && make install)
+    touch libaec-stamp
 }
