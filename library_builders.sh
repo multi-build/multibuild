@@ -44,7 +44,11 @@ function build_simple {
 
 function build_openblas {
     if [ -e openblas-stamp ]; then return; fi
-    git clone https://github.com/xianyi/OpenBLAS
+    if [ -d "OpenBLAS" ]; then
+        (cd OpenBLAS && git clean -fxd && git reset --hard)
+    else
+        git clone https://github.com/xianyi/OpenBLAS
+    fi
     (cd OpenBLAS \
         && git checkout "v${OPENBLAS_VERSION}" \
         && make DYNAMIC_ARCH=1 USE_OPENMP=0 NUM_THREADS=64 > /dev/null \
