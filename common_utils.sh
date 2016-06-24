@@ -40,9 +40,47 @@ function gh-clone {
 function rm_mkdir {
     # Remove directory if present, then make directory
     local path=$1
-    [ -z "$path" ] && echo "Need not-empty path" && exit 1
-    [ -d "$path" ] && rm -rf $path
+    if [ -z "$path" ]; then echo "Need not-empty path"; exit 1; fi
+    if [ -d "$path" ]; then rm -rf $path; fi
     mkdir $path
+}
+
+function untar {
+    local in_fname=$1
+    if [ -z "$in_fname" ];then echo "in_fname not defined"; exit 1; fi
+    local extension=${in_fname##*.}
+    case $extension in
+        tar) tar xf $in_fname ;;
+        gz|tgz) tar zxf $in_fname ;;
+        bz2) tar jxf $in_fname ;;
+        zip) unzip $in_fname ;;
+        xz) unxz -c $in_fname | tar xf ;;
+        *) echo Did not recognize extension $extension; exit 1 ;;
+    esac
+}
+
+function fetch_unpack {
+    # Fetch input archive name from input URL
+    # Parameters
+    #    url - URL from which to fetch archive
+    #    archive_fname (optional) archive name
+    #
+    # If `archive_fname` not specified then use basename from `url`
+    # If `archive_fname` already present at download location, use that instead.
+    local url=$1
+    if [ -z "$url" ];then echo "url not defined"; exit 1; fi
+    local archive_fname=${2:-$(basename $url)}
+    local arch_sdir="${ARCHIVE_SDIR:-archives}"
+    # Make the archive directory in case it doesn't exist
+    mkdir -p $arch_sdir
+    local out_archive="${arch_sdir}/${archive_fname}"
+    # Fetch the archive if it does not exist
+    if [ ! -f "$out_archive" ]; then
+        curl -L $url > $out_archive
+    fi
+    # Unpack archive, refreshing contents
+    rm_mkdir arch_tmp
+    (cd arch_tmp && untar ../$out_archive && rsync --delete -avh * ..)
 }
 
 function clean_code {

@@ -16,7 +16,9 @@ SZIP_VERSION="${SZIP_VERSION:-2.1}"
 HDF5_VERSION="${HDF5_VERSION:-1.8.17}"
 LIBAEC_VERSION="${LIBAEC_VERSION:-0.3.3}"
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
+ARCHIVE_SDIR=${ARCHIVE_DIR:-archives}
 
+# Set defaults
 if [ $(uname) == "Darwin" ]; then
     ARCH_FLAGS=${ARCH_FLAGS:-"-arch i386 -arch x86_64"}
     export CFLAGS="${CFLAGS} $ARCH_FLAGS"
@@ -32,8 +34,7 @@ function build_simple {
     fi
     local name_version="${name}-${version}"
     local targz=${name_version}.tar.gz
-    curl -LO $url/$targz
-    tar zxf $targz
+    fetch_unpack $url/$targz
     (cd $name_version \
         && ./configure --prefix=$BUILD_PREFIX \
         && make \
@@ -66,8 +67,7 @@ function build_new_zlib {
 
 function build_jpeg {
     if [ -e jpeg-stamp ]; then return; fi
-    curl -LO http://ijg.org/files/jpegsrc.v9b.tar.gz
-    tar zxf jpegsrc.v9b.tar.gz
+    fetch_unpack http://ijg.org/files/jpegsrc.v9b.tar.gz
     (cd jpeg-9b \
         && ./configure --prefix=$BUILD_PREFIX \
         && make \
@@ -82,8 +82,7 @@ function build_libpng {
 
 function build_bzip2 {
     if [ -e bzip2-stamp ]; then return; fi
-    curl -LO http://bzip.org/${BZIP2_VERSION}/bzip2-${BZIP2_VERSION}.tar.gz
-    tar zxf bzip2-${BZIP2_VERSION}.tar.gz
+    fetch_unpack http://bzip.org/${BZIP2_VERSION}/bzip2-${BZIP2_VERSION}.tar.gz
     (cd bzip2-${BZIP2_VERSION} \
         && make -f Makefile-libbz2_so \
         && make install PREFIX=$BUILD_PREFIX)
@@ -107,8 +106,7 @@ function build_openjpeg {
         yum install -y cmake28
         cmake=cmake28
     fi
-    curl -LO https://github.com/uclouvain/openjpeg/archive/version.${OPENJPEG_VERSION}.tar.gz
-    tar zxf version.${OPENJPEG_VERSION}.tar.gz
+    fetch_unpack https://github.com/uclouvain/openjpeg/archive/version.${OPENJPEG_VERSION}.tar.gz
     (cd openjpeg-version.${OPENJPEG_VERSION} \
         && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX . \
         && make install)
@@ -133,8 +131,7 @@ function build_libwebp {
     build_libpng
     build_tiff
     build_giflib
-    curl -LO https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${LIBWEBP_VERSION}.tar.gz
-    tar zxf libwebp-${LIBWEBP_VERSION}.tar.gz
+    fetch_unpack https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${LIBWEBP_VERSION}.tar.gz
     (cd libwebp-${LIBWEBP_VERSION} && \
         ./configure --enable-libwebpmux --enable-libwebpdemux --prefix=$BUILD_PREFIX \
         && make \
@@ -157,8 +154,7 @@ function build_szip {
     if [ -e szip-stamp ]; then return; fi
     build_zlib
     local szip_url=https://www.hdfgroup.org/ftp/lib-external/szip/
-    curl -sLO ${szip_url}/$SZIP_VERSION/src/szip-$SZIP_VERSION.tar.gz
-    tar zxf szip-$SZIP_VERSION.tar.gz
+    fetch_unpack ${szip_url}/$SZIP_VERSION/src/szip-$SZIP_VERSION.tar.gz
     (cd szip-$SZIP_VERSION \
         && ./configure --enable-encoding=no --prefix=$BUILD_PREFIX \
         && make \
@@ -171,8 +167,7 @@ function build_hdf5 {
     # libaec is a drop-in replacement for szip
     build_libaec
     local hdf5_url=https://www.hdfgroup.org/ftp/HDF5/releases
-    curl -sLO $hdf5_url/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.gz
-    tar zxf hdf5-$HDF5_VERSION.tar.gz
+    fetch_unpack $hdf5_url/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.gz
     (cd hdf5-$HDF5_VERSION \
         && ./configure --with-szlib=$BUILD_PREFIX --prefix=$BUILD_PREFIX \
         && make \
@@ -185,8 +180,7 @@ function build_libaec {
     local root_name=libaec-0.3.3
     local tar_name=${root_name}.tar.gz
     # Note URL will change for each version
-    curl -LO https://gitlab.dkrz.de/k202009/libaec/uploads/48398bd5b7bc05a3edb3325abfeac864/${tar_name}
-    tar zxf $tar_name
+    fetch_unpack https://gitlab.dkrz.de/k202009/libaec/uploads/48398bd5b7bc05a3edb3325abfeac864/${tar_name}
     (cd $root_name \
         && ./configure --prefix=$BUILD_PREFIX \
         && make \
