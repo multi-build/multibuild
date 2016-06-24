@@ -15,6 +15,7 @@ LIBYAML_VERSION="${LIBYAML_VERSION:-0.1.5}"
 SZIP_VERSION="${SZIP_VERSION:-2.1}"
 HDF5_VERSION="${HDF5_VERSION:-1.8.17}"
 LIBAEC_VERSION="${LIBAEC_VERSION:-0.3.3}"
+BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
 
 if [ $(uname) == "Darwin" ]; then
     ARCH_FLAGS=${ARCH_FLAGS:-"-arch i386 -arch x86_64"}
@@ -33,7 +34,10 @@ function build_simple {
     local targz=${name_version}.tar.gz
     curl -LO $url/$targz
     tar zxf $targz
-    (cd $name_version && ./configure && make && make install)
+    (cd $name_version \
+        && ./configure --prefix=$BUILD_PREFIX \
+        && make \
+        && make install)
     touch "${name}-stamp"
 }
 
@@ -43,7 +47,7 @@ function build_openblas {
     (cd OpenBLAS \
         && git checkout "v${OPENBLAS_VERSION}" \
         && make DYNAMIC_ARCH=1 USE_OPENMP=0 NUM_THREADS=64 > /dev/null \
-        && make PREFIX=/usr/local/ install)
+        && make PREFIX=$BUILD_PREFIX install)
     touch openblas-stamp
 }
 
@@ -64,7 +68,10 @@ function build_jpeg {
     if [ -e jpeg-stamp ]; then return; fi
     curl -LO http://ijg.org/files/jpegsrc.v9b.tar.gz
     tar zxf jpegsrc.v9b.tar.gz
-    (cd jpeg-9b && ./configure && make && make install)
+    (cd jpeg-9b \
+        && ./configure --prefix=$BUILD_PREFIX \
+        && make \
+        && make install)
     touch jpeg-stamp
 }
 
@@ -77,7 +84,9 @@ function build_bzip2 {
     if [ -e bzip2-stamp ]; then return; fi
     curl -LO http://bzip.org/${BZIP2_VERSION}/bzip2-${BZIP2_VERSION}.tar.gz
     tar zxf bzip2-${BZIP2_VERSION}.tar.gz
-    (cd bzip2-${BZIP2_VERSION} && make -f Makefile-libbz2_so && make install)
+    (cd bzip2-${BZIP2_VERSION} \
+        && make -f Makefile-libbz2_so \
+        && make install PREFIX=$BUILD_PREFIX)
     touch bzip2-stamp
 }
 
@@ -91,14 +100,18 @@ function build_tiff {
 
 function build_openjpeg {
     if [ -e openjpeg-stamp ]; then return; fi
+    local cmake=cmake
     if [ -n "$IS_OSX" ]; then
         brew install cmake
     else
         yum install -y cmake28
+        cmake=cmake28
     fi
     curl -LO https://github.com/uclouvain/openjpeg/archive/version.${OPENJPEG_VERSION}.tar.gz
     tar zxf version.${OPENJPEG_VERSION}.tar.gz
-    (cd openjpeg-version.${OPENJPEG_VERSION} && cmake28 . && make install)
+    (cd openjpeg-version.${OPENJPEG_VERSION} \
+        && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX . \
+        && make install)
     touch openjpeg-stamp
 }
 
@@ -123,8 +136,9 @@ function build_libwebp {
     curl -LO https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${LIBWEBP_VERSION}.tar.gz
     tar zxf libwebp-${LIBWEBP_VERSION}.tar.gz
     (cd libwebp-${LIBWEBP_VERSION} && \
-        ./configure --enable-libwebpmux --enable-libwebpdemux && \
-         make && make install)
+        ./configure --enable-libwebpmux --enable-libwebpdemux --prefix=$BUILD_PREFIX \
+        && make \
+        && make install)
     touch libwebp-stamp
 }
 
@@ -146,7 +160,7 @@ function build_szip {
     curl -sLO ${szip_url}/$SZIP_VERSION/src/szip-$SZIP_VERSION.tar.gz
     tar zxf szip-$SZIP_VERSION.tar.gz
     (cd szip-$SZIP_VERSION \
-        && ./configure --enable-encoding=no \
+        && ./configure --enable-encoding=no --prefix=$BUILD_PREFIX \
         && make \
         && make install)
     touch szip-stamp
@@ -160,7 +174,7 @@ function build_hdf5 {
     curl -sLO $hdf5_url/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.gz
     tar zxf hdf5-$HDF5_VERSION.tar.gz
     (cd hdf5-$HDF5_VERSION \
-        && ./configure --prefix=/usr/local --with-szlib=/usr/local \
+        && ./configure --with-szlib=$BUILD_PREFIX --prefix=$BUILD_PREFIX \
         && make \
         && make install)
     touch hdf5-stamp
@@ -174,7 +188,7 @@ function build_libaec {
     curl -LO https://gitlab.dkrz.de/k202009/libaec/uploads/48398bd5b7bc05a3edb3325abfeac864/${tar_name}
     tar zxf $tar_name
     (cd $root_name \
-        && ./configure \
+        && ./configure --prefix=$BUILD_PREFIX \
         && make \
         && make install)
     touch libaec-stamp
