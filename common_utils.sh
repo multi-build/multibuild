@@ -138,7 +138,7 @@ function bdist_wheel_cmd {
     cp dist/*.whl $abs_wheelhouse
 }
 
-function build_wheel {
+function build_pip_wheel {
     # Standard wheel building command with pip wheel
     build_wheel_cmd "pip_wheel_cmd" $@
 }
@@ -146,6 +146,11 @@ function build_wheel {
 function build_bdist_wheel {
     # Wheel building with bdist_wheel. See bdist_wheel_cmd
     build_wheel_cmd "bdist_wheel_cmd" $@
+}
+
+function build_wheel {
+    # Set default building method to pip
+    build_pip_wheel $@
 }
 
 function pip_opts {
