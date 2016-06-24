@@ -18,10 +18,14 @@ LIBAEC_VERSION="${LIBAEC_VERSION:-0.3.3}"
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
 ARCHIVE_SDIR=${ARCHIVE_DIR:-archives}
 
-# Set defaults
+# Set default compilation flags and OSX flag variable
 if [ $(uname) == "Darwin" ]; then
+    # Dual arch build by default
     ARCH_FLAGS=${ARCH_FLAGS:-"-arch i386 -arch x86_64"}
-    export CFLAGS="${CFLAGS} $ARCH_FLAGS"
+    # Only set CFLAGS, FFLAGS if they are not already defined.  Build functions
+    # can override the arch flags by setting CFLAGS, FFLAGS
+    export CFLAGS="${CFLAGS:-$ARCH_FLAGS}"
+    export FFLAGS="${FFLAGS:-$ARCH_FLAGS}"
     IS_OSX=1
 fi
 
