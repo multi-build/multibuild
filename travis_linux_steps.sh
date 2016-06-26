@@ -49,6 +49,7 @@ function build_wheel {
         -e MANYLINUX_URL="$MANYLINUX_URL" \
         -e BUILD_DEPENDS="$BUILD_DEPENDS" \
         -e REPO_DIR="$repo_dir" \
+        -e PLAT="$PLAT" \
         -v $PWD:/io \
         $docker_image /io/$MULTIBUILD_DIR/docker_build_wrap.sh
 }
