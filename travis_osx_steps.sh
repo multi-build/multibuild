@@ -4,6 +4,7 @@ set -e
 
 # Get needed utilities
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
+MB_PYTHON_VERSION=${MB_PYTHON_VERSION:-$TRAVIS_PYTHON_VERSION}
 source $MULTIBUILD_DIR/osx_utils.sh
 
 # NB - config.sh sourced at end of this function.
@@ -12,7 +13,7 @@ source $MULTIBUILD_DIR/osx_utils.sh
 function before_install {
     export CC=clang
     export CXX=clang++
-    get_macpython_environment $TRAVIS_PYTHON_VERSION venv
+    get_macpython_environment $MB_PYTHON_VERSION venv
     source venv/bin/activate
     pip install --upgrade pip wheel
 }

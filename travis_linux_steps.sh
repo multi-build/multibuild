@@ -16,6 +16,9 @@ MANYLINUX_URL=${MANYLINUX_URL:-https://nipy.bic.berkeley.edu/manylinux}
 # Get our own location on this filesystem
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 
+# Allow travis Python version as proxy for multibuild Python version
+MB_PYTHON_VERSION=${MB_PYTHON_VERSION:-$TRAVIS_PYTHON_VERSION}
+
 function before_install {
     # Install a virtualenv to work in.
     virtualenv --python=python venv
@@ -32,7 +35,7 @@ function build_wheel {
     # Depends on
     #     REPO_DIR  (or via input argument)
     #     PLAT (can be passed in as argument)
-    #     TRAVIS_PYTHON_VERSION
+    #     MB_PYTHON_VERSION
     #     UNICODE_WIDTH (optional)
     #     BUILD_DEPENDS (optional)
     #     MANYLINUX_URL (optional)
@@ -43,7 +46,7 @@ function build_wheel {
     local docker_image=quay.io/pypa/manylinux1_$plat
     docker pull $docker_image
     docker run --rm \
-        -e PYTHON_VERSION="$TRAVIS_PYTHON_VERSION" \
+        -e PYTHON_VERSION="$MB_PYTHON_VERSION" \
         -e UNICODE_WIDTH="$UNICODE_WIDTH" \
         -e WHEEL_SDIR="$WHEEL_SDIR" \
         -e MANYLINUX_URL="$MANYLINUX_URL" \
@@ -61,7 +64,7 @@ function install_run {
     #
     # Depends on
     #  PLAT (can be passed in as argument)
-    #  TRAVIS_PYTHON_VERSION
+    #  MB_PYTHON_VERSION
     #  UNICODE_WIDTH (optional)
     #  WHEEL_SDIR (optional)
     #  MANYLINUX_URL (optional)
@@ -71,7 +74,7 @@ function install_run {
     local docker_image="matthewbrett/trusty:$bitness"
     docker pull $docker_image
     docker run --rm \
-        -e PYTHON_VERSION="$TRAVIS_PYTHON_VERSION" \
+        -e PYTHON_VERSION="$MB_PYTHON_VERSION" \
         -e UNICODE_WIDTH="$UNICODE_WIDTH" \
         -e WHEEL_SDIR="$WHEEL_SDIR" \
         -e MANYLINUX_URL="$MANYLINUX_URL" \

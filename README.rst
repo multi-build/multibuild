@@ -56,50 +56,67 @@ Use these scripts like so:
             "MNKyBWOzu7JAUmC0Y+JhPKfytXxY/ADRmUIMEWZV977FLZPgYctqd+lqel2QIFgdHDO1CIdTSymOOFZckM9ICUXg9Ta+8oBjSvAVWO1ahDcToRM2DLq66fKg+NKimd2OfK7x597h/QmUSl4k8XyvyyXgl5jOiLg/EJxNE2r83IA="
 
     language: python
+    python: 3.5
     sudo: required
     dist: trusty
     services: docker
 
-    matrix:
     include:
-        - os: linux
-        python: 2.7
-        - os: linux
-        python: 2.7
+      - os: linux
         env:
-            - UNICODE_WIDTH=16
-        - os: linux
-        python: 2.7
+          - MB_PYTHON_VERSION=2.6
+      - os: linux
         env:
-            - PLAT=i686
-        - os: linux
-        python: 2.7
+          - MB_PYTHON_VERSION=2.6
+          - PLAT=i686
+      - os: linux
+        env: MB_PYTHON_VERSION=2.7
+      - os: linux
         env:
-            - PLAT=i686
-            - UNICODE_WIDTH=16
-        - os: linux
-        python: 3.4
-        - os: linux
-        python: 3.4
+          - MB_PYTHON_VERSION=2.7
+          - UNICODE_WIDTH=16
+      - os: linux
         env:
-            - PLAT=i686
-        - os: linux
-        python: 3.5
-        - os: linux
-        python: 3.5
+          - MB_PYTHON_VERSION=2.7
+          - PLAT=i686
+      - os: linux
         env:
-            - PLAT=i686
-        - os: osx
+          - MB_PYTHON_VERSION=2.7
+          - PLAT=i686
+          - UNICODE_WIDTH=16
+      - os: linux
+        env:
+          - MB_PYTHON_VERSION=3.3
+      - os: linux
+        env:
+          - MB_PYTHON_VERSION=3.3
+          - PLAT=i686
+      - os: linux
+        env:
+          - MB_PYTHON_VERSION=3.4
+      - os: linux
+        env:
+          - MB_PYTHON_VERSION=3.4
+          - PLAT=i686
+      - os: linux
+        env:
+          - MB_PYTHON_VERSION=3.5
+      - os: linux
+        env:
+          - MB_PYTHON_VERSION=3.5
+          - PLAT=i686
+      - os: osx
         language: objective-c
-        env: TRAVIS_PYTHON_VERSION=2.7
-        - os: osx
+        env:
+          - MB_PYTHON_VERSION=2.7
+      - os: osx
         language: objective-c
         env:
-            - TRAVIS_PYTHON_VERSION=3.4
-        - os: osx
+          - MB_PYTHON_VERSION=3.4
+      - os: osx
         language: objective-c
         env:
-            - TRAVIS_PYTHON_VERSION=3.5
+          - MB_PYTHON_VERSION=3.5
 
     before_install:
         - source multibuild/common_utils.sh
