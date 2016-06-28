@@ -28,9 +28,9 @@ function lex_ver {
 }
 
 function is_function {
-    set +e
-    $(declare -Ff "$1") > /dev/null && echo true
-    set -e
+    # Echo "true" if input argument string is a function
+    # Allow errors during "set -e" blocks.
+    (set +e; echo $($(declare -Ff "$1") > /dev/null && echo true))
 }
 
 function gh-clone {

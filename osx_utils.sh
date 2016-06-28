@@ -99,15 +99,16 @@ function pyinst_ext_for_version {
     # Earlier Python installers are .dmg, later are .pkg.
     local py_version=$1
     check_var $py_version
+    py_version=$(fill_pyver $py_version)
     local py_0=${py_version:0:1}
     if [ $py_0 -eq 2 ]; then
-        if [ $(lex_ver $py_version) -ge $(lex_ver 2.7.9) ]; then
+        if [ "$(lex_ver $py_version)" -ge "$(lex_ver 2.7.9)" ]; then
             echo "pkg"
         else
             echo "dmg"
         fi
     elif [ $py_0 -ge 3 ]; then
-        if [ $(lex_ver $py_version) -ge $(lex_ver 3.4.2) ]; then
+        if [ "$(lex_ver $py_version)" -ge "$(lex_ver 3.4.2)" ]; then
             echo "pkg"
         else
             echo "dmg"
@@ -160,7 +161,7 @@ function install_virtualenv {
     # install even if installed already
     $PIP_CMD install virtualenv --ignore-installed
     check_python
-    VIRTUALENV_CMD="`dirname $PYTHON_EXE`/virtualenv"
+    VIRTUALENV_CMD="$(dirname $PYTHON_EXE)/virtualenv"
 }
 
 function make_workon_venv {
