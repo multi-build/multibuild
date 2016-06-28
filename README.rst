@@ -56,6 +56,8 @@ Use these scripts like so:
             "MNKyBWOzu7JAUmC0Y+JhPKfytXxY/ADRmUIMEWZV977FLZPgYctqd+lqel2QIFgdHDO1CIdTSymOOFZckM9ICUXg9Ta+8oBjSvAVWO1ahDcToRM2DLq66fKg+NKimd2OfK7x597h/QmUSl4k8XyvyyXgl5jOiLg/EJxNE2r83IA="
 
     language: python
+    # The travis Python version is unrelated to the version we build and test
+    # with.  This is set with the MB_PYTHON_VERSION variable.
     python: 3.5
     sudo: required
     dist: trusty
