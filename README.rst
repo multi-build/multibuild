@@ -61,6 +61,9 @@ Use these scripts like so:
     dist: trusty
     services: docker
 
+    exclude:
+      # Exclude the default Python 3.5 build
+      - python: 3.5
     include:
       - os: linux
         env:
