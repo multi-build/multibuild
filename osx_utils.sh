@@ -226,5 +226,12 @@ function repair_wheelhouse {
     pip install delocate
     delocate-listdeps $wheelhouse/*.whl # lists library dependencies
     delocate-wheel $wheelhouse/*.whl # copies library dependencies into wheel
+    # Add platform tags to label wheels as compatible with OSX 10.9 and
+    # 10.10.  The wheels will be built against Python.org Python, and so will
+    # in fact be compatible with OSX >= 10.6.  pip < 6.0 doesn't realize
+    # this, so, in case users have older pip, add platform tags to specify
+    # compatibility with later OSX.  Not necessary for OSX released well
+    # after pip 6.0.  See:
+    # https://github.com/MacPython/wiki/wiki/Spinning-wheels#question-will-pip-give-me-a-broken-wheel
     delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
 }
