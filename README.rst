@@ -17,7 +17,79 @@ The small innovation here is that you can test against 32-bit builds, and both
 wide and narrow unicode Python 2 builds, which was not easy on the default
 travis-ci configurations.
 
-Use these scripts like so:
+*****************
+How does it work?
+*****************
+
+Multibuild is a series of bash scripts that define bash functions to build and
+test wheels.
+
+Configuration is by overriding the default build function, and defining a test
+function.
+
+The bash scripts are layered, in the sense that they loaded in the following
+sequence:
+
+* OSX - build and test phases.  See ``multibuild/travis_osx_steps.sh``.
+
+  * multibuild/common_utils.sh
+  * multibuild/osx_utils.sh
+  * multibuild/library_builders.sh
+  * multibuild/travis_osx_steps.sh
+  * config.sh
+
+* Manylinux:
+
+  * build phase (in manylinux docker container). See
+    ``multibuild/docker_build_wrap.sh``:
+
+    * multibuild/common_utils.sh
+    * multibuild/manylinux_utils.sh
+    * multibuild/library_builders.sh
+    * config.sh
+
+  * test phase (in Ubuntu 14.04 docker container).  See
+    ``multibuild/docker_test_wrap.sh``:
+
+    * multibuild/common_utils.sh
+    * config.sh
+
+*********************
+Environment variables
+*********************
+
+The OSX build / test is the more straightforward of the two, because the build
+and test phase are on the same VM.  Therefore any environment variable defined
+in the ``.travis.yml`` or bash shell scripts listed above are available for
+your build and test.
+
+The manylinux1 build / test is more complicated, because the build has to run
+inside a manylinux docker container, and the test has to run in another Ubuntu
+container.  See ``multibuild/travis_linux_steps.sh`` for the default
+invocation of docker for the build and test phases, and the environment
+variables available inside the containers.
+
+*********************************
+Standard build and test functions
+*********************************
+
+The standard build commmand is ``build_wheel``.  This is a bash function.  By
+default it is defined in ``multibuild/common_utils.sh``, but you can override
+it in the project ``config.sh`` file (see below).
+
+The standard test command is the bash function ``install_run``.  This is also
+defined ``multibuild/common_utils.sh``.  Typically, you do not override this
+function, but you define a ``pre_build`` function in ``config.sh``, to build
+any libraries you need, and a ``run_tests`` function, to run your tests,
+returning a non-zero error code for failure.  The default ``install_run``
+implementation will call ``pre_build``, if defined, and then calls the
+``run_tests`` function, which you must define, probably in ``config.sh``.  See
+the examples below for examples of less and more complicateb builds, where the
+complicated builds override more of the default implementations.
+
+********************
+To use these scripts
+********************
 
 * Make a repository for building wheels on travis-ci - e.g.
   https://github.com/MacPython/astropy-wheels - or in your case maybe

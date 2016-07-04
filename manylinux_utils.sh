@@ -1,3 +1,4 @@
+#!/bin/bash
 # Useful utilities common across manylinux1 builds
 
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")

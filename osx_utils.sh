@@ -2,6 +2,10 @@
 # Use with ``source osx_utils.sh``
 set -e
 
+# Get our own location on this filesystem, load common utils
+MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
+source $MULTIBUILD_DIR/common_utils.sh
+
 MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
@@ -16,10 +20,6 @@ LATEST_3p2=3.2.5
 LATEST_3p3=3.3.5
 LATEST_3p4=3.4.4
 LATEST_3p5=3.5.1
-
-# Get our own location on this filesystem
-MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
-source $MULTIBUILD_DIR/common_utils.sh
 
 function check_python {
     if [ -z "$PYTHON_EXE" ]; then

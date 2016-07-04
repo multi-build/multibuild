@@ -1,5 +1,5 @@
 #!/bin/bash
-# Utilities for both OSX and Docker
+# Utilities for both OSX and Docker Linux
 # Python should be on the PATH
 set -e
 

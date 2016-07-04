@@ -6,6 +6,7 @@ set -e
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 MB_PYTHON_VERSION=${MB_PYTHON_VERSION:-$TRAVIS_PYTHON_VERSION}
 source $MULTIBUILD_DIR/osx_utils.sh
+source $MULTIBUILD_DIR/library_builders.sh
 
 # NB - config.sh sourced at end of this function.
 # config.sh can override any function defined here.
