@@ -23,3 +23,6 @@ touch tmp_dir/afile
 rm_mkdir tmp_dir
 [ -e tmp_dir/afile ] && ingest "tmp_dir/afile should have been deleted"
 rmdir tmp_dir
+
+# On Linux docker containers in travis, can only be x86_64 or i686
+[ "$(get_platform)" == x86_64 ] || [ "$(get_platform)" == i686 ] || exit 1

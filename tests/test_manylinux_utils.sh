@@ -1,7 +1,5 @@
 # Tests for manylinux utils
 
-[ "$(get_platform)" == x86_64 ] || [ "$(get_platform)" == i686 ] || exit 1
-
 # cpython path calculator
 [ "$(cpython_path 2.6)" == "/opt/python/cp26-cp26mu" ] || ingest "cp 2.6"
 [ "$(cpython_path 2.6 32)" == "/opt/python/cp26-cp26mu" ] || ingest "cp 2.6 32"

@@ -157,6 +157,11 @@ function pip_opts {
     [ -n "$MANYLINUX_URL" ] && echo "--find-links $MANYLINUX_URL"
 }
 
+function get_platform {
+    # Report platform as given by uname
+    python -c 'import platform; print(platform.uname()[4])'
+}
+
 function install_wheel {
     # Install test dependencies and built wheel
     #
