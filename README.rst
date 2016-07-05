@@ -219,15 +219,15 @@ To use these scripts
           - MB_PYTHON_VERSION=3.5
           - PLAT=i686
       - os: osx
-        language: objective-c
+        language: generic
         env:
           - MB_PYTHON_VERSION=2.7
       - os: osx
-        language: objective-c
+        language: generic
         env:
           - MB_PYTHON_VERSION=3.4
       - os: osx
-        language: objective-c
+        language: generic
         env:
           - MB_PYTHON_VERSION=3.5
 
