@@ -49,9 +49,9 @@ The OSX build / test and phase are on the OSX VM started by travis-ci.
 Therefore any environment variable defined in the ``.travis.yml`` or bash
 shell scripts listed above are available for your build and test.
 
-The ``build_wheel`` function builds the wheel, and th ``install_run`` function
-installs the wheel and tests it.  Look in ``common_utils.sh`` for default
-definitions of these functions.  See below for more details.
+The ``build_wheel`` function builds the wheel, and the ``install_run``
+function installs the wheel and tests it.  Look in ``common_utils.sh`` for
+default definitions of these functions.  See below for more details.
 
 Manylinux
 =========
@@ -107,16 +107,21 @@ default the function that is run on OSX, and in the Manylinux container for
 the build phase, is defined in ``multibuild/common_utils.sh``.  You can
 override the default function in the project ``config.sh`` file (see below).
 
+Typically, you can get away with leaving the default ``build_wheel`` function,
+but you may need to define a ``pre_build`` function in ``config.sh``.  The
+default ``build_wheel`` function will call the ``pre_build`` function, if
+defined, before building the wheel, so ``pre_build`` is a good place to build
+any required libraries.
+
 The standard test command is the bash function ``install_run``.  The version
 run on OSX and in the Linux testing container is also defined in
 ``multibuild/common_utils.sh``.  Typically, you do not override this function,
-but you define a ``pre_build`` function in ``config.sh``, to build any
-libraries you need, and a ``run_tests`` function, to run your tests, returning
-a non-zero error code for failure.  The default ``install_run`` implementation
-will call ``pre_build``, if defined, and then calls the ``run_tests``
-function, which you must define, probably in ``config.sh``.  See the examples
-below for examples of less and more complicateb builds, where the complicated
-builds override more of the default implementations.
+but you in that case you will need to define a ``run_tests`` function, to run
+your tests, returning a non-zero error code for failure.  The default
+``install_run`` implementation calls the ``run_tests`` function, which you
+will likely define in ``config.sh``.  See the examples below for examples of
+less and more complicateb builds, where the complicated builds override more
+of the default implementations.
 
 ********************
 To use these scripts
