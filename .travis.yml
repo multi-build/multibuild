@@ -1,10 +1,9 @@
-language: erlang
+language: generic
 
 matrix:
   include:
     - os: linux
     - os: osx
-      language: objective-c
       env:
         - PYTHON_VERSION=2.7.11
     - os: osx
@@ -13,20 +12,16 @@ matrix:
         - PYTHON_VERSION=2.7.11
         - VENV=venv
     - os: osx
-      language: objective-c
       env:
         - PYTHON_VERSION=3.4.4
     - os: osx
-      language: objective-c
       env:
         - PYTHON_VERSION=3.4.4
         - VENV=venv
     - os: osx
-      language: objective-c
       env:
         - PYTHON_VERSION=3.5.1
     - os: osx
-      language: objective-c
       env:
         - PYTHON_VERSION=3.5.1
         - VENV=venv
