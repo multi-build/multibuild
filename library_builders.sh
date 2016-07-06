@@ -172,6 +172,7 @@ function build_szip {
 
 function build_hdf5 {
     if [ -e hdf5-stamp ]; then return; fi
+    build_zlib
     # libaec is a drop-in replacement for szip
     build_libaec
     local hdf5_url=https://www.hdfgroup.org/ftp/HDF5/releases
