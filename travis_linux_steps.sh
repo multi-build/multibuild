@@ -36,6 +36,7 @@ function build_wheel {
     #     REPO_DIR  (or via input argument)
     #     PLAT (can be passed in as argument)
     #     MB_PYTHON_VERSION
+    #     BUILD_COMMIT
     #     UNICODE_WIDTH (optional)
     #     BUILD_DEPENDS (optional)
     #     MANYLINUX_URL (optional)
@@ -48,6 +49,7 @@ function build_wheel {
     docker run --rm \
         -e PYTHON_VERSION="$MB_PYTHON_VERSION" \
         -e UNICODE_WIDTH="$UNICODE_WIDTH" \
+        -e BUILD_COMMIT="$BUILD_COMMIT" \
         -e WHEEL_SDIR="$WHEEL_SDIR" \
         -e MANYLINUX_URL="$MANYLINUX_URL" \
         -e BUILD_DEPENDS="$BUILD_DEPENDS" \

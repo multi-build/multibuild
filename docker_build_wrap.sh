@@ -2,9 +2,9 @@
 # Depends on:
 #   REPO_DIR
 #   PYTHON_VERSION
-#   BUILD_COMMIT
+#   BUILD_COMMIT (may be used by config.sh)
 #   UNICODE_WIDTH  (can be empty)
-#   BUILD_DEPENDS  (can be empty)
+#   BUILD_DEPENDS  (may be used by config.sh, can be empty)
 set -e
 
 # Unicode width, default 32
@@ -13,7 +13,7 @@ UNICODE_WIDTH=${UNICODE_WIDTH:-32}
 # Location of wheels, default "wheelhouse"
 WHEEL_SDIR=${WHEEL_SDIR:-wheelhouse}
 
-# Manylinux, openblas version, lex_ver, Python versions
+# Always pull in common and library builder utils
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 # This next also sources common utils.
 source $MULTIBUILD_DIR/manylinux_utils.sh
