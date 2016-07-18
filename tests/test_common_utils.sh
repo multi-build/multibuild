@@ -12,6 +12,16 @@
 [ "$(lex_ver 2.1.4)" == "002001004" ] || ingest "lex_ver 2.1.4"
 [ "$(lex_ver 2.1.4rc1)" == "002001004" ] || ingest "lex_ver 2.1.4"
 
+[ "$(unlex_ver 002000000)" == "2.0.0" ] || ingest "unlex_ver 002000000"
+[ "$(unlex_ver 003002012)" == "3.2.12" ] || ingest "unlex_ver 003002012"
+# Not octal
+[ "$(unlex_ver 003044099)" == "3.44.99" ] || ingest "unlex_ver 003044099"
+[ "$(unlex_ver 003543012)" == "3.543.12" ] || ingest "unlex_ver 003543012"
+[ "$(unlex_ver 003543012abc)" == "3.543.12" ] || ingest "unlex_ver 003543012abc"
+
+[ "$(strip_ver_suffix 3.4.0rc1)" == "3.4.0" ] || ingest "unlex_ver strip suff 1"
+[ "$(strip_ver_suffix 3.24.12a4)" == "3.24.12" ] || ingest "unlex_ver strip suff 2"
+
 [ "$(is_function abspath)" == "true" ] || ingest "is_function abspath"
 [ "$(is_function foo)" == "" ] || ingest "is_function foo"
 bar=baz

@@ -27,6 +27,18 @@ function lex_ver {
     echo $1 | awk -F "." '{printf "%03d%03d%03d", $1, $2, $3}'
 }
 
+function unlex_ver {
+    # Reverses lex_ver to produce major.minor.micro
+    # Thus:
+    # 003002001 -> 3.2.1
+    # 003000000 -> 3.0.0
+    echo "$((10#${1:0:3}+0)).$((10#${1:3:3}+0)).$((10#${1:6:3}+0))"
+}
+
+function strip_ver_suffix {
+    echo $(unlex_ver $(lex_ver $1))
+}
+
 function is_function {
     # Echo "true" if input argument string is a function
     # Allow errors during "set -e" blocks.
