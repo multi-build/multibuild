@@ -142,26 +142,26 @@ To use these scripts
 * Create a ``.travis.yml`` file, something like this::
 
     env:
-    global:
-        - REPO_DIR=your-project
-        # Commit from your-project that you want to build
-        - BUILD_COMMIT=v0.1.0
-        # pip dependencies to _build_ your project
-        - BUILD_DEPENDS="Cython numpy"
-        # pip dependencies to _test_ your project.  Include any dependencies
-        # that you need, that are also specified in BUILD_DEPENDS, this will be
-        # a separate install.
-        - TEST_DEPENDS="numpy scipy pytest"
-        - PLAT=x86_64
-        - UNICODE_WIDTH=32
-        - WHEELHOUSE_UPLOADER_USERNAME=travis-worker
-        # Following generated with
-        # travis encrypt -r your-org/your-project-wheels WHEELHOUSE_UPLOADER_SECRET=<the api key>
-        # This is for Rackspace uploads.  Contact the scikit-learn team for
-        # permission (and the API key) to upload to the Rackspace account used
-        # here, or use your own account.
-        - secure:
-            "MNKyBWOzu7JAUmC0Y+JhPKfytXxY/ADRmUIMEWZV977FLZPgYctqd+lqel2QIFgdHDO1CIdTSymOOFZckM9ICUXg9Ta+8oBjSvAVWO1ahDcToRM2DLq66fKg+NKimd2OfK7x597h/QmUSl4k8XyvyyXgl5jOiLg/EJxNE2r83IA="
+        global:
+            - REPO_DIR=your-project
+            # Commit from your-project that you want to build
+            - BUILD_COMMIT=v0.1.0
+            # pip dependencies to _build_ your project
+            - BUILD_DEPENDS="Cython numpy"
+            # pip dependencies to _test_ your project.  Include any dependencies
+            # that you need, that are also specified in BUILD_DEPENDS, this will be
+            # a separate install.
+            - TEST_DEPENDS="numpy scipy pytest"
+            - PLAT=x86_64
+            - UNICODE_WIDTH=32
+            - WHEELHOUSE_UPLOADER_USERNAME=travis-worker
+            # Following generated with
+            # travis encrypt -r your-org/your-project-wheels WHEELHOUSE_UPLOADER_SECRET=<the api key>
+            # This is for Rackspace uploads.  Contact Matthew Brett, or the
+            # scikit-learn team, for # permission (and the API key) to upload to
+            # the Rackspace account used here, or use your own account.
+            - secure:
+                "MNKyBWOzu7JAUmC0Y+JhPKfytXxY/ADRmUIMEWZV977FLZPgYctqd+lqel2QIFgdHDO1CIdTSymOOFZckM9ICUXg9Ta+8oBjSvAVWO1ahDcToRM2DLq66fKg+NKimd2OfK7x597h/QmUSl4k8XyvyyXgl5jOiLg/EJxNE2r83IA="
 
     language: python
     # The travis Python version is unrelated to the version we build and test
