@@ -123,11 +123,12 @@ function install_macpython {
     # "3" or "3.4" or "3.4.1".
     # sets $PYTHON_EXE variable to python executable
     local py_version=$(fill_pyver $1)
+    local py_stripped=$(strip_ver_suffix $py_version)
     local inst_ext=$(pyinst_ext_for_version $py_version)
     local py_inst=python-$py_version-macosx10.6.$inst_ext
     local inst_path=$DOWNLOADS_SDIR/$py_inst
     mkdir -p $DOWNLOADS_SDIR
-    curl $MACPYTHON_URL/$py_version/${py_inst} > $inst_path
+    curl $MACPYTHON_URL/$py_stripped/${py_inst} > $inst_path
     if [ "$inst_ext" == "dmg" ]; then
         hdiutil attach $inst_path -mountpoint /Volumes/Python
         inst_path=/Volumes/Python/Python.mpkg
