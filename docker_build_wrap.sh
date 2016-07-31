@@ -15,7 +15,7 @@ WHEEL_SDIR=${WHEEL_SDIR:-wheelhouse}
 
 # Always pull in common and library builder utils
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
-# This next also sources common utils.
+# These routines also source common_utils.sh
 source $MULTIBUILD_DIR/manylinux_utils.sh
 source $MULTIBUILD_DIR/library_builders.sh
 

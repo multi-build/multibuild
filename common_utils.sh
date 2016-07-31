@@ -1,6 +1,14 @@
 #!/bin/bash
 # Utilities for both OSX and Docker Linux
 # Python should be on the PATH
+
+# Only source common_utils once
+if [ -n "$COMMON_UTILS_SOURCED" ]; then
+    return
+fi
+COMMON_UTILS_SOURCED=1
+
+# Turn on exit-if-error
 set -e
 
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")

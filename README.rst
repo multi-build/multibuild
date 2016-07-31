@@ -45,6 +45,8 @@ functions and variables in earlier scripts:
 * multibuild/travis_osx_steps.sh
 * config.sh
 
+See ``travis_osx_steps.sh`` to review source order.
+
 The OSX build / test and phase are on the OSX VM started by travis-ci.
 Therefore any environment variable defined in the ``.travis.yml`` or bash
 shell scripts listed above are available for your build and test.
@@ -56,8 +58,8 @@ default definitions of these functions.  See below for more details.
 Manylinux
 =========
 
-The build phase is in a Manylinux1 docker container, but the test phase is in a
-clean Ubuntu 14.04 container.
+The build phase is in a Manylinux1 docker container, but the test phase is in
+a clean Ubuntu 14.04 container.
 
 Build phase
 -----------
@@ -71,6 +73,8 @@ following bash scripts:
 * multibuild/manylinux_utils.sh
 * multibuild/library_builders.sh
 * config.sh
+
+See ``docker_build_wrap.sh`` to review the order of script sourcing.
 
 See the definition of ``build_wheel`` in ``multibuild/travis_linux_steps.sh``
 for the environment variables passed from travis-ci to the Manylinux1
@@ -91,6 +95,8 @@ wrapper script sources the following bash scripts:
 
 * multibuild/common_utils.sh
 * config.sh
+
+See ``docker_test_wrap.sh`` for script source order.
 
 See ``install_run`` in ``multibuild/travis_linux_steps.sh`` for the
 environment variables passed into the container.

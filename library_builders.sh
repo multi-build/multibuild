@@ -1,3 +1,7 @@
+# Find, load common utilties
+MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
+source $MULTIBUILD_DIR/common_utils.sh
+
 # Recipes for building some libaries
 OPENBLAS_VERSION="${OPENBLAS_VERSION:-0.2.18}"
 # We use system zlib by default - see build_new_zlib
