@@ -1,4 +1,5 @@
 # Find, load common utilties
+# Defines IS_OSX, fetch_unpack
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 source $MULTIBUILD_DIR/common_utils.sh
 
@@ -19,18 +20,22 @@ LIBYAML_VERSION="${LIBYAML_VERSION:-0.1.5}"
 SZIP_VERSION="${SZIP_VERSION:-2.1}"
 HDF5_VERSION="${HDF5_VERSION:-1.8.17}"
 LIBAEC_VERSION="${LIBAEC_VERSION:-0.3.3}"
+LZO_VERSION=${LZO_VERSION:-2.09}
+BLOSC_VERSION=${BLOSC_VERSION:-1.10.2}
+
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
 ARCHIVE_SDIR=${ARCHIVE_DIR:-archives}
 
-# Set default compilation flags and OSX flag variable
-if [ $(uname) == "Darwin" ]; then
+# Set default library compilation flags for OSX
+# IS_OSX defined in common_utils.sh
+if [ -n "$IS_OSX" ]; then
     # Dual arch build by default
     ARCH_FLAGS=${ARCH_FLAGS:-"-arch i386 -arch x86_64"}
     # Only set CFLAGS, FFLAGS if they are not already defined.  Build functions
     # can override the arch flags by setting CFLAGS, FFLAGS
     export CFLAGS="${CFLAGS:-$ARCH_FLAGS}"
+    export CXXFLAGS="${CXXFLAGS:-$ARCH_FLAGS}"
     export FFLAGS="${FFLAGS:-$ARCH_FLAGS}"
-    IS_OSX=1
 fi
 
 function build_simple {
@@ -66,9 +71,9 @@ function build_openblas {
 
 function build_zlib {
     # Gives an old but safe version
+    if [ -n "$IS_OSX" ]; then return; fi  # OSX has zlib already
     if [ -e zlib-stamp ]; then return; fi
-    # OSX has zlib already
-    if [ -z "$IS_OSX" ]; then yum install -y zlib-devel; fi
+    yum install -y zlib-devel
     touch zlib-stamp
 }
 
@@ -93,6 +98,7 @@ function build_libpng {
 }
 
 function build_bzip2 {
+    if [ -n "$IS_OSX" ]; then return; fi  # OSX has bzip2 libs already
     if [ -e bzip2-stamp ]; then return; fi
     fetch_unpack http://bzip.org/${BZIP2_VERSION}/bzip2-${BZIP2_VERSION}.tar.gz
     (cd bzip2-${BZIP2_VERSION} \
@@ -109,15 +115,20 @@ function build_tiff {
     build_simple tiff $TIFF_VERSION http://download.osgeo.org/libtiff
 }
 
-function build_openjpeg {
-    if [ -e openjpeg-stamp ]; then return; fi
+function get_cmake {
     local cmake=cmake
     if [ -n "$IS_OSX" ]; then
-        brew install cmake
+        brew install cmake > /dev/null
     else
-        yum install -y cmake28
+        yum install -y cmake28 > /dev/null
         cmake=cmake28
     fi
+    echo $cmake
+}
+
+function build_openjpeg {
+    if [ -e openjpeg-stamp ]; then return; fi
+    local cmake=$(get_cmake)
     fetch_unpack https://github.com/uclouvain/openjpeg/archive/version.${OPENJPEG_VERSION}.tar.gz
     (cd openjpeg-version.${OPENJPEG_VERSION} \
         && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX . \
@@ -199,4 +210,30 @@ function build_libaec {
         && make \
         && make install)
     touch libaec-stamp
+}
+
+function build_blosc {
+    if [ -e blosc-stamp ]; then return; fi
+    local cmake=$(get_cmake)
+    fetch_unpack https://github.com/Blosc/c-blosc/archive/v${BLOSC_VERSION}.tar.gz
+    (cd c-blosc-${BLOSC_VERSION} \
+        && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX . \
+        && make install)
+    if [ -n "$IS_OSX" ]; then
+        # Fix blosc library id bug
+        for lib in $(ls ${BUILD_PREFIX}/lib/libblosc*.dylib); do
+            install_name_tool -id $lib $lib
+        done
+    fi
+    touch blosc-stamp
+}
+
+function build_lzo {
+    if [ -e lzo-stamp ]; then return; fi
+    fetch_unpack http://www.oberhumer.com/opensource/lzo/download/lzo-${LZO_VERSION}.tar.gz
+    (cd lzo-${LZO_VERSION} \
+        && ./configure --prefix=$BUILD_PREFIX --enable-shared \
+        && make \
+        && make install)
+    touch lzo-stamp
 }
