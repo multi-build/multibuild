@@ -111,7 +111,6 @@ function build_bzip2 {
 function build_tiff {
     build_zlib
     build_jpeg
-    build_openjpeg
     build_xz
     build_simple tiff $TIFF_VERSION http://download.osgeo.org/libtiff
 }
@@ -129,6 +128,10 @@ function get_cmake {
 
 function build_openjpeg {
     if [ -e openjpeg-stamp ]; then return; fi
+    build_zlib
+    build_libpng
+    build_tiff
+    build_lcms2
     local cmake=$(get_cmake)
     fetch_unpack https://github.com/uclouvain/openjpeg/archive/version.${OPENJPEG_VERSION}.tar.gz
     (cd openjpeg-version.${OPENJPEG_VERSION} \
