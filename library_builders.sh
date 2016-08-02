@@ -11,6 +11,7 @@ LIBPNG_VERSION="${LIBPNG_VERSION:-1.6.21}"
 BZIP2_VERSION="${BZIP2_VERSION:-1.0.6}"
 FREETYPE_VERSION="${FREETYPE_VERSION:-2.6.3}"
 TIFF_VERSION="${TIFF_VERSION:-4.0.6}"
+JPEG_VERSION="${JPEG_VERSION:-9b}"
 OPENJPEG_VERSION="${OPENJPEG_VERSION:-2.1}"
 LCMS2_VERSION="${LCMS2_VERSION:-2.7}"
 GIFLIB_VERSION="${GIFLIB_VERSION:-5.1.3}"
@@ -84,8 +85,8 @@ function build_new_zlib {
 
 function build_jpeg {
     if [ -e jpeg-stamp ]; then return; fi
-    fetch_unpack http://ijg.org/files/jpegsrc.v9b.tar.gz
-    (cd jpeg-9b \
+    fetch_unpack http://ijg.org/files/jpegsrc.v${JPEG_VERSION}.tar.gz
+    (cd jpeg-${JPEG_VERSION} \
         && ./configure --prefix=$BUILD_PREFIX \
         && make \
         && make install)
