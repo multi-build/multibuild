@@ -177,65 +177,66 @@ To use these scripts
     dist: trusty
     services: docker
 
-    exclude:
-      # Exclude the default Python 3.5 build
-      - python: 3.5
-    include:
-      - os: linux
-        env:
-          - MB_PYTHON_VERSION=2.6
-      - os: linux
-        env:
-          - MB_PYTHON_VERSION=2.6
-          - PLAT=i686
-      - os: linux
-        env: MB_PYTHON_VERSION=2.7
-      - os: linux
-        env:
-          - MB_PYTHON_VERSION=2.7
-          - UNICODE_WIDTH=16
-      - os: linux
-        env:
-          - MB_PYTHON_VERSION=2.7
-          - PLAT=i686
-      - os: linux
-        env:
-          - MB_PYTHON_VERSION=2.7
-          - PLAT=i686
-          - UNICODE_WIDTH=16
-      - os: linux
-        env:
-          - MB_PYTHON_VERSION=3.3
-      - os: linux
-        env:
-          - MB_PYTHON_VERSION=3.3
-          - PLAT=i686
-      - os: linux
-        env:
-          - MB_PYTHON_VERSION=3.4
-      - os: linux
-        env:
-          - MB_PYTHON_VERSION=3.4
-          - PLAT=i686
-      - os: linux
-        env:
-          - MB_PYTHON_VERSION=3.5
-      - os: linux
-        env:
-          - MB_PYTHON_VERSION=3.5
-          - PLAT=i686
-      - os: osx
-        language: generic
-        env:
-          - MB_PYTHON_VERSION=2.7
-      - os: osx
-        language: generic
-        env:
-          - MB_PYTHON_VERSION=3.4
-      - os: osx
-        language: generic
-        env:
-          - MB_PYTHON_VERSION=3.5
+    matrix:
+      exclude:
+        # Exclude the default Python 3.5 build
+        - python: 3.5
+      include:
+        - os: linux
+          env:
+            - MB_PYTHON_VERSION=2.6
+        - os: linux
+          env:
+            - MB_PYTHON_VERSION=2.6
+            - PLAT=i686
+        - os: linux
+          env: MB_PYTHON_VERSION=2.7
+        - os: linux
+          env:
+            - MB_PYTHON_VERSION=2.7
+            - UNICODE_WIDTH=16
+        - os: linux
+          env:
+            - MB_PYTHON_VERSION=2.7
+            - PLAT=i686
+        - os: linux
+          env:
+            - MB_PYTHON_VERSION=2.7
+            - PLAT=i686
+            - UNICODE_WIDTH=16
+        - os: linux
+          env:
+            - MB_PYTHON_VERSION=3.3
+        - os: linux
+          env:
+            - MB_PYTHON_VERSION=3.3
+            - PLAT=i686
+        - os: linux
+          env:
+            - MB_PYTHON_VERSION=3.4
+        - os: linux
+          env:
+            - MB_PYTHON_VERSION=3.4
+            - PLAT=i686
+        - os: linux
+          env:
+            - MB_PYTHON_VERSION=3.5
+        - os: linux
+          env:
+            - MB_PYTHON_VERSION=3.5
+            - PLAT=i686
+        - os: osx
+          language: generic
+          env:
+            - MB_PYTHON_VERSION=2.7
+        - os: osx
+          language: generic
+          env:
+            - MB_PYTHON_VERSION=3.4
+        - os: osx
+          language: generic
+          env:
+            - MB_PYTHON_VERSION=3.5
 
     before_install:
         - source multibuild/common_utils.sh
