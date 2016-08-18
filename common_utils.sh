@@ -198,7 +198,7 @@ function build_index_wheel {
     if [ -n "$BUILD_DEPENDS" ]; then
         pip install $(pip_opts) $@ $BUILD_DEPENDS
     fi
-    pip wheel $(pip_opts) $@ -w $abs_wheelhouse --no-deps $project_spec
+    pip wheel $(pip_opts) $@ -w $wheelhouse --no-deps $project_spec
     repair_wheelhouse $wheelhouse
 }
 
