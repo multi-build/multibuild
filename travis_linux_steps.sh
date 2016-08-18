@@ -44,9 +44,43 @@ function build_wheel {
     local repo_dir=${1:-$REPO_DIR}
     [ -z "$repo_dir" ] && echo "repo_dir not defined" && exit 1
     local plat=${2:-$PLAT}
+    build_multilinux $plat "build_wheel $repo_dir"
+}
+
+function build_index_wheel {
+    # Builds wheel from an index (e.g pypi), puts into $WHEEL_SDIR
+    #
+    # In fact wraps the actual work which happens in the container.
+    #
+    # Depends on
+    #     PLAT (can be passed in as argument)
+    #     MB_PYTHON_VERSION
+    #     UNICODE_WIDTH (optional)
+    #     BUILD_DEPENDS (optional)
+    #     MANYLINUX_URL (optional)
+    #     WHEEL_SDIR (optional)
+    local project_spec=$1
+    [ -z "$project_spec" ] && echo "project_spec not defined" && exit 1
+    local plat=${2:-$PLAT}
+    build_multilinux $plat "build_index_wheel $project_spec"
+}
+
+function build_multilinux {
+    # Runs passed build commands in manylinux container
+    #
+    # Depends on
+    #     MB_PYTHON_VERSION
+    #     UNICODE_WIDTH (optional)
+    #     BUILD_DEPENDS (optional)
+    #     MANYLINUX_URL (optional)
+    #     WHEEL_SDIR (optional)
+    local plat=$1
+    [ -z "$plat" ] && echo "plat not defined" && exit 1
+    local build_cmds="$2"
     local docker_image=quay.io/pypa/manylinux1_$plat
     docker pull $docker_image
     docker run --rm \
+        -e BUILD_COMMANDS="$build_cmds" \
         -e PYTHON_VERSION="$MB_PYTHON_VERSION" \
         -e UNICODE_WIDTH="$UNICODE_WIDTH" \
         -e BUILD_COMMIT="$BUILD_COMMIT" \

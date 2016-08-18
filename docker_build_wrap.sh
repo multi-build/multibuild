@@ -1,6 +1,6 @@
 #!/bin/bash
 # Depends on:
-#   REPO_DIR
+#   BUILD_COMMANDS
 #   PYTHON_VERSION
 #   BUILD_COMMIT (may be used by config.sh)
 #   UNICODE_WIDTH  (can be empty)
@@ -29,4 +29,4 @@ cd /io
 # `common_utils.sh` via `manylinux_utils.sh`.
 source config.sh
 
-build_wheel $REPO_DIR
+$BUILD_COMMANDS
