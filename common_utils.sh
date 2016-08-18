@@ -173,6 +173,35 @@ function build_wheel {
     build_pip_wheel $@
 }
 
+function build_index_wheel {
+    # Builds wheel from some index, usually pypi
+    #
+    # Parameters:
+    #     project_spec
+    #        requirement to install, e.g. "tornado" or "tornado==4.4.1"
+    #     *args
+    #        Any other arguments to be passed to pip `install`  and `wheel`
+    #        commands.
+    #
+    # Depends on
+    #     WHEEL_SDIR  (optional, default "wheelhouse")
+    #     BUILD_DEPENDS (optional, default "")
+    #     MANYLINUX_URL (optional, default "") (via pip_opts function)
+    #
+    # You can also override `pip_opts` command to set indices other than pypi
+    local project_spec=$1
+    [ -z "$project_spec" ] && echo "project_spec not defined" && exit 1
+    # Discard first argument to pass remainder to pip
+    shift
+    local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
+    if [ -n "$(is_function "pre_build")" ]; then pre_build; fi
+    if [ -n "$BUILD_DEPENDS" ]; then
+        pip install $(pip_opts) $@ $BUILD_DEPENDS
+    fi
+    pip wheel $(pip_opts) $@ -w $abs_wheelhouse --no-deps $project_spec
+    repair_wheelhouse $wheelhouse
+}
+
 function pip_opts {
     [ -n "$MANYLINUX_URL" ] && echo "--find-links $MANYLINUX_URL"
 }
