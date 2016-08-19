@@ -76,9 +76,9 @@ following bash scripts:
 
 See ``docker_build_wrap.sh`` to review the order of script sourcing.
 
-See the definition of ``build_wheel`` in ``multibuild/travis_linux_steps.sh``
-for the environment variables passed from travis-ci to the Manylinux1
-container.
+See the definition of ``build_multilinux`` in
+``multibuild/travis_linux_steps.sh`` for the environment variables passed from
+travis-ci to the Manylinux1 container.
 
 Once in the container, after sourcing the scripts above, the wrapper runs the
 real ``build_wheel`` function, which now comes (by default) from
@@ -113,9 +113,14 @@ default the function that is run on OSX, and in the Manylinux container for
 the build phase, is defined in ``multibuild/common_utils.sh``.  You can
 override the default function in the project ``config.sh`` file (see below).
 
-Typically, you can get away with leaving the default ``build_wheel`` function,
-but you may need to define a ``pre_build`` function in ``config.sh``.  The
-default ``build_wheel`` function will call the ``pre_build`` function, if
+If you are building a wheel from pypi, rather than from a source repository,
+you can use the ``build_index_wheel`` command, again defined in
+``multibuild/common_utils.sh``.
+
+Typically, you can get away with leaving the default ``build_wheel`` /
+``build_index_wheel`` functions to do their thing, but you may need to define
+a ``pre_build`` function in ``config.sh``.  The default ``build_wheel`` and
+``build_index_wheel`` functions will call the ``pre_build`` function, if
 defined, before building the wheel, so ``pre_build`` is a good place to build
 any required libraries.
 
@@ -261,6 +266,21 @@ To use these scripts
             ${TRAVIS_BUILD_DIR}/wheelhouse/
             --no-update-index
             wheels
+
+  The example above is for a project building from a git submodule.  If you
+  aren't building from a submodule, but want to use ``pip`` to build from a
+  source archive on https://pypi.org or similar, replace the first few lines
+  of the ``.travis.yml`` file with something like::
+
+    env:
+        global:
+            # Instead of REPO_DIR, BUILD_COMMIT
+            - PROJECT_SPEC="tornado==4.1.1"
+
+  then your ``install`` section could look something like this::
+
+    install:
+        - build_index_wheel $PROJECT_SPEC
 
 * Next create a ``config.sh`` for your project, that fills in any steps you
   need to do before building the wheel (such as building required libraries).
