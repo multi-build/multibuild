@@ -90,7 +90,7 @@ function fill_pyver {
     elif [ $ver == "3.2" ]; then
         echo $LATEST_3p2
     else
-        echo "Can't fill version $ver"
+        echo "Can't fill version $ver" 1>&2
         exit 1
     fi
 }
