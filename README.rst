@@ -108,7 +108,7 @@ It then (in the container) runs the real ``install_run`` command, which comes
 Standard build and test functions
 *********************************
 
-The standard build commmand is ``build_wheel``.  This is a bash function.  By
+The standard build command is ``build_wheel``.  This is a bash function.  By
 default the function that is run on OSX, and in the Manylinux container for
 the build phase, is defined in ``multibuild/common_utils.sh``.  You can
 override the default function in the project ``config.sh`` file (see below).
@@ -131,7 +131,7 @@ but you in that case you will need to define a ``run_tests`` function, to run
 your tests, returning a non-zero error code for failure.  The default
 ``install_run`` implementation calls the ``run_tests`` function, which you
 will likely define in ``config.sh``.  See the examples below for examples of
-less and more complicateb builds, where the complicated builds override more
+less and more complicated builds, where the complicated builds override more
 of the default implementations.
 
 ********************
