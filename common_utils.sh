@@ -14,6 +14,10 @@ set -e
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 if [ $(uname) == "Darwin" ]; then IS_OSX=1; fi
 
+# Work round bug in travis xcode image described at
+# https://github.com/direnv/direnv/issues/210
+shell_session_update() { :; }
+
 function abspath {
     python -c "import os.path; print(os.path.abspath('$1'))"
 }
