@@ -124,8 +124,8 @@ function install_python {
     # Picks an implementation of Python determined by the current enviroment
     # variables, then installs it
     # A sub-function will set $PYTHON_EXE variable to the python executable
-    if [ -n "$MB_PYTHON_VERSION" ]; then
-        install_macpython $MB_PYTHON_VERSION
+    if [ -n ${MB_PYTHON_VERSION:-"$PYTHON_VERSION"} ]; then
+        install_macpython ${MB_PYTHON_VERSION:-"$PYTHON_VERSION"}
     elif [ -n "$PYPY_VERSION" ]; then
         install_mac_pypy $PYPY_VERSION
     else

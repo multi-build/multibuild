@@ -14,7 +14,7 @@
 [ "$(pyinst_ext_for_version 3)" == pkg ] || ingest
 
 # Test utilities for getting Python version versions
-[ "$(get_py_digit)" == "${PYTHON_VERSION:0:1}" ] || ingest
-[ "$(get_py_mm)" == "${PYTHON_VERSION:0:3}" ] || ingest
-[ "$(get_py_mm_nodot)" == $(echo "${PYTHON_VERSION:0:3}" | tr -d .) ] || \
+[ "$(get_py_digit)" == "${cpython_version:0:1}" ] || ingest
+[ "$(get_py_mm)" == "${cpython_version:0:3}" ] || ingest
+[ "$(get_py_mm_nodot)" == $(echo "${cpython_version:0:3}" | tr -d .) ] || \
     ingest
