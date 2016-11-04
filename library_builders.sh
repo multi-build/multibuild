@@ -23,6 +23,8 @@ HDF5_VERSION="${HDF5_VERSION:-1.8.17}"
 LIBAEC_VERSION="${LIBAEC_VERSION:-0.3.3}"
 LZO_VERSION=${LZO_VERSION:-2.09}
 BLOSC_VERSION=${BLOSC_VERSION:-1.10.2}
+CURL_VERSION=${CURL_VERSION:-7.43.0}
+NETCDF_VERSION=${NETCDF_VERSION:-4.4.1}
 
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
 ARCHIVE_SDIR=${ARCHIVE_DIR:-archives}
@@ -240,4 +242,27 @@ function build_lzo {
         && make \
         && make install)
     touch lzo-stamp
+}
+
+function build_curl {
+    if [ -e curl-stamp ]; then return; fi
+    if [ -n "$IS_OSX" ]; then flags="--with-darwinssl"; fi
+    fetch_unpack https://curl.haxx.se/download/curl-${CURL_VERSION}.tar.gz
+    (cd curl-${CURL_VERSION} \
+        && ./configure --prefix=$BUILD_PREFIX $flags \
+        && make \
+        && make install)
+    touch curl-stamp
+}
+
+function build_netcdf {
+    if [ -e netcdf-stamp ]; then return; fi
+    build_hdf5
+    build_curl
+    fetch_unpack https://github.com/Unidata/netcdf-c/archive/v${NETCDF_VERSION}.tar.gz
+    (cd netcdf-c-${NETCDF_VERSION} \
+        && ./configure --prefix=$BUILD_PREFIX \
+        && make \
+        && make install)
+    touch netcdf-stamp
 }
