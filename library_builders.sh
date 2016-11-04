@@ -295,7 +295,7 @@ function build_netcdf {
     build_curl
     fetch_unpack https://github.com/Unidata/netcdf-c/archive/v${NETCDF_VERSION}.tar.gz
     (cd netcdf-c-${NETCDF_VERSION} \
-        && ./configure --prefix=$BUILD_PREFIX \
+        && ./configure --prefix=$BUILD_PREFIX --enable-dap \
         && make \
         && make install)
     touch netcdf-stamp
