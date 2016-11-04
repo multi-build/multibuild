@@ -251,12 +251,14 @@ function build_curl {
     if [ -e curl-stamp ]; then return; fi
     if [ -n "$IS_OSX" ]; then
         flags="--with-darwinssl"
-    else
+    else  # manylinux
+        prefix="LIBS=-ldl"
+        flags="--with-ssl"
         build_openssl
     fi
     fetch_unpack https://curl.haxx.se/download/curl-${CURL_VERSION}.tar.gz
     (cd curl-${CURL_VERSION} \
-        && ./configure --prefix=$BUILD_PREFIX $flags \
+        && $prefix ./configure --prefix=$BUILD_PREFIX $flags \
         && make \
         && make install)
     touch curl-stamp
