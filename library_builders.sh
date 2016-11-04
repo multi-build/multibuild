@@ -25,6 +25,9 @@ LZO_VERSION=${LZO_VERSION:-2.09}
 BLOSC_VERSION=${BLOSC_VERSION:-1.10.2}
 CURL_VERSION=${CURL_VERSION:-7.43.0}
 NETCDF_VERSION=${NETCDF_VERSION:-4.4.1}
+OPENSSL_ROOT=openssl-1.0.2j
+OPENSSL_HASH=e7aff292be21c259c6af26469c7a9b3ba26e9abaaffd325e3dccc9785256c431
+OPENSSL_DOWNLOAD_URL=ftp://ftp.openssl.org/source
 
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
 ARCHIVE_SDIR=${ARCHIVE_DIR:-archives}
@@ -246,13 +249,42 @@ function build_lzo {
 
 function build_curl {
     if [ -e curl-stamp ]; then return; fi
-    if [ -n "$IS_OSX" ]; then flags="--with-darwinssl"; fi
+    if [ -n "$IS_OSX" ]; then
+        flags="--with-darwinssl"
+    else
+        build_openssl
+    fi
     fetch_unpack https://curl.haxx.se/download/curl-${CURL_VERSION}.tar.gz
     (cd curl-${CURL_VERSION} \
         && ./configure --prefix=$BUILD_PREFIX $flags \
         && make \
         && make install)
     touch curl-stamp
+}
+
+function check_sha256sum {
+    local fname=$1
+    if [ -z "$fname" ]; then echo "Need path"; exit 1; fi
+    local sha256=$2
+    if [ -z "$sha256" ]; then echo "Need SHA256 hash"; exit 1; fi
+    echo "${sha256}  ${fname}" > ${fname}.sha256
+    if [ -n "$IS_OSX" ]; then
+        shasum -a 256 -c ${fname}.sha256
+    else
+        sha256sum -c ${fname}.sha256
+    fi
+    rm ${fname}.sha256
+}
+
+function build_openssl {
+    if [ -e openssl-stamp ]; then return; fi
+    fetch_unpack ${OPENSSL_DOWNLOAD_URL}/${OPENSSL_ROOT}.tar.gz
+    check_sha256sum $ARCHIVE_SDIR/${OPENSSL_ROOT}.tar.gz ${OPENSSL_HASH}
+    (cd ${OPENSSL_ROOT} \
+        && ./config no-ssl2 no-shared -fPIC --prefix=$BUILD_PREFIX \
+        && make \
+        && make install)
+    touch openssl-stamp
 }
 
 function build_netcdf {
