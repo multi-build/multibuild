@@ -23,7 +23,7 @@ HDF5_VERSION="${HDF5_VERSION:-1.8.17}"
 LIBAEC_VERSION="${LIBAEC_VERSION:-0.3.3}"
 LZO_VERSION=${LZO_VERSION:-2.09}
 BLOSC_VERSION=${BLOSC_VERSION:-1.10.2}
-CURL_VERSION=${CURL_VERSION:-7.43.0}
+CURL_VERSION=${CURL_VERSION:-7.49.1}
 NETCDF_VERSION=${NETCDF_VERSION:-4.4.1}
 OPENSSL_ROOT=openssl-1.0.2j
 OPENSSL_HASH=e7aff292be21c259c6af26469c7a9b3ba26e9abaaffd325e3dccc9785256c431
@@ -249,16 +249,18 @@ function build_lzo {
 
 function build_curl {
     if [ -e curl-stamp ]; then return; fi
+    local flags="--prefix=$BUILD_PREFIX --disable-shared"
     if [ -n "$IS_OSX" ]; then
-        flags="--with-darwinssl"
+        flags="$flags --with-darwinssl"
     else  # manylinux
-        flags="--with-ssl"
+        flags="$flags --with-ssl"
         build_openssl
     fi
     fetch_unpack https://curl.haxx.se/download/curl-${CURL_VERSION}.tar.gz
     (cd curl-${CURL_VERSION} \
-        && if [ -z "$IS_OSX" ]; then LIBS=-ldl; fi \
-        && ./configure --prefix=$BUILD_PREFIX $flags \
+        && if [ -z "$IS_OSX" ]; then \
+        LIBS=-ldl ./configure $flags; else \
+        ./configure $flags; fi\
         && make \
         && make install)
     touch curl-stamp
