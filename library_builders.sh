@@ -249,7 +249,7 @@ function build_lzo {
 
 function build_curl {
     if [ -e curl-stamp ]; then return; fi
-    local flags="--prefix=$BUILD_PREFIX --disable-shared"
+    local flags="--prefix=$BUILD_PREFIX"
     if [ -n "$IS_OSX" ]; then
         flags="$flags --with-darwinssl"
     else  # manylinux
