@@ -25,6 +25,10 @@ matrix:
       env:
         - PYTHON_VERSION=3.5.1
         - VENV=venv
+    - os: osx
+      env:
+        - PYTHON_VERSION=3.6.0
+        - VENV=venv
 
 script:
   - source tests/test_multibuild.sh

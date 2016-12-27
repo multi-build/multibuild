@@ -20,6 +20,8 @@ LATEST_3p2=3.2.5
 LATEST_3p3=3.3.5
 LATEST_3p4=3.4.4
 LATEST_3p5=3.5.1
+LATEST_3p6=3.6.0
+
 
 function check_python {
     if [ -z "$PYTHON_EXE" ]; then
@@ -77,7 +79,9 @@ function fill_pyver {
         echo $LATEST_2p7
     elif [ $ver == "2.6" ]; then
         echo $LATEST_2p6
-    elif [ $ver == 3 ] || [ $ver == "3.5" ]; then
+    elif [ $ver == 3 ] || [ $ver == "3.6" ]; then
+        echo $LATEST_3p6
+    elif [ $ver == "3.5" ]; then
         echo $LATEST_3p5
     elif [ $ver == "3.4" ]; then
         echo $LATEST_3p4
