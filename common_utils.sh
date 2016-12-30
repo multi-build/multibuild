@@ -125,7 +125,7 @@ function build_wheel_cmd {
     #
     # Parameters:
     #     cmd  (optional, default "pip_wheel_cmd"
-    #        Name of command for builing wheel
+    #        Name of command for building wheel
     #     repo_dir  (optional, default $REPO_DIR)
     #
     # Depends on
