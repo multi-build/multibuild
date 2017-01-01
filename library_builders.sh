@@ -85,7 +85,8 @@ function build_zlib {
 
 function build_new_zlib {
     # Careful, this one may cause yum to segfault
-    build_simple zlib $ZLIB_VERSION http://zlib.net
+    # Fossils directory should also contain latest
+    build_simple zlib $ZLIB_VERSION http://zlib.net/fossils
 }
 
 function build_jpeg {
