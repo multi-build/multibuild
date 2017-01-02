@@ -16,3 +16,6 @@
 [ "$(cpython_path 3.5)" == "/opt/python/cp35-cp35m" ] || ingest "cp 3.5"
 [ "$(cpython_path 3.5 32)" == "/opt/python/cp35-cp35m" ] || ingest "cp 3.5 32"
 [ "$(cpython_path 3.5 16)" == "/opt/python/cp35-cp35m" ] || ingest "cp 3.5 16"
+[ "$(cpython_path 3.6)" == "/opt/python/cp36-cp36m" ] || ingest "cp 3.6"
+[ "$(cpython_path 3.6 32)" == "/opt/python/cp36-cp36m" ] || ingest "cp 3.6 32"
+[ "$(cpython_path 3.6 16)" == "/opt/python/cp36-cp36m" ] || ingest "cp 3.6 16"

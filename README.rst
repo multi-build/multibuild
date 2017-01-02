@@ -11,7 +11,7 @@ These scripts are designed to build *and test*:
 * 64-bit manylinux1_x86_64 wheels, both narrow and wide unicode builds;
 * 32-bit manylinux1_i686 wheels, both narrow and wide unicode builds.
 
-You can currently build and test against Pythons 2.6, 2.7, 3.3, 3.4, 3.5.
+You can currently build and test against Pythons 2.6, 2.7, 3.3, 3.4, 3.5, 3.6.
 
 The small innovation here is that you can test against 32-bit builds, and both
 wide and narrow unicode Python 2 builds, which was not easy on the default
@@ -230,6 +230,13 @@ To use these scripts
           env:
             - MB_PYTHON_VERSION=3.5
             - PLAT=i686
+        - os: linux
+          env:
+            - MB_PYTHON_VERSION=3.6
+        - os: linux
+          env:
+            - MB_PYTHON_VERSION=3.6
+            - PLAT=i686
         - os: osx
           language: generic
           env:
@@ -242,6 +249,10 @@ To use these scripts
           language: generic
           env:
             - MB_PYTHON_VERSION=3.5
+        - os: osx
+          language: generic
+          env:
+            - MB_PYTHON_VERSION=3.6
 
     before_install:
         - source multibuild/common_utils.sh
