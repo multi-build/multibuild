@@ -9,6 +9,7 @@
 [ "$(fill_pyver 3.6.0)" == "3.6.0" ] || ingest
 [ "$(fill_pyver 3.5)" == $LATEST_3p5 ] || ingest
 [ "$(fill_pyver 3.5.0)" == "3.5.0" ] || ingest
+[ "$(fill_pyver 3.6.0)" == "3.6.0" ] || ingest
 [ "$(fill_pyver 3.4)" == $LATEST_3p4 ] || ingest
 [ "$(fill_pyver 3.3)" == $LATEST_3p3 ] || ingest
 [ "$(fill_pyver 3.2)" == $LATEST_3p2 ] || ingest

@@ -9,6 +9,7 @@
 [ "$(pyinst_ext_for_version 3.4.1)" == dmg ] || ingest
 [ "$(pyinst_ext_for_version 3.4.2)" == pkg ] || ingest
 [ "$(pyinst_ext_for_version 3.5.0)" == pkg ] || ingest
+[ "$(pyinst_ext_for_version 3.6.0)" == pkg ] || ingest
 [ "$(pyinst_ext_for_version 3.3)" == dmg ] || ingest
 [ "$(pyinst_ext_for_version 3.4)" == pkg ] || ingest
 [ "$(pyinst_ext_for_version 3)" == pkg ] || ingest
