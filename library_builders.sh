@@ -6,7 +6,7 @@ source $MULTIBUILD_DIR/common_utils.sh
 # Recipes for building some libaries
 OPENBLAS_VERSION="${OPENBLAS_VERSION:-0.2.18}"
 # We use system zlib by default - see build_new_zlib
-ZLIB_VERSION="${ZLIB_VERSION:-1.2.9}"
+ZLIB_VERSION="${ZLIB_VERSION:-1.2.10}"
 LIBPNG_VERSION="${LIBPNG_VERSION:-1.6.21}"
 BZIP2_VERSION="${BZIP2_VERSION:-1.0.6}"
 FREETYPE_VERSION="${FREETYPE_VERSION:-2.6.3}"
