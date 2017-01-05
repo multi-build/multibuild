@@ -112,12 +112,27 @@ function clean_code {
     local build_commit=${2:-$BUILD_COMMIT}
     [ -z "$repo_dir" ] && echo "repo_dir not defined" && exit 1
     [ -z "$build_commit" ] && echo "build_commit not defined" && exit 1
-    (cd $repo_dir \
-        && git fetch origin \
-        && git checkout $build_commit \
-        && git clean -fxd \
-        && git reset --hard \
-        && git submodule update --init --recursive)
+
+    # The package $repo_dir is a submodule. git submodules do not
+    # have a .git directory. If $repo_dir is copied around tools
+    # like Versioneer which require that it be a git repository
+    # are unable to determine the version.
+    #
+    # To fix this, we replace $repo_dir with a normal git repository
+    # that can be moved around without consequece.
+    (contents=$(cat "$repo_dir/.git") \
+       && origin_url=$(cd $repo_dir && git config --get remote.origin.url) \
+       && git_dir=$(realpath $repo_dir/${contents:8})\
+       && rm -rf $repo_dir \
+       && git clone --local $git_dir $repo_dir \
+       && cd $repo_dir \
+       && git remote remove origin \
+       && git remote add origin $origin_url \
+       && git fetch origin \
+       && git checkout $build_commit \
+       && git clean -fxd \
+       && git reset --hard \
+       && git submodule update --init --recursive)
 }
 
 function build_wheel_cmd {
