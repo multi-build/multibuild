@@ -10,3 +10,9 @@ function ingest {
 function barf {
     [ "$RET" == 0 ] || exit 1
 }
+
+function local_author {
+    # Run in git repository to set commit author
+    git config user.email "my@noble.self"
+    git config user.name "Noble Self"
+}
