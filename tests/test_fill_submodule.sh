@@ -27,6 +27,8 @@ cd project
 [ "$(git log --format="%s")" == "first project" ] || ingest "bad after filling"
 [ -d .git ] || ingest "expecting .git to be a directory"
 [ "$(git config --get remote.origin.url)" == "$remote_url" ] || ingest "bad remote"
+# Check we can do a checkout
+git checkout master
 cd ..
 # Intervene again (has .git directory now)
 fill_submodule project
