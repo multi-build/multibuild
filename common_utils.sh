@@ -256,8 +256,9 @@ function fill_submodule {
     [ -d "$git_loc" ] && return
     # Need to recreate .git directory for submodule
     local origin_url=$(cd "$repo_dir" && git config --get remote.origin.url)
-    git clone --recursive "$repo_dir" "${repo_dir}-copy"
+    local repo_copy="$repo_dir-$RANDOM"
+    git clone --recursive "$repo_dir" "$repo_copy"
     rm -rf "$repo_dir"
-    mv "${repo_dir}-copy" "$repo_dir"
+    mv "${repo_copy}" "$repo_dir"
     (cd "$repo_dir" && git remote set-url origin $origin_url)
 }
