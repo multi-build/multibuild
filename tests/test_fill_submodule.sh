@@ -8,7 +8,8 @@ mkdir project
     echo "Interesting!" > README.txt &&
     git add README.txt &&
     local_author &&
-    git commit -m "first project")
+    git commit -m "first project" &&
+    git tag first-commit)
 mkdir superproject
 cd superproject
 git init
@@ -27,8 +28,10 @@ cd project
 [ "$(git log --format="%s")" == "first project" ] || ingest "bad after filling"
 [ -d .git ] || ingest "expecting .git to be a directory"
 [ "$(git config --get remote.origin.url)" == "$remote_url" ] || ingest "bad remote"
-# Check we can do a checkout
+# Check we can do a checkout of a branch
 git checkout master
+# Checkout a tag
+git checkout first-commit
 cd ..
 # Intervene again (has .git directory now)
 fill_submodule project
