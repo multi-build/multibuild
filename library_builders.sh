@@ -22,12 +22,14 @@ SZIP_VERSION="${SZIP_VERSION:-2.1}"
 HDF5_VERSION="${HDF5_VERSION:-1.8.18}"
 LIBAEC_VERSION="${LIBAEC_VERSION:-0.3.3}"
 LZO_VERSION=${LZO_VERSION:-2.09}
+LZF_VERSION="${LZF_VERSION:-3.6}"
 BLOSC_VERSION=${BLOSC_VERSION:-1.10.2}
 CURL_VERSION=${CURL_VERSION:-7.49.1}
 NETCDF_VERSION=${NETCDF_VERSION:-4.4.1}
 OPENSSL_ROOT=openssl-1.0.2j
 OPENSSL_HASH=e7aff292be21c259c6af26469c7a9b3ba26e9abaaffd325e3dccc9785256c431
 OPENSSL_DOWNLOAD_URL=ftp://ftp.openssl.org/source
+
 
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
 ARCHIVE_SDIR=${ARCHIVE_DIR:-archives}
@@ -247,6 +249,10 @@ function build_lzo {
         && make \
         && make install)
     touch lzo-stamp
+}
+
+function build_lzf {
+    build_simple liblzf $LZF_VERSION http://dist.schmorp.de/liblzf
 }
 
 function build_curl {
