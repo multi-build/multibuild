@@ -23,6 +23,7 @@ HDF5_VERSION="${HDF5_VERSION:-1.8.18}"
 LIBAEC_VERSION="${LIBAEC_VERSION:-0.3.3}"
 LZO_VERSION=${LZO_VERSION:-2.09}
 BLOSC_VERSION=${BLOSC_VERSION:-1.10.2}
+SNAPPY_VERSION="${SNAPPY_VERSION:-1.1.3}"
 CURL_VERSION=${CURL_VERSION:-7.49.1}
 NETCDF_VERSION=${NETCDF_VERSION:-4.4.1}
 OPENSSL_ROOT=openssl-1.0.2j
@@ -237,6 +238,10 @@ function build_blosc {
         done
     fi
     touch blosc-stamp
+}
+
+function build_snappy {
+    build_simple snappy $SNAPPY_VERSION https://github.com/google/snappy/releases/download/$SNAPPY_VERSION
 }
 
 function build_lzo {
