@@ -120,6 +120,22 @@ function pyinst_ext_for_version {
     fi
 }
 
+function install_python {
+    # Picks an implementation of Python determined by the current enviroment
+    # variables, then installs it
+    # A sub-function will set $PYTHON_EXE variable to the python executable
+    if [ -n "$MB_PYTHON_VERSION" ]; then
+        install_macpython $MB_PYTHON_VERSION
+    elif [ -n "$PYPY_VERSION" ]; then
+        install_mac_pypy $PYPY_VERSION
+    else
+        echo "config error: expected one of these enviroment variables:"
+        echo "    MB_PYTHON_VERSION"
+        echo "    PYPY_VERSION"
+        exit 1
+    fi
+}
+
 function install_macpython {
     # Installs Python.org Python
     # Parameter $version
@@ -145,6 +161,22 @@ function install_macpython {
     if [ -e "$inst_cmd" ]; then
         sh "$inst_cmd"
     fi
+}
+
+function install_mac_pypy {
+    # Installs pypy.org PyPy
+    # Parameter $version
+    # Version given in major or major.minor or major.minor.micro e.g
+    # "3" or "3.4" or "3.4.1".
+    # sets $PYTHON_EXE variable to python executable
+    local py_version=$(fill_pypy_ver $1)
+    local py_build=$(get_pypy_build_prefix $py_version)$py_version-osx64
+    local py_zip=$py_build.tar.bz2
+    local zip_path=$DOWNLOADS_SDIR/$py_zip
+    mkdir -p $DOWNLOADS_SDIR
+    wget -nv $PYPY_URL/${py_zip} -P $DOWNLOADS_SDIR
+    untar $zip_path
+    PYTHON_EXE=$(realpath $py_build/bin/pypy)
 }
 
 function install_pip {
@@ -205,6 +237,29 @@ function set_py_vars {
     export PYTHON_EXE PIP_CMD
 }
 
+function get_python_environment {
+    # Set up MacPython environment
+    # Parameters:
+    #     $venv_dir : {directory_name|not defined}
+    #         If defined - make virtualenv in this directory, set python / pip
+    #         commands accordingly
+    #
+    # Installs Python
+    # Sets $PYTHON_EXE to path to Python executable
+    # Sets $PIP_CMD to full command for pip (including sudo if necessary)
+    # If $venv_dir defined, Sets $VIRTUALENV_CMD to virtualenv executable
+    # Puts directory of $PYTHON_EXE on $PATH
+    local venv_dir=$1
+    remove_travis_ve_pip
+    install_python
+    install_pip
+    if [ -n "$venv_dir" ]; then
+        install_virtualenv
+        make_workon_venv $venv_dir
+    fi
+    set_py_vars
+}
+
 function get_macpython_environment {
     # Set up MacPython environment
     # Parameters:
@@ -219,16 +274,8 @@ function get_macpython_environment {
     # Sets $PIP_CMD to full command for pip (including sudo if necessary)
     # If $venv_dir defined, Sets $VIRTUALENV_CMD to virtualenv executable
     # Puts directory of $PYTHON_EXE on $PATH
-    local version=$1
-    local venv_dir=$2
-    remove_travis_ve_pip
-    install_macpython $version
-    install_pip
-    if [ -n "$venv_dir" ]; then
-        install_virtualenv
-        make_workon_venv $venv_dir
-    fi
-    set_py_vars
+    export MB_PYTHON_VERSION=$1
+    get_python_environment $2
 }
 
 function repair_wheelhouse {

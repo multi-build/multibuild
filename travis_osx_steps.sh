@@ -15,7 +15,7 @@ source $MULTIBUILD_DIR/library_builders.sh
 function before_install {
     export CC=clang
     export CXX=clang++
-    get_macpython_environment $MB_PYTHON_VERSION venv
+    get_python_environment venv
     source venv/bin/activate
     pip install --upgrade pip wheel
 }
