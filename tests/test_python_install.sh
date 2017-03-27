@@ -20,15 +20,16 @@ then
 fi
 python_mm="${cpython_version:0:1}.${cpython_version:2:1}"
 
-requested_version=${PYTHON_VERSION:-${MB_PYTHON_VERSION:-${PYPY_VERSION:-${PYPY3_VERSION}}}}
-# remove any version tags which my have been added to the enviroment variable
-if [[ "$requested_version" =~ [^-]* ]]; then
-    requested_version="$BASH_REMATCH"
+# Remove implementation prefix
+if [[ "$MB_PYTHON_VERSION" =~ (pypy-)?([0-9\.]+) ]]; then
+    requested_version=${BASH_REMATCH[2]}
+else
+    ingest "Error parsing MB_PYTHON_VERSION=$MB_PYTHON_VERSION"
 fi
 
 # simple regex match, a 2.7 pattern will match 2.7.11, but not 2
 if ! [[ "$implementer_version" =~ $requested_version ]]; then
-    ingest "Wrong python version: $implementer_version"
+    ingest "Wrong python version: ${implementer_version}!=${requested_version}"
 fi
 
 if [ -n "$VENV" ]; then  # in virtualenv

@@ -256,7 +256,7 @@ To use these scripts
         - os: osx
           language: generic
           env:
-            - PYPY_VERSION=5.7
+            - MB_PYTHON_VERSION=pypy-5.7
 
     before_install:
         - source multibuild/common_utils.sh
