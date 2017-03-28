@@ -21,10 +21,10 @@ fi
 python_mm="${cpython_version:0:1}.${cpython_version:2:1}"
 
 # Remove implementation prefix
-if [[ "$MB_PYTHON_VERSION" =~ (pypy-)?([0-9\.]+) ]]; then
+if [[ "$PYTHON_VERSION" =~ (pypy-)?([0-9\.]+) ]]; then
     requested_version=${BASH_REMATCH[2]}
 else
-    ingest "Error parsing MB_PYTHON_VERSION=$MB_PYTHON_VERSION"
+    ingest "Error parsing PYTHON_VERSION=$PYTHON_VERSION"
 fi
 
 # simple regex match, a 2.7 pattern will match 2.7.11, but not 2

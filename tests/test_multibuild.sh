@@ -6,11 +6,7 @@ source tests/test_common_utils.sh
 source tests/test_fill_submodule.sh
 if [ -n "$IS_OSX" ]; then
     source osx_utils.sh
-    if [ -n "$PYTHON_VERSION" ]; then
-        get_macpython_environment $PYTHON_VERSION $VENV
-    else
-        get_python_environment $VENV
-    fi
+    get_macpython_environment $PYTHON_VERSION $VENV
     source tests/test_python_install.sh
     source tests/test_fill_pyver.sh
     source tests/test_osx_utils.sh

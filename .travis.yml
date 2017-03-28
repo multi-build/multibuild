@@ -31,35 +31,35 @@ matrix:
         - VENV=venv
     - os: osx
       env:
-        - MB_PYTHON_VERSION=pypy-2.6
+        - PYTHON_VERSION=pypy-2.6
         - VENV=venv
     - os: osx
       env:
-        - MB_PYTHON_VERSION=pypy-4.0
+        - PYTHON_VERSION=pypy-4.0
         - VENV=venv
     - os: osx
       env:
-        - MB_PYTHON_VERSION=pypy-5.0
+        - PYTHON_VERSION=pypy-5.0
         - VENV=venv
     - os: osx
       env:
-        - MB_PYTHON_VERSION=pypy-5.1
+        - PYTHON_VERSION=pypy-5.1
         - VENV=venv
     - os: osx
       env:
-        - MB_PYTHON_VERSION=pypy-5.3
+        - PYTHON_VERSION=pypy-5.3
         - VENV=venv
     - os: osx
       env:
-        - MB_PYTHON_VERSION=pypy-5.4
+        - PYTHON_VERSION=pypy-5.4
         - VENV=venv
     - os: osx
       env:
-        - MB_PYTHON_VERSION=pypy-5.6
+        - PYTHON_VERSION=pypy-5.6
         - VENV=venv
     - os: osx
       env:
-        - MB_PYTHON_VERSION=pypy-5.7
+        - PYTHON_VERSION=pypy-5.7
         - VENV=venv
 
 script:
