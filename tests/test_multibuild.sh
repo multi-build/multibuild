@@ -9,6 +9,7 @@ if [ -n "$IS_OSX" ]; then
     get_macpython_environment $PYTHON_VERSION $VENV
     source tests/test_python_install.sh
     source tests/test_fill_pyver.sh
+    source tests/test_fill_pypy_ver.sh
     source tests/test_osx_utils.sh
 else
     source manylinux_utils.sh
