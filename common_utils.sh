@@ -74,11 +74,11 @@ function untar {
     if [ -z "$in_fname" ];then echo "in_fname not defined"; exit 1; fi
     local extension=${in_fname##*.}
     case $extension in
-        tar) tar xf $in_fname ;;
-        gz|tgz) tar zxf $in_fname ;;
-        bz2) tar jxf $in_fname ;;
+        tar) tar -xf $in_fname ;;
+        gz|tgz) tar -zxf $in_fname ;;
+        bz2) tar -jxf $in_fname ;;
         zip) unzip $in_fname ;;
-        xz) unxz -c $in_fname | tar xf ;;
+        xz) unxz -c $in_fname | tar -xf ;;
         *) echo Did not recognize extension $extension; exit 1 ;;
     esac
 }
@@ -261,4 +261,75 @@ function fill_submodule {
     rm -rf "$repo_dir"
     mv "${repo_copy}" "$repo_dir"
     (cd "$repo_dir" && git remote set-url origin $origin_url)
+}
+
+PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
+
+# As of 2017-03-25, the latest verions of PyPy.
+LATEST_PP_1=1.9
+
+LATEST_PP_2=2.6
+LATEST_PP_2p0=2.0.2
+LATEST_PP_2p2=2.2.1
+LATEST_PP_2p3=2.3.1
+LATEST_PP_2p4=2.4.0
+LATEST_PP_2p5=2.5.1
+LATEST_PP_2p6=2.6.1
+
+LATEST_PP_4=4.0
+LATEST_PP_4p0=4.0.1
+
+LATEST_PP_5=5.7
+LATEST_PP_5p0=5.0.1
+LATEST_PP_5p1=5.1.1
+LATEST_PP_5p3=5.3.1
+LATEST_PP_5p4=5.4.1
+LATEST_PP_5p6=5.6.0
+LATEST_PP_5p7=5.7.0
+
+function unroll_version {
+    # Convert major or major.minor format to major.minor.micro using the above
+    # values recursively
+    # Parameters:
+    #   $prefix : one of LATEST_PP or LATEST_PP3
+    #   $version : major[.minor[.patch]]
+    # Hence:
+    #   LATEST_PP 5 -> 5.7.0
+    #   LATEST 2.7 -> 2.7.11
+    local prefix=$1
+    local ver=$2
+    local latest=${prefix}_${ver//./p}
+    if [ -n "${!latest}" ]; then
+        echo $(unroll_version ${prefix} ${!latest})
+    else
+        echo $ver
+    fi
+}
+
+function fill_pypy_ver {
+    # Convert major or major.minor format to major.minor.micro
+    # Parameters:
+    #   $version : major[.minor[.patch]]
+    # Hence:
+    #   5 -> 5.7.0
+    echo $(unroll_version LATEST_PP $1)
+}
+
+function get_pypy_build_prefix {
+    # Return the file prefix of a PyPy file
+    # Parameters:
+    #   $version : pypy2 version number
+    local version=$1
+    if [[ $version =~ ([0-9]+)\.([0-9]+) ]]; then
+        local major=${BASH_REMATCH[1]}
+        local minor=${BASH_REMATCH[2]}
+        if (( $major > 5 || ($major == 5 && $minor >= 3) )); then
+            echo "pypy2-v"
+        else
+            echo "pypy-"
+        fi
+    else
+        echo "error: expected version number, got $1" 1>&2
+        exit 1
+    fi
 }

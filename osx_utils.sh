@@ -90,7 +90,7 @@ function fill_pyver {
     elif [ $ver == "3.2" ]; then
         echo $LATEST_3p2
     else
-        echo "Can't fill version $ver"
+        echo "Can't fill version $ver" 1>&2
         exit 1
     fi
 }
@@ -121,6 +121,23 @@ function pyinst_ext_for_version {
 }
 
 function install_macpython {
+    # Install Python and set $PYTHON_EXE to the installed executable
+    # Parameters:
+    #     $version : [implementation-]major[.minor[.patch]]
+    #         The Python implementation to install, e.g. "3.6" or "pypy-5.4"
+    local version=$1
+    if [[ "$version" =~ pypy-([0-9\.]+) ]]; then
+        install_mac_pypy "${BASH_REMATCH[1]}"
+    elif [[ "$version" =~ ([0-9\.]+) ]]; then
+        install_mac_cpython "${BASH_REMATCH[1]}"
+    else
+        echo "config error: Issue parsing this implentation in install_python:"
+        echo "    version=$version"
+        exit 1
+    fi
+}
+
+function install_mac_cpython {
     # Installs Python.org Python
     # Parameter $version
     # Version given in major or major.minor or major.minor.micro e.g
@@ -145,6 +162,22 @@ function install_macpython {
     if [ -e "$inst_cmd" ]; then
         sh "$inst_cmd"
     fi
+}
+
+function install_mac_pypy {
+    # Installs pypy.org PyPy
+    # Parameter $version
+    # Version given in major or major.minor or major.minor.micro e.g
+    # "3" or "3.4" or "3.4.1".
+    # sets $PYTHON_EXE variable to python executable
+    local py_version=$(fill_pypy_ver $1)
+    local py_build=$(get_pypy_build_prefix $py_version)$py_version-osx64
+    local py_zip=$py_build.tar.bz2
+    local zip_path=$DOWNLOADS_SDIR/$py_zip
+    mkdir -p $DOWNLOADS_SDIR
+    wget -nv $PYPY_URL/${py_zip} -P $DOWNLOADS_SDIR
+    untar $zip_path
+    PYTHON_EXE=$(realpath $py_build/bin/pypy)
 }
 
 function install_pip {
@@ -208,8 +241,8 @@ function set_py_vars {
 function get_macpython_environment {
     # Set up MacPython environment
     # Parameters:
-    #     $version :
-    #         major.minor.micro e.g. "3.4.1"
+    #     $version : [implementation-]major[.minor[.patch]]
+    #         The Python implementation to install, e.g. "3.6" or "pypy-5.4"
     #     $venv_dir : {directory_name|not defined}
     #         If defined - make virtualenv in this directory, set python / pip
     #         commands accordingly

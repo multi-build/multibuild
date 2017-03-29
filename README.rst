@@ -253,6 +253,10 @@ To use these scripts
           language: generic
           env:
             - MB_PYTHON_VERSION=3.6
+        - os: osx
+          language: generic
+          env:
+            - MB_PYTHON_VERSION=pypy-5.7
 
     before_install:
         - source multibuild/common_utils.sh

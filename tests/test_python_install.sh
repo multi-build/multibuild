@@ -11,16 +11,30 @@ pip install delocate
 delocate-listdeps --version || ingest "Delocate not installed right"
 
 # Python version from Python to compare against required
-python_version=$($PYTHON_EXE --version 2>&1 | awk '{print $2}')
-python_mm="${PYTHON_VERSION:0:1}.${PYTHON_VERSION:2:1}"
+if [[ $($PYTHON_EXE --version 2>&1 | awk '{print $2}') =~ ([0-9.]*).?([0-9.]*) ]]
+then
+    # CPython version, 2.7.x on both CPython 2.7 and PyPy 5.4
+    cpython_version=${BASH_REMATCH[1]}
+    # CPython/PyPy version
+    implementer_version=${BASH_REMATCH[2]:-$cpython_version}
+fi
+python_mm="${cpython_version:0:1}.${cpython_version:2:1}"
 
-if [ "$python_version" != $PYTHON_VERSION ]; then
-    ingest "Wrong macpython python version $python_version"
+# Remove implementation prefix
+if [[ "$PYTHON_VERSION" =~ (pypy-)?([0-9\.]+) ]]; then
+    requested_version=${BASH_REMATCH[2]}
+else
+    ingest "Error parsing PYTHON_VERSION=$PYTHON_VERSION"
+fi
+
+# simple regex match, a 2.7 pattern will match 2.7.11, but not 2
+if ! [[ "$implementer_version" =~ $requested_version ]]; then
+    ingest "Wrong python version: ${implementer_version}!=${requested_version}"
 fi
 
 if [ -n "$VENV" ]; then  # in virtualenv
     # Correct pip and Python versions should be on PATH
-    if [ "$($PYTHON_EXE --version)" != "$(python --version)" ]; then
+    if [ "$($PYTHON_EXE --version 2>&1)" != "$(python --version 2>&1)" ]; then
         ingest "Python versions do not match"
     fi
     if [ "$($PIP_CMD --version)" != "$(pip --version)" ]; then
