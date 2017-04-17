@@ -278,3 +278,10 @@ function repair_wheelhouse {
     # https://github.com/MacPython/wiki/wiki/Spinning-wheels#question-will-pip-give-me-a-broken-wheel
     delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
 }
+
+function install_pkg_config {
+    # Install pkg-config avoiding error from homebrew
+    # See :
+    # https://github.com/matthew-brett/multibuild/issues/24#issue-221951587
+    command -v pkg-config > /dev/null 2>&1 || brew install pkg-config
+}
