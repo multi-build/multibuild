@@ -268,6 +268,10 @@ function repair_wheelhouse {
     local wheelhouse=$1
     pip install delocate
     delocate-listdeps $wheelhouse/*.whl # lists library dependencies
+    # repair_wheelhouse can take more than 10 minutes without generating output
+    # but jobs that do not generate output within 10 minutes are aborted by travis-ci.
+    # Echoing something here solves the problem.
+    echo in repair_wheelhouse, executing delocate-wheel
     delocate-wheel $wheelhouse/*.whl # copies library dependencies into wheel
     # Add platform tags to label wheels as compatible with OSX 10.9 and
     # 10.10.  The wheels will be built against Python.org Python, and so will
