@@ -339,3 +339,16 @@ OSX / Linux differences:
 * https://github.com/MacPython/matplotlib-wheels
 * https://github.com/python-pillow/Pillow-wheels
 * https://github.com/MacPython/h5py-wheels
+
+**********************
+Multibuild development
+**********************
+
+The main multibuild repository is always at
+https://github.com/matthew-brett/multibuild
+
+We try to keep the ``master`` branch stable, so consider doing regular or
+per-build updates of your Multibuild code to current ``master``.
+
+We do testing and development in the ``devel`` branch.  From time to time we
+merge ``devel`` into master.
