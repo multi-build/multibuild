@@ -13,7 +13,9 @@
 [ "$(pyinst_ext_for_version 3.4)" == pkg ] || ingest
 [ "$(pyinst_ext_for_version 3)" == pkg ] || ingest
 [ "$(pyinst_fname_for_version 2.6.6)" == "python-2.6.6-macosx10.3.dmg" ] || ingest
-[ "$(pyinst_fname_for_version 2.7.9)" == "python-2.7.9-macosx10.6.dmg" ] || ingest
+[ "$(pyinst_fname_for_version 2.7.8)" == "python-2.7.8-macosx10.6.dmg" ] || ingest
+[ "$(pyinst_fname_for_version 2.7.9)" == "python-2.7.9-macosx10.6.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 3.4.1)" == "python-3.4.1-macosx10.6.dmg" ] || ingest
 [ "$(pyinst_fname_for_version 3.4.1)" == "python-3.4.1-macosx10.6.dmg" ] || ingest
 [ "$(pyinst_fname_for_version 3.4.2)" == "python-3.4.2-macosx10.6.pkg" ] || ingest
 [ "$(pyinst_fname_for_version 3.6.1)" == "python-3.6.1-macosx10.6.pkg" ] || ingest
