@@ -202,10 +202,14 @@ function install_pip {
     check_python
     mkdir -p $DOWNLOADS_SDIR
     curl $GET_PIP_URL > $DOWNLOADS_SDIR/get-pip.py
-    # Travis VMS now install pip for system python by default - force install
-    # even if installed already
-    sudo $PYTHON_EXE $DOWNLOADS_SDIR/get-pip.py --ignore-installed
+    # Python 2.6 will fail SSL check
     local py_mm=`get_py_mm`
+    if [ "$py_mm" == "2.6" ]; then
+        local pip_args="--trusted-host=pypi.python.org"
+    fi
+    # Travis VMS now install pip for system python by default - force install
+    # even if installed already.
+    sudo $PYTHON_EXE $DOWNLOADS_SDIR/get-pip.py --ignore-installed $pip_args
     PIP_CMD="sudo `dirname $PYTHON_EXE`/pip$py_mm"
 }
 
