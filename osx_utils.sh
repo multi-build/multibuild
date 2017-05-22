@@ -120,6 +120,21 @@ function pyinst_ext_for_version {
     fi
 }
 
+function pyinst_fname_for_version {
+    # echo filename for OSX installer file given Python version
+    # Parameters
+    #   $py_version (python version in major.minor.extra format)
+    local py_version=$1
+    local inst_ext=$(pyinst_ext_for_version $py_version)
+    # Python 2.6 has OSX 10.3 suffix
+    if [ "$(lex_ver $py_version)" -le "$(lex_ver 2.6.6)" ]; then
+        local osx_ver=10.3
+    else
+        local osx_ver=10.6
+    fi
+    echo "python-$py_version-macosx${osx_ver}.$inst_ext"
+}
+
 function install_macpython {
     # Install Python and set $PYTHON_EXE to the installed executable
     # Parameters:
@@ -145,12 +160,11 @@ function install_mac_cpython {
     # sets $PYTHON_EXE variable to python executable
     local py_version=$(fill_pyver $1)
     local py_stripped=$(strip_ver_suffix $py_version)
-    local inst_ext=$(pyinst_ext_for_version $py_version)
-    local py_inst=python-$py_version-macosx10.6.$inst_ext
+    local py_inst=$(pyinst_fname_for_version $py_version)
     local inst_path=$DOWNLOADS_SDIR/$py_inst
     mkdir -p $DOWNLOADS_SDIR
     curl $MACPYTHON_URL/$py_stripped/${py_inst} > $inst_path
-    if [ "$inst_ext" == "dmg" ]; then
+    if [ "${py_inst: -3}" == "dmg" ]; then
         hdiutil attach $inst_path -mountpoint /Volumes/Python
         inst_path=/Volumes/Python/Python.mpkg
     fi
