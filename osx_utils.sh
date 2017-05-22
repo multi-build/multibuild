@@ -293,6 +293,7 @@ function get_macpython_environment {
 function repair_wheelhouse {
     local wheelhouse=$1
     check_pip
+    echo "pip cmd is $PIP_CMD"
     $PIP_CMD install delocate
     delocate-listdeps $wheelhouse/*.whl # lists library dependencies
     # repair_wheelhouse can take more than 10 minutes without generating output
