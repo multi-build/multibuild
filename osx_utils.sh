@@ -210,7 +210,12 @@ function install_pip {
     # Travis VMS now install pip for system python by default - force install
     # even if installed already.
     sudo $PYTHON_EXE $DOWNLOADS_SDIR/get-pip.py --ignore-installed $pip_args
-    PIP_CMD="sudo `dirname $PYTHON_EXE`/pip$py_mm $pip_args"
+    PIP_CMD="sudo $(dirname $PYTHON_EXE)/pip$py_mm"
+    # Append pip_args if present (avoiding trailing space cf using variable
+    # above).
+    if [ -n "$pip_args" ]; then
+        PIP_CMD="$PIP_CMD $pip_args"
+    fi
 }
 
 function install_virtualenv {
@@ -239,6 +244,9 @@ function make_workon_venv {
     $VIRTUALENV_CMD --python=$PYTHON_EXE $venv_dir
     PYTHON_EXE=$venv_dir/bin/python
     PIP_CMD=$venv_dir/bin/pip
+    if [ "$(get_py_mm)" == "2.6" ]; then
+        PIP_CMD="$PIP_CMD --trusted-host=pypi.python.org"
+    fi
 }
 
 function remove_travis_ve_pip {
