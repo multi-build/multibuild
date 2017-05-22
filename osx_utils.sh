@@ -292,7 +292,8 @@ function get_macpython_environment {
 
 function repair_wheelhouse {
     local wheelhouse=$1
-    pip install delocate
+    check_pip
+    $PIP_CMD install delocate
     delocate-listdeps $wheelhouse/*.whl # lists library dependencies
     # repair_wheelhouse can take more than 10 minutes without generating output
     # but jobs that do not generate output within 10 minutes are aborted by travis-ci.

@@ -31,6 +31,9 @@ fi
 if ! [[ "$implementer_version" =~ $requested_version ]]; then
     ingest "Wrong python version: ${implementer_version}!=${requested_version}"
 fi
+if [ "$python_mm" == "2.6" ]; then
+    expected_pip_args=" --trusted-host=pypi.python.org"
+fi
 
 if [ -n "$VENV" ]; then  # in virtualenv
     # Correct pip and Python versions should be on PATH
@@ -44,7 +47,7 @@ if [ -n "$VENV" ]; then  # in virtualenv
     if [ "$PYTHON_EXE" != "$PWD/venv/bin/python" ]; then
         ingest "Wrong virtualenv python '$PYTHON_EXE'"
     fi
-    if [ "$PIP_CMD" != "$PWD/venv/bin/pip" ]; then
+    if [ "$PIP_CMD" != "${PWD}/venv/bin/pip${expected_pip_args}" ]; then
         ingest "Wrong virtualenv pip '$PIP_CMD'"
     fi
 else # not virtualenv
@@ -52,7 +55,7 @@ else # not virtualenv
     if [ "$PYTHON_EXE" != "$macpie_bin/python$python_mm" ]; then
         ingest "Wrong macpython python cmd '$PYTHON_EXE'"
     fi
-    if [ "$PIP_CMD" != "sudo $macpie_bin/pip$python_mm" ]; then
+    if [ "$PIP_CMD" != "sudo $macpie_bin/pip${python_mm}${expected_pip_args}" ]; then
         ingest "Wrong macpython pip '$PIP_CMD'"
     fi
 fi
