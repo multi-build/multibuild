@@ -146,7 +146,7 @@ function install_macpython {
     elif [[ "$version" =~ ([0-9\.]+) ]]; then
         install_mac_cpython "${BASH_REMATCH[1]}"
     else
-        echo "config error: Issue parsing this implentation in install_python:"
+        echo "config error: Issue parsing this implementation in install_python:"
         echo "    version=$version"
         exit 1
     fi
