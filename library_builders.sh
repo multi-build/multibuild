@@ -28,7 +28,8 @@ SNAPPY_VERSION="${SNAPPY_VERSION:-1.1.3}"
 CURL_VERSION=${CURL_VERSION:-7.49.1}
 NETCDF_VERSION=${NETCDF_VERSION:-4.4.1.1}
 OPENSSL_ROOT=openssl-1.0.2k
-OPENSSL_HASH=f137b5d9b1bea8d939f6965cae83a6df4ff9724c7d53ca2edd7358f4909de150
+# Hash from https://www.openssl.org/source/openssl-1.0.2k.tar.gz.sha256
+OPENSSL_HASH=6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0
 OPENSSL_DOWNLOAD_URL=https://www.openssl.org/source
 
 
