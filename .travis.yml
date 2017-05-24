@@ -1,12 +1,22 @@
+# Set TEST_BUILDS=1 to run library_builders tests
+
 language: generic
 
 matrix:
   include:
     - os: linux
+      dist: precise
+      env:
+        - TEST_BUILDS=1
+    - os: linux
+      dist: trusty
+      env:
+        - TEST_BUILDS=1
     - os: osx
       osx_image: xcode6.4
       env:
         - PYTHON_VERSION=2.6
+        - TEST_BUILDS=1
     - os: osx
       osx_image: xcode6.4
       env:
@@ -15,6 +25,7 @@ matrix:
     - os: osx
       env:
         - PYTHON_VERSION=2.7.11
+        - TEST_BUILDS=1
     - os: osx
       language: objective-c
       env:
