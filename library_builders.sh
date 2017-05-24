@@ -27,9 +27,10 @@ BLOSC_VERSION=${BLOSC_VERSION:-1.10.2}
 SNAPPY_VERSION="${SNAPPY_VERSION:-1.1.3}"
 CURL_VERSION=${CURL_VERSION:-7.49.1}
 NETCDF_VERSION=${NETCDF_VERSION:-4.4.1.1}
-OPENSSL_ROOT=openssl-1.0.2j
-OPENSSL_HASH=e7aff292be21c259c6af26469c7a9b3ba26e9abaaffd325e3dccc9785256c431
-OPENSSL_DOWNLOAD_URL=ftp://ftp.openssl.org/source
+OPENSSL_ROOT=openssl-1.0.2k
+# Hash from https://www.openssl.org/source/openssl-1.0.2k.tar.gz.sha256
+OPENSSL_HASH=6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0
+OPENSSL_DOWNLOAD_URL=https://www.openssl.org/source
 
 
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
