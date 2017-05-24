@@ -14,6 +14,7 @@ else
     source manylinux_utils.sh
     source tests/test_manylinux_utils.sh
 fi
+source tests/test_library_builders.sh
 
 # Exit 1 if any test errors
 barf
