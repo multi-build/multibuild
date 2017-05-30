@@ -333,3 +333,21 @@ function get_pypy_build_prefix {
         exit 1
     fi
 }
+
+retry () {
+    # Retry command (with arguments) up to 5 times
+    # https://gist.github.com/fungusakafungus/1026804
+    local retry_max=5
+    local count=$retry_max
+    while [ $count -gt 0 ]; do
+        "$@" && break
+        count=$(($count - 1))
+        sleep 1
+    done
+
+    [ $count -eq 0 ] && {
+        echo "Retry failed [$retry_max]: $@" >&2
+        return 1
+    }
+    return 0
+}
