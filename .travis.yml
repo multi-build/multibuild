@@ -44,14 +44,14 @@ matrix:
         - VENV=venv
     - os: osx
       env:
-        - PYTHON_VERSION=3.5.1
+        - PYTHON_VERSION=3.5.3
     - os: osx
       env:
-        - PYTHON_VERSION=3.5.1
+        - PYTHON_VERSION=3.5.3
         - VENV=venv
     - os: osx
       env:
-        - PYTHON_VERSION=3.6.0
+        - PYTHON_VERSION=3.6.1
         - VENV=venv
     - os: osx
       env:
@@ -85,6 +85,32 @@ matrix:
       env:
         - PYTHON_VERSION=pypy-5.7
         - VENV=venv
+    # Default OSX (xcode image) is 10.11 (xcode 7.3.1) as of 2017-05-02
+    # See: https://docs.travis-ci.com/user/osx-ci-environment/#OS-X-Version
+    - os: osx
+      osx_image: xcode8.3
+      env:
+        - PYTHON_VERSION=3.5
+    - os: osx
+      osx_image: xcode8.2
+      env:
+        - PYTHON_VERSION=3.5
+    - os: osx
+      osx_image: xcode8.1
+      env:
+        - PYTHON_VERSION=3.5
+    - os: osx
+      osx_image: xcode8
+      env:
+        - PYTHON_VERSION=3.5
+    - os: osx
+      osx_image: xcode7.3
+      env:
+        - PYTHON_VERSION=3.5
+    - os: osx
+      osx_image: xcode6.4
+      env:
+        - PYTHON_VERSION=3.5
 
 script:
   - source tests/test_multibuild.sh
