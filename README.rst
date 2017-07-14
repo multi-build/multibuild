@@ -1,21 +1,29 @@
-######################################################
-Utilities for building on travis-ci with OSX and Linux
-######################################################
+################################################
+Utilities for building on Travis-CI and AppVeyor
+################################################
 
-A set of scripts to automate builds of OSX and manylinux1 wheels on travis-ci
-infrastructure.
+A set of scripts to automate builds of OSX and manylinux1 wheels on the
+`Travis-CI <http://travis-ci.org/>`_ infrastructure, and also Windows
+wheels on the `AppVeyor <https://ci.appveyor.com/>`_ infrastructure.
 
-These scripts are designed to build *and test*:
+The TravisCI scripts are designed to build *and test*:
 
 * Dual architecture OSX wheels;
-* 64-bit manylinux1_x86_64 wheels, both narrow and wide unicode builds;
-* 32-bit manylinux1_i686 wheels, both narrow and wide unicode builds.
+* 64-bit ``manylinux1_x86_64`` wheels, both narrow and wide unicode builds;
+* 32-bit ``manylinux1_i686`` wheels, both narrow and wide unicode builds.
 
 You can currently build and test against Pythons 2.6, 2.7, 3.3, 3.4, 3.5, 3.6.
 
 The small innovation here is that you can test against 32-bit builds, and both
 wide and narrow unicode Python 2 builds, which was not easy on the default
 travis-ci configurations.
+
+The AppVeyor setup is designed to build *and test*:
+
+* 64-bit Windows ``win_amd64`` wheels;
+* 32-bit Windows ``win32`` wheels.
+
+You can currently build and test against Pythons 2.7, 3.4, 3.5, 3.6.
 
 *****************
 How does it work?
@@ -318,6 +326,19 @@ To use these scripts
 
 * Make sure your project is set up to build on travis-ci, and you should now
   be ready (to begin the long slow debugging process, probably).
+  
+* For the Windows wheels, create an ``appveyor.yml`` file, something like:
+
+  - https://github.com/MacPython/numpy-wheels/blob/master/appveyor.yml
+  - https://github.com/MacPython/astropy-wheels/blob/master/appveyor.yml
+  - https://github.com/MacPython/nipy-wheels/blob/master/appveyor.yml
+  - https://github.com/MacPython/pytables-wheels/blob/master/appveyor.yml
+  
+  Note the Windows test customisations etc are inside ``appveyor.yml``,
+  and that ``config.sh`` is only for the Linux/Mac builds on TravisCI.
+
+* Make sure your project is set up to build on appveyor, and you should now
+  be ready (for what could be another round of slow debugging).
 
 If your project depends on numpy, you will want to build against the earliest
 numpy that your project supports - see `forward, backward numpy compatibility
