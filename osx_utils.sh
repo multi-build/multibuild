@@ -12,15 +12,15 @@ GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 DOWNLOADS_SDIR=downloads
 WORKING_SDIR=working
 
-# As of 2 June 2017 - latest Python of each version with binary download
+# As of 1 August 2017 - latest Python of each version with binary download
 # available.
 LATEST_2p7=2.7.13
 LATEST_2p6=2.6.6
 LATEST_3p2=3.2.5
 LATEST_3p3=3.3.5
 LATEST_3p4=3.4.4
-LATEST_3p5=3.5.3
-LATEST_3p6=3.6.1
+LATEST_3p5=3.5.4
+LATEST_3p6=3.6.2
 
 
 function check_python {
