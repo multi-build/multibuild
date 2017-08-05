@@ -34,7 +34,7 @@ OPENSSL_DOWNLOAD_URL=https://www.openssl.org/source
 
 
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
-ARCHIVE_SDIR=${ARCHIVE_DIR:-archives}
+ARCHIVE_SDIR="${ARCHIVE_DIR:-archives}"
 
 # Set default library compilation flags for OSX
 # IS_OSX defined in common_utils.sh
@@ -49,15 +49,25 @@ if [ -n "$IS_OSX" ]; then
 fi
 
 function build_simple {
+    # Simple download / unpack / cd / configure / make / make install
+    #
+    # Parameters
+    #    name - name of project (forming first part of archive filename)
+    #    version - version of project (forming second part of archive
+    #              filename). `name` and `version` joined with a "-" character.
+    #    url - base URL from which to fetch archive (we will suffix the archive
+    #          filename)
+    #    suffix (optional) - suffix for archive filename, default ".tar.gz".
     local name=$1
     local version=$2
     local url=$3
+    local suffix="${4:-.tar.gz}"
     if [ -e "${name}-stamp" ]; then
         return
     fi
     local name_version="${name}-${version}"
-    local targz=${name_version}.tar.gz
-    fetch_unpack $url/$targz
+    local archive_fname="${name_version}${suffix}"
+    fetch_unpack "$url/$archive_fname"
     (cd $name_version \
         && ./configure --prefix=$BUILD_PREFIX \
         && make \
