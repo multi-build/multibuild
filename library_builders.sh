@@ -301,7 +301,7 @@ function check_sha256sum {
     else
         sha256sum -c ${fname}.sha256
     fi
-    rm ${fname}.sha256
+    rm -f ${fname}.sha256
 }
 
 function build_openssl {
