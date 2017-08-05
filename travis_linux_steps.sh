@@ -19,6 +19,17 @@ MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 # Allow travis Python version as proxy for multibuild Python version
 MB_PYTHON_VERSION=${MB_PYTHON_VERSION:-$TRAVIS_PYTHON_VERSION}
 
+function get_docker_image {
+    # Docker image, given platform
+    #
+    # Parameters
+    #   plat - platform for Docker image (usually i686, x86_64)
+    #
+    # You can override this in the .travis.yml file or another file sourced
+    # after travis_steps.sh
+    echo "quay.io/pypa/manylinux1_$1"
+}
+
 function before_install {
     # Install a virtualenv to work in.
     virtualenv --python=python venv
@@ -77,7 +88,7 @@ function build_multilinux {
     local plat=$1
     [ -z "$plat" ] && echo "plat not defined" && exit 1
     local build_cmds="$2"
-    local docker_image=quay.io/pypa/manylinux1_$plat
+    local docker_image="$(get_docker_image $plat)"
     retry docker pull $docker_image
     docker run --rm \
         -e BUILD_COMMANDS="$build_cmds" \
