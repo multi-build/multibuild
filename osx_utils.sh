@@ -260,6 +260,7 @@ function remove_travis_ve_pip {
 }
 
 function set_py_vars {
+    # Used by terryfy project; left here for back-compatibility
     export PATH="`dirname $PYTHON_EXE`:$PATH"
     export PYTHON_EXE PIP_CMD
 }
@@ -286,8 +287,11 @@ function get_macpython_environment {
     if [ -n "$venv_dir" ]; then
         install_virtualenv
         make_workon_venv $venv_dir
+        source $venv_dir/bin/activate
+    else
+        export PATH="`dirname $PYTHON_EXE`:$PATH"
     fi
-    set_py_vars
+    export PYTHON_EXE PIP_CMD
 }
 
 function repair_wheelhouse {
