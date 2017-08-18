@@ -75,16 +75,18 @@ function build_simple {
     #    url - base URL from which to fetch archive (we will suffix the archive
     #          filename)
     #    suffix (optional) - suffix for archive filename, default ".tar.gz".
+    #    config_flags (optional) - any extra flags to configure step
     local name=$1
     local version=$2
     local url=$3
     local suffix="${4:-.tar.gz}"
+    local config_flags=$5
     stamped $name && return
     local name_version="${name}-${version}"
     local archive_fname="${name_version}${suffix}"
     fetch_unpack "$url/$archive_fname"
     (cd $name_version \
-        && ./configure --prefix=$BUILD_PREFIX \
+        && ./configure --prefix=$BUILD_PREFIX ${config_flags} \
         && make \
         && make install)
     stamp $name
@@ -272,13 +274,10 @@ function build_snappy {
 }
 
 function build_lzo {
-    stamped lzo && return
-    fetch_unpack http://www.oberhumer.com/opensource/lzo/download/lzo-${LZO_VERSION}.tar.gz
-    (cd lzo-${LZO_VERSION} \
-        && ./configure --prefix=$BUILD_PREFIX --enable-shared \
-        && make \
-        && make install)
-    stamp lzo
+    build_simple lzo $LZO_VERSION \
+        http://www.oberhumer.com/opensource/lzo/download \
+        .tar.gz \
+        "--enable-shared"
 }
 
 function build_lzf {
