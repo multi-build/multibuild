@@ -35,6 +35,7 @@ OPENSSL_DOWNLOAD_URL=https://www.openssl.org/source
 
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
 ARCHIVE_SDIR="${ARCHIVE_DIR:-archives}"
+STAMP_DIR="${STAMP_DIR:-$PWD}"
 
 # Set default library compilation flags for OSX
 # IS_OSX defined in common_utils.sh
@@ -47,6 +48,22 @@ if [ -n "$IS_OSX" ]; then
     export CXXFLAGS="${CXXFLAGS:-$ARCH_FLAGS}"
     export FFLAGS="${FFLAGS:-$ARCH_FLAGS}"
 fi
+
+function stamped {
+    # Return 1 if build stamped, 0 otherwise
+    #
+    # Parameters
+    #     proejct_name
+    [ -e ${STAMP_DIR}/${1}-stamp ] && return 0 || return 1;
+}
+
+function stamp {
+    # Stamp build
+    #
+    # Parameters
+    #     proejct_name
+    touch ${STAMP_DIR}/${1}-stamp
+}
 
 function build_simple {
     # Simple download / unpack / cd / configure / make / make install
@@ -62,9 +79,7 @@ function build_simple {
     local version=$2
     local url=$3
     local suffix="${4:-.tar.gz}"
-    if [ -e "${name}-stamp" ]; then
-        return
-    fi
+    stamped $name && return
     local name_version="${name}-${version}"
     local archive_fname="${name_version}${suffix}"
     fetch_unpack "$url/$archive_fname"
@@ -72,11 +87,11 @@ function build_simple {
         && ./configure --prefix=$BUILD_PREFIX \
         && make \
         && make install)
-    touch "${name}-stamp"
+    stamp $name
 }
 
 function build_openblas {
-    if [ -e openblas-stamp ]; then return; fi
+    stamped openblas && return
     if [ -d "OpenBLAS" ]; then
         (cd OpenBLAS && git clean -fxd && git reset --hard)
     else
@@ -86,15 +101,15 @@ function build_openblas {
         && git checkout "v${OPENBLAS_VERSION}" \
         && make DYNAMIC_ARCH=1 USE_OPENMP=0 NUM_THREADS=64 > /dev/null \
         && make PREFIX=$BUILD_PREFIX install)
-    touch openblas-stamp
+    stamp openblas
 }
 
 function build_zlib {
     # Gives an old but safe version
     if [ -n "$IS_OSX" ]; then return; fi  # OSX has zlib already
-    if [ -e zlib-stamp ]; then return; fi
+    stamped zlib && return
     yum install -y zlib-devel
-    touch zlib-stamp
+    stamp zlib
 }
 
 function build_new_zlib {
@@ -104,13 +119,13 @@ function build_new_zlib {
 }
 
 function build_jpeg {
-    if [ -e jpeg-stamp ]; then return; fi
+    stamped jpeg && return
     fetch_unpack http://ijg.org/files/jpegsrc.v${JPEG_VERSION}.tar.gz
     (cd jpeg-${JPEG_VERSION} \
         && ./configure --prefix=$BUILD_PREFIX \
         && make \
         && make install)
-    touch jpeg-stamp
+    stamp jpeg
 }
 
 function build_libpng {
@@ -120,12 +135,12 @@ function build_libpng {
 
 function build_bzip2 {
     if [ -n "$IS_OSX" ]; then return; fi  # OSX has bzip2 libs already
-    if [ -e bzip2-stamp ]; then return; fi
+    stamped bzip2 && return
     fetch_unpack http://bzip.org/${BZIP2_VERSION}/bzip2-${BZIP2_VERSION}.tar.gz
     (cd bzip2-${BZIP2_VERSION} \
         && make -f Makefile-libbz2_so \
         && make install PREFIX=$BUILD_PREFIX)
-    touch bzip2-stamp
+    stamp bzip2
 }
 
 function build_tiff {
@@ -147,7 +162,7 @@ function get_cmake {
 }
 
 function build_openjpeg {
-    if [ -e openjpeg-stamp ]; then return; fi
+    stamped openjpeg && return
     build_zlib
     build_libpng
     build_tiff
@@ -157,7 +172,7 @@ function build_openjpeg {
     (cd openjpeg-version.${OPENJPEG_VERSION} \
         && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX . \
         && make install)
-    touch openjpeg-stamp
+    stamp openjpeg
 }
 
 function build_lcms2 {
@@ -174,8 +189,7 @@ function build_xz {
 }
 
 function build_libwebp {
-    if [ -e libwebp-stamp ]; then return; fi
-    build_libpng
+    stamped libwebp && return
     build_tiff
     build_giflib
     fetch_unpack https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${LIBWEBP_VERSION}.tar.gz
@@ -183,7 +197,7 @@ function build_libwebp {
         ./configure --enable-libwebpmux --enable-libwebpdemux --prefix=$BUILD_PREFIX \
         && make \
         && make install)
-    touch libwebp-stamp
+    stamp libwebp
 }
 
 function build_freetype {
@@ -198,7 +212,7 @@ function build_libyaml {
 
 function build_szip {
     # Build szip without encoding (patent restrictions)
-    if [ -e szip-stamp ]; then return; fi
+    stamped szip && return
     build_zlib
     local szip_url=https://www.hdfgroup.org/ftp/lib-external/szip/
     fetch_unpack ${szip_url}/$SZIP_VERSION/src/szip-$SZIP_VERSION.tar.gz
@@ -206,11 +220,11 @@ function build_szip {
         && ./configure --enable-encoding=no --prefix=$BUILD_PREFIX \
         && make \
         && make install)
-    touch szip-stamp
+    stamp szip
 }
 
 function build_hdf5 {
-    if [ -e hdf5-stamp ]; then return; fi
+    stamped hdf5 && return
     build_zlib
     # libaec is a drop-in replacement for szip
     build_libaec
@@ -221,11 +235,11 @@ function build_hdf5 {
         && ./configure --with-szlib=$BUILD_PREFIX --prefix=$BUILD_PREFIX \
         && make \
         && make install)
-    touch hdf5-stamp
+    stamp hdf5
 }
 
 function build_libaec {
-    if [ -e libaec-stamp ]; then return; fi
+    stamped libaec && return
     local root_name=libaec-0.3.3
     local tar_name=${root_name}.tar.gz
     # Note URL will change for each version
@@ -234,11 +248,11 @@ function build_libaec {
         && ./configure --prefix=$BUILD_PREFIX \
         && make \
         && make install)
-    touch libaec-stamp
+    stamp libaec
 }
 
 function build_blosc {
-    if [ -e blosc-stamp ]; then return; fi
+    stamped blosc && return
     local cmake=$(get_cmake)
     fetch_unpack https://github.com/Blosc/c-blosc/archive/v${BLOSC_VERSION}.tar.gz
     (cd c-blosc-${BLOSC_VERSION} \
@@ -250,7 +264,7 @@ function build_blosc {
             install_name_tool -id $lib $lib
         done
     fi
-    touch blosc-stamp
+    stamp blosc
 }
 
 function build_snappy {
@@ -258,13 +272,13 @@ function build_snappy {
 }
 
 function build_lzo {
-    if [ -e lzo-stamp ]; then return; fi
+    stamped lzo && return
     fetch_unpack http://www.oberhumer.com/opensource/lzo/download/lzo-${LZO_VERSION}.tar.gz
     (cd lzo-${LZO_VERSION} \
         && ./configure --prefix=$BUILD_PREFIX --enable-shared \
         && make \
         && make install)
-    touch lzo-stamp
+    stamp lzo
 }
 
 function build_lzf {
@@ -272,7 +286,7 @@ function build_lzf {
 }
 
 function build_curl {
-    if [ -e curl-stamp ]; then return; fi
+    stamped curl && return
     local flags="--prefix=$BUILD_PREFIX"
     if [ -n "$IS_OSX" ]; then
         flags="$flags --with-darwinssl"
@@ -287,7 +301,7 @@ function build_curl {
         ./configure $flags; fi\
         && make \
         && make install)
-    touch curl-stamp
+    stamp curl
 }
 
 function check_sha256sum {
@@ -305,18 +319,18 @@ function check_sha256sum {
 }
 
 function build_openssl {
-    if [ -e openssl-stamp ]; then return; fi
+    stamped openssl && return
     fetch_unpack ${OPENSSL_DOWNLOAD_URL}/${OPENSSL_ROOT}.tar.gz
     check_sha256sum $ARCHIVE_SDIR/${OPENSSL_ROOT}.tar.gz ${OPENSSL_HASH}
     (cd ${OPENSSL_ROOT} \
         && ./config no-ssl2 no-shared -fPIC --prefix=$BUILD_PREFIX \
         && make \
         && make install)
-    touch openssl-stamp
+    stamp openssl
 }
 
 function build_netcdf {
-    if [ -e netcdf-stamp ]; then return; fi
+    stamped netcdf && return
     build_hdf5
     build_curl
     fetch_unpack https://github.com/Unidata/netcdf-c/archive/v${NETCDF_VERSION}.tar.gz
@@ -324,5 +338,5 @@ function build_netcdf {
         && ./configure --prefix=$BUILD_PREFIX --enable-dap \
         && make \
         && make install)
-    touch netcdf-stamp
+    stamp netcdf
 }
