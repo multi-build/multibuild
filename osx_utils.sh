@@ -297,7 +297,13 @@ function get_macpython_environment {
 function repair_wheelhouse {
     local wheelhouse=$1
     check_pip
+    if [ $(lex_ver $(get_py_mm)) -lt $(lex_ver 2.7) ]; then
+        # Wheel 0.30 doesn't work for Python 2.6; see:
+        # https://github.com/pypa/wheel/issues/193
+        $PIP_CMD install wheel<=0.29
+    fi
     $PIP_CMD install delocate
+
     delocate-listdeps $wheelhouse/*.whl # lists library dependencies
     # repair_wheelhouse can take more than 10 minutes without generating output
     # but jobs that do not generate output within 10 minutes are aborted by travis-ci.
