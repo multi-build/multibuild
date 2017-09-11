@@ -300,7 +300,7 @@ function repair_wheelhouse {
     if [ $(lex_ver $(get_py_mm)) -lt $(lex_ver 2.7) ]; then
         # Wheel 0.30 doesn't work for Python 2.6; see:
         # https://github.com/pypa/wheel/issues/193
-        $PIP_CMD install wheel<=0.29
+        $PIP_CMD install "wheel<=0.29"
     fi
     $PIP_CMD install delocate
 
