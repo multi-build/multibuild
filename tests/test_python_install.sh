@@ -7,7 +7,7 @@ echo "virtualenv on path: $(which virtualenv)"
 echo "virtualenv cmd: $VIRTUALENV_CMD"
 
 # Check that a pip install puts scripts on path
-$PIP_CMD install delocate
+install_delocate
 delocate-listdeps --version || ingest "Delocate not installed right"
 
 # Python version from Python to compare against required
