@@ -87,9 +87,11 @@ function build_multilinux {
         -e WHEEL_SDIR="$WHEEL_SDIR" \
         -e MANYLINUX_URL="$MANYLINUX_URL" \
         -e BUILD_DEPENDS="$BUILD_DEPENDS" \
+        -e USE_CCACHE="$USE_CCACHE" \
         -e REPO_DIR="$repo_dir" \
         -e PLAT="$PLAT" \
         -v $PWD:/io \
+        -v $HOME/.ccache:/ccache \
         $docker_image /io/$MULTIBUILD_DIR/docker_build_wrap.sh
 }
 
