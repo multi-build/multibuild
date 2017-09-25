@@ -7,6 +7,28 @@
 #   BUILD_DEPENDS  (may be used by config.sh, can be empty)
 set -e
 
+if [ $USE_CCACHE == 1 ]; then
+  # Link up the correct location for ccache
+  ln -s /ccache $HOME/.ccache
+
+  # Now install ccache
+  yum install -y ccache
+
+  # Create fake compilers and prepend them to the PATH
+  # Note that yum is supposed to create these for us,
+  # but I had trouble finding them
+  CCACHE_DIR=/usr/lib/ccache/compilers
+  mkdir -p $CCACHE_DIR
+  ln -s /usr/bin/ccache $CCACHE_DIR/gcc
+  ln -s /usr/bin/ccache $CCACHE_DIR/g++
+  ln -s /usr/bin/ccache $CCACHE_DIR/cc
+  ln -s /usr/bin/ccache $CCACHE_DIR/c++
+  export PATH=$CCACHE_DIR:$PATH
+  
+  # Prove to the developer that the correct gcc is used
+  which gcc
+fi
+
 # Unicode width, default 32
 UNICODE_WIDTH=${UNICODE_WIDTH:-32}
 
