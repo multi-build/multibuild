@@ -13,16 +13,6 @@ source $MULTIBUILD_DIR/library_builders.sh
 # config.sh can override any function defined here.
 
 function before_install {
-    if [ $USE_CCACHE == 1 ]; then
-        brew install ccache
-        export PATH=/usr/local/opt/ccache/libexec:$PATH
-        export CCACHE_MAXSIZE=200M
-        export CCACHE_CPP2=1
-        
-        # Prove to the developer that ccache is activated
-        which clang
-    fi
-
     export CC=clang
     export CXX=clang++
     get_macpython_environment $MB_PYTHON_VERSION venv
