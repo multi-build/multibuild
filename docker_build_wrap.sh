@@ -9,7 +9,7 @@ set -e
 
 if [ $USE_CCACHE == 1 ]; then
   # Link up the correct location for ccache
-  ln -s /ccache $HOME/.ccache
+  ln -s /parent-home/.ccache $HOME/.ccache
 
   # Now install ccache
   yum install -y ccache
