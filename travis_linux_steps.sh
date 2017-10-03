@@ -91,7 +91,7 @@ function build_multilinux {
         -e REPO_DIR="$repo_dir" \
         -e PLAT="$PLAT" \
         -v $PWD:/io \
-        -v $HOME/.ccache:/ccache \
+        -v $HOME:/parent-home \
         $docker_image /io/$MULTIBUILD_DIR/docker_build_wrap.sh
 }
 
