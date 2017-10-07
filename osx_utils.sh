@@ -340,3 +340,13 @@ function install_pkg_config {
     # https://github.com/matthew-brett/multibuild/issues/24#issue-221951587
     command -v pkg-config > /dev/null 2>&1 || brew install pkg-config
 }
+
+function activate_ccache {
+    brew install ccache
+    export PATH=/usr/local/opt/ccache/libexec:$PATH
+    export CCACHE_MAXSIZE=200M
+    export CCACHE_CPP2=1
+
+    # Prove to the developer that ccache is activated
+    which clang
+}
