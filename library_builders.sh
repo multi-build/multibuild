@@ -316,3 +316,19 @@ function build_netcdf {
         && make install)
     touch netcdf-stamp
 }
+
+function build_swig {
+    if [ -n "$IS_OSX" ]; then
+        brew install swig > /dev/null
+    else
+        yum install -y swig > /dev/null
+    fi
+}
+
+function build_sparsesuite {
+    if [ -n "$IS_OSX" ]; then
+        brew install homebrew/science/suite-sparse > /dev/null
+    else
+        yum install -y swig > /dev/null
+    fi
+}
