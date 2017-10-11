@@ -6,4 +6,3 @@ source library_builders.sh
 
 build_openssl
 build_swig
-build_sparsesuite
