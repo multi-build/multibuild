@@ -32,6 +32,7 @@ OPENSSL_ROOT=openssl-1.0.2l
 # Hash from https://www.openssl.org/source/openssl-1.0.2?.tar.gz.sha256
 OPENSSL_HASH=ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c
 OPENSSL_DOWNLOAD_URL=https://www.openssl.org/source
+PCRE_URL=ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.38.tar.gz
 
 
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
@@ -329,6 +330,7 @@ function build_simple_swig {
     local targz=${name_version}.tar.gz
     fetch_unpack $url/$targz
     (cd $name_version \
+        && wget $PCRE_URL \
         && ./Tools/pcre-build.sh \
         && ./configure --prefix=$BUILD_PREFIX \
         && make \
