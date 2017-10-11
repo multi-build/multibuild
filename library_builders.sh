@@ -27,6 +27,7 @@ BLOSC_VERSION=${BLOSC_VERSION:-1.10.2}
 SNAPPY_VERSION="${SNAPPY_VERSION:-1.1.3}"
 CURL_VERSION=${CURL_VERSION:-7.49.1}
 NETCDF_VERSION=${NETCDF_VERSION:-4.4.1.1}
+SWIG_VERSION=${SWIG_VERSION:-3.0.12}
 OPENSSL_ROOT=openssl-1.0.2l
 # Hash from https://www.openssl.org/source/openssl-1.0.2?.tar.gz.sha256
 OPENSSL_HASH=ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c
@@ -317,11 +318,29 @@ function build_netcdf {
     touch netcdf-stamp
 }
 
+function build_simple_swig {
+    local name=$1
+    local version=$2
+    local url=$3
+    if [ -e "${name}-stamp" ]; then
+        return
+    fi
+    local name_version="${name}-${version}"
+    local targz=${name_version}.tar.gz
+    fetch_unpack $url/$targz
+    (cd $name_version \
+        && ./Tools/pcre-build.sh \
+        && ./configure --prefix=$BUILD_PREFIX \
+        && make \
+        && make install)
+    touch "${name}-stamp"
+}
+
 function build_swig {
     if [ -n "$IS_OSX" ]; then
         brew install swig > /dev/null
     else
-        yum install -y swig > /dev/null
+        build_simple_swig swig $SWIG_VERSION http://prdownloads.sourceforge.net/swig/
     fi
 }
 
@@ -329,6 +348,6 @@ function build_sparsesuite {
     if [ -n "$IS_OSX" ]; then
         brew install homebrew/science/suite-sparse > /dev/null
     else
-        yum install -y swig > /dev/null
+        yum install -y suitesparse-devel > /dev/null
     fi
 }
