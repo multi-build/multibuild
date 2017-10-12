@@ -28,11 +28,11 @@ SNAPPY_VERSION="${SNAPPY_VERSION:-1.1.3}"
 CURL_VERSION=${CURL_VERSION:-7.49.1}
 NETCDF_VERSION=${NETCDF_VERSION:-4.4.1.1}
 SWIG_VERSION=${SWIG_VERSION:-3.0.12}
+PCRE_VERSION=${PCRE_VERSION:-8.38}
 OPENSSL_ROOT=openssl-1.0.2l
 # Hash from https://www.openssl.org/source/openssl-1.0.2?.tar.gz.sha256
 OPENSSL_HASH=ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c
 OPENSSL_DOWNLOAD_URL=https://www.openssl.org/source
-PCRE_URL=ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.38.tar.gz
 
 
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
@@ -319,30 +319,16 @@ function build_netcdf {
     touch netcdf-stamp
 }
 
-function build_simple_swig {
-    local name=$1
-    local version=$2
-    local url=$3
-    if [ -e "${name}-stamp" ]; then
-        return
-    fi
-    local name_version="${name}-${version}"
-    local targz=${name_version}.tar.gz
-    fetch_unpack $url/$targz
-    (cd $name_version \
-        && wget $PCRE_URL \
-        && ./Tools/pcre-build.sh \
-        && ./configure --prefix=$BUILD_PREFIX \
-        && make \
-        && make install)
-    touch "${name}-stamp"
+function build_pcre {
+    build_simple pcre $PCRE_VERSION https://ftp.pcre.org/pub/pcre/
 }
 
 function build_swig {
     if [ -n "$IS_OSX" ]; then
         brew install swig > /dev/null
     else
-        build_simple_swig swig $SWIG_VERSION http://prdownloads.sourceforge.net/swig/
+        build_pcre
+        build_simple swig $SWIG_VERSION http://prdownloads.sourceforge.net/swig/
     fi
 }
 
