@@ -284,6 +284,7 @@ function get_macpython_environment {
     remove_travis_ve_pip
     install_macpython $version
     install_pip
+    brew update
     if [ -n "$venv_dir" ]; then
         install_virtualenv
         make_workon_venv $venv_dir
