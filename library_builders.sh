@@ -332,7 +332,7 @@ function build_swig {
     fi
 }
 
-function build_sparsesuite {
+function build_suitesparse {
     if [ -n "$IS_OSX" ]; then
         brew install homebrew/science/suite-sparse > /dev/null
     else
