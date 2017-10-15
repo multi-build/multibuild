@@ -52,12 +52,13 @@ function build_simple {
     local name=$1
     local version=$2
     local url=$3
+    local ext=${4:-tar.gz}
     if [ -e "${name}-stamp" ]; then
         return
     fi
     local name_version="${name}-${version}"
-    local targz=${name_version}.tar.gz
-    fetch_unpack $url/$targz
+    local archive=${name_version}.${ext}
+    fetch_unpack $url/$archive
     (cd $name_version \
         && ./configure --prefix=$BUILD_PREFIX \
         && make \
