@@ -14,6 +14,7 @@ WORKING_SDIR=working
 
 # As of 15 October 2017 - latest Python of each version with binary download
 # available.
+# See: https://www.python.org/downloads/mac-osx/
 LATEST_2p7=2.7.14
 LATEST_2p6=2.6.6
 LATEST_3p2=3.2.5
