@@ -52,13 +52,14 @@ function build_simple {
     local name=$1
     local version=$2
     local url=$3
-    local configure_args=${@:4}
+    local ext=${4:-tar.gz}
+    local configure_args=${@:5}
     if [ -e "${name}-stamp" ]; then
         return
     fi
     local name_version="${name}-${version}"
-    local targz=${name_version}.tar.gz
-    fetch_unpack $url/$targz
+    local archive=${name_version}.${ext}
+    fetch_unpack $url/$archive
     (cd $name_version \
         && ./configure --prefix=$BUILD_PREFIX $configure_args \
         && make \
@@ -144,7 +145,11 @@ function build_openjpeg {
     build_tiff
     build_lcms2
     local cmake=$(get_cmake)
-    fetch_unpack https://github.com/uclouvain/openjpeg/archive/version.${OPENJPEG_VERSION}.tar.gz
+    local archive_prefix="v"
+    if [ $(lex_ver $OPENJPEG_VERSION) -lt $(lex_ver 2.1.1) ]; then
+        archive_prefix="version."
+    fi
+    fetch_unpack https://github.com/uclouvain/openjpeg/archive/${archive_prefix}${OPENJPEG_VERSION}.tar.gz
     (cd openjpeg-version.${OPENJPEG_VERSION} \
         && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX . \
         && make install)
