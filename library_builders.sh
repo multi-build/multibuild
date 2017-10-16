@@ -52,6 +52,7 @@ function build_simple {
     local name=$1
     local version=$2
     local url=$3
+    local configure_args=${@:4}
     if [ -e "${name}-stamp" ]; then
         return
     fi
@@ -59,7 +60,7 @@ function build_simple {
     local targz=${name_version}.tar.gz
     fetch_unpack $url/$targz
     (cd $name_version \
-        && ./configure --prefix=$BUILD_PREFIX \
+        && ./configure --prefix=$BUILD_PREFIX $configure_args \
         && make \
         && make install)
     touch "${name}-stamp"
