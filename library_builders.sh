@@ -335,7 +335,7 @@ function build_swig {
 
 function build_suitesparse {
     if [ -n "$IS_OSX" ]; then
-        brew install homebrew/science/suite-sparse > /dev/null
+        brew install suite-sparse > /dev/null
     else
         yum install -y suitesparse-devel > /dev/null
     fi
