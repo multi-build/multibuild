@@ -337,6 +337,6 @@ function build_suitesparse {
     if [ -n "$IS_OSX" ]; then
         brew install homebrew/science/suite-sparse > /dev/null
     else
-        build_simple suitesparse $SUITESPARSE_VERSION http://faculty.cse.tamu.edu/davis/SuiteSparse/
+        yum install -y suitesparse-devel > /dev/null
     fi
 }
