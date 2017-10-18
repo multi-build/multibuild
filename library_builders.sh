@@ -76,7 +76,6 @@ function build_github {
         return
     fi
     fetch_unpack "https://github.com/${path}/archive/${version}.tar.gz"
-    ls -r .
     (cd $name_version \
         && ./configure --prefix=$BUILD_PREFIX $configure_args \
         && make \
