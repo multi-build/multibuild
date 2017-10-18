@@ -49,6 +49,8 @@ if [ -n "$IS_OSX" ]; then
 fi
 
 function build_simple {
+    # Example: build_simple libpng $LIBPNG_VERSION
+    #   http://download.sourceforge.net/libpng tar.gz --additional --configure --arguments
     local name=$1
     local version=$2
     local url=$3
