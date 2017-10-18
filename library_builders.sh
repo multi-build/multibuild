@@ -70,18 +70,18 @@ function build_github {
     local path=$1
     local version=$2
     local configure_args=${@:3}
-    if [ -e "${path}-stamp" ]; then
-        return
-    fi
     local name=`basename "$path"`
     local name_version="${name}-${version}"
+    if [ -e "${name}-stamp" ]; then
+        return
+    fi
     fetch_unpack "https://github.com/${path}/archive/${version}.tar.gz"
     ls -r .
     (cd $name_version \
         && ./configure --prefix=$BUILD_PREFIX $configure_args \
         && make \
         && make install)
-    touch "${path}-stamp"
+    touch "${name}-stamp"
 }
 
 function build_openblas {
