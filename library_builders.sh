@@ -49,8 +49,9 @@ if [ -n "$IS_OSX" ]; then
 fi
 
 function build_simple {
-    # Example: build_simple libpng $LIBPNG_VERSION
-    #   http://download.sourceforge.net/libpng tar.gz --additional --configure --arguments
+    # Example: build_simple libpng $LIBPNG_VERSION \
+    #               http://download.sourceforge.net/libpng tar.gz \
+    #               --additional --configure --arguments
     local name=$1
     local version=$2
     local url=$3
@@ -176,7 +177,7 @@ function build_libwebp {
     build_tiff
     build_giflib
     build_simple libwebp $LIBWEBP_VERSION \
-        https://storage.googleapis.com/downloads.webmproject.org/releases/webp/ \
+        https://storage.googleapis.com/downloads.webmproject.org/releases/webp/ tar.gz \
         --enable-libwebpmux --enable-libwebpdemux 
 }
 
@@ -194,7 +195,7 @@ function build_szip {
     # Build szip without encoding (patent restrictions)
     build_zlib
     build_simple szip $SZIP_VERSION \
-        https://www.hdfgroup.org/ftp/lib-external/szip/ \
+        https://www.hdfgroup.org/ftp/lib-external/szip/ tar.gz \
         --enable-encoding=no
 }
 
