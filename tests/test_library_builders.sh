@@ -11,6 +11,6 @@ function suppress {
     /bin/rm /tmp/suppress.out
 }
 
-# suppress build_openssl
-build_libwebp
-build_szip
+suppress build_openssl
+suppress build_libwebp
+suppress build_szip
