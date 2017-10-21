@@ -6,9 +6,9 @@ source library_builders.sh
 
 function suppress {
     # Suppress the output of a bash command unless it fails
-    /bin/rm --force /tmp/suppress.out 2> /dev/null
-    $* 2>&1 > /tmp/suppress.out || cat /tmp/suppress.out
-    /bin/rm /tmp/suppress.out
+    rm --force $TMPDIR/suppress.out 2> /dev/null
+    $* 2>&1 > $TMPDIR/suppress.out || cat $TMPDIR/suppress.out
+    rm $TMPDIR/suppress.out
 }
 
 suppress build_openssl
