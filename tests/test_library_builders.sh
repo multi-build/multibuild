@@ -8,7 +8,7 @@ set -e -x
 
 function suppress {
     # Suppress the output of a bash command unless it fails
-    rm --force $HOME/suppress.out 2> /dev/null
+    rm --force $HOME/suppress.out 2> /dev/null || true
     $* 2>&1 > $HOME/suppress.out || cat $HOME/suppress.out
     rm $HOME/suppress.out
 }
