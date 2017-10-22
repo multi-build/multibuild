@@ -4,7 +4,7 @@ export BUILD_PREFIX="${PWD}/builds"
 rm_mkdir $BUILD_PREFIX
 source library_builders.sh
 
-set -e -x
+# set -e -x
 
 function suppress {
     # Suppress the output of a bash command unless it fails
