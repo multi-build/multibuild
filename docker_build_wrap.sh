@@ -7,7 +7,7 @@
 #   BUILD_DEPENDS  (may be used by config.sh, can be empty)
 set -e
 
-if [ $USE_CCACHE == 1 ]; then
+if [ "$USE_CCACHE" == "1" ]; then
     activate_ccache
 fi
 
