@@ -266,7 +266,7 @@ function set_py_vars {
 }
 
 function get_macpython_environment {
-    if [ $USE_CCACHE == 1 ]; then
+    if [ "$USE_CCACHE" == "1" ]; then
         activate_ccache
     fi
     # Set up MacPython environment
