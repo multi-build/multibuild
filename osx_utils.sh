@@ -336,6 +336,7 @@ function install_pkg_config {
 }
 
 function activate_ccache {
+    brew update
     brew install ccache
     export PATH=/usr/local/opt/ccache/libexec:$PATH
     export CCACHE_MAXSIZE=200M
