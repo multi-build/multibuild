@@ -59,7 +59,7 @@ function build_simple {
     local configure_args=${@:5}
     if [[ $ext == --* ]]; then
         configure_args="$ext $configure_args"
-        ext=".tar.gz"
+        ext="tar.gz"
     fi
     if [ -e "${name}-stamp" ]; then
         return
