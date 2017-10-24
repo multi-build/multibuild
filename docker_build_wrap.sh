@@ -7,6 +7,10 @@
 #   BUILD_DEPENDS  (may be used by config.sh, can be empty)
 set -e
 
+if [ "$USE_CCACHE" == "1" ]; then
+    activate_ccache
+fi
+
 # Unicode width, default 32
 UNICODE_WIDTH=${UNICODE_WIDTH:-32}
 
