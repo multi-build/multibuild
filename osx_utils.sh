@@ -267,6 +267,9 @@ function set_py_vars {
 }
 
 function get_macpython_environment {
+    if [ "$USE_CCACHE" == "1" ]; then
+        activate_ccache
+    fi
     # Set up MacPython environment
     # Parameters:
     #     $version : [implementation-]major[.minor[.patch]]
@@ -332,4 +335,15 @@ function install_pkg_config {
     # See :
     # https://github.com/matthew-brett/multibuild/issues/24#issue-221951587
     command -v pkg-config > /dev/null 2>&1 || brew install pkg-config
+}
+
+function activate_ccache {
+    brew update
+    brew install ccache
+    export PATH=/usr/local/opt/ccache/libexec:$PATH
+    export CCACHE_MAXSIZE=200M
+    export CCACHE_CPP2=1
+
+    # Prove to the developer that ccache is activated
+    which clang
 }
