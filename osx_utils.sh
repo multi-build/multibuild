@@ -267,6 +267,8 @@ function set_py_vars {
 }
 
 function get_macpython_environment {
+    export HOMEBREW_NO_AUTO_UPDATE=1
+
     if [ "$USE_CCACHE" == "1" ]; then
         activate_ccache
     fi
@@ -288,7 +290,7 @@ function get_macpython_environment {
     remove_travis_ve_pip
     install_macpython $version
     install_pip
-    export HOMEBREW_NO_AUTO_UPDATE=1
+
     if [ -n "$venv_dir" ]; then
         install_virtualenv
         make_workon_venv $venv_dir
@@ -338,7 +340,7 @@ function install_pkg_config {
 }
 
 function activate_ccache {
-    brew update
+
     brew install ccache
     export PATH=/usr/local/opt/ccache/libexec:$PATH
     export CCACHE_MAXSIZE=200M
