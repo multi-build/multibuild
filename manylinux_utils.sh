@@ -63,11 +63,11 @@ function activate_ccache {
     # but I had trouble finding them
     local ccache_dir=/usr/lib/ccache/compilers
     mkdir -p $ccache_dir
-    ln -s /usr/bin/ccache $CCACHE_DIR/gcc
-    ln -s /usr/bin/ccache $CCACHE_DIR/g++
-    ln -s /usr/bin/ccache $CCACHE_DIR/cc
-    ln -s /usr/bin/ccache $CCACHE_DIR/c++
-    export PATH=$CCACHE_DIR:$PATH
+    ln -s /usr/bin/ccache $ccache_dir/gcc
+    ln -s /usr/bin/ccache $ccache_dir/g++
+    ln -s /usr/bin/ccache $ccache_dir/cc
+    ln -s /usr/bin/ccache $ccache_dir/c++
+    export PATH=$ccache_dir:$PATH
 
     # Prove to the developer that ccache is activated
     which gcc
