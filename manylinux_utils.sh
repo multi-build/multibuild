@@ -52,6 +52,7 @@ function repair_wheelhouse {
 
 function activate_ccache {
     # Link up the correct location for ccache
+    mkdir -p /parent-home/.ccache
     ln -s /parent-home/.ccache $HOME/.ccache
 
     # Now install ccache
