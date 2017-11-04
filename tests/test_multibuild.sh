@@ -19,6 +19,7 @@ if [ -n "$TEST_BUILDS" ]; then
     if [ -n "$IS_OSX" ]; then
         source tests/test_library_builders.sh        
     else
+        touch config.sh
         source travis_linux_steps.sh
         build_multilinux i686 "source tests/test_library_builders.sh"
     fi
