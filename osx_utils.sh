@@ -267,11 +267,6 @@ function set_py_vars {
 }
 
 function get_macpython_environment {
-    export HOMEBREW_NO_AUTO_UPDATE=1
-
-    if [ "$USE_CCACHE" == "1" ]; then
-        activate_ccache
-    fi
     # Set up MacPython environment
     # Parameters:
     #     $version : [implementation-]major[.minor[.patch]]
@@ -287,6 +282,15 @@ function get_macpython_environment {
     # Puts directory of $PYTHON_EXE on $PATH
     local version=$1
     local venv_dir=$2
+
+    # We MUST set this before calling homebrew or it could potentially fail
+    # See travis-ci issue #8552 for more details
+    export HOMEBREW_NO_AUTO_UPDATE=1
+
+    if [ "$USE_CCACHE" == "1" ]; then
+        activate_ccache
+    fi
+    
     remove_travis_ve_pip
     install_macpython $version
     install_pip
