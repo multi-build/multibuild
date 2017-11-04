@@ -6,3 +6,4 @@ source library_builders.sh
 
 build_openssl
 suppress build_github fredrik-johansson/arb 2.11.1
+build_swig
