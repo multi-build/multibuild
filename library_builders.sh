@@ -60,10 +60,6 @@ function build_simple {
     local url=$3
     local ext=${4:-tar.gz}
     local configure_args=${@:5}
-    if [[ $ext == --* ]]; then
-        configure_args="$ext $configure_args"
-        ext="tar.gz"
-    fi
     if [ -e "${name}-stamp" ]; then
         return
     fi
@@ -186,7 +182,7 @@ function build_libwebp {
     build_tiff
     build_giflib
     build_simple libwebp $LIBWEBP_VERSION \
-        https://storage.googleapis.com/downloads.webmproject.org/releases/webp/ \
+        https://storage.googleapis.com/downloads.webmproject.org/releases/webp/ tar.gz \
         --enable-libwebpmux --enable-libwebpdemux 
 }
 
@@ -204,7 +200,7 @@ function build_szip {
     # Build szip without encoding (patent restrictions)
     build_zlib
     build_simple szip $SZIP_VERSION \
-        https://www.hdfgroup.org/ftp/lib-external/szip/ \
+        https://www.hdfgroup.org/ftp/lib-external/szip/ tar.gz \
         --enable-encoding=no
 }
 
