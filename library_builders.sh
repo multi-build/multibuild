@@ -27,6 +27,9 @@ BLOSC_VERSION=${BLOSC_VERSION:-1.10.2}
 SNAPPY_VERSION="${SNAPPY_VERSION:-1.1.3}"
 CURL_VERSION=${CURL_VERSION:-7.49.1}
 NETCDF_VERSION=${NETCDF_VERSION:-4.4.1.1}
+SWIG_VERSION=${SWIG_VERSION:-3.0.12}
+PCRE_VERSION=${PCRE_VERSION:-8.38}
+SUITESPARSE_VERSION=${SUITESPARSE_VERSION:-4.5.6}
 OPENSSL_ROOT=openssl-1.0.2l
 # Hash from https://www.openssl.org/source/openssl-1.0.2?.tar.gz.sha256
 OPENSSL_HASH=ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c
@@ -320,4 +323,25 @@ function build_netcdf {
         && make \
         && make install)
     touch netcdf-stamp
+}
+
+function build_pcre {
+    build_simple pcre $PCRE_VERSION https://ftp.pcre.org/pub/pcre/
+}
+
+function build_swig {
+    if [ -n "$IS_OSX" ]; then
+        brew install swig > /dev/null
+    else
+        build_pcre
+        build_simple swig $SWIG_VERSION http://prdownloads.sourceforge.net/swig/
+    fi
+}
+
+function build_suitesparse {
+    if [ -n "$IS_OSX" ]; then
+        brew install suite-sparse > /dev/null
+    else
+        yum install -y suitesparse-devel > /dev/null
+    fi
 }
