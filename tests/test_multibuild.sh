@@ -16,8 +16,7 @@ else
     source tests/test_manylinux_utils.sh
 fi
 if [ -n "$TEST_BUILDS" ]; then
-    SUDO_ENABLED=$(sudo -n uptime 2>&1|grep "load"|wc -l)
-    if [ -n "$IS_OSX" ] || [ ! ${SUDO_ENABLED} -gt 0 ] || [ ! -x "$(command -v foo)" ]; then
+    if [ -n "$IS_OSX" ] || [ ! -x "$(command -v foo)" ]; then
         source tests/test_library_builders.sh        
     else
         touch config.sh
