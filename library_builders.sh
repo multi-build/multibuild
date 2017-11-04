@@ -73,6 +73,24 @@ function build_simple {
     touch "${name}-stamp"
 }
 
+function build_github {
+    # Example: build_github fredrik-johansson/arb 2.11.1
+    local path=$1
+    local version=$2
+    local configure_args=${@:3}
+    local name=`basename "$path"`
+    local name_version="${name}-${version}"
+    if [ -e "${name}-stamp" ]; then
+        return
+    fi
+    fetch_unpack "https://github.com/${path}/archive/${version}.tar.gz"
+    (cd $name_version \
+        && ./configure --prefix=$BUILD_PREFIX $configure_args \
+        && make \
+        && make install)
+    touch "${name}-stamp"
+}
+
 function build_openblas {
     if [ -e openblas-stamp ]; then return; fi
     if [ -d "OpenBLAS" ]; then
