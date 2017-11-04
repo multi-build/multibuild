@@ -7,10 +7,6 @@
 #   BUILD_DEPENDS  (may be used by config.sh, can be empty)
 set -e
 
-if [ "$USE_CCACHE" == "1" ]; then
-    activate_ccache
-fi
-
 # Unicode width, default 32
 UNICODE_WIDTH=${UNICODE_WIDTH:-32}
 
@@ -22,6 +18,10 @@ MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 # These routines also source common_utils.sh
 source $MULTIBUILD_DIR/manylinux_utils.sh
 source $MULTIBUILD_DIR/library_builders.sh
+
+if [ "$USE_CCACHE" == "1" ]; then
+    activate_ccache
+fi
 
 # Set PATH for chosen Python, Unicode width
 export PATH="$(cpython_path $PYTHON_VERSION $UNICODE_WIDTH)/bin:$PATH"
