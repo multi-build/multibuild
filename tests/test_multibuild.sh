@@ -16,7 +16,7 @@ else
     source tests/test_manylinux_utils.sh
 fi
 if [ -n "$TEST_BUILDS" ]; then
-    if [ -n "$IS_OSX" ] || [ ! -x "$(command -v foo)" ]; then
+    if [ -n "$IS_OSX" ] || [ ! -x "$(command -v docker)" ]; then
         source tests/test_library_builders.sh        
     else
         touch config.sh
