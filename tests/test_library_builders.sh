@@ -16,3 +16,4 @@ function suppress {
 suppress build_openssl
 suppress build_libwebp
 suppress build_szip
+suppress build_swig

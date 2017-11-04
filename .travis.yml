@@ -12,6 +12,11 @@ matrix:
       dist: trusty
       env:
         - TEST_BUILDS=1
+    - os: linux
+      dist: trusty
+      env:
+        - TEST_BUILDS=1
+        - USE_CCACHE=1
     - os: osx
       osx_image: xcode6.4
       env:
@@ -53,6 +58,11 @@ matrix:
       env:
         - PYTHON_VERSION=3.6.1
         - VENV=venv
+    - os: osx
+      env:
+        - PYTHON_VERSION=3.6.1
+        - VENV=venv
+        - USE_CCACHE=1
     - os: osx
       env:
         - PYTHON_VERSION=pypy-2.6
