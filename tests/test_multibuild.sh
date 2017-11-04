@@ -16,7 +16,11 @@ else
     source tests/test_manylinux_utils.sh
 fi
 if [ -n "$TEST_BUILDS" ]; then
-    source tests/test_library_builders.sh
+    if [ -n "$IS_OSX" ]; then
+        build_multilinux i686 "source tests/test_library_builders.sh"
+    else
+        source tests/test_library_builders.sh
+    fi
 fi
 
 # Exit 1 if any test errors
