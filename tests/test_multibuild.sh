@@ -17,9 +17,9 @@ else
 fi
 if [ -n "$TEST_BUILDS" ]; then
     if [ -n "$IS_OSX" ]; then
-        build_multilinux i686 "source tests/test_library_builders.sh"
+        source tests/test_library_builders.sh        
     else
-        source tests/test_library_builders.sh
+        build_multilinux i686 "source tests/test_library_builders.sh"
     fi
 fi
 
