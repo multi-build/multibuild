@@ -2,6 +2,11 @@
 
 language: generic
 
+branches:
+  only:
+  - master
+  - devel
+
 matrix:
   include:
     - os: linux
