@@ -268,24 +268,26 @@ PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
 # As of 2017-03-25, the latest verions of PyPy.
 LATEST_PP_1=1.9
 
-LATEST_PP_2=2.6
 LATEST_PP_2p0=2.0.2
+# No minor version numbers for 2.1
+LATEST_PP_2p1=2.1
 LATEST_PP_2p2=2.2.1
 LATEST_PP_2p3=2.3.1
 LATEST_PP_2p4=2.4.0
 LATEST_PP_2p5=2.5.1
 LATEST_PP_2p6=2.6.1
+LATEST_PP_2=$LATEST_PP_2p6
 
-LATEST_PP_4=4.0
 LATEST_PP_4p0=4.0.1
+LATEST_PP_4=$LATEST_PP_4p0
 
-LATEST_PP_5=5.7
 LATEST_PP_5p0=5.0.1
 LATEST_PP_5p1=5.1.1
 LATEST_PP_5p3=5.3.1
 LATEST_PP_5p4=5.4.1
 LATEST_PP_5p6=5.6.0
 LATEST_PP_5p7=5.7.0
+LATEST_PP_5=$LATEST_PP_5p7
 
 function unroll_version {
     # Convert major or major.minor format to major.minor.micro using the above
