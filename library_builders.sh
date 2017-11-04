@@ -52,10 +52,14 @@ if [ -n "$IS_OSX" ]; then
 fi
 
 function build_simple {
+    # Example: build_simple libpng $LIBPNG_VERSION \
+    #               http://download.sourceforge.net/libpng tar.gz \
+    #               --additional --configure --arguments
     local name=$1
     local version=$2
     local url=$3
     local ext=${4:-tar.gz}
+    local configure_args=${@:5}
     if [ -e "${name}-stamp" ]; then
         return
     fi
@@ -63,7 +67,7 @@ function build_simple {
     local archive=${name_version}.${ext}
     fetch_unpack $url/$archive
     (cd $name_version \
-        && ./configure --prefix=$BUILD_PREFIX \
+        && ./configure --prefix=$BUILD_PREFIX $configure_args \
         && make \
         && make install)
     touch "${name}-stamp"
@@ -174,16 +178,12 @@ function build_xz {
 }
 
 function build_libwebp {
-    if [ -e libwebp-stamp ]; then return; fi
     build_libpng
     build_tiff
     build_giflib
-    fetch_unpack https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${LIBWEBP_VERSION}.tar.gz
-    (cd libwebp-${LIBWEBP_VERSION} && \
-        ./configure --enable-libwebpmux --enable-libwebpdemux --prefix=$BUILD_PREFIX \
-        && make \
-        && make install)
-    touch libwebp-stamp
+    build_simple libwebp $LIBWEBP_VERSION \
+        https://storage.googleapis.com/downloads.webmproject.org/releases/webp/ tar.gz \
+        --enable-libwebpmux --enable-libwebpdemux 
 }
 
 function build_freetype {
@@ -198,15 +198,10 @@ function build_libyaml {
 
 function build_szip {
     # Build szip without encoding (patent restrictions)
-    if [ -e szip-stamp ]; then return; fi
     build_zlib
-    local szip_url=https://www.hdfgroup.org/ftp/lib-external/szip/
-    fetch_unpack ${szip_url}/$SZIP_VERSION/src/szip-$SZIP_VERSION.tar.gz
-    (cd szip-$SZIP_VERSION \
-        && ./configure --enable-encoding=no --prefix=$BUILD_PREFIX \
-        && make \
-        && make install)
-    touch szip-stamp
+    build_simple szip $SZIP_VERSION \
+        https://www.hdfgroup.org/ftp/lib-external/szip/ tar.gz \
+        --enable-encoding=no
 }
 
 function build_hdf5 {
