@@ -49,6 +49,8 @@ platform:
 
 matrix:
     fast_finish: true
+    allow_failures:
+      - PYTHON_VERSION: "3.4"
 
 install:
     # Install miniconda and fix headers
