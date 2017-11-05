@@ -8,6 +8,9 @@ branches:
   - devel
 
 matrix:
+  allow_failures:
+  - xcode: xcode8.3
+    env: PYTHON_VERSION=3.5
   include:
     - os: linux
       dist: precise
