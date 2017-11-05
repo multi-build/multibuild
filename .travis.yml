@@ -9,7 +9,7 @@ branches:
 
 matrix:
   allow_failures:
-  - xcode: xcode8.3
+  - osx_image: xcode8.3
     env: PYTHON_VERSION=3.5
   include:
     - os: linux
