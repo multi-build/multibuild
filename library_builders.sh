@@ -131,13 +131,8 @@ function build_jpeg {
 
 function build_libpng {
     build_zlib
-    if [ -e libpng-stamp ]; then return; fi
-    fetch_unpack http://download.sourceforge.net/libpng/libpng-${LIBPNG_VERSION}.tar.gz
-    (cd libpng-${LIBPNG_VERSION} \
-        && ./configure --prefix=$BUILD_PREFIX LDFLAGS="-L$BUILD_PREFIX/lib" \
-        && make \
-        && make install)
-    touch "${name}-stamp"
+    build_simple libpng $LIBPNG_VERSION http://download.sourceforge.net/libpng tar.gz
+        LDFLAGS="-L$BUILD_PREFIX/lib"
 }
 
 function build_bzip2 {
