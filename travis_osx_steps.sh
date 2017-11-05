@@ -13,6 +13,10 @@ source $MULTIBUILD_DIR/library_builders.sh
 # config.sh can override any function defined here.
 
 function before_install {
+    # Promote BUILD_PREFIX on search path to find new zlib
+    export CPPFLAGS="-L$BUILD_PREFIX/include $CPPFLAGS"
+    export LDFLAGS="-L$BUILD_PREFIX/lib $LDFLAGS"
+
     export CC=clang
     export CXX=clang++
     get_macpython_environment $MB_PYTHON_VERSION venv
