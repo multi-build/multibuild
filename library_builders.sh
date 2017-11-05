@@ -131,7 +131,8 @@ function build_jpeg {
 
 function build_libpng {
     build_zlib
-    build_simple libpng $LIBPNG_VERSION http://download.sourceforge.net/libpng
+    build_simple libpng $LIBPNG_VERSION http://download.sourceforge.net/libpng tar.gz
+        LDFLAGS="-L$BUILD_PREFIX/lib"
 }
 
 function build_bzip2 {
