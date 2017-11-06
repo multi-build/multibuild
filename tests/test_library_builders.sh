@@ -18,7 +18,7 @@ function suppress {
     rm $HOME/suppress.out
 }
 
-if [ "$TRAVIS_OS_NAME" == "osx" ]; then; brew update; fi
+if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; fi
 
 suppress build_openssl
 suppress build_openblas
