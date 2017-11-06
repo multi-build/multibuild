@@ -95,7 +95,7 @@ function build_openblas {
     if [ -e openblas-stamp ]; then return; fi
     if [ -n "$IS_OSX" ]; then
         brew install openblas
-        brew link openblas
+        brew link --force openblas
     else
         if [ -d "OpenBLAS" ]; then
             (cd OpenBLAS && git clean -fxd && git reset --hard)
