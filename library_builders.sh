@@ -93,15 +93,20 @@ function build_github {
 
 function build_openblas {
     if [ -e openblas-stamp ]; then return; fi
-    if [ -d "OpenBLAS" ]; then
-        (cd OpenBLAS && git clean -fxd && git reset --hard)
+    if [ -n "$IS_OSX" ]; then
+        brew install openblas
+        brew link --force openblas
     else
-        git clone https://github.com/xianyi/OpenBLAS
+        if [ -d "OpenBLAS" ]; then
+            (cd OpenBLAS && git clean -fxd && git reset --hard)
+        else
+            git clone https://github.com/xianyi/OpenBLAS
+        fi
+        (cd OpenBLAS \
+            && git checkout "v${OPENBLAS_VERSION}" \
+            && make DYNAMIC_ARCH=1 USE_OPENMP=0 NUM_THREADS=64 > /dev/null \
+            && make PREFIX=$BUILD_PREFIX install)
     fi
-    (cd OpenBLAS \
-        && git checkout "v${OPENBLAS_VERSION}" \
-        && make DYNAMIC_ARCH=1 USE_OPENMP=0 NUM_THREADS=64 > /dev/null \
-        && make PREFIX=$BUILD_PREFIX install)
     touch openblas-stamp
 }
 
