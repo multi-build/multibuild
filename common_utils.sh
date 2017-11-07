@@ -203,7 +203,9 @@ function build_index_wheel {
     # Discard first argument to pass remainder to pip
     shift
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
-    if [ -n "$(is_function "pre_build")" ]; then pre_build; fi
+    start_progress
+    if [ -n "$(is_function "pre_build")" ]; then suppress pre_build; fi
+    stop_progress
     if [ -n "$BUILD_DEPENDS" ]; then
         pip install $(pip_opts) $@ $BUILD_DEPENDS
     fi
