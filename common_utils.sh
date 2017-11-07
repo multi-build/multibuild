@@ -316,6 +316,15 @@ function fill_submodule {
     (cd "$repo_dir" && git remote set-url origin $origin_url)
 }
 
+function latest_tag {
+    rev=$(git rev-list --tags --max-count=1)
+    if [[ -z $rev ]]; then
+        echo "master"
+    else
+        echo $(git describe $rev)
+    fi
+}
+
 PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
 
 # As of 2018-01-14, the latest verions of PyPy.
