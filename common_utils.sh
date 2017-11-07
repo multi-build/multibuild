@@ -365,6 +365,18 @@ function stop_progress {
     kill $MULTIBULD_PROGRESS_BAR_PID >/dev/null 2>&1
 }
 
+function print_failure {
+    cat $HOME/suppress.out 
+    exit 1
+}
+
+function suppress {
+    # Suppress the output of a bash command unless it fails
+    rm -f $HOME/suppress.out 2> /dev/null || true
+    $* 2>&1 > $HOME/suppress.out || print_failure
+    rm $HOME/suppress.out
+}
+
 function run_progress {
     # maximal_size_of_bar speed_in_seconds first_delimiter fill_chars last_delimiter
     MAX=${1:-11}
