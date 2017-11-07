@@ -167,7 +167,7 @@ To use these scripts
         global:
             - REPO_DIR=your-project
             # Commit from your-project that you want to build
-            - BUILD_COMMIT=v0.1.0
+            - BUILD_COMMIT=v0.1.0  # or `latest-tag`
             # pip dependencies to _build_ your project
             - BUILD_DEPENDS="Cython numpy"
             # pip dependencies to _test_ your project.  Include any dependencies
