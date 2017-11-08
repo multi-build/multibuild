@@ -10,7 +10,3 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
 else
     source $MULTIBUILD_DIR/travis_linux_steps.sh
 fi
-
-# Promote BUILD_PREFIX on search path to find new zlib
-export CPPFLAGS="-L$BUILD_PREFIX/include $CPPFLAGS"
-export LDFLAGS="-L$BUILD_PREFIX/lib $LDFLAGS"
