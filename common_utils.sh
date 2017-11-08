@@ -361,7 +361,7 @@ MULTIBULD_PROGRESS_BAR_PID=0
 function start_progress {
     if [ "$MULTIBULD_PROGRESS_BAR_PID" -ne 0 ]; then return; fi
 
-    _run_progress &
+    _run_progress 1>&2 &
     MULTIBULD_PROGRESS_BAR_PID=$!
 }
 
