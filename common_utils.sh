@@ -359,17 +359,17 @@ retry () {
 MULTIBULD_PROGRESS_BAR_PID=0
 
 function start_progress {
-    run_progress &
+    if [ "$MULTIBULD_PROGRESS_BAR_PID" -ne 0 ]; then return; fi
+
+    _run_progress &
     MULTIBULD_PROGRESS_BAR_PID=$!
 }
 
 function stop_progress {
-    kill $MULTIBULD_PROGRESS_BAR_PID >/dev/null 2>&1
-}
+    if [ "$MULTIBULD_PROGRESS_BAR_PID" -eq 0 ]; then return; fi
 
-function print_failure {
-    cat $HOME/suppress.out 
-    exit 1
+    kill $MULTIBULD_PROGRESS_BAR_PID >/dev/null 2>&1
+    MULTIBULD_PROGRESS_BAR_PID=0
 }
 
 function suppress {
@@ -379,7 +379,12 @@ function suppress {
     rm $HOME/suppress.out
 }
 
-function run_progress {
+function _print_failure {
+    cat $HOME/suppress.out 
+    exit 1
+}
+
+function _run_progress {
     # maximal_size_of_bar speed_in_seconds first_delimiter fill_chars last_delimiter
     MAX=${1:-11}
     TIME="${2:-0.08}"
