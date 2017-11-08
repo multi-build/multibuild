@@ -21,7 +21,7 @@ shell_session_update() { :; }
 # Start a process that runs as a keep-alive
 # to avoid travis quitting if there is no output
 
-(while true; do >&2 echo "Travis-CI keep-alive"; sleep 10; done)
+(while true; do >&2 echo "Travis-CI keep-alive"; sleep 480; done)
 
 function abspath {
     python -c "import os.path; print(os.path.abspath('$1'))"
@@ -68,11 +68,10 @@ function gh-clone {
 
 function suppress {
     # Suppress the output of a bash command unless it fails
-    (>&2 echo "Note: suppressing output")
     tmp=$(mktemp) || return # this will be the temp file w/ the output
     "$@"  > "$tmp" 2>&1 # this should run the command, respecting all arguments
     ret=$?
-    [ "$ret" -eq 0 ] || cat "$tmp"  # if $? (the return of the last run command) is not zero, cat the temp file
+    [ "$ret" -eq 0 ] || cat "$tmp" 1>&2 # if $? (the return of the last run command) is not zero, cat the temp file
     rm -f "$tmp"
     return "$ret" # return the exit status of the command
 }
