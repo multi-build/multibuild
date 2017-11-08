@@ -63,13 +63,12 @@ function gh-clone {
 
 function suppress {
     # Suppress the output of a bash command unless it fails
-    temp_file=$(mktemp)
-    rm -f $temp_file 2> /dev/null
-    if ! $* 2>&1 > $temp_file; then
-        cat $temp_file 1>&2
-        exit 1
-    fi
-    rm $temp_file
+    tmp=$(mktemp) || return # this will be the temp file w/ the output
+    "$@"  > "$tmp" 2>&1 # this should run the command, respecting all arguments
+    ret=$?
+    [ "$ret" -eq 0 ] || cat "$tmp"  # if $? (the return of the last run command) is not zero, cat the temp file
+    rm -f "$tmp"
+    return "$ret" # return the exit status of the command
 }
 
 function rm_mkdir {
