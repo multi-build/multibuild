@@ -63,6 +63,7 @@ function gh-clone {
 
 function suppress {
     # Suppress the output of a bash command unless it fails
+    (>&2 echo "Note: suppressing output")
     tmp=$(mktemp) || return # this will be the temp file w/ the output
     "$@"  > "$tmp" 2>&1 # this should run the command, respecting all arguments
     ret=$?
