@@ -61,6 +61,17 @@ function gh-clone {
     git clone https://github.com/$1
 }
 
+function suppress {
+    # Suppress the output of a bash command unless it fails
+    temp_file=$(mktemp)
+    rm -f $temp_file 2> /dev/null
+    if ! $* 2>&1 > $temp_file; then
+        cat $temp_file 1>&2
+        exit 1
+    fi
+    rm $temp_file
+}
+
 function rm_mkdir {
     # Remove directory if present, then make directory
     local path=$1
