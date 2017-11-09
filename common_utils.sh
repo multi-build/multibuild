@@ -71,7 +71,7 @@ function suppress {
     tmp=$(mktemp) || return # this will be the temp file w/ the output
     "$@"  > "$tmp" 2>&1 # this should run the command, respecting all arguments
     ret=$?
-    [ "$ret" -eq 0 ] || cat "$tmp" 1>&2 # if $? (the return of the last run command) is not zero, cat the temp file
+    [ "$ret" -eq 0 ] || >&2 cat "$tmp" # if $? (the return of the last run command) is not zero, cat the temp file
     rm -f "$tmp"
     return "$ret" # return the exit status of the command
 }
