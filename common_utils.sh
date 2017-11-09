@@ -21,7 +21,7 @@ shell_session_update() { :; }
 # Start a process that runs as a keep-alive
 # to avoid travis quitting if there is no output
 
-(while true; do >&2 echo "Travis-CI keep-alive"; sleep 480; done)
+(while true; do >&2 echo "Travis-CI keep-alive"; sleep 480; done) &
 
 function abspath {
     python -c "import os.path; print(os.path.abspath('$1'))"
