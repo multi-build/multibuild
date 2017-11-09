@@ -6,18 +6,6 @@ source library_builders.sh
 
 # set -e -x
 
-function print_failure {
-    cat $HOME/suppress.out 
-    exit 1
-}
-
-function suppress {
-    # Suppress the output of a bash command unless it fails
-    rm -f $HOME/suppress.out 2> /dev/null || true
-    $* 2>&1 > $HOME/suppress.out || print_failure
-    rm $HOME/suppress.out
-}
-
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; fi
 
 suppress build_openssl

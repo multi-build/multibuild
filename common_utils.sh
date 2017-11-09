@@ -18,6 +18,11 @@ if [ $(uname) == "Darwin" ]; then IS_OSX=1; fi
 # https://github.com/direnv/direnv/issues/210
 shell_session_update() { :; }
 
+# Start a process that runs as a keep-alive
+# to avoid travis quitting if there is no output
+
+(while true; do >&2 echo "Travis-CI keep-alive"; sleep 480; done) &
+
 function abspath {
     python -c "import os.path; print(os.path.abspath('$1'))"
 }
@@ -59,6 +64,14 @@ function is_function {
 
 function gh-clone {
     git clone https://github.com/$1
+}
+
+function suppress {
+    # Suppress the output of a bash command unless it fails
+    out=$( ( $@ ) 2>&1 )
+    ret=$?
+    [ "$ret" -eq 0 ] || >&2 echo "$out" # if $? (the return of the last run command) is not zero, cat the temp file
+    return "$ret" # return the exit status of the command
 }
 
 function rm_mkdir {
