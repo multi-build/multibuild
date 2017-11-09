@@ -10,7 +10,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; fi
 
 suppress build_openssl
 suppress build_openblas
-suppress build_libwebp
+# suppress build_libwebp
 suppress build_szip
 suppress build_swig
 suppress build_github fredrik-johansson/arb 2.11.1
