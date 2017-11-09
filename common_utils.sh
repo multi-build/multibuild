@@ -68,7 +68,7 @@ function gh-clone {
 
 function suppress {
     # Suppress the output of a bash command unless it fails
-    out="$("$@" 2>&1)" || echo "$out"
+    out=$( ( $@ ) 2>&1 )
     ret=$?
     [ "$ret" -eq 0 ] || >&2 echo "$out" # if $? (the return of the last run command) is not zero, cat the temp file
     return "$ret" # return the exit status of the command
