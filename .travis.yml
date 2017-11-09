@@ -6,6 +6,10 @@ branches:
   only:
   - master
   - devel
+  
+ cache:
+    directories:
+     - $HOME/.ccache
 
 matrix:
   allow_failures:
