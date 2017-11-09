@@ -4,7 +4,7 @@ export BUILD_PREFIX="${PWD}/builds"
 rm_mkdir $BUILD_PREFIX
 source library_builders.sh
 
-set -e -x
+# set -e -x
 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; fi
 
