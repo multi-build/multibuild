@@ -9,7 +9,7 @@ source library_builders.sh
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; fi
 
 suppress build_openssl
-suppress build_openblas
+suppress build_libpng
 suppress build_libwebp
 suppress build_szip
 suppress build_swig
