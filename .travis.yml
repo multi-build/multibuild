@@ -7,9 +7,9 @@ branches:
   - master
   - devel
   
- cache:
-    directories:
-     - $HOME/.ccache
+cache:
+  directories:
+   - $HOME/.ccache
 
 matrix:
   allow_failures:
