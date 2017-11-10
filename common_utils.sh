@@ -18,12 +18,28 @@ if [ $(uname) == "Darwin" ]; then IS_OSX=1; fi
 # https://github.com/direnv/direnv/issues/210
 shell_session_update() { :; }
 
-if [ -n "$MB_KEEP_ALIVE" ]; then
+function start_spinner {
+    if [ -n "$MB_SPINNER_PID" ]; then
+        return
+    fi
+
     # Start a process that runs as a keep-alive
     # to avoid travis quitting if there is no output
+    (while true; do
+        >&2 echo "Travis-CI keep-alive"
+        sleep 480
+    done) &
+    MB_SPINNER_PID=$!
+}
 
-    (while true; do >&2 echo "Travis-CI keep-alive"; sleep 480; done) &
-fi
+function stop_spinner {
+    if [ ! -n "$MB_SPINNER_PID" ]; then
+        return
+    fi
+    
+    kill $MB_SPINNER_PID
+    unset MB_SPINNER_PID
+}
 
 function abspath {
     python -c "import os.path; print(os.path.abspath('$1'))"
