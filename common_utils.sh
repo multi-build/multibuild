@@ -27,7 +27,7 @@ function start_spinner {
     # to avoid travis quitting if there is no output
     (while true; do
         >&2 echo "Building libraries..."
-        sleep 480
+        sleep 60
     done) &
     MB_SPINNER_PID=$!
 }
