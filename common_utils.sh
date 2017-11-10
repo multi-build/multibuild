@@ -26,7 +26,7 @@ function start_spinner {
     # Start a process that runs as a keep-alive
     # to avoid travis quitting if there is no output
     (while true; do
-        >&2 echo "Travis-CI keep-alive"
+        >&2 echo "Building libraries..."
         sleep 480
     done) &
     MB_SPINNER_PID=$!
