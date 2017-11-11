@@ -23,13 +23,15 @@ function start_spinner {
         return
     fi
 
+    >&2 echo "Building libraries..."
     # Start a process that runs as a keep-alive
     # to avoid travis quitting if there is no output
     (while true; do
-        >&2 echo "Building libraries..."
         sleep 60
+        >&2 echo "Still building..."
     done) &
     MB_SPINNER_PID=$!
+    disown
 }
 
 function stop_spinner {
@@ -39,6 +41,8 @@ function stop_spinner {
     
     kill $MB_SPINNER_PID
     unset MB_SPINNER_PID
+
+    >&2 echo "Building libraries finished."
 }
 
 function abspath {
