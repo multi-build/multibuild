@@ -11,6 +11,6 @@ else
     source $MULTIBUILD_DIR/travis_linux_steps.sh
 fi
 
-# Promote BUILD_PREFIX on search path to find new zlib
+# Promote BUILD_PREFIX on search path to any newly built libs
 export CPPFLAGS="-L$BUILD_PREFIX/include $CPPFLAGS"
-export LDFLAGS="-L$BUILD_PREFIX/lib $LDFLAGS"
+export LIBRARY_PATH="-L$BUILD_PREFIX/lib:$LIBRARY_PATH"
