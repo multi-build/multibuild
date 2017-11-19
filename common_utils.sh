@@ -304,7 +304,7 @@ function fill_submodule {
 
 PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
 
-# As of 2017-03-25, the latest verions of PyPy.
+# As of 2017-11-19, the latest verions of PyPy.
 LATEST_PP_1=1.9
 
 LATEST_PP_2p0=2.0.2
@@ -325,7 +325,7 @@ LATEST_PP_5p1=5.1.1
 LATEST_PP_5p3=5.3.1
 LATEST_PP_5p4=5.4.1
 LATEST_PP_5p6=5.6.0
-LATEST_PP_5p7=5.7.0
+LATEST_PP_5p7=5.7.1
 LATEST_PP_5=$LATEST_PP_5p7
 
 function unroll_version {
