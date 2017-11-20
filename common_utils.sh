@@ -326,7 +326,9 @@ LATEST_PP_5p3=5.3.1
 LATEST_PP_5p4=5.4.1
 LATEST_PP_5p6=5.6.0
 LATEST_PP_5p7=5.7.1
-LATEST_PP_5=$LATEST_PP_5p7
+LATEST_PP_5p8=5.8.0
+LATEST_PP_5p9=5.9.0
+LATEST_PP_5=$LATEST_PP_5p9
 
 function unroll_version {
     # Convert major or major.minor format to major.minor.micro using the above
