@@ -1,7 +1,6 @@
 # Stripped-down version of bash utilities for use with gfortran
 
 ARCHIVE_SDIR="${ARCHIVE_SDIR:-archives}"
-GF_UTIL_DIR=$(dirname "${BASH_SOURCE[0]}")
 
 function _mb_get_gf_lib_for_suf {
     local suffix=$1
