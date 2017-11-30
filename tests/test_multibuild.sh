@@ -16,7 +16,13 @@ else
     source tests/test_manylinux_utils.sh
 fi
 if [ -n "$TEST_BUILDS" ]; then
-    source tests/test_library_builders.sh
+    if [ -n "$IS_OSX" ] || [ ! -x "$(command -v docker)" ]; then
+        source tests/test_library_builders.sh        
+    else
+        touch config.sh
+        source travis_linux_steps.sh
+        build_multilinux i686 "source tests/test_library_builders.sh"
+    fi
 fi
 
 # Exit 1 if any test errors

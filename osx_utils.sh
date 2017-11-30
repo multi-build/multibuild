@@ -12,15 +12,16 @@ GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 DOWNLOADS_SDIR=downloads
 WORKING_SDIR=working
 
-# As of 1 August 2017 - latest Python of each version with binary download
+# As of 15 October 2017 - latest Python of each version with binary download
 # available.
-LATEST_2p7=2.7.13
+# See: https://www.python.org/downloads/mac-osx/
+LATEST_2p7=2.7.14
 LATEST_2p6=2.6.6
 LATEST_3p2=3.2.5
 LATEST_3p3=3.3.5
 LATEST_3p4=3.4.4
-LATEST_3p5=3.5.3
-LATEST_3p6=3.6.2
+LATEST_3p5=3.5.4
+LATEST_3p6=3.6.3
 
 
 function check_python {
@@ -282,9 +283,19 @@ function get_macpython_environment {
     # Puts directory of $PYTHON_EXE on $PATH
     local version=$1
     local venv_dir=$2
+
+    # We MUST set this before calling homebrew or it could potentially fail
+    # See travis-ci issue #8552 for more details
+    export HOMEBREW_NO_AUTO_UPDATE=1
+
+    if [ "$USE_CCACHE" == "1" ]; then
+        activate_ccache
+    fi
+    
     remove_travis_ve_pip
     install_macpython $version
     install_pip
+
     if [ -n "$venv_dir" ]; then
         install_virtualenv
         make_workon_venv $venv_dir
@@ -331,4 +342,14 @@ function install_pkg_config {
     # See :
     # https://github.com/matthew-brett/multibuild/issues/24#issue-221951587
     command -v pkg-config > /dev/null 2>&1 || brew install pkg-config
+}
+
+function activate_ccache {
+
+    brew install ccache
+    export PATH=/usr/local/opt/ccache/libexec:$PATH
+    export CCACHE_CPP2=1
+
+    # Prove to the developer that ccache is activated
+    which clang
 }

@@ -23,6 +23,33 @@ shell_session_update() { :; }
 # https://github.com/travis-ci/travis-ci/issues/8703#issuecomment-347881274
 unset -f cd
 
+function start_spinner {
+    if [ -n "$MB_SPINNER_PID" ]; then
+        return
+    fi
+
+    >&2 echo "Building libraries..."
+    # Start a process that runs as a keep-alive
+    # to avoid travis quitting if there is no output
+    (while true; do
+        sleep 60
+        >&2 echo "Still building..."
+    done) &
+    MB_SPINNER_PID=$!
+    disown
+}
+
+function stop_spinner {
+    if [ ! -n "$MB_SPINNER_PID" ]; then
+        return
+    fi
+    
+    kill $MB_SPINNER_PID
+    unset MB_SPINNER_PID
+
+    >&2 echo "Building libraries finished."
+}
+
 function abspath {
     python -c "import os.path; print(os.path.abspath('$1'))"
 }
@@ -64,6 +91,14 @@ function is_function {
 
 function gh-clone {
     git clone https://github.com/$1
+}
+
+function suppress {
+    # Suppress the output of a bash command unless it fails
+    out=$( ( $@ ) 2>&1 )
+    ret=$?
+    [ "$ret" -eq 0 ] || >&2 echo "$out" # if $? (the return of the last run command) is not zero, cat the temp file
+    return "$ret" # return the exit status of the command
 }
 
 function rm_mkdir {
@@ -147,7 +182,11 @@ function build_wheel_cmd {
     local repo_dir=${2:-$REPO_DIR}
     [ -z "$repo_dir" ] && echo "repo_dir not defined" && exit 1
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
-    if [ -n "$(is_function "pre_build")" ]; then pre_build; fi
+    if [ -n "$(is_function "pre_build")" ]; then 
+        start_spinner
+        pre_build
+        stop_spinner
+    fi
     if [ -n "$BUILD_DEPENDS" ]; then
         pip install $(pip_opts) $BUILD_DEPENDS
     fi
@@ -270,7 +309,7 @@ function fill_submodule {
 
 PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
 
-# As of 2017-03-25, the latest verions of PyPy.
+# As of 2017-11-19, the latest verions of PyPy.
 LATEST_PP_1=1.9
 
 LATEST_PP_2p0=2.0.2
@@ -291,8 +330,10 @@ LATEST_PP_5p1=5.1.1
 LATEST_PP_5p3=5.3.1
 LATEST_PP_5p4=5.4.1
 LATEST_PP_5p6=5.6.0
-LATEST_PP_5p7=5.7.0
-LATEST_PP_5=$LATEST_PP_5p7
+LATEST_PP_5p7=5.7.1
+LATEST_PP_5p8=5.8.0
+LATEST_PP_5p9=5.9.0
+LATEST_PP_5=$LATEST_PP_5p9
 
 function unroll_version {
     # Convert major or major.minor format to major.minor.micro using the above

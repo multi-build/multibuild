@@ -19,6 +19,10 @@ MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 source $MULTIBUILD_DIR/manylinux_utils.sh
 source $MULTIBUILD_DIR/library_builders.sh
 
+if [ "$USE_CCACHE" == "1" ]; then
+    activate_ccache
+fi
+
 # Set PATH for chosen Python, Unicode width
 export PATH="$(cpython_path $PYTHON_VERSION $UNICODE_WIDTH)/bin:$PATH"
 

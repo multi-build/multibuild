@@ -49,3 +49,26 @@ function repair_wheelhouse {
     done
     chmod -R a+rwX $out_dir
 }
+
+function activate_ccache {
+    # Link up the correct location for ccache
+    mkdir -p /parent-home/.ccache
+    ln -s /parent-home/.ccache $HOME/.ccache
+
+    # Now install ccache
+    suppress yum install -y ccache
+
+    # Create fake compilers and prepend them to the PATH
+    # Note that yum is supposed to create these for us,
+    # but I had trouble finding them
+    local ccache_dir=/usr/lib/ccache/compilers
+    mkdir -p $ccache_dir
+    ln -s /usr/bin/ccache $ccache_dir/gcc
+    ln -s /usr/bin/ccache $ccache_dir/g++
+    ln -s /usr/bin/ccache $ccache_dir/cc
+    ln -s /usr/bin/ccache $ccache_dir/c++
+    export PATH=$ccache_dir:$PATH
+
+    # Prove to the developer that ccache is activated
+    which gcc
+}

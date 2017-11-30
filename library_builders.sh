@@ -27,6 +27,9 @@ BLOSC_VERSION=${BLOSC_VERSION:-1.10.2}
 SNAPPY_VERSION="${SNAPPY_VERSION:-1.1.3}"
 CURL_VERSION=${CURL_VERSION:-7.49.1}
 NETCDF_VERSION=${NETCDF_VERSION:-4.4.1.1}
+SWIG_VERSION=${SWIG_VERSION:-3.0.12}
+PCRE_VERSION=${PCRE_VERSION:-8.38}
+SUITESPARSE_VERSION=${SUITESPARSE_VERSION:-4.5.6}
 OPENSSL_ROOT=openssl-1.0.2l
 # Hash from https://www.openssl.org/source/openssl-1.0.2?.tar.gz.sha256
 OPENSSL_HASH=ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c
@@ -49,10 +52,14 @@ if [ -n "$IS_OSX" ]; then
 fi
 
 function build_simple {
+    # Example: build_simple libpng $LIBPNG_VERSION \
+    #               http://download.sourceforge.net/libpng tar.gz \
+    #               --additional --configure --arguments
     local name=$1
     local version=$2
     local url=$3
     local ext=${4:-tar.gz}
+    local configure_args=${@:5}
     if [ -e "${name}-stamp" ]; then
         return
     fi
@@ -60,7 +67,25 @@ function build_simple {
     local archive=${name_version}.${ext}
     fetch_unpack $url/$archive
     (cd $name_version \
-        && ./configure --prefix=$BUILD_PREFIX \
+        && ./configure --prefix=$BUILD_PREFIX $configure_args \
+        && make \
+        && make install)
+    touch "${name}-stamp"
+}
+
+function build_github {
+    # Example: build_github fredrik-johansson/arb 2.11.1
+    local path=$1
+    local version=$2
+    local configure_args=${@:3}
+    local name=`basename "$path"`
+    local name_version="${name}-${version}"
+    if [ -e "${name}-stamp" ]; then
+        return
+    fi
+    fetch_unpack "https://github.com/${path}/archive/${version}.tar.gz"
+    (cd $name_version \
+        && ./configure --prefix=$BUILD_PREFIX $configure_args \
         && make \
         && make install)
     touch "${name}-stamp"
@@ -68,15 +93,20 @@ function build_simple {
 
 function build_openblas {
     if [ -e openblas-stamp ]; then return; fi
-    if [ -d "OpenBLAS" ]; then
-        (cd OpenBLAS && git clean -fxd && git reset --hard)
+    if [ -n "$IS_OSX" ]; then
+        brew install openblas
+        brew link --force openblas
     else
-        git clone https://github.com/xianyi/OpenBLAS
+        if [ -d "OpenBLAS" ]; then
+            (cd OpenBLAS && git clean -fxd && git reset --hard)
+        else
+            git clone https://github.com/xianyi/OpenBLAS
+        fi
+        (cd OpenBLAS \
+            && git checkout "v${OPENBLAS_VERSION}" \
+            && make DYNAMIC_ARCH=1 USE_OPENMP=0 NUM_THREADS=64 > /dev/null \
+            && make PREFIX=$BUILD_PREFIX install)
     fi
-    (cd OpenBLAS \
-        && git checkout "v${OPENBLAS_VERSION}" \
-        && make DYNAMIC_ARCH=1 USE_OPENMP=0 NUM_THREADS=64 > /dev/null \
-        && make PREFIX=$BUILD_PREFIX install)
     touch openblas-stamp
 }
 
@@ -144,8 +174,14 @@ function build_openjpeg {
     build_tiff
     build_lcms2
     local cmake=$(get_cmake)
-    fetch_unpack https://github.com/uclouvain/openjpeg/archive/version.${OPENJPEG_VERSION}.tar.gz
-    (cd openjpeg-version.${OPENJPEG_VERSION} \
+    local archive_prefix="v"
+    local directory_prefix="openjpeg-"
+    if [ $(lex_ver $OPENJPEG_VERSION) -lt $(lex_ver 2.1.1) ]; then
+        archive_prefix="version."
+        directory_prefix="openjpeg-version."
+    fi
+    fetch_unpack https://github.com/uclouvain/openjpeg/archive/${archive_prefix}${OPENJPEG_VERSION}.tar.gz
+    (cd ${directory_prefix}${OPENJPEG_VERSION} \
         && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX . \
         && make install)
     touch openjpeg-stamp
@@ -165,16 +201,12 @@ function build_xz {
 }
 
 function build_libwebp {
-    if [ -e libwebp-stamp ]; then return; fi
     build_libpng
     build_tiff
     build_giflib
-    fetch_unpack https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${LIBWEBP_VERSION}.tar.gz
-    (cd libwebp-${LIBWEBP_VERSION} && \
-        ./configure --enable-libwebpmux --enable-libwebpdemux --prefix=$BUILD_PREFIX \
-        && make \
-        && make install)
-    touch libwebp-stamp
+    build_simple libwebp $LIBWEBP_VERSION \
+        https://storage.googleapis.com/downloads.webmproject.org/releases/webp/ tar.gz \
+        --enable-libwebpmux --enable-libwebpdemux 
 }
 
 function build_freetype {
@@ -189,15 +221,10 @@ function build_libyaml {
 
 function build_szip {
     # Build szip without encoding (patent restrictions)
-    if [ -e szip-stamp ]; then return; fi
     build_zlib
-    local szip_url=https://www.hdfgroup.org/ftp/lib-external/szip/
-    fetch_unpack ${szip_url}/$SZIP_VERSION/src/szip-$SZIP_VERSION.tar.gz
-    (cd szip-$SZIP_VERSION \
-        && ./configure --enable-encoding=no --prefix=$BUILD_PREFIX \
-        && make \
-        && make install)
-    touch szip-stamp
+    build_simple szip $SZIP_VERSION \
+        https://www.hdfgroup.org/ftp/lib-external/szip/ tar.gz \
+        --enable-encoding=no
 }
 
 function build_hdf5 {
@@ -316,4 +343,25 @@ function build_netcdf {
         && make \
         && make install)
     touch netcdf-stamp
+}
+
+function build_pcre {
+    build_simple pcre $PCRE_VERSION https://ftp.pcre.org/pub/pcre/
+}
+
+function build_swig {
+    if [ -n "$IS_OSX" ]; then
+        brew install swig > /dev/null
+    else
+        build_pcre
+        build_simple swig $SWIG_VERSION http://prdownloads.sourceforge.net/swig/
+    fi
+}
+
+function build_suitesparse {
+    if [ -n "$IS_OSX" ]; then
+        brew install suite-sparse > /dev/null
+    else
+        yum install -y suitesparse-devel > /dev/null
+    fi
 }
