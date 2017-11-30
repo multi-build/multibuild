@@ -251,7 +251,8 @@ function make_workon_venv {
 
 function remove_travis_ve_pip {
     # Remove travis installs of virtualenv and pip
-    if [ "$(sudo which virtualenv)" == /usr/local/bin/virtualenv ]; then
+    # FIXME: What if virtualenv is installed but pip is not?
+    if [ "$(sudo which virtualenv)" == /usr/local/bin/virtualenv ] && [ "$(sudo which pip)" == /usr/local/bin/pip ]; then
         sudo pip uninstall -y virtualenv;
     fi
     if [ "$(sudo which pip)" == /usr/local/bin/pip ]; then
