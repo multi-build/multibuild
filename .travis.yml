@@ -113,4 +113,5 @@ matrix:
         - PYTHON_VERSION=3.5
 
 script:
+  - set -x
   - source tests/test_multibuild.sh
