@@ -16,5 +16,6 @@ suppress build_libwebp
 suppress build_szip
 suppress build_swig
 suppress build_github fredrik-johansson/arb 2.11.1
+suppress build_openblas
 
 stop_spinner
