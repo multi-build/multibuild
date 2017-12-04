@@ -102,6 +102,7 @@ function build_openblas {
         brew install openblas
         brew link --force openblas
     else
+        mkdir -p $ARCHIVE_SDIR
         local plat=${1:-$PLAT}
         local tar_path=$(abspath $(_mb_get_gf_lib "openblas-${OPENBLAS_VERSION}" "$plat"))
         (cd / && tar zxf $tar_path)
