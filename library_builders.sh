@@ -2,6 +2,11 @@
 # Defines IS_OSX, fetch_unpack
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 source $MULTIBUILD_DIR/common_utils.sh
+source $MULTIBUILD_DIR/_gfortran_utils.sh
+
+# For OpenBLAS
+PLAT="${PLAT:x86_64}"
+GF_LIB_URL="https://3f23b170c54c2533c070-1c8a9b3114517dc5fe17b7c3f8c63a43.ssl.cf2.rackcdn.com"
 
 # Recipes for building some libaries
 OPENBLAS_VERSION="${OPENBLAS_VERSION:-0.2.18}"
@@ -97,15 +102,9 @@ function build_openblas {
         brew install openblas
         brew link --force openblas
     else
-        if [ -d "OpenBLAS" ]; then
-            (cd OpenBLAS && git clean -fxd && git reset --hard)
-        else
-            git clone https://github.com/xianyi/OpenBLAS
-        fi
-        (cd OpenBLAS \
-            && git checkout "v${OPENBLAS_VERSION}" \
-            && make DYNAMIC_ARCH=1 USE_OPENMP=0 NUM_THREADS=64 > /dev/null \
-            && make PREFIX=$BUILD_PREFIX install)
+        local plat=${1:-$PLAT}
+        local tar_path=$(abspath $(_mb_get_gf_lib "openblas-${OPENBLAS_VERSION}" "$plat"))
+        (cd / && tar zxf $tar_path)
     fi
     touch openblas-stamp
 }
