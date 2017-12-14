@@ -84,7 +84,13 @@ function build_github {
     local version=$2
     local configure_args=${@:3}
     local name=`basename "$path"`
-    local name_version="${name}-${version}"
+    # This is tricky. If the version name starts with a "v",
+    # then the archive name will not start with a "v"
+    if [[ $version == v* ]]; then 
+        local name_version="${name}-${version:1}"
+    else
+        local name_version="${name}-${version}"
+    fi
     if [ -e "${name}-stamp" ]; then
         return
     fi
