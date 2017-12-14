@@ -384,5 +384,6 @@ function build_bison {
 
 function build_flex {
     # the flex repository's git tags have a 'v' prefix
-    build_github westes/flex v$FLEX_VERSION
+    build_simple flex $FLEX_VERSION \
+        https://github.com/westes/flex/releases/download/v$FLEX_VERSION
 }
