@@ -2,6 +2,7 @@
 # Depends on:
 #   BUILD_COMMANDS
 #   PYTHON_VERSION
+#   CONFIG_PATH (can be empty)
 #   BUILD_COMMIT (may be used by config.sh)
 #   UNICODE_WIDTH  (can be empty)
 #   BUILD_DEPENDS  (may be used by config.sh, can be empty)
@@ -12,6 +13,9 @@ UNICODE_WIDTH=${UNICODE_WIDTH:-32}
 
 # Location of wheels, default "wheelhouse"
 WHEEL_SDIR=${WHEEL_SDIR:-wheelhouse}
+
+# Location of `config.sh` file, default "./config.sh"
+CONFIG_PATH=${CONFIG_PATH:-config.sh}
 
 # Always pull in common and library builder utils
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
@@ -31,6 +35,6 @@ cd /io
 
 # Configuration for this package, possibly overriding `build_wheel` defined in
 # `common_utils.sh` via `manylinux_utils.sh`.
-source config.sh
+source "$CONFIG_PATH"
 
 $BUILD_COMMANDS
