@@ -35,6 +35,10 @@ NETCDF_VERSION=${NETCDF_VERSION:-4.4.1.1}
 SWIG_VERSION=${SWIG_VERSION:-3.0.12}
 PCRE_VERSION=${PCRE_VERSION:-8.38}
 SUITESPARSE_VERSION=${SUITESPARSE_VERSION:-4.5.6}
+LIBTOOL_VERSION=${LIBTOOL_VERSION:-2.4.6}
+RAGEL_VERSION=${RAGEL_VERSION:-6.10}
+FLEX_VERSION=${FLEX_VERSION:-2.6.4}
+BISON_VERSION=${BISON_VERSION:-3.0.4}
 OPENSSL_ROOT=openssl-1.0.2l
 # Hash from https://www.openssl.org/source/openssl-1.0.2?.tar.gz.sha256
 OPENSSL_HASH=ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c
@@ -364,4 +368,21 @@ function build_suitesparse {
     else
         yum install -y suitesparse-devel > /dev/null
     fi
+}
+
+function build_libtool {
+    build_simple libtool $LIBTOOL_VERSION https://ftp.gnu.org/gnu/libtool/
+}
+
+function build_ragel {
+    build_simple ragel $RAGEL_VERSION http://www.colm.net/files/ragel/
+}
+
+function build_bison {
+    build_simple bison $BISON_VERSION https://ftp.gnu.org/gnu/bison/
+}
+
+function build_flex {
+    # the flex repository's git tags have a 'v' prefix
+    build_github westes/flex v$FLEX_VERSION
 }
