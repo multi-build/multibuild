@@ -324,6 +324,9 @@ To use these scripts
         python -c 'import sys; import yourpackage; sys.exit(yourpackage.test())'
     }
 
+  Optionally you can specify a different location for ``config.sh`` file with
+  the ``$CONFIG_PATH`` environment variable.
+
 * Make sure your project is set up to build on travis-ci, and you should now
   be ready (to begin the long slow debugging process, probably).
   
