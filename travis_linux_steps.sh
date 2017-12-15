@@ -84,6 +84,7 @@ function build_multilinux {
         -e PYTHON_VERSION="$MB_PYTHON_VERSION" \
         -e UNICODE_WIDTH="$UNICODE_WIDTH" \
         -e BUILD_COMMIT="$BUILD_COMMIT" \
+        -e CONFIG_PATH="$CONFIG_PATH" \
         -e WHEEL_SDIR="$WHEEL_SDIR" \
         -e MANYLINUX_URL="$MANYLINUX_URL" \
         -e BUILD_DEPENDS="$BUILD_DEPENDS" \
@@ -115,6 +116,7 @@ function install_run {
         -e PYTHON_VERSION="$MB_PYTHON_VERSION" \
         -e MB_PYTHON_VERSION="$MB_PYTHON_VERSION" \
         -e UNICODE_WIDTH="$UNICODE_WIDTH" \
+        -e CONFIG_PATH="$CONFIG_PATH" \
         -e WHEEL_SDIR="$WHEEL_SDIR" \
         -e MANYLINUX_URL="$MANYLINUX_URL" \
         -e TEST_DEPENDS="$TEST_DEPENDS" \
