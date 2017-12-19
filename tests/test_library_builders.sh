@@ -6,7 +6,7 @@ source library_builders.sh
 
 # set -e -x
 
-if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; fi
+if [ -n "$IS_OSX" ]; then brew update; fi
 
 start_spinner
 
