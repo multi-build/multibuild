@@ -22,6 +22,8 @@ shell_session_update() { :; }
 # suggested by Thomas K at
 # https://github.com/travis-ci/travis-ci/issues/8703#issuecomment-347881274
 unset -f cd
+unset -f pushd
+unset -f popd
 
 function start_spinner {
     if [ -n "$MB_SPINNER_PID" ]; then
