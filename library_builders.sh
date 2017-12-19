@@ -39,6 +39,8 @@ LIBTOOL_VERSION=${LIBTOOL_VERSION:-2.4.6}
 RAGEL_VERSION=${RAGEL_VERSION:-6.10}
 FLEX_VERSION=${FLEX_VERSION:-2.6.4}
 BISON_VERSION=${BISON_VERSION:-3.0.4}
+NETCDF_VERSION=${NETCDF_VERSION:-4.5.0}
+
 OPENSSL_ROOT=openssl-1.0.2l
 # Hash from https://www.openssl.org/source/openssl-1.0.2?.tar.gz.sha256
 OPENSSL_HASH=ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c
@@ -392,4 +394,11 @@ function build_flex {
     # the flex repository's git tags have a 'v' prefix
     build_simple flex $FLEX_VERSION \
         https://github.com/westes/flex/releases/download/v$FLEX_VERSION
+}
+
+function build_netcdf {
+    build_zlib
+    build_hdf5
+    build_curl
+    build_simple netcdf $NETCDF_VERSION ftp://ftp.unidata.ucar.edu/pub/netcdf
 }
