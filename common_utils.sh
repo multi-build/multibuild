@@ -184,11 +184,9 @@ function build_wheel_cmd {
     local repo_dir=${2:-$REPO_DIR}
     [ -z "$repo_dir" ] && echo "repo_dir not defined" && exit 1
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
-    if [ -n "$(is_function "pre_build")" ]; then 
-        start_spinner
-        pre_build
-        stop_spinner
-    fi
+    start_spinner
+    if [ -n "$(is_function "pre_build")" ]; then pre_build; fi
+    stop_spinner
     if [ -n "$BUILD_DEPENDS" ]; then
         pip install $(pip_opts) $BUILD_DEPENDS
     fi
@@ -249,7 +247,9 @@ function build_index_wheel {
     # Discard first argument to pass remainder to pip
     shift
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
+    start_spinner
     if [ -n "$(is_function "pre_build")" ]; then pre_build; fi
+    stop_spinner
     if [ -n "$BUILD_DEPENDS" ]; then
         pip install $(pip_opts) $@ $BUILD_DEPENDS
     fi
