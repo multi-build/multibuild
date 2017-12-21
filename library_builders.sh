@@ -77,7 +77,7 @@ function build_simple {
     fetch_unpack $url/$archive
     (cd $name_version \
         && ./configure --prefix=$BUILD_PREFIX $configure_args \
-        && make \
+        && make -j4 \
         && make install)
     touch "${name}-stamp"
 }
@@ -101,7 +101,7 @@ function build_github {
     fetch_unpack "https://github.com/${path}/archive/${version}.tar.gz"
     (cd $name_version \
         && ./configure --prefix=$BUILD_PREFIX $configure_args \
-        && make \
+        && make -j4 \
         && make install)
     touch "${name}-stamp"
 }
@@ -139,7 +139,7 @@ function build_jpeg {
     fetch_unpack http://ijg.org/files/jpegsrc.v${JPEG_VERSION}.tar.gz
     (cd jpeg-${JPEG_VERSION} \
         && ./configure --prefix=$BUILD_PREFIX \
-        && make \
+        && make -j4 \
         && make install)
     touch jpeg-stamp
 }
@@ -247,7 +247,7 @@ function build_hdf5 {
     fetch_unpack $hdf5_url/hdf5-$short/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.gz
     (cd hdf5-$HDF5_VERSION \
         && ./configure --with-szlib=$BUILD_PREFIX --prefix=$BUILD_PREFIX \
-        && make \
+        && make -j4 \
         && make install)
     touch hdf5-stamp
 }
@@ -313,7 +313,7 @@ function build_curl {
         && if [ -z "$IS_OSX" ]; then \
         LIBS=-ldl ./configure $flags; else \
         ./configure $flags; fi\
-        && make \
+        && make -j4 \
         && make install)
     touch curl-stamp
 }
@@ -338,7 +338,7 @@ function build_openssl {
     check_sha256sum $ARCHIVE_SDIR/${OPENSSL_ROOT}.tar.gz ${OPENSSL_HASH}
     (cd ${OPENSSL_ROOT} \
         && ./config no-ssl2 no-shared -fPIC --prefix=$BUILD_PREFIX \
-        && make \
+        && make -j4 \
         && make install)
     touch openssl-stamp
 }
@@ -350,7 +350,7 @@ function build_netcdf {
     fetch_unpack https://github.com/Unidata/netcdf-c/archive/v${NETCDF_VERSION}.tar.gz
     (cd netcdf-c-${NETCDF_VERSION} \
         && ./configure --prefix=$BUILD_PREFIX --enable-dap \
-        && make \
+        && make -j4 \
         && make install)
     touch netcdf-stamp
 }
