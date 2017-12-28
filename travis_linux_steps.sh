@@ -72,14 +72,12 @@ function build_multilinux {
     #     MB_PYTHON_VERSION
     #     UNICODE_WIDTH (optional)
     #     BUILD_DEPENDS (optional)
-    #     DOCKER_IMAGE (optional)  
     #     MANYLINUX_URL (optional)
     #     WHEEL_SDIR (optional)
     local plat=$1
     [ -z "$plat" ] && echo "plat not defined" && exit 1
     local build_cmds="$2"
-    local docker_image=${DOCKER_IMAGE:-quay.io/pypa/manylinux1_\$plat}
-    docker_image=$(eval echo "$docker_image")
+    local docker_image=quay.io/pypa/manylinux1_$plat
     retry docker pull $docker_image
     docker run --rm \
         -e BUILD_COMMANDS="$build_cmds" \
