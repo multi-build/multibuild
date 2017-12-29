@@ -242,12 +242,9 @@ function make_workon_venv {
     fi
     venv_dir=`abspath $venv_dir`
     check_python
-    $VIRTUALENV_CMD --python=$PYTHON_EXE $venv_dir
+    $PYTHON_EXE -m virtualenv $venv_dir
     PYTHON_EXE=$venv_dir/bin/python
     PIP_CMD=$venv_dir/bin/pip
-    if [ "$(get_py_mm)" == "2.6" ]; then
-        PIP_CMD="$PIP_CMD --trusted-host=pypi.python.org"
-    fi
 }
 
 function remove_travis_ve_pip {
