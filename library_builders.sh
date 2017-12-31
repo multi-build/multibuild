@@ -1,4 +1,4 @@
-# Find, load common utilties
+# Find, load common utilities
 # Defines IS_OSX, fetch_unpack
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 source $MULTIBUILD_DIR/common_utils.sh
@@ -8,7 +8,7 @@ source $MULTIBUILD_DIR/_gfortran_utils.sh
 PLAT="${PLAT:x86_64}"
 GF_LIB_URL="https://3f23b170c54c2533c070-1c8a9b3114517dc5fe17b7c3f8c63a43.ssl.cf2.rackcdn.com"
 
-# Recipes for building some libaries
+# Recipes for building some libraries
 OPENBLAS_VERSION="${OPENBLAS_VERSION:-0.2.18}"
 # We use system zlib by default - see build_new_zlib
 ZLIB_VERSION="${ZLIB_VERSION:-1.2.10}"
