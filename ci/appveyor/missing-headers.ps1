@@ -1,7 +1,7 @@
 function InstallMissingHeaders () {
     # Visual Studio 2008 is missing stdint.h, but you can just download one
     # from the web.
-    # http://stackoverflow.com/questions/126279/c99-stdint-h-header-and-ms-visual-studio
+    # https://stackoverflow.com/questions/126279/c99-stdint-h-header-and-ms-visual-studio
     $webclient = New-Object System.Net.WebClient
 
     $include_dirs = @("C:\Program Files\Microsoft SDKs\Windows\v7.0\Include",

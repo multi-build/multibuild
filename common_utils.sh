@@ -294,7 +294,7 @@ function install_run {
 function fill_submodule {
     # Restores .git directory to submodule, if necessary
     # See:
-    # http://stackoverflow.com/questions/41776331/is-there-a-way-to-reconstruct-a-git-directory-for-a-submodule
+    # https://stackoverflow.com/questions/41776331/is-there-a-way-to-reconstruct-a-git-directory-for-a-submodule
     local repo_dir="$1"
     [ -z "$repo_dir" ] && echo "repo_dir not defined" && exit 1
     local git_loc="$repo_dir/.git"
