@@ -3,7 +3,7 @@ Utilities for building on Travis-CI and AppVeyor
 ################################################
 
 A set of scripts to automate builds of OSX and manylinux1 wheels on the
-`Travis-CI <http://travis-ci.org/>`_ infrastructure, and also Windows
+`Travis-CI <https://travis-ci.org/>`_ infrastructure, and also Windows
 wheels on the `AppVeyor <https://ci.appveyor.com/>`_ infrastructure.
 
 The TravisCI scripts are designed to build *and test*:
@@ -345,7 +345,7 @@ To use these scripts
 
 If your project depends on numpy, you will want to build against the earliest
 numpy that your project supports - see `forward, backward numpy compatibility
-<http://stackoverflow.com/questions/17709641/valueerror-numpy-dtype-has-the-wrong-size-try-recompiling/18369312#18369312>`_.
+<https://stackoverflow.com/questions/17709641/valueerror-numpy-dtype-has-the-wrong-size-try-recompiling/18369312#18369312>`_.
 See the `astropy-wheels travis file
 <https://github.com/MacPython/astropy-wheels/blob/master/.travis.yml>`_ for an
 example specifying numpy build and test dependencies.
