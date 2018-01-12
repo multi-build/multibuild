@@ -87,6 +87,7 @@ function build_multilinux {
         -e UNICODE_WIDTH="$UNICODE_WIDTH" \
         -e BUILD_COMMIT="$BUILD_COMMIT" \
         -e CONFIG_PATH="$CONFIG_PATH" \
+        -e CONFIG_PRE_PATH="$CONFIG_PRE_PATH" \
         -e WHEEL_SDIR="$WHEEL_SDIR" \
         -e MANYLINUX_URL="$MANYLINUX_URL" \
         -e BUILD_DEPENDS="$BUILD_DEPENDS" \

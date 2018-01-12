@@ -17,10 +17,13 @@ WHEEL_SDIR=${WHEEL_SDIR:-wheelhouse}
 # Location of `config.sh` file, default "./config.sh"
 CONFIG_PATH=${CONFIG_PATH:-config.sh}
 
+CONFIG_PRE_PATH=${CONFIG_PRE_PATH:-config_pre.sh}
+
 # Always pull in common and library builder utils
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 # These routines also source common_utils.sh
 source $MULTIBUILD_DIR/manylinux_utils.sh
+if [ -r "$CONFIG_PRE_PATH" ]; then source "$CONFIG_PRE_PATH"; fi
 source $MULTIBUILD_DIR/library_builders.sh
 
 if [ "$USE_CCACHE" == "1" ]; then
