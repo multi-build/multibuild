@@ -6,11 +6,6 @@ environment:
     BUILD_DEPENDS: "cython"
     TEST_DEPENDS: "nose"
 
-    # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
-    # /E:ON and /V:ON options are not enabled in the batch script interpreter
-    # See: https://stackoverflow.com/a/13751649/163740
-    CMD_IN_ENV: "cmd /E:ON /V:ON /C %APPVEYOR_BUILD_FOLDER%\\ci\\appveyor\\windows_sdk.cmd"
-
   matrix:
     - PYTHON: "C:\\Miniconda"
       PYTHON_VERSION: "2.7"
@@ -49,13 +44,9 @@ platform:
 
 matrix:
     fast_finish: true
-    allow_failures:
-      - PYTHON_VERSION: "3.4"
 
 install:
     # Install miniconda and fix headers
-    - ps: .\\ci\\appveyor\\install.ps1
-    - ps: .\\ci\\appveyor\\missing-headers.ps1
     - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PYTHON%\Library\bin;%PATH%
     - conda info
 
@@ -75,7 +66,7 @@ build_script:
     # build wheel:
     - cd %REPO_DIR%
     - git checkout %BUILD_COMMIT%
-    - "%CMD_IN_ENV% python setup.py bdist_wheel"
+    - python setup.py bdist_wheel
     - ls dist/*
 
 test_script:
