@@ -348,5 +348,5 @@ function activate_ccache {
     export CCACHE_CPP2=1
 
     # Prove to the developer that ccache is activated
-    which clang
+    echo "Using C compiler: $(which clang)"
 }
