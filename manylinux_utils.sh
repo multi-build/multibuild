@@ -70,5 +70,5 @@ function activate_ccache {
     export PATH=$ccache_dir:$PATH
 
     # Prove to the developer that ccache is activated
-    which gcc
+    echo "Using C compiler: $(which gcc)"
 }
