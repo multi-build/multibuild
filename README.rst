@@ -49,7 +49,7 @@ functions and variables in earlier scripts:
 
 * multibuild/common_utils.sh
 * multibuild/osx_utils.sh
-* config_pre.sh
+* env_vars.sh
 * multibuild/library_builders.sh
 * config.sh
 
@@ -79,7 +79,7 @@ following bash scripts:
 
 * multibuild/common_utils.sh
 * multibuild/manylinux_utils.sh
-* config_pre.sh
+* env_vars.sh
 * multibuild/library_builders.sh
 * config.sh
 
@@ -321,13 +321,13 @@ To use these scripts
   Optionally you can specify a different location for ``config.sh`` file with
   the ``$CONFIG_PATH`` environment variable.
   
-* Optionally, create a ``config_pre.sh`` file to set defaults for any build
+* Optionally, create an ``env_vars.sh`` file to set defaults for any build
   environment variables used in ``library_builders.sh``. In Linux, they cannot
   be just set in the global environment because the build runs in Docker, so
   only the variables explicitly passed to ``docker run`` are propagated.
   
   Likewise, you can specify a different location for the file by setting the
-  the ``$CONFIG_PRE_PATH`` environment variable.
+  the ``$ENV_VARS_PATH`` environment variable.
 
 * Make sure your project is set up to build on travis-ci, and you should now
   be ready (to begin the long slow debugging process, probably).
@@ -340,7 +340,7 @@ To use these scripts
   - https://github.com/MacPython/pytables-wheels/blob/master/appveyor.yml
   
   Note the Windows test customizations etc are inside ``appveyor.yml``,
-  and that ``config.sh`` and ``config_pre.sh`` are only for the
+  and that ``config.sh`` and ``env_vars.sh`` are only for the
   Linux/Mac builds on TravisCI.
 
 * Make sure your project is set up to build on appveyor, and you should now
