@@ -365,7 +365,7 @@ The main multibuild repository is always at
 https://github.com/matthew-brett/multibuild
 
 We try to keep the ``master`` branch stable and do testing and development
-in the ``devel`` branch.  From time to time we merge ``devel`` into master.
+in the ``devel`` branch.  From time to time we merge ``devel`` into ``master``.
 
 In practice, you can check out the newest commit from ``devel`` that works
 for you, then stay at it until you need newer features.
