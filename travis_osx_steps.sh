@@ -5,8 +5,12 @@ set -e
 # Get needed utilities
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 MB_PYTHON_VERSION=${MB_PYTHON_VERSION:-$TRAVIS_PYTHON_VERSION}
+
+ENV_VARS_PATH=${ENV_VARS_PATH:-env_vars.sh}
+
 # These load common_utils.sh
 source $MULTIBUILD_DIR/osx_utils.sh
+if [ -r "$ENV_VARS_PATH" ]; then source "$ENV_VARS_PATH"; fi
 source $MULTIBUILD_DIR/library_builders.sh
 
 # NB - config.sh sourced at end of this function.
