@@ -2,11 +2,6 @@
 
 language: generic
 
-branches:
-  only:
-  - master
-  - devel
-  
 cache:
   directories:
    - $HOME/.ccache
