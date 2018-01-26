@@ -24,6 +24,7 @@ MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 # These routines also source common_utils.sh
 source $MULTIBUILD_DIR/manylinux_utils.sh
 if [ -r "$ENV_VARS_PATH" ]; then source "$ENV_VARS_PATH"; fi
+source $MULTIBUILD_DIR/configure_build.sh
 source $MULTIBUILD_DIR/library_builders.sh
 
 if [ "$USE_CCACHE" == "1" ]; then
