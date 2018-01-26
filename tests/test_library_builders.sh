@@ -4,10 +4,6 @@ export BUILD_PREFIX="${PWD}/builds"
 rm_mkdir $BUILD_PREFIX
 source library_builders.sh
 
-# set -e -x
-
-if [ -n "$IS_OSX" ]; then brew update; fi
-
 start_spinner
 
 suppress build_openssl
