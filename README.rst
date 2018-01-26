@@ -50,7 +50,7 @@ functions and variables in earlier scripts:
 * multibuild/common_utils.sh
 * multibuild/osx_utils.sh
 * env_vars.sh
-* multibuild/library_builders.sh
+* multibuild/build_env+library_builders.sh
 * config.sh
 
 See ``travis_osx_steps.sh`` to review source order.
@@ -80,7 +80,7 @@ following bash scripts:
 * multibuild/common_utils.sh
 * multibuild/manylinux_utils.sh
 * env_vars.sh
-* multibuild/library_builders.sh
+* multibuild/build_env+library_builders.sh
 * config.sh
 
 See ``docker_build_wrap.sh`` to review the order of script sourcing.
@@ -321,10 +321,11 @@ To use these scripts
   Optionally you can specify a different location for ``config.sh`` file with
   the ``$CONFIG_PATH`` environment variable.
   
-* Optionally, create an ``env_vars.sh`` file to set defaults for any build
-  environment variables used in ``library_builders.sh``. In Linux, they cannot
-  be just set in the global environment because the build runs in Docker, so
-  only the variables explicitly passed to ``docker run`` are propagated.
+* Optionally, create an ``env_vars.sh`` file to set defaults for any environment
+  variables used in ``build_env+library_builders.sh`` and/or the build. In
+  Linux, they cannot be just set in the global environment because the build
+  runs in Docker, so only the variables explicitly passed to ``docker run`` are
+  propagated.
   
   Likewise, you can specify a different location for the file by setting the
   the ``$ENV_VARS_PATH`` environment variable.

@@ -1,4 +1,4 @@
-# Set TEST_BUILDS=1 to run library_builders tests
+# Set TEST_BUILDS=1 to run library builders tests
 
 language: generic
 

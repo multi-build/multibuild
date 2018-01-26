@@ -2,7 +2,7 @@
 # Smoke test
 export BUILD_PREFIX="${PWD}/builds"
 rm_mkdir $BUILD_PREFIX
-source library_builders.sh
+source build_env+library_builders.sh
 
 start_spinner
 
