@@ -3,6 +3,12 @@
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 source $MULTIBUILD_DIR/common_utils.sh
 
+# Only source configure_build once
+if [ -n "$CONFIGURE_BUILD_SOURCED" ]; then
+    return
+fi
+CONFIGURE_BUILD_SOURCED=1
+
 PLAT="${PLAT:x86_64}"
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
 
