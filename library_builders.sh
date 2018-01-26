@@ -3,6 +3,7 @@
 
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 source $MULTIBUILD_DIR/_gfortran_utils.sh
+source $MULTIBUILD_DIR/configure_build.sh
 
 # For OpenBLAS
 GF_LIB_URL="https://3f23b170c54c2533c070-1c8a9b3114517dc5fe17b7c3f8c63a43.ssl.cf2.rackcdn.com"
