@@ -1,11 +1,11 @@
-# Find, load common utilities
-# Defines IS_OSX, fetch_unpack
+#Functions and environment variables to build various
+#native libraries commonly used as dependencies
+
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
-source $MULTIBUILD_DIR/common_utils.sh
 source $MULTIBUILD_DIR/_gfortran_utils.sh
+source $MULTIBUILD_DIR/configure_build.sh
 
 # For OpenBLAS
-PLAT="${PLAT:x86_64}"
 GF_LIB_URL="https://3f23b170c54c2533c070-1c8a9b3114517dc5fe17b7c3f8c63a43.ssl.cf2.rackcdn.com"
 
 # Recipes for building some libraries
@@ -45,20 +45,8 @@ OPENSSL_HASH=ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c
 OPENSSL_DOWNLOAD_URL=https://www.openssl.org/source
 
 
-BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
 ARCHIVE_SDIR=${ARCHIVE_DIR:-archives}
 
-# Set default library compilation flags for OSX
-# IS_OSX defined in common_utils.sh
-if [ -n "$IS_OSX" ]; then
-    # Dual arch build by default
-    ARCH_FLAGS=${ARCH_FLAGS:-"-arch i386 -arch x86_64"}
-    # Only set CFLAGS, FFLAGS if they are not already defined.  Build functions
-    # can override the arch flags by setting CFLAGS, FFLAGS
-    export CFLAGS="${CFLAGS:-$ARCH_FLAGS}"
-    export CXXFLAGS="${CXXFLAGS:-$ARCH_FLAGS}"
-    export FFLAGS="${FFLAGS:-$ARCH_FLAGS}"
-fi
 
 function build_simple {
     # Example: build_simple libpng $LIBPNG_VERSION \

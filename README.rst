@@ -50,6 +50,7 @@ functions and variables in earlier scripts:
 * multibuild/common_utils.sh
 * multibuild/osx_utils.sh
 * env_vars.sh
+* multibuild/configure_build.sh
 * multibuild/library_builders.sh
 * config.sh
 
@@ -80,6 +81,7 @@ following bash scripts:
 * multibuild/common_utils.sh
 * multibuild/manylinux_utils.sh
 * env_vars.sh
+* multibuild/configure_build.sh
 * multibuild/library_builders.sh
 * config.sh
 
@@ -321,10 +323,11 @@ To use these scripts
   Optionally you can specify a different location for ``config.sh`` file with
   the ``$CONFIG_PATH`` environment variable.
   
-* Optionally, create an ``env_vars.sh`` file to set defaults for any build
-  environment variables used in ``library_builders.sh``. In Linux, they cannot
-  be just set in the global environment because the build runs in Docker, so
-  only the variables explicitly passed to ``docker run`` are propagated.
+* Optionally, create an ``env_vars.sh`` file to override the defaults for any
+  environment variables used by ``configure_build.sh``/``library_builders.sh``.
+  In Linux, they cannot be just set in the initial environment because the
+  build runs in Docker, so only the variables explicitly passed to
+  ``docker run`` are propagated.
   
   Likewise, you can specify a different location for the file by setting the
   the ``$ENV_VARS_PATH`` environment variable.
