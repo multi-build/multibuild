@@ -6,6 +6,10 @@ cache:
   directories:
    - $HOME/.ccache
 
+env:
+  global:
+    - HOMEBREW_NO_AUTO_UPDATE=1
+
 matrix:
   include:
     - os: linux
