@@ -32,11 +32,6 @@ environment:
       PYTHON_VERSION: "3.6"
       PYTHON_ARCH: "64"
 
-branches:
-  only:
-    - master
-    - devel
-
 # We always use a 64-bit machine, but can build x86 distributions
 # with the TARGET_ARCH variable.
 platform:
