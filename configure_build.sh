@@ -22,6 +22,9 @@ if [ -n "$IS_OSX" ]; then
     export CFLAGS="${CFLAGS:-$ARCH_FLAGS}"
     export CXXFLAGS="${CXXFLAGS:-$ARCH_FLAGS}"
     export FFLAGS="${FFLAGS:-$ARCH_FLAGS}"
+
+    # Disable homebrew auto-update
+    export HOMEBREW_NO_AUTO_UPDATE=1
 fi
 
 # Promote BUILD_PREFIX on search path to any newly built libs
