@@ -281,9 +281,6 @@ function get_macpython_environment {
     local version=$1
     local venv_dir=$2
 
-    # We MUST set this before calling homebrew or it could potentially fail
-    # See travis-ci issue #8552 for more details
-    export HOMEBREW_NO_AUTO_UPDATE=1
 
     if [ "$USE_CCACHE" == "1" ]; then
         activate_ccache
