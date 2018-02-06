@@ -25,6 +25,13 @@ if [ -n "$IS_OSX" ]; then
 
     # Disable homebrew auto-update
     export HOMEBREW_NO_AUTO_UPDATE=1
+else
+    # Strip all binaries after compilation.
+    STRIP_FLAGS=${STRIP_FLAGS:-"-Wl,-strip-all"}
+
+    export CFLAGS="${CFLAGS:-$STRIP_FLAGS}"
+    export CXXFLAGS="${CXXFLAGS:-$STRIP_FLAGS}"
+    export FFLAGS="${FFLAGS:-$STRIP_FLAGS}"
 fi
 
 # Promote BUILD_PREFIX on search path to any newly built libs
