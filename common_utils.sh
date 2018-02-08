@@ -311,7 +311,7 @@ function fill_submodule {
 
 PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
 
-# As of 2017-11-19, the latest verions of PyPy.
+# As of 2018-01-14, the latest verions of PyPy.
 LATEST_PP_1=1.9
 
 LATEST_PP_2p0=2.0.2
