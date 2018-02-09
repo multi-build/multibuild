@@ -17,7 +17,8 @@ WHEEL_SDIR=${WHEEL_SDIR:-wheelhouse}
 # Location of `config.sh` file, default "./config.sh"
 CONFIG_PATH=${CONFIG_PATH:-config.sh}
 
-ENV_VARS_PATH=${ENV_VARS_PATH:-env_vars.sh}
+# Path is relative to repository from which we ran
+ENV_VARS_PATH="/io/${ENV_VARS_PATH:-env_vars.sh}"
 
 # Always pull in common and library builder utils
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
