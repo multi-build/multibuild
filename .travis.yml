@@ -2,18 +2,9 @@
 
 language: generic
 
-branches:
-  only:
-  - master
-  - devel
-  
 cache:
   directories:
    - $HOME/.ccache
-
-env:
-  global:
-    - HOMEBREW_NO_AUTO_UPDATE=1
 
 matrix:
   include:
@@ -32,11 +23,6 @@ matrix:
         - TEST_BUILDS=1
         - USE_CCACHE=1
       sudo: required
-    - os: osx
-      osx_image: xcode6.4
-      env:
-        - PYTHON_VERSION=2.7.11
-        - TEST_BUILDS=1
     - os: osx
       osx_image: xcode6.4
       env:

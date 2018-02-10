@@ -322,15 +322,20 @@ To use these scripts
 
   Optionally you can specify a different location for ``config.sh`` file with
   the ``$CONFIG_PATH`` environment variable.
-  
+
 * Optionally, create an ``env_vars.sh`` file to override the defaults for any
-  environment variables used by ``configure_build.sh``/``library_builders.sh``.
-  In Linux, they cannot be just set in the initial environment because the
-  build runs in Docker, so only the variables explicitly passed to
-  ``docker run`` are propagated.
-  
-  Likewise, you can specify a different location for the file by setting the
-  the ``$ENV_VARS_PATH`` environment variable.
+  environment variables used by
+  ``configure_build.sh``/``library_builders.sh``. In Linux, the environment
+  variables used for the build cannot be set in the ``.travis.yml`` file,
+  because the build processing runs in a Docker container, so only the only
+  environment variables that reach the container are those passed in via the
+  ``docker run`` command, or those set in ``env_vars.sh``.
+
+  As for the ``config.sh`` file, you can specify a different location for the
+  file by setting the ``$ENV_VARS_PATH`` environment variable.  The path in
+  ``$ENV_VARS_PATH`` is relative to the repository root directory.  For
+  example, if your repository had a subdirectory ``scripts`` with a file
+  ``my_env_vars.sh``, you should set ``ENV_VARS_PATH=scripts/my_env_vars.sh``.
 
 * Make sure your project is set up to build on travis-ci, and you should now
   be ready (to begin the long slow debugging process, probably).
