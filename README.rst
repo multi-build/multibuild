@@ -2,21 +2,21 @@
 Utilities for building on Travis-CI and AppVeyor
 ################################################
 
-A set of scripts to automate builds of OSX and manylinux1 wheels on the
+A set of scripts to automate builds of OSX and Manylinux1 wheels on the
 `Travis-CI <https://travis-ci.org/>`_ infrastructure, and also Windows
 wheels on the `AppVeyor <https://ci.appveyor.com/>`_ infrastructure.
 
 The TravisCI scripts are designed to build *and test*:
 
 * Dual architecture OSX wheels;
-* 64-bit ``manylinux1_x86_64`` wheels, both narrow and wide unicode builds;
-* 32-bit ``manylinux1_i686`` wheels, both narrow and wide unicode builds.
+* 64-bit ``manylinux1_x86_64`` wheels, both narrow and wide Unicode builds;
+* 32-bit ``manylinux1_i686`` wheels, both narrow and wide Unicode builds.
 
 You can currently build and test against Pythons 2.7, 3.3, 3.4, 3.5, 3.6.
 
 The small innovation here is that you can test against 32-bit builds, and both
-wide and narrow unicode Python 2 builds, which was not easy on the default
-travis-ci configurations.
+wide and narrow Unicode Python 2 builds, which was not easy on the default
+Travis CI configurations.
 
 The AppVeyor setup is designed to build *and test*:
 
@@ -89,7 +89,7 @@ See ``docker_build_wrap.sh`` to review the order of script sourcing.
 
 See the definition of ``build_multilinux`` in
 ``multibuild/travis_linux_steps.sh`` for the environment variables passed from
-travis-ci to the Manylinux1 container.
+Travis CI to the Manylinux1 container.
 
 Once in the container, after sourcing the scripts above, the wrapper runs the
 real ``build_wheel`` function, which now comes (by default) from
@@ -149,7 +149,7 @@ of the default implementations.
 To use these scripts
 ********************
 
-* Make a repository for building wheels on travis-ci - e.g.
+* Make a repository for building wheels on Travis CI - e.g.
   https://github.com/MacPython/astropy-wheels - or in your case maybe
   ``https://github.com/your-org/your-project-wheels``;
 
@@ -327,7 +327,7 @@ To use these scripts
   environment variables used by
   ``configure_build.sh``/``library_builders.sh``. In Linux, the environment
   variables used for the build cannot be set in the ``.travis.yml`` file,
-  because the build processing runs in a Docker container, so only the only
+  because the build processing runs in a Docker container, so the only
   environment variables that reach the container are those passed in via the
   ``docker run`` command, or those set in ``env_vars.sh``.
 
@@ -337,21 +337,21 @@ To use these scripts
   example, if your repository had a subdirectory ``scripts`` with a file
   ``my_env_vars.sh``, you should set ``ENV_VARS_PATH=scripts/my_env_vars.sh``.
 
-* Make sure your project is set up to build on travis-ci, and you should now
+* Make sure your project is set up to build on Travis CI, and you should now
   be ready (to begin the long slow debugging process, probably).
-  
+
 * For the Windows wheels, create an ``appveyor.yml`` file, something like:
 
   - https://github.com/MacPython/numpy-wheels/blob/master/appveyor.yml
   - https://github.com/MacPython/astropy-wheels/blob/master/appveyor.yml
   - https://github.com/MacPython/nipy-wheels/blob/master/appveyor.yml
   - https://github.com/MacPython/pytables-wheels/blob/master/appveyor.yml
-  
+
   Note the Windows test customizations etc are inside ``appveyor.yml``,
   and that ``config.sh`` and ``env_vars.sh`` are only for the
-  Linux/Mac builds on TravisCI.
+  Linux/Mac builds on Travis CI.
 
-* Make sure your project is set up to build on appveyor, and you should now
+* Make sure your project is set up to build on Appveyor, and you should now
   be ready (for what could be another round of slow debugging).
 
 If your project depends on numpy, you will want to build against the earliest
