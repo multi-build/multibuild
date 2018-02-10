@@ -124,4 +124,5 @@ matrix:
         - PYTHON_VERSION=3.5
 
 script:
+  - export ENV_VARS_PATH="tests/env_vars.sh"
   - source tests/test_multibuild.sh
