@@ -1,5 +1,5 @@
 ################################################
-Utilities for building on Travis-CI and AppVeyor
+Utilities for building on Travis CI and AppVeyor
 ################################################
 
 A set of scripts to automate builds of OSX and Manylinux1 wheels on the
@@ -351,7 +351,7 @@ To use these scripts
   and that ``config.sh`` and ``env_vars.sh`` are only for the
   Linux/Mac builds on Travis CI.
 
-* Make sure your project is set up to build on Appveyor, and you should now
+* Make sure your project is set up to build on AppVeyor, and you should now
   be ready (for what could be another round of slow debugging).
 
 If your project depends on numpy, you will want to build against the earliest
