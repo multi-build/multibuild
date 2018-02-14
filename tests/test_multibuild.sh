@@ -1,4 +1,6 @@
 # Test multibuild utilities
+export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+set -x
 source common_utils.sh
 source tests/utils.sh
 
@@ -27,3 +29,5 @@ fi
 
 # Exit 1 if any test errors
 barf
+# Don't need Travis' machinery trace
+set +x
