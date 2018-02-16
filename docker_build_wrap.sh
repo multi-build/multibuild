@@ -8,6 +8,9 @@
 #   BUILD_DEPENDS  (may be used by config.sh, can be empty)
 set -e
 
+# Change into root directory of repo
+cd /io
+
 # Unicode width, default 32
 UNICODE_WIDTH=${UNICODE_WIDTH:-32}
 
@@ -18,7 +21,7 @@ WHEEL_SDIR=${WHEEL_SDIR:-wheelhouse}
 CONFIG_PATH=${CONFIG_PATH:-config.sh}
 
 # Path is relative to repository from which we ran
-ENV_VARS_PATH="/io/${ENV_VARS_PATH:-env_vars.sh}"
+ENV_VARS_PATH=${ENV_VARS_PATH:-env_vars.sh}
 
 # Always pull in common and library builder utils
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
@@ -34,9 +37,6 @@ fi
 
 # Set PATH for chosen Python, Unicode width
 export PATH="$(cpython_path $PYTHON_VERSION $UNICODE_WIDTH)/bin:$PATH"
-
-# Change into root directory of repo
-cd /io
 
 # Configuration for this package, possibly overriding `build_wheel` defined in
 # `common_utils.sh` via `manylinux_utils.sh`.
