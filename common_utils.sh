@@ -83,6 +83,12 @@ function untar {
     esac
 }
 
+function install_rsync {
+    if [ -z "$IS_OSX" ]; then
+        [[ $(type -P rsync) ]] || yum install -y rsync
+    fi
+}
+
 function fetch_unpack {
     # Fetch input archive name from input URL
     # Parameters
@@ -104,6 +110,7 @@ function fetch_unpack {
     fi
     # Unpack archive, refreshing contents
     rm_mkdir arch_tmp
+    install_rsync
     (cd arch_tmp && untar ../$out_archive && rsync --delete -avh * ..)
 }
 
