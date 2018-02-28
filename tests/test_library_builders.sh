@@ -12,7 +12,7 @@ suppress build_libpng
 suppress build_libwebp
 suppress build_szip
 suppress build_swig
-suppress build_github fredrik-johansson/arb 2.12.0
+suppress build_github fredrik-johansson/arb 2.13.0
 suppress build_flex
 suppress build_openblas
 
