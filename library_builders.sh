@@ -47,6 +47,25 @@ OPENSSL_DOWNLOAD_URL=https://www.openssl.org/source
 
 ARCHIVE_SDIR=${ARCHIVE_DIR:-archives}
 
+function configure_make_install {
+    local name_version=$1
+    local configure_args=${@:2}
+
+    (cd $name_version \
+        && ./configure --prefix=$BUILD_PREFIX $configure_args \
+        && make -j4 install)
+}
+
+function cmake_make_install {
+    local name_version=$1
+    local configure_args=${@:2}
+
+    (cd ${name_version} \
+        && mkdir -p build \
+        && cd build \
+        && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX $configure_args .. \
+        && make -j4 install)
+}
 
 function build_simple {
     # Example: build_simple libpng $LIBPNG_VERSION \
@@ -63,10 +82,7 @@ function build_simple {
     local name_version="${name}-${version}"
     local archive=${name_version}.${ext}
     fetch_unpack $url/$archive
-    (cd $name_version \
-        && ./configure --prefix=$BUILD_PREFIX $configure_args \
-        && make -j4 \
-        && make install)
+    configure_make_install $name_version $configure_args
     touch "${name}-stamp"
 }
 
@@ -87,10 +103,7 @@ function build_github {
         return
     fi
     fetch_unpack "https://github.com/${path}/archive/${version}.tar.gz"
-    (cd $name_version \
-        && ./configure --prefix=$BUILD_PREFIX $configure_args \
-        && make -j4 \
-        && make install)
+    configure_make_install $name_version $configure_args
     touch "${name}-stamp"
 }
 
@@ -125,10 +138,7 @@ function build_new_zlib {
 function build_jpeg {
     if [ -e jpeg-stamp ]; then return; fi
     fetch_unpack http://ijg.org/files/jpegsrc.v${JPEG_VERSION}.tar.gz
-    (cd jpeg-${JPEG_VERSION} \
-        && ./configure --prefix=$BUILD_PREFIX \
-        && make -j4 \
-        && make install)
+    configure_make_install jpeg-${JPEG_VERSION}
     touch jpeg-stamp
 }
 
@@ -179,9 +189,7 @@ function build_openjpeg {
         directory_prefix="openjpeg-version."
     fi
     fetch_unpack https://github.com/uclouvain/openjpeg/archive/${archive_prefix}${OPENJPEG_VERSION}.tar.gz
-    (cd ${directory_prefix}${OPENJPEG_VERSION} \
-        && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX . \
-        && make install)
+    cmake_make_install ${directory_prefix}${OPENJPEG_VERSION}
     touch openjpeg-stamp
 }
 
@@ -233,10 +241,7 @@ function build_hdf5 {
     local hdf5_url=https://www.hdfgroup.org/ftp/HDF5/releases
     local short=$(echo $HDF5_VERSION | awk -F "." '{printf "%d.%d", $1, $2}')
     fetch_unpack $hdf5_url/hdf5-$short/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.gz
-    (cd hdf5-$HDF5_VERSION \
-        && ./configure --with-szlib=$BUILD_PREFIX --prefix=$BUILD_PREFIX \
-        && make -j4 \
-        && make install)
+    configure_make_install hdf5-$HDF5_VERSION --with-szlib=$BUILD_PREFIX
     touch hdf5-stamp
 }
 
@@ -246,10 +251,7 @@ function build_libaec {
     local tar_name=${root_name}.tar.gz
     # Note URL will change for each version
     fetch_unpack https://gitlab.dkrz.de/k202009/libaec/uploads/48398bd5b7bc05a3edb3325abfeac864/${tar_name}
-    (cd $root_name \
-        && ./configure --prefix=$BUILD_PREFIX \
-        && make \
-        && make install)
+    configure_make_install $root_name
     touch libaec-stamp
 }
 
@@ -257,9 +259,7 @@ function build_blosc {
     if [ -e blosc-stamp ]; then return; fi
     local cmake=$(get_cmake)
     fetch_unpack https://github.com/Blosc/c-blosc/archive/v${BLOSC_VERSION}.tar.gz
-    (cd c-blosc-${BLOSC_VERSION} \
-        && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX . \
-        && make install)
+    cmake_make_install c-blosc-${BLOSC_VERSION}
     if [ -n "$IS_OSX" ]; then
         # Fix blosc library id bug
         for lib in $(ls ${BUILD_PREFIX}/lib/libblosc*.dylib); do
@@ -276,10 +276,7 @@ function build_snappy {
 function build_lzo {
     if [ -e lzo-stamp ]; then return; fi
     fetch_unpack http://www.oberhumer.com/opensource/lzo/download/lzo-${LZO_VERSION}.tar.gz
-    (cd lzo-${LZO_VERSION} \
-        && ./configure --prefix=$BUILD_PREFIX --enable-shared \
-        && make \
-        && make install)
+    configure_make_install lzo-${LZO_VERSION} --enable-shared
     touch lzo-stamp
 }
 
@@ -288,21 +285,14 @@ function build_lzf {
 }
 
 function build_curl {
-    if [ -e curl-stamp ]; then return; fi
-    local flags="--prefix=$BUILD_PREFIX"
-    if [ -n "$IS_OSX" ]; then
-        flags="$flags --with-darwinssl"
-    else  # manylinux
-        flags="$flags --with-ssl"
-        build_openssl
+    if [ -n "$IS_OSX" ] && [ brew ls --versions curl > /dev/null ]; then
+        brew install curl
+        return
     fi
+    if [ -e curl-stamp ]; then return; fi
+    build_openssl
     fetch_unpack https://curl.haxx.se/download/curl-${CURL_VERSION}.tar.gz
-    (cd curl-${CURL_VERSION} \
-        && if [ -z "$IS_OSX" ]; then \
-        LIBS=-ldl ./configure $flags; else \
-        ./configure $flags; fi\
-        && make -j4 \
-        && make install)
+    configure_make_install curl-${CURL_VERSION} --with-ssl
     touch curl-stamp
 }
 
@@ -324,10 +314,8 @@ function build_openssl {
     if [ -e openssl-stamp ]; then return; fi
     fetch_unpack ${OPENSSL_DOWNLOAD_URL}/${OPENSSL_ROOT}.tar.gz
     check_sha256sum $ARCHIVE_SDIR/${OPENSSL_ROOT}.tar.gz ${OPENSSL_HASH}
-    (cd ${OPENSSL_ROOT} \
-        && ./config no-ssl2 no-shared -fPIC --prefix=$BUILD_PREFIX \
-        && make -j4 \
-        && make install)
+    cp ${OPENSSL_ROOT}/config ${OPENSSL_ROOT}/configure
+    configure_make_install ${OPENSSL_ROOT} no-ssl2 no-shared -fPIC
     touch openssl-stamp
 }
 
@@ -336,10 +324,7 @@ function build_netcdf {
     build_hdf5
     build_curl
     fetch_unpack https://github.com/Unidata/netcdf-c/archive/v${NETCDF_VERSION}.tar.gz
-    (cd netcdf-c-${NETCDF_VERSION} \
-        && ./configure --prefix=$BUILD_PREFIX --enable-dap \
-        && make -j4 \
-        && make install)
+    configure_make_install netcdf-c-${NETCDF_VERSION} --enable-dap
     touch netcdf-stamp
 }
 
