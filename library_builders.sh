@@ -40,6 +40,7 @@ RAGEL_VERSION=${RAGEL_VERSION:-6.10}
 FLEX_VERSION=${FLEX_VERSION:-2.6.4}
 BISON_VERSION=${BISON_VERSION:-3.0.4}
 FFTW_VERSION=${FFTW_VERSION:-3.3.7}
+CFITSIO_VERSION=${CFITSIO_VERSION:-3370}
 OPENSSL_ROOT=openssl-1.0.2l
 # Hash from https://www.openssl.org/source/openssl-1.0.2?.tar.gz.sha256
 OPENSSL_HASH=ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c
@@ -426,4 +427,17 @@ function build_fftw {
 
     # restore CFLAGS
     export CFLAGS=$old_cflags
+}
+
+function build_cfitsio {
+    if [ -n "$IS_OSX" ]; then
+        brew install cfitsio
+    else
+        # cannot use build_simple because cfitsio has no dash between name and version
+        local cfitsio_name_ver=cfitsio${CFITSIO_VERSION}
+        fetch_unpack https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/${cfitsio_name_ver}.tar.gz
+        (cd cfitsio \
+            && ./configure --prefix=$BUILD_PREFIX \
+            && make shared && make install)
+    fi
 }
