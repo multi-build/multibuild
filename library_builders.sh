@@ -384,6 +384,7 @@ function build_flex {
 }
 
 function build_cfitsio {
+    if [ -e cfitsio-stamp ]; then return; fi
     if [ -n "$IS_OSX" ]; then
         brew install cfitsio
     else
@@ -394,4 +395,5 @@ function build_cfitsio {
             && ./configure --prefix=$BUILD_PREFIX \
             && make shared && make install)
     fi
+    touch cfitsio-stamp
 }
