@@ -153,7 +153,7 @@ function fetch_unpack {
     # Unpack archive, refreshing contents
     rm_mkdir arch_tmp
     install_rsync
-    (cd arch_tmp && untar ../$out_archive && rsync --delete -avh * ..)
+    (cd arch_tmp && untar ../$out_archive && rsync --delete -ah * ..)
 }
 
 function clean_code {
