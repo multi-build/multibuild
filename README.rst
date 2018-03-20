@@ -342,7 +342,7 @@ To use these scripts
 
 * For the Windows wheels, create an ``appveyor.yml`` file, something like:
 
-  - https://github.com/MacPython/numpy-wheels/blob/master/appveyor.yml
+  - https://github.com/MacPython/numpy-wheels/blob/master/.appveyor.yml
   - https://github.com/MacPython/astropy-wheels/blob/master/appveyor.yml
   - https://github.com/MacPython/nipy-wheels/blob/master/appveyor.yml
   - https://github.com/MacPython/pytables-wheels/blob/master/appveyor.yml
