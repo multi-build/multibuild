@@ -51,7 +51,7 @@ ARCHIVE_SDIR=${ARCHIVE_DIR:-archives}
 
 function build_simple {
     # Example: build_simple libpng $LIBPNG_VERSION \
-    #               http://download.sourceforge.net/libpng tar.gz \
+    #               https://download.sourceforge.net/libpng tar.gz \
     #               --additional --configure --arguments
     local name=$1
     local version=$2
@@ -120,7 +120,7 @@ function build_zlib {
 function build_new_zlib {
     # Careful, this one may cause yum to segfault
     # Fossils directory should also contain latest
-    build_simple zlib $ZLIB_VERSION http://zlib.net/fossils
+    build_simple zlib $ZLIB_VERSION https://zlib.net/fossils
 }
 
 function build_jpeg {
@@ -135,7 +135,7 @@ function build_jpeg {
 
 function build_libpng {
     build_zlib
-    build_simple libpng $LIBPNG_VERSION http://download.sourceforge.net/libpng
+    build_simple libpng $LIBPNG_VERSION https://download.sourceforge.net/libpng
 }
 
 function build_bzip2 {
@@ -152,7 +152,7 @@ function build_tiff {
     build_zlib
     build_jpeg
     build_xz
-    build_simple tiff $TIFF_VERSION http://download.osgeo.org/libtiff
+    build_simple tiff $TIFF_VERSION https://download.osgeo.org/libtiff
 }
 
 function get_cmake {
@@ -188,15 +188,15 @@ function build_openjpeg {
 
 function build_lcms2 {
     build_tiff
-    build_simple lcms2 $LCMS2_VERSION http://downloads.sourceforge.net/project/lcms/lcms/$LCMS2_VERSION
+    build_simple lcms2 $LCMS2_VERSION https://downloads.sourceforge.net/project/lcms/lcms/$LCMS2_VERSION
 }
 
 function build_giflib {
-    build_simple giflib $GIFLIB_VERSION http://downloads.sourceforge.net/project/giflib
+    build_simple giflib $GIFLIB_VERSION https://downloads.sourceforge.net/project/giflib
 }
 
 function build_xz {
-    build_simple xz $XZ_VERSION http://tukaani.org/xz
+    build_simple xz $XZ_VERSION https://tukaani.org/xz
 }
 
 function build_libwebp {
@@ -211,11 +211,11 @@ function build_libwebp {
 function build_freetype {
     build_libpng
     build_bzip2
-    build_simple freetype $FREETYPE_VERSION http://download.savannah.gnu.org/releases/freetype
+    build_simple freetype $FREETYPE_VERSION https://download.savannah.gnu.org/releases/freetype
 }
 
 function build_libyaml {
-    build_simple yaml $LIBYAML_VERSION http://pyyaml.org/download/libyaml
+    build_simple yaml $LIBYAML_VERSION https://pyyaml.org/download/libyaml
 }
 
 function build_szip {
@@ -276,7 +276,7 @@ function build_snappy {
 
 function build_lzo {
     if [ -e lzo-stamp ]; then return; fi
-    fetch_unpack http://www.oberhumer.com/opensource/lzo/download/lzo-${LZO_VERSION}.tar.gz
+    fetch_unpack https://www.oberhumer.com/opensource/lzo/download/lzo-${LZO_VERSION}.tar.gz
     (cd lzo-${LZO_VERSION} \
         && ./configure --prefix=$BUILD_PREFIX --enable-shared \
         && make \
@@ -353,7 +353,7 @@ function build_swig {
         brew install swig > /dev/null
     else
         build_pcre
-        build_simple swig $SWIG_VERSION http://prdownloads.sourceforge.net/swig
+        build_simple swig $SWIG_VERSION https://prdownloads.sourceforge.net/swig
     fi
 }
 
@@ -370,7 +370,7 @@ function build_libtool {
 }
 
 function build_ragel {
-    build_simple ragel $RAGEL_VERSION http://www.colm.net/files/ragel
+    build_simple ragel $RAGEL_VERSION https://www.colm.net/files/ragel
 }
 
 function build_bison {
