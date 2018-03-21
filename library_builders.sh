@@ -383,41 +383,38 @@ function build_flex {
         https://github.com/westes/flex/releases/download/v$FLEX_VERSION
 }
 
+function build_fftw_case {
+    local configure_args=${@:0}
+
+    build_simple fftw $FFTW_VERSION \
+        http://www.fftw.org/ tar.gz \
+        --with-pic --enable-shared --enable-threads --disable-fortran \
+        $configure_args
+    # eval cd fftw-$FFTW_VERSION/tests && make check-local && cd -
+}
+
 function build_fftw {
     echo 'Building fftw'
     # Taken from: https://github.com/conda-forge/fftw-feedstock/blob/master/recipe/build.sh
     export CFLAGS="-O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math"
 
-    # TODO: make this a loop:
     # single
     echo 'Building fftw: single'
-    build_simple fftw $FFTW_VERSION \
-        http://www.fftw.org/ tar.gz \
-        --with-pic --enable-shared --enable-threads --disable-fortran \
-        --enable-float --enable-sse --enable-sse2 --enable-avx
-    # eval cd tests && make check-local && cd -
+    build_fftw_case --enable-float --enable-sse --enable-sse2 --enable-avx
 
     # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
 
     # double
     echo 'Building fftw: double'
-    build_simple fftw $FFTW_VERSION \
-        http://www.fftw.org/ tar.gz \
-        --with-pic --enable-shared --enable-threads --disable-fortran \
-        --enable-sse2 --enable-avx
-    # eval cd tests && make check-local && cd -
+    build_fftw_case --enable-sse2 --enable-avx
 
     # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
 
     # long double (SSE2 and AVX not supported)
     echo 'Building fftw: long double'
-    build_simple fftw $FFTW_VERSION \
-        http://www.fftw.org/ tar.gz \
-        --with-pic --enable-shared --enable-threads --disable-fortran \
-        --enable-long-double
-    # eval cd tests && make check-local && cd -
+    build_fftw_case --enable-long-double
 
     # Taken from: https://github.com/conda-forge/pyfftw-feedstock/blob/master/recipe/build.sh
     export C_INCLUDE_PATH=$BUILD_PREFIX/include  # required as fftw3.h installed here
