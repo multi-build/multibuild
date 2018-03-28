@@ -395,6 +395,10 @@ function build_fftw_case {
 
 function build_fftw {
     echo 'Building fftw'
+
+    # Save off current CFLAGS
+    local old_cflags=$CFLAGS
+
     # Taken from: https://github.com/conda-forge/fftw-feedstock/blob/master/recipe/build.sh
     export CFLAGS="-O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math"
 
@@ -427,6 +431,6 @@ function build_fftw {
     ls -l $C_INCLUDE_PATH/fftw3*
     ls -l $STATIC_FFTW_DIR/libfftw3*
 
-    # Clear CFLAGS from fftw build
-    export CFLAGS=""
+    # restore CFLAGS
+    export CFLAGS=$old_cflags
 }
