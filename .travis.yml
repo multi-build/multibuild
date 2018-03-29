@@ -97,7 +97,7 @@ matrix:
         - PYTHON_VERSION=pypy-5.7
         - VENV=venv
     # Default OSX (xcode image) is 10.11 (xcode 7.3.1) as of 2017-05-02
-    # See: https://docs.travis-ci.com/user/osx-ci-environment/#OS-X-Version
+    # See: https://docs.travis-ci.com/user/reference/osx/
     - os: osx
       osx_image: xcode8.3
       env:
