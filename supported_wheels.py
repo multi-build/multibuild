@@ -6,7 +6,10 @@ from __future__ import print_function
 import sys
 
 from wheel.install import WheelFile
-from wheel.pep425tags import get_supported
+try:
+    from pip.pep425tags import get_supported
+except ImportError:  # pip 10
+    from pip._internal.pep425tags import get_supported
 
 
 def main():
