@@ -6,7 +6,7 @@ from __future__ import print_function
 import sys
 
 from wheel.install import WheelFile
-from pip.pep425tags import get_supported
+from wheel.pep425tags import get_supported
 
 
 def main():
