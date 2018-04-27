@@ -206,7 +206,7 @@ function install_pip {
     # Python 2.6 will fail SSL check
     local py_mm=`get_py_mm`
     if [ "$py_mm" == "2.6" ]; then
-        local pip_args="--trusted-host=pypi.python.org"
+        local pip_args="--trusted-host=pypi.org"
     fi
     # Travis VMS now install pip for system python by default - force install
     # even if installed already.
