@@ -32,7 +32,7 @@ if ! [[ "$implementer_version" =~ $requested_version ]]; then
     ingest "Wrong python version: ${implementer_version}!=${requested_version}"
 fi
 if [ "$python_mm" == "2.6" ]; then
-    expected_pip_args=" --trusted-host=pypi.python.org"
+    expected_pip_args=" --trusted-host=pypi.org"
 fi
 
 if [ -n "$VENV" ]; then  # in virtualenv
