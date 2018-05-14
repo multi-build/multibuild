@@ -24,7 +24,7 @@ LIBWEBP_VERSION="${LIBWEBP_VERSION:-0.5.0}"
 XZ_VERSION="${XZ_VERSION:-5.2.2}"
 LIBYAML_VERSION="${LIBYAML_VERSION:-0.1.5}"
 SZIP_VERSION="${SZIP_VERSION:-2.1}"
-HDF5_VERSION="${HDF5_VERSION:-1.8.18}"
+HDF5_VERSION="${HDF5_VERSION:-1.10.2}"
 LIBAEC_VERSION="${LIBAEC_VERSION:-0.3.3}"
 LZO_VERSION=${LZO_VERSION:-2.09}
 LZF_VERSION="${LZF_VERSION:-3.6}"
@@ -79,7 +79,7 @@ function build_github {
     local name=`basename "$path"`
     # This is tricky. If the version name starts with a "v",
     # then the archive name will not start with a "v"
-    if [[ $version == v* ]]; then 
+    if [[ $version == v* ]]; then
         local name_version="${name}-${version:1}"
     else
         local name_version="${name}-${version}"
@@ -205,7 +205,7 @@ function build_libwebp {
     build_giflib
     build_simple libwebp $LIBWEBP_VERSION \
         https://storage.googleapis.com/downloads.webmproject.org/releases/webp/ tar.gz \
-        --enable-libwebpmux --enable-libwebpdemux 
+        --enable-libwebpmux --enable-libwebpdemux
 }
 
 function build_freetype {
