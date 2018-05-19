@@ -96,11 +96,14 @@ function gh-clone {
 }
 
 function suppress {
-    # Suppress the output of a bash command unless it fails
-    out=$( ( $@ ) 2>&1 )
-    ret=$?
-    [ "$ret" -eq 0 ] || >&2 echo "$out" # if $? (the return of the last run command) is not zero, cat the temp file
-    return "$ret" # return the exit status of the command
+  # https://unix.stackexchange.com/questions/256120/how-can-i-suppress-output-only-if-the-command-succeeds#256122
+  tmp=$(mktemp) || return
+  echo "Running $@"
+  "$@"  > "$tmp" 2>&1
+  ret=$?
+  [ "$ret" -eq 0 ] || cat "$tmp"
+  rm -f "$tmp"
+  return "$ret"
 }
 
 function rm_mkdir {

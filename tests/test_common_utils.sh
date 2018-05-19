@@ -34,5 +34,32 @@ rm_mkdir tmp_dir
 [ -e tmp_dir/afile ] && ingest "tmp_dir/afile should have been deleted"
 rmdir tmp_dir
 
+# Test suppress command
+function bad_cmd {
+    echo bad
+    return 1
+}
+
+function bad_mid_cmd {
+    echo ok for now
+    false
+    echo should be bad now
+    return 0
+}
+
+function good_cmd {
+    echo good
+    return 0
+}
+
+# Check state of set -e, disable if set
+# https://stackoverflow.com/questions/14564746/in-bash-how-to-get-the-current-status-of-set-x?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+using_e=${-//[^e]/}
+set +e
+[ "$(suppress bad_cmd)" == "$(printf "Running bad_cmd\nbad")" ] || ingest "suppress bad_cmd"
+[ "$(suppress good_cmd)" == "Running good_cmd" ] || ingest "suppress good_cmd"
+[ "$(suppress bad_mid_cmd)" == "Running bad_mid_cmd" ] || ingest "suppress bad_mid_cmd"
+if [ -n "$using_e" ]; then set -e; fi
+
 # On Linux docker containers in travis, can only be x86_64 or i686
 [ "$(get_platform)" == x86_64 ] || [ "$(get_platform)" == i686 ] || exit 1
