@@ -88,7 +88,7 @@ function strip_ver_suffix {
 function is_function {
     # Echo "true" if input argument string is a function
     # Allow errors during "set -e" blocks.
-    (set +e; echo $($(declare -Ff "$1") > /dev/null && echo true))
+    (set +e; $(declare -Ff "$1" > /dev/null) && echo true)
 }
 
 function gh-clone {
