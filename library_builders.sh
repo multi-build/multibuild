@@ -204,7 +204,7 @@ function build_libwebp {
     build_tiff
     build_giflib
     build_simple libwebp $LIBWEBP_VERSION \
-        https://storage.googleapis.com/downloads.webmproject.org/releases/webp/ tar.gz \
+        https://storage.googleapis.com/downloads.webmproject.org/releases/webp tar.gz \
         --enable-libwebpmux --enable-libwebpdemux
 }
 
@@ -222,7 +222,7 @@ function build_szip {
     # Build szip without encoding (patent restrictions)
     build_zlib
     build_simple szip $SZIP_VERSION \
-        https://www.hdfgroup.org/ftp/lib-external/szip/ tar.gz \
+        https://www.hdfgroup.org/ftp/lib-external/szip tar.gz \
         --enable-encoding=no
 }
 
@@ -345,7 +345,7 @@ function build_netcdf {
 }
 
 function build_pcre {
-    build_simple pcre $PCRE_VERSION https://ftp.pcre.org/pub/pcre/
+    build_simple pcre $PCRE_VERSION https://ftp.pcre.org/pub/pcre
 }
 
 function build_swig {
@@ -353,7 +353,7 @@ function build_swig {
         brew install swig > /dev/null
     else
         build_pcre
-        build_simple swig $SWIG_VERSION http://prdownloads.sourceforge.net/swig/
+        build_simple swig $SWIG_VERSION http://prdownloads.sourceforge.net/swig
     fi
 }
 
@@ -366,15 +366,15 @@ function build_suitesparse {
 }
 
 function build_libtool {
-    build_simple libtool $LIBTOOL_VERSION https://ftp.gnu.org/gnu/libtool/
+    build_simple libtool $LIBTOOL_VERSION https://ftp.gnu.org/gnu/libtool
 }
 
 function build_ragel {
-    build_simple ragel $RAGEL_VERSION http://www.colm.net/files/ragel/
+    build_simple ragel $RAGEL_VERSION http://www.colm.net/files/ragel
 }
 
 function build_bison {
-    build_simple bison $BISON_VERSION https://ftp.gnu.org/gnu/bison/
+    build_simple bison $BISON_VERSION https://ftp.gnu.org/gnu/bison
 }
 
 function build_flex {
@@ -387,7 +387,7 @@ function build_fftw_case {
     local configure_args=${@:0}
 
     build_simple fftw $FFTW_VERSION \
-        http://www.fftw.org/ tar.gz \
+        http://www.fftw.org tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         $configure_args
     # eval cd fftw-$FFTW_VERSION/tests && make check-local && cd -
