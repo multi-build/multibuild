@@ -23,7 +23,7 @@ GIFLIB_VERSION="${GIFLIB_VERSION:-5.1.3}"
 LIBWEBP_VERSION="${LIBWEBP_VERSION:-0.5.0}"
 XZ_VERSION="${XZ_VERSION:-5.2.2}"
 LIBYAML_VERSION="${LIBYAML_VERSION:-0.1.5}"
-SZIP_VERSION="${SZIP_VERSION:-2.1}"
+SZIP_VERSION="${SZIP_VERSION:-2.1.1}"
 HDF5_VERSION="${HDF5_VERSION:-1.10.2}"
 LIBAEC_VERSION="${LIBAEC_VERSION:-0.3.3}"
 LZO_VERSION=${LZO_VERSION:-2.09}
@@ -222,7 +222,7 @@ function build_szip {
     # Build szip without encoding (patent restrictions)
     build_zlib
     build_simple szip $SZIP_VERSION \
-        https://www.hdfgroup.org/ftp/lib-external/szip tar.gz \
+        https://support.hdfgroup.org/ftp/lib-external/szip/$SZIP_VERSION/src tar.gz \
         --enable-encoding=no
 }
 
