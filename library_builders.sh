@@ -74,21 +74,15 @@ function build_simple {
 function build_github {
     # Example: build_github fredrik-johansson/arb 2.11.1
     local path=$1
-    local version=$2
+    local tag_name=$2
     local configure_args=${@:3}
     local name=`basename "$path"`
-    # This is tricky. If the version name starts with a "v",
-    # then the archive name will not start with a "v"
-    if [[ $version == v* ]]; then
-        local name_version="${name}-${version:1}"
-    else
-        local name_version="${name}-${version}"
-    fi
+    local name_tag_name="${name}-${tag_name}"
     if [ -e "${name}-stamp" ]; then
         return
     fi
-    fetch_unpack "https://github.com/${path}/archive/${version}.tar.gz"
-    (cd $name_version \
+    fetch_unpack "https://github.com/${path}/archive/${tag_name}.tar.gz"
+    (cd $name_tag_name \
         && ./configure --prefix=$BUILD_PREFIX $configure_args \
         && make -j4 \
         && make install)
@@ -102,7 +96,7 @@ function build_openblas {
         brew link --force openblas
     else
         mkdir -p $ARCHIVE_SDIR
-        local plat=${1:-$PLAT}
+        local plat=${1:-${PLAT:-x86_64}}
         local tar_path=$(abspath $(_mb_get_gf_lib "openblas-${OPENBLAS_VERSION}" "$plat"))
         (cd / && tar zxf $tar_path)
     fi

@@ -12,7 +12,10 @@ suppress build_libpng
 suppress build_libwebp
 suppress build_szip
 suppress build_swig
-suppress build_github fredrik-johansson/arb 2.13.0
+# We need to find a test for build_github
+# It needs a standalone C library with ./configure script.
+# arb (below) requires a couple of other libraries.
+# suppress build_github fredrik-johansson/arb 2.13.0
 suppress build_flex
 suppress build_openblas
 
