@@ -6,23 +6,35 @@ cache:
   directories:
    - $HOME/.ccache
 
+env:
+  global:
+    - PLAT=x86_64
+
 matrix:
   include:
     - os: linux
       dist: precise
-      env:
-        - TEST_BUILDS=1
+    # 64-bit builds
     - os: linux
       dist: trusty
       env:
         - TEST_BUILDS=1
       sudo: required
+    # 32-bit builds
+    - os: linux
+      dist: trusty
+      env:
+        - TEST_BUILDS=1
+        - PLAT=i686
+      sudo: required
+    # Builds with caching
     - os: linux
       dist: trusty
       env:
         - TEST_BUILDS=1
         - USE_CCACHE=1
       sudo: required
+    # OSX builds
     - os: osx
       osx_image: xcode6.4
       env:
