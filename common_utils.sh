@@ -95,15 +95,32 @@ function gh-clone {
     git clone https://github.com/$1
 }
 
+function set_opts {
+    # Set options from input options string (in $- format).
+    local opts=$1
+    local chars="exhimBH"
+    for (( i=0; i<${#chars}; i++ )); do
+        char=${chars:$i:1}
+        [ -n "${opts//[^${char}]/}" ] && set -$char || set +$char
+    done
+}
+
 function suppress {
-  # https://unix.stackexchange.com/questions/256120/how-can-i-suppress-output-only-if-the-command-succeeds#256122
-  tmp=$(mktemp) || return
-  echo "Running $@"
-  "$@"  > "$tmp" 2>&1
-  ret=$?
-  [ "$ret" -eq 0 ] || cat "$tmp"
-  rm -f "$tmp"
-  return "$ret"
+    # Run a command, show output only if return code not 0.
+    # Takes into account state of -e option.
+    # Compare
+    # https://unix.stackexchange.com/questions/256120/how-can-i-suppress-output-only-if-the-command-succeeds#256122
+    # Set -e stuff agonized over in
+    # https://unix.stackexchange.com/questions/296526/set-e-in-a-subshell
+    local tmp=$(mktemp tmp.XXXXXXXXX) || return
+    local opts=$-
+    echo "Running $@"
+    set +e
+    ( set_opts $opts ; $@  > "$tmp" 2>&1 ) ; ret=$?
+    [ "$ret" -eq 0 ] || cat "$tmp"
+    rm -f "$tmp"
+    set_opts $opts
+    return "$ret"
 }
 
 function rm_mkdir {
