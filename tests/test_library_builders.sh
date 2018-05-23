@@ -23,7 +23,12 @@ suppress build_lcms2
 suppress build_xz
 suppress build_freetype
 suppress build_libyaml
-suppress build_lzo
+if [ -z "$IS_OSX" ]; then
+    # Gives compiler conformance error on macOS Sierra:
+    # https://gist.github.com/5e20e137ea51fa8ca9fc443191f9d463
+    # https://gist.github.com/ad86c474f3c0b7ec74290bb13f9414af
+    suppress build_lzo
+fi
 suppress build_ragel
 suppress build_new_zlib
 
