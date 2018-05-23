@@ -92,6 +92,8 @@ function build_github {
 function build_openblas {
     if [ -e openblas-stamp ]; then return; fi
     if [ -n "$IS_OSX" ]; then
+        # https://github.com/travis-ci/travis-ci/issues/8826
+        brew cask uninstall oclint || echo "no oclint"
         brew install openblas
         brew link --force openblas
     else
