@@ -18,5 +18,13 @@ suppress build_swig
 # suppress build_github fredrik-johansson/arb 2.13.0
 suppress build_flex
 suppress build_openblas
+suppress build_tiff
+suppress build_lcms2
+suppress build_xz
+suppress build_freetype
+suppress build_libyaml
+suppress build_lzo
+suppress build_ragel
+suppress build_new_zlib
 
 stop_spinner
