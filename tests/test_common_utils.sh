@@ -63,13 +63,16 @@ set +ex
     || ingest "suppress good_cmd"
 [ "$(suppress bad_mid_cmd)" == "Running bad_mid_cmd" ] \
     || ingest "suppress bad_mid_cmd"
-[ "$(set -e; suppress bad_cmd)" == "$(printf "Running bad_cmd\nbad")" ] \
-    || ingest "suppress bad_cmd set -e"
-[ "$(set -e; suppress good_cmd)" == "Running good_cmd" ] || \
-    ingest "suppress good_cmd set -e"
+# Can't use pipes here, because of the effect on set -e behavior.
+expected="$(printf "Running bad_cmd\nbad")"
+actual="$(set -e; suppress bad_cmd)"
+[ "$actual" == "$expected" ] || ingest "suppress bad_cmd set -e"
+expected="$(printf "Running good_cmd")"
+actual="$(set -e; suppress good_cmd)"
+[ "$actual" == "$expected" ] || ingest "suppress good_cmd set -e"
 expected="$(printf "Running bad_mid_cmd\nok for now")"
-[ "$(set -e; suppress bad_mid_cmd)" == "$expected" ] \
-    || ingest "suppress bad_mid_cmd set -e"
+actual="$(set -e; suppress bad_mid_cmd)"
+[ "$actual" == "$expected" ] || ingest "suppress bad_mid_cmd set -e"
 # Reset options
 set_opts $ORIG_OPTS
 
