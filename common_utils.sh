@@ -157,6 +157,8 @@ function fetch_unpack {
     #    url - URL from which to fetch archive
     #    archive_fname (optional) archive name
     #
+    # Echos unpacked directory and file names.
+    #
     # If `archive_fname` not specified then use basename from `url`
     # If `archive_fname` already present at download location, use that instead.
     local url=$1
@@ -170,10 +172,14 @@ function fetch_unpack {
     if [ ! -f "$out_archive" ]; then
         curl -L $url > $out_archive
     fi
-    # Unpack archive, refreshing contents
+    # Unpack archive, refreshing contents, echoing dir and file
+    # names.
     rm_mkdir arch_tmp
     install_rsync
-    (cd arch_tmp && untar ../$out_archive && rsync --delete -ah * ..)
+    (cd arch_tmp && \
+        untar ../$out_archive && \
+        ls -1d * &&
+        rsync --delete -ah * ..)
 }
 
 function clean_code {

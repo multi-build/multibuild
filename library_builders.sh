@@ -77,12 +77,11 @@ function build_github {
     local tag_name=$2
     local configure_args=${@:3}
     local name=`basename "$path"`
-    local name_tag_name="${name}-${tag_name}"
     if [ -e "${name}-stamp" ]; then
         return
     fi
-    fetch_unpack "https://github.com/${path}/archive/${tag_name}.tar.gz"
-    (cd $name_tag_name \
+    local out_dir=$(fetch_unpack "https://github.com/${path}/archive/${tag_name}.tar.gz")
+    (cd $out_dir \
         && ./configure --prefix=$BUILD_PREFIX $configure_args \
         && make -j4 \
         && make install)
