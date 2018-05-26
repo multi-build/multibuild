@@ -27,6 +27,16 @@
 bar=baz
 [ "$(is_function bar)" == "" ] || ingest "is_function bar"
 
+# Check function is not run in is_function. Thanks to Andrew Murray.
+function rmfile {
+    rm testfile
+}
+
+touch testfile
+[ "$(is_function rmfile)" == "true" ] || ingest "is_function rmfile"
+[ -f testfile ] || ingest "testfile removed during isfunction check"
+rm testfile
+
 rm_mkdir tmp_dir
 [ -d tmp_dir ] || ingest "tmp_dir does not exist"
 touch tmp_dir/afile

@@ -169,13 +169,11 @@ function build_openjpeg {
     build_lcms2
     local cmake=$(get_cmake)
     local archive_prefix="v"
-    local directory_prefix="openjpeg-"
     if [ $(lex_ver $OPENJPEG_VERSION) -lt $(lex_ver 2.1.1) ]; then
         archive_prefix="version."
-        directory_prefix="openjpeg-version."
     fi
-    fetch_unpack https://github.com/uclouvain/openjpeg/archive/${archive_prefix}${OPENJPEG_VERSION}.tar.gz
-    (cd ${directory_prefix}${OPENJPEG_VERSION} \
+    local out_dir=$(fetch_unpack https://github.com/uclouvain/openjpeg/archive/${archive_prefix}${OPENJPEG_VERSION}.tar.gz)
+    (cd $out_dir \
         && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX . \
         && make install)
     touch openjpeg-stamp
