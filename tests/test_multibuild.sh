@@ -18,12 +18,14 @@ else
     source tests/test_manylinux_utils.sh
 fi
 if [ -n "$TEST_BUILDS" ]; then
-    if [ -n "$IS_OSX" ] || [ ! -x "$(command -v docker)" ]; then
-        source tests/test_library_builders.sh        
+    if [ -n "$IS_OSX" ]; then
+        source tests/test_library_builders.sh
+    elif [ ! -x "$(command -v docker)" ]; then
+        echo "Skipping build tests; no docker available"
     else
         touch config.sh
         source travis_linux_steps.sh
-        build_multilinux i686 "source tests/test_library_builders.sh"
+        build_multilinux $PLAT "source tests/test_library_builders.sh"
     fi
 fi
 
