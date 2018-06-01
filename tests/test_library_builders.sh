@@ -35,6 +35,7 @@ if [ -z "$IS_OSX" ]; then
     suppress build_lzo
 fi
 suppress build_ragel
+suppress build_cfitsio
 suppress build_new_zlib
 
 stop_spinner
