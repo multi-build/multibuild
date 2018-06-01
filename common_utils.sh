@@ -187,6 +187,11 @@ function clean_code {
     local build_commit=${2:-$BUILD_COMMIT}
     [ -z "$repo_dir" ] && echo "repo_dir not defined" && exit 1
     [ -z "$build_commit" ] && echo "build_commit not defined" && exit 1
+
+    if [[ "$build_commit" == "latest-tag" ]]; then
+        build_commit=$(latest_tag)
+    fi
+
     # The package $repo_dir may be a submodule. git submodules do not
     # have a .git directory. If $repo_dir is copied around, tools like
     # Versioneer which require that it be a git repository are unable
@@ -340,6 +345,15 @@ function fill_submodule {
     rm -rf "$repo_dir"
     mv "${repo_copy}" "$repo_dir"
     (cd "$repo_dir" && git remote set-url origin $origin_url)
+}
+
+function latest_tag {
+    rev=$(git rev-list --tags --max-count=1)
+    if [[ -z $rev ]]; then
+        echo "master"
+    else
+        echo $(git describe $rev)
+    fi
 }
 
 PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
