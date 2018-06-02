@@ -88,3 +88,7 @@ set_opts $ORIG_OPTS
 
 # On Linux docker containers in travis, can only be x86_64 or i686
 [ "$(get_platform)" == x86_64 ] || [ "$(get_platform)" == i686 ] || exit 1
+
+# Crudest possible check for get_distutils_platform
+expected=$(python -c "import distutils.util as du; print(du.get_platform())")
+[ "$(get_distutils_platform)" == "$expected" ] || ingest "bad distutils platform"
