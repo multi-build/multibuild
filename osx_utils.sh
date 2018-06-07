@@ -12,16 +12,16 @@ GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 DOWNLOADS_SDIR=downloads
 WORKING_SDIR=working
 
-# As of 20 December 2017 - latest Python of each version with binary download
+# As of 1 May 2018 - latest Python of each version with binary download
 # available.
 # See: https://www.python.org/downloads/mac-osx/
-LATEST_2p7=2.7.14
+LATEST_2p7=2.7.15
 LATEST_2p6=2.6.6
 LATEST_3p2=3.2.5
 LATEST_3p3=3.3.5
 LATEST_3p4=3.4.4
 LATEST_3p5=3.5.4
-LATEST_3p6=3.6.4
+LATEST_3p6=3.6.5
 
 
 function check_python {
@@ -206,7 +206,7 @@ function install_pip {
     # Python 2.6 will fail SSL check
     local py_mm=`get_py_mm`
     if [ "$py_mm" == "2.6" ]; then
-        local pip_args="--trusted-host=pypi.python.org"
+        local pip_args="--trusted-host=pypi.org"
     fi
     # Travis VMS now install pip for system python by default - force install
     # even if installed already.

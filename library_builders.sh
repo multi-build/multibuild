@@ -23,10 +23,10 @@ GIFLIB_VERSION="${GIFLIB_VERSION:-5.1.3}"
 LIBWEBP_VERSION="${LIBWEBP_VERSION:-0.5.0}"
 XZ_VERSION="${XZ_VERSION:-5.2.2}"
 LIBYAML_VERSION="${LIBYAML_VERSION:-0.1.5}"
-SZIP_VERSION="${SZIP_VERSION:-2.1}"
-HDF5_VERSION="${HDF5_VERSION:-1.8.18}"
+SZIP_VERSION="${SZIP_VERSION:-2.1.1}"
+HDF5_VERSION="${HDF5_VERSION:-1.10.2}"
 LIBAEC_VERSION="${LIBAEC_VERSION:-0.3.3}"
-LZO_VERSION=${LZO_VERSION:-2.09}
+LZO_VERSION=${LZO_VERSION:-2.10}
 LZF_VERSION="${LZF_VERSION:-3.6}"
 BLOSC_VERSION=${BLOSC_VERSION:-1.10.2}
 SNAPPY_VERSION="${SNAPPY_VERSION:-1.1.3}"
@@ -40,6 +40,7 @@ RAGEL_VERSION=${RAGEL_VERSION:-6.10}
 FLEX_VERSION=${FLEX_VERSION:-2.6.4}
 BISON_VERSION=${BISON_VERSION:-3.0.4}
 FFTW_VERSION=${FFTW_VERSION:-3.3.7}
+CFITSIO_VERSION=${CFITSIO_VERSION:-3370}
 OPENSSL_ROOT=openssl-1.0.2l
 # Hash from https://www.openssl.org/source/openssl-1.0.2?.tar.gz.sha256
 OPENSSL_HASH=ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c
@@ -51,7 +52,7 @@ ARCHIVE_SDIR=${ARCHIVE_DIR:-archives}
 
 function build_simple {
     # Example: build_simple libpng $LIBPNG_VERSION \
-    #               http://download.sourceforge.net/libpng tar.gz \
+    #               https://download.sourceforge.net/libpng tar.gz \
     #               --additional --configure --arguments
     local name=$1
     local version=$2
@@ -74,21 +75,14 @@ function build_simple {
 function build_github {
     # Example: build_github fredrik-johansson/arb 2.11.1
     local path=$1
-    local version=$2
+    local tag_name=$2
     local configure_args=${@:3}
     local name=`basename "$path"`
-    # This is tricky. If the version name starts with a "v",
-    # then the archive name will not start with a "v"
-    if [[ $version == v* ]]; then 
-        local name_version="${name}-${version:1}"
-    else
-        local name_version="${name}-${version}"
-    fi
     if [ -e "${name}-stamp" ]; then
         return
     fi
-    fetch_unpack "https://github.com/${path}/archive/${version}.tar.gz"
-    (cd $name_version \
+    local out_dir=$(fetch_unpack "https://github.com/${path}/archive/${tag_name}.tar.gz")
+    (cd $out_dir \
         && ./configure --prefix=$BUILD_PREFIX $configure_args \
         && make -j4 \
         && make install)
@@ -98,11 +92,13 @@ function build_github {
 function build_openblas {
     if [ -e openblas-stamp ]; then return; fi
     if [ -n "$IS_OSX" ]; then
+        # https://github.com/travis-ci/travis-ci/issues/8826
+        brew cask uninstall oclint || echo "no oclint"
         brew install openblas
         brew link --force openblas
     else
         mkdir -p $ARCHIVE_SDIR
-        local plat=${1:-$PLAT}
+        local plat=${1:-${PLAT:-x86_64}}
         local tar_path=$(abspath $(_mb_get_gf_lib "openblas-${OPENBLAS_VERSION}" "$plat"))
         (cd / && tar zxf $tar_path)
     fi
@@ -120,7 +116,7 @@ function build_zlib {
 function build_new_zlib {
     # Careful, this one may cause yum to segfault
     # Fossils directory should also contain latest
-    build_simple zlib $ZLIB_VERSION http://zlib.net/fossils
+    build_simple zlib $ZLIB_VERSION https://zlib.net/fossils
 }
 
 function build_jpeg {
@@ -135,7 +131,7 @@ function build_jpeg {
 
 function build_libpng {
     build_zlib
-    build_simple libpng $LIBPNG_VERSION http://download.sourceforge.net/libpng
+    build_simple libpng $LIBPNG_VERSION https://download.sourceforge.net/libpng
 }
 
 function build_bzip2 {
@@ -152,7 +148,7 @@ function build_tiff {
     build_zlib
     build_jpeg
     build_xz
-    build_simple tiff $TIFF_VERSION http://download.osgeo.org/libtiff
+    build_simple tiff $TIFF_VERSION https://download.osgeo.org/libtiff
 }
 
 function get_cmake {
@@ -174,13 +170,11 @@ function build_openjpeg {
     build_lcms2
     local cmake=$(get_cmake)
     local archive_prefix="v"
-    local directory_prefix="openjpeg-"
     if [ $(lex_ver $OPENJPEG_VERSION) -lt $(lex_ver 2.1.1) ]; then
         archive_prefix="version."
-        directory_prefix="openjpeg-version."
     fi
-    fetch_unpack https://github.com/uclouvain/openjpeg/archive/${archive_prefix}${OPENJPEG_VERSION}.tar.gz
-    (cd ${directory_prefix}${OPENJPEG_VERSION} \
+    local out_dir=$(fetch_unpack https://github.com/uclouvain/openjpeg/archive/${archive_prefix}${OPENJPEG_VERSION}.tar.gz)
+    (cd $out_dir \
         && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX . \
         && make install)
     touch openjpeg-stamp
@@ -188,15 +182,15 @@ function build_openjpeg {
 
 function build_lcms2 {
     build_tiff
-    build_simple lcms2 $LCMS2_VERSION http://downloads.sourceforge.net/project/lcms/lcms/$LCMS2_VERSION
+    build_simple lcms2 $LCMS2_VERSION https://downloads.sourceforge.net/project/lcms/lcms/$LCMS2_VERSION
 }
 
 function build_giflib {
-    build_simple giflib $GIFLIB_VERSION http://downloads.sourceforge.net/project/giflib
+    build_simple giflib $GIFLIB_VERSION https://downloads.sourceforge.net/project/giflib
 }
 
 function build_xz {
-    build_simple xz $XZ_VERSION http://tukaani.org/xz
+    build_simple xz $XZ_VERSION https://tukaani.org/xz
 }
 
 function build_libwebp {
@@ -204,25 +198,25 @@ function build_libwebp {
     build_tiff
     build_giflib
     build_simple libwebp $LIBWEBP_VERSION \
-        https://storage.googleapis.com/downloads.webmproject.org/releases/webp/ tar.gz \
-        --enable-libwebpmux --enable-libwebpdemux 
+        https://storage.googleapis.com/downloads.webmproject.org/releases/webp tar.gz \
+        --enable-libwebpmux --enable-libwebpdemux
 }
 
 function build_freetype {
     build_libpng
     build_bzip2
-    build_simple freetype $FREETYPE_VERSION http://download.savannah.gnu.org/releases/freetype
+    build_simple freetype $FREETYPE_VERSION https://download.savannah.gnu.org/releases/freetype
 }
 
 function build_libyaml {
-    build_simple yaml $LIBYAML_VERSION http://pyyaml.org/download/libyaml
+    build_simple yaml $LIBYAML_VERSION https://pyyaml.org/download/libyaml
 }
 
 function build_szip {
     # Build szip without encoding (patent restrictions)
     build_zlib
     build_simple szip $SZIP_VERSION \
-        https://www.hdfgroup.org/ftp/lib-external/szip/ tar.gz \
+        https://support.hdfgroup.org/ftp/lib-external/szip/$SZIP_VERSION/src tar.gz \
         --enable-encoding=no
 }
 
@@ -276,7 +270,7 @@ function build_snappy {
 
 function build_lzo {
     if [ -e lzo-stamp ]; then return; fi
-    fetch_unpack http://www.oberhumer.com/opensource/lzo/download/lzo-${LZO_VERSION}.tar.gz
+    fetch_unpack https://www.oberhumer.com/opensource/lzo/download/lzo-${LZO_VERSION}.tar.gz
     (cd lzo-${LZO_VERSION} \
         && ./configure --prefix=$BUILD_PREFIX --enable-shared \
         && make \
@@ -345,7 +339,7 @@ function build_netcdf {
 }
 
 function build_pcre {
-    build_simple pcre $PCRE_VERSION https://ftp.pcre.org/pub/pcre/
+    build_simple pcre $PCRE_VERSION https://ftp.pcre.org/pub/pcre
 }
 
 function build_swig {
@@ -353,7 +347,7 @@ function build_swig {
         brew install swig > /dev/null
     else
         build_pcre
-        build_simple swig $SWIG_VERSION http://prdownloads.sourceforge.net/swig/
+        build_simple swig $SWIG_VERSION https://prdownloads.sourceforge.net/swig
     fi
 }
 
@@ -366,15 +360,15 @@ function build_suitesparse {
 }
 
 function build_libtool {
-    build_simple libtool $LIBTOOL_VERSION https://ftp.gnu.org/gnu/libtool/
+    build_simple libtool $LIBTOOL_VERSION https://ftp.gnu.org/gnu/libtool
 }
 
 function build_ragel {
-    build_simple ragel $RAGEL_VERSION http://www.colm.net/files/ragel/
+    build_simple ragel $RAGEL_VERSION https://www.colm.net/files/ragel
 }
 
 function build_bison {
-    build_simple bison $BISON_VERSION https://ftp.gnu.org/gnu/bison/
+    build_simple bison $BISON_VERSION https://ftp.gnu.org/gnu/bison
 }
 
 function build_flex {
@@ -387,7 +381,7 @@ function build_fftw_case {
     local configure_args=${@:0}
 
     build_simple fftw $FFTW_VERSION \
-        http://www.fftw.org/ tar.gz \
+        http://www.fftw.org tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         $configure_args
     # eval cd fftw-$FFTW_VERSION/tests && make check-local && cd -
@@ -433,4 +427,19 @@ function build_fftw {
 
     # restore CFLAGS
     export CFLAGS=$old_cflags
+}
+
+function build_cfitsio {
+    if [ -e cfitsio-stamp ]; then return; fi
+    if [ -n "$IS_OSX" ]; then
+        brew install cfitsio
+    else
+        # cannot use build_simple because cfitsio has no dash between name and version
+        local cfitsio_name_ver=cfitsio${CFITSIO_VERSION}
+        fetch_unpack https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/${cfitsio_name_ver}.tar.gz
+        (cd cfitsio \
+            && ./configure --prefix=$BUILD_PREFIX \
+            && make shared && make install)
+    fi
+    touch cfitsio-stamp
 }

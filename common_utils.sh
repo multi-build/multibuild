@@ -88,19 +88,39 @@ function strip_ver_suffix {
 function is_function {
     # Echo "true" if input argument string is a function
     # Allow errors during "set -e" blocks.
-    (set +e; echo $($(declare -Ff "$1") > /dev/null && echo true))
+    (set +e; $(declare -Ff "$1" > /dev/null) && echo true)
 }
 
 function gh-clone {
     git clone https://github.com/$1
 }
 
+function set_opts {
+    # Set options from input options string (in $- format).
+    local opts=$1
+    local chars="exhimBH"
+    for (( i=0; i<${#chars}; i++ )); do
+        char=${chars:$i:1}
+        [ -n "${opts//[^${char}]/}" ] && set -$char || set +$char
+    done
+}
+
 function suppress {
-    # Suppress the output of a bash command unless it fails
-    out=$( ( $@ ) 2>&1 )
-    ret=$?
-    [ "$ret" -eq 0 ] || >&2 echo "$out" # if $? (the return of the last run command) is not zero, cat the temp file
-    return "$ret" # return the exit status of the command
+    # Run a command, show output only if return code not 0.
+    # Takes into account state of -e option.
+    # Compare
+    # https://unix.stackexchange.com/questions/256120/how-can-i-suppress-output-only-if-the-command-succeeds#256122
+    # Set -e stuff agonized over in
+    # https://unix.stackexchange.com/questions/296526/set-e-in-a-subshell
+    local tmp=$(mktemp tmp.XXXXXXXXX) || return
+    local opts=$-
+    echo "Running $@"
+    set +e
+    ( set_opts $opts ; $@  > "$tmp" 2>&1 ) ; ret=$?
+    [ "$ret" -eq 0 ] || cat "$tmp"
+    rm -f "$tmp"
+    set_opts $opts
+    return "$ret"
 }
 
 function rm_mkdir {
@@ -137,6 +157,8 @@ function fetch_unpack {
     #    url - URL from which to fetch archive
     #    archive_fname (optional) archive name
     #
+    # Echos unpacked directory and file names.
+    #
     # If `archive_fname` not specified then use basename from `url`
     # If `archive_fname` already present at download location, use that instead.
     local url=$1
@@ -150,10 +172,14 @@ function fetch_unpack {
     if [ ! -f "$out_archive" ]; then
         curl -L $url > $out_archive
     fi
-    # Unpack archive, refreshing contents
+    # Unpack archive, refreshing contents, echoing dir and file
+    # names.
     rm_mkdir arch_tmp
     install_rsync
-    (cd arch_tmp && untar ../$out_archive && rsync --delete -ah * ..)
+    (cd arch_tmp && \
+        untar ../$out_archive && \
+        ls -1d * &&
+        rsync --delete -ah * ..)
 }
 
 function clean_code {
@@ -318,7 +344,7 @@ function fill_submodule {
 
 PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
 
-# As of 2018-01-14, the latest verions of PyPy.
+# As of 2018-04-25, the latest verions of PyPy.
 LATEST_PP_1=1.9
 
 LATEST_PP_2p0=2.0.2
@@ -344,6 +370,9 @@ LATEST_PP_5p8=5.8.0
 LATEST_PP_5p9=5.9.0
 LATEST_PP_5p10=5.10.1
 LATEST_PP_5=$LATEST_PP_5p10
+
+LATEST_PP_6p0=6.0.0
+LATEST_PP_6=$LATEST_PP_6p0
 
 function unroll_version {
     # Convert major or major.minor format to major.minor.micro using the above
