@@ -115,6 +115,10 @@ matrix:
     # Default OSX (xcode image) is 10.12 (xcode 8.3.3) as of 2018-03-29
     # See: https://docs.travis-ci.com/user/reference/osx/
     - os: osx
+      osx_image: xcode9.4
+      env:
+        - PYTHON_VERSION=3.5
+    - os: osx
       osx_image: xcode9.3
       env:
         - PYTHON_VERSION=3.5
