@@ -2,17 +2,17 @@
 Utilities for building on Travis CI and AppVeyor
 ################################################
 
-A set of scripts to automate builds of OSX and Manylinux1 wheels on the
-`Travis-CI <https://travis-ci.org/>`_ infrastructure, and also Windows
+A set of scripts to automate builds of macOS and Manylinux1 wheels on the
+`Travis CI <https://travis-ci.org/>`_ infrastructure, and also Windows
 wheels on the `AppVeyor <https://ci.appveyor.com/>`_ infrastructure.
 
-The TravisCI scripts are designed to build *and test*:
+The Travis CI scripts are designed to build *and test*:
 
-* Dual architecture OSX wheels;
+* Dual architecture macOS wheels;
 * 64-bit ``manylinux1_x86_64`` wheels, both narrow and wide Unicode builds;
 * 32-bit ``manylinux1_i686`` wheels, both narrow and wide Unicode builds.
 
-You can currently build and test against Pythons 2.7, 3.3, 3.4, 3.5, 3.6.
+You can currently build and test against Pythons 2.7, 3.3, 3.4, 3.5, 3.6, 3.7.
 
 The small innovation here is that you can test against 32-bit builds, and both
 wide and narrow Unicode Python 2 builds, which was not easy on the default
@@ -38,8 +38,8 @@ function.
 The bash scripts are layered, in the sense that they loaded in the following
 sequence:
 
-OSX
-===
+macOS
+=====
 
 See ``multibuild/travis_osx_steps.sh``.
 
@@ -56,7 +56,7 @@ functions and variables in earlier scripts:
 
 See ``travis_osx_steps.sh`` to review source order.
 
-The OSX build / test and phase are on the OSX VM started by travis-ci.
+The macOS build / test and phase are on the macOS VM started by Travis CI.
 Therefore any environment variable defined in the ``.travis.yml`` or bash
 shell scripts listed above are available for your build and test.
 
@@ -67,14 +67,14 @@ default definitions of these functions.  See below for more details.
 Manylinux
 =========
 
-The build phase is in a Manylinux1 docker container, but the test phase is in
+The build phase is in a Manylinux1 Docker container, but the test phase is in
 a clean Ubuntu 14.04 container.
 
 Build phase
 -----------
 
 ``multibuild/travis_linux_steps.sh`` defines the ``build_wheel`` function,
-which starts up the Manylinux1 docker container to run a wrapper script
+which starts up the Manylinux1 Docker container to run a wrapper script
 ``multibuild/docker_build_wrap.sh``, that (within the container) sources the
 following bash scripts:
 
@@ -98,9 +98,9 @@ real ``build_wheel`` function, which now comes (by default) from
 Test phase
 ----------
 
-Testing is in an Ubuntu 14.04 docker container - see
+Testing is in an Ubuntu 14.04 Docker container - see
 ``multibuild/docker_test_wrap.sh``.  ``multibuild/travis_linux_steps.sh``
-defines the ``install_run`` function, which starts up the testing docker
+defines the ``install_run`` function, which starts up the testing Docker
 container with a wrapper script ``multibuild/docker_test_wrap.sh``.  The
 wrapper script sources the following bash scripts:
 
@@ -120,7 +120,7 @@ Standard build and test functions
 *********************************
 
 The standard build command is ``build_wheel``.  This is a bash function.  By
-default the function that is run on OSX, and in the Manylinux container for
+default the function that is run on macOS, and in the Manylinux container for
 the build phase, is defined in ``multibuild/common_utils.sh``.  You can
 override the default function in the project ``config.sh`` file (see below).
 
@@ -136,7 +136,7 @@ defined, before building the wheel, so ``pre_build`` is a good place to build
 any required libraries.
 
 The standard test command is the bash function ``install_run``.  The version
-run on OSX and in the Linux testing container is also defined in
+run on macOS and in the Linux testing container is also defined in
 ``multibuild/common_utils.sh``.  Typically, you do not override this function,
 but you in that case you will need to define a ``run_tests`` function, to run
 your tests, returning a non-zero error code for failure.  The default
@@ -186,7 +186,7 @@ To use these scripts
                 "MNKyBWOzu7JAUmC0Y+JhPKfytXxY/ADRmUIMEWZV977FLZPgYctqd+lqel2QIFgdHDO1CIdTSymOOFZckM9ICUXg9Ta+8oBjSvAVWO1ahDcToRM2DLq66fKg+NKimd2OfK7x597h/QmUSl4k8XyvyyXgl5jOiLg/EJxNE2r83IA="
 
     language: python
-    # The travis Python version is unrelated to the version we build and test
+    # The Travis Python version is unrelated to the version we build and test
     # with.  This is set with the MB_PYTHON_VERSION variable.
     python: 3.5
     sudo: required
@@ -286,7 +286,7 @@ To use these scripts
             --no-update-index
             wheels
 
-  The example above is for a project building from a git submodule.  If you
+  The example above is for a project building from a Git submodule.  If you
   aren't building from a submodule, but want to use ``pip`` to build from a
   source archive on https://pypi.org or similar, replace the first few lines
   of the ``.travis.yml`` file with something like::
@@ -306,7 +306,7 @@ To use these scripts
   You also need this file to specify how to run your tests::
 
     # Define custom utilities
-    # Test for OSX with [ -n "$IS_OSX" ]
+    # Test for macOS with [ -n "$IS_OSX" ]
 
     function pre_build {
         # Any stuff that you need to do before you start building the wheels
@@ -354,12 +354,12 @@ To use these scripts
 * Make sure your project is set up to build on AppVeyor, and you should now
   be ready (for what could be another round of slow debugging).
 
-If your project depends on numpy, you will want to build against the earliest
-numpy that your project supports - see `forward, backward numpy compatibility
+If your project depends on NumPy, you will want to build against the earliest
+NumPy that your project supports - see `forward, backward NumPy compatibility
 <https://stackoverflow.com/questions/17709641/valueerror-numpy-dtype-has-the-wrong-size-try-recompiling/18369312#18369312>`_.
-See the `astropy-wheels travis file
+See the `astropy-wheels Travis file
 <https://github.com/MacPython/astropy-wheels/blob/master/.travis.yml>`_ for an
-example specifying numpy build and test dependencies.
+example specifying NumPy build and test dependencies.
 
 Here are some simple example projects:
 
@@ -369,7 +369,7 @@ Here are some simple example projects:
 * https://github.com/MacPython/dipy-wheels
 
 Less simple projects where there are some serious build dependencies, and / or
-OSX / Linux differences:
+macOS / Linux differences:
 
 * https://github.com/MacPython/matplotlib-wheels
 * https://github.com/python-pillow/Pillow-wheels
