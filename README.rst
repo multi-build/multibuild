@@ -354,12 +354,12 @@ To use these scripts
 * Make sure your project is set up to build on AppVeyor, and you should now
   be ready (for what could be another round of slow debugging).
 
-If your project depends on numpy, you will want to build against the earliest
-numpy that your project supports - see `forward, backward numpy compatibility
+If your project depends on NumPy, you will want to build against the earliest
+NumPy that your project supports - see `forward, backward NumPy compatibility
 <https://stackoverflow.com/questions/17709641/valueerror-numpy-dtype-has-the-wrong-size-try-recompiling/18369312#18369312>`_.
 See the `astropy-wheels Travis file
 <https://github.com/MacPython/astropy-wheels/blob/master/.travis.yml>`_ for an
-example specifying numpy build and test dependencies.
+example specifying NumPy build and test dependencies.
 
 Here are some simple example projects:
 
