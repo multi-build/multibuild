@@ -3,10 +3,10 @@ Utilities for building on Travis CI and AppVeyor
 ################################################
 
 A set of scripts to automate builds of macOS and Manylinux1 wheels on the
-`Travis-CI <https://travis-ci.org/>`_ infrastructure, and also Windows
+`Travis CI <https://travis-ci.org/>`_ infrastructure, and also Windows
 wheels on the `AppVeyor <https://ci.appveyor.com/>`_ infrastructure.
 
-The TravisCI scripts are designed to build *and test*:
+The Travis CI scripts are designed to build *and test*:
 
 * Dual architecture macOS wheels;
 * 64-bit ``manylinux1_x86_64`` wheels, both narrow and wide Unicode builds;
@@ -56,7 +56,7 @@ functions and variables in earlier scripts:
 
 See ``travis_osx_steps.sh`` to review source order.
 
-The macOS build / test and phase are on the macOS VM started by travis-ci.
+The macOS build / test and phase are on the macOS VM started by Travis CI.
 Therefore any environment variable defined in the ``.travis.yml`` or bash
 shell scripts listed above are available for your build and test.
 
@@ -186,7 +186,7 @@ To use these scripts
                 "MNKyBWOzu7JAUmC0Y+JhPKfytXxY/ADRmUIMEWZV977FLZPgYctqd+lqel2QIFgdHDO1CIdTSymOOFZckM9ICUXg9Ta+8oBjSvAVWO1ahDcToRM2DLq66fKg+NKimd2OfK7x597h/QmUSl4k8XyvyyXgl5jOiLg/EJxNE2r83IA="
 
     language: python
-    # The travis Python version is unrelated to the version we build and test
+    # The Travis Python version is unrelated to the version we build and test
     # with.  This is set with the MB_PYTHON_VERSION variable.
     python: 3.5
     sudo: required
@@ -357,7 +357,7 @@ To use these scripts
 If your project depends on numpy, you will want to build against the earliest
 numpy that your project supports - see `forward, backward numpy compatibility
 <https://stackoverflow.com/questions/17709641/valueerror-numpy-dtype-has-the-wrong-size-try-recompiling/18369312#18369312>`_.
-See the `astropy-wheels travis file
+See the `astropy-wheels Travis file
 <https://github.com/MacPython/astropy-wheels/blob/master/.travis.yml>`_ for an
 example specifying numpy build and test dependencies.
 
