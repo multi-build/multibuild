@@ -67,14 +67,14 @@ default definitions of these functions.  See below for more details.
 Manylinux
 =========
 
-The build phase is in a Manylinux1 docker container, but the test phase is in
+The build phase is in a Manylinux1 Docker container, but the test phase is in
 a clean Ubuntu 14.04 container.
 
 Build phase
 -----------
 
 ``multibuild/travis_linux_steps.sh`` defines the ``build_wheel`` function,
-which starts up the Manylinux1 docker container to run a wrapper script
+which starts up the Manylinux1 Docker container to run a wrapper script
 ``multibuild/docker_build_wrap.sh``, that (within the container) sources the
 following bash scripts:
 
@@ -98,9 +98,9 @@ real ``build_wheel`` function, which now comes (by default) from
 Test phase
 ----------
 
-Testing is in an Ubuntu 14.04 docker container - see
+Testing is in an Ubuntu 14.04 Docker container - see
 ``multibuild/docker_test_wrap.sh``.  ``multibuild/travis_linux_steps.sh``
-defines the ``install_run`` function, which starts up the testing docker
+defines the ``install_run`` function, which starts up the testing Docker
 container with a wrapper script ``multibuild/docker_test_wrap.sh``.  The
 wrapper script sources the following bash scripts:
 
