@@ -286,7 +286,7 @@ To use these scripts
             --no-update-index
             wheels
 
-  The example above is for a project building from a git submodule.  If you
+  The example above is for a project building from a Git submodule.  If you
   aren't building from a submodule, but want to use ``pip`` to build from a
   source archive on https://pypi.org or similar, replace the first few lines
   of the ``.travis.yml`` file with something like::
