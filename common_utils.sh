@@ -299,6 +299,12 @@ function get_platform {
     python -c 'import platform; print(platform.uname()[4])'
 }
 
+function get_distutils_platform {
+    # Report platform as given by distutils get_platform.
+    # This is the platform tag that pip will use.
+    python -c "import distutils.util; print(distutils.util.get_platform())"
+}
+
 function install_wheel {
     # Install test dependencies and built wheel
     #

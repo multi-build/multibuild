@@ -73,7 +73,11 @@ matrix:
         - VENV=venv
     - os: osx
       env:
-        - PYTHON_VERSION=3.6
+        - PYTHON_VERSION=3.7
+        - VENV=venv
+    - os: osx
+      env:
+        - PYTHON_VERSION=3.7
         - VENV=venv
         - USE_CCACHE=1
     - os: osx
@@ -114,6 +118,10 @@ matrix:
         - VENV=venv
     # Default OSX (xcode image) is 10.12 (xcode 8.3.3) as of 2018-03-29
     # See: https://docs.travis-ci.com/user/reference/osx/
+    - os: osx
+      osx_image: xcode9.4
+      env:
+        - PYTHON_VERSION=3.5
     - os: osx
       osx_image: xcode9.3
       env:
