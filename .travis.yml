@@ -73,7 +73,11 @@ matrix:
         - VENV=venv
     - os: osx
       env:
-        - PYTHON_VERSION=3.6
+        - PYTHON_VERSION=3.7
+        - VENV=venv
+    - os: osx
+      env:
+        - PYTHON_VERSION=3.7
         - VENV=venv
         - USE_CCACHE=1
     - os: osx
