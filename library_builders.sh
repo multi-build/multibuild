@@ -343,20 +343,24 @@ function build_pcre {
 }
 
 function build_swig {
+    if [ -e swig-stamp ]; then return; fi
     if [ -n "$IS_OSX" ]; then
         brew install swig > /dev/null
     else
         build_pcre
         build_simple swig $SWIG_VERSION https://prdownloads.sourceforge.net/swig
     fi
+    touch swig-stamp
 }
 
 function build_suitesparse {
+    if [ -e suitesparse-stamp ]; then return; fi
     if [ -n "$IS_OSX" ]; then
         brew install suite-sparse > /dev/null
     else
         yum install -y suitesparse-devel > /dev/null
     fi
+    touch suitesparse-stamp
 }
 
 function build_libtool {
