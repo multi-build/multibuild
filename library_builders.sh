@@ -14,6 +14,8 @@ OPENBLAS_VERSION="${OPENBLAS_VERSION:-0.2.18}"
 ZLIB_VERSION="${ZLIB_VERSION:-1.2.10}"
 LIBPNG_VERSION="${LIBPNG_VERSION:-1.6.21}"
 BZIP2_VERSION="${BZIP2_VERSION:-1.0.6}"
+# BZIP website went down as of August 8 2018
+BZIP_URL=https://web.archive.org/web/20180624184806/http://bzip.org
 FREETYPE_VERSION="${FREETYPE_VERSION:-2.6.3}"
 TIFF_VERSION="${TIFF_VERSION:-4.0.6}"
 JPEG_VERSION="${JPEG_VERSION:-9b}"
@@ -137,7 +139,7 @@ function build_libpng {
 function build_bzip2 {
     if [ -n "$IS_OSX" ]; then return; fi  # OSX has bzip2 libs already
     if [ -e bzip2-stamp ]; then return; fi
-    fetch_unpack http://bzip.org/${BZIP2_VERSION}/bzip2-${BZIP2_VERSION}.tar.gz
+    fetch_unpack $BZIP_URL/${BZIP2_VERSION}/bzip2-${BZIP2_VERSION}.tar.gz
     (cd bzip2-${BZIP2_VERSION} \
         && make -f Makefile-libbz2_so \
         && make install PREFIX=$BUILD_PREFIX)
