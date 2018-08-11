@@ -168,9 +168,16 @@ function fetch_unpack {
     # Make the archive directory in case it doesn't exist
     mkdir -p $arch_sdir
     local out_archive="${arch_sdir}/${archive_fname}"
-    # Fetch the archive if it does not exist
+    # If the archive is not already in the archives directory, get it.
     if [ ! -f "$out_archive" ]; then
-        curl -L $url > $out_archive
+        # Source it from multibuild archives if available.
+        local our_archive="${MULTIBUILD_DIR}/archives/${archive_fname}"
+        if [ -f "$our_archive" ]; then
+            ln $our_archive $out_archive
+        else
+            # Otherwise download it.
+            curl -L $url > $out_archive
+        fi
     fi
     # Unpack archive, refreshing contents, echoing dir and file
     # names.
