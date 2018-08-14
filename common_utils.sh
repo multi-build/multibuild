@@ -173,7 +173,7 @@ function fetch_unpack {
         # Source it from multibuild archives if available.
         local our_archive="${MULTIBUILD_DIR}/archives/${archive_fname}"
         if [ -f "$our_archive" ]; then
-            ln $our_archive $out_archive
+            ln -s $our_archive $out_archive
         else
             # Otherwise download it.
             curl -L $url > $out_archive
