@@ -35,6 +35,6 @@ else
 fi
 
 # Promote BUILD_PREFIX on search path to any newly built libs
-export CPPFLAGS="-L$BUILD_PREFIX/include $CPPFLAGS"
+export CPPFLAGS="-I$BUILD_PREFIX/include $CPPFLAGS"
 export LIBRARY_PATH="$BUILD_PREFIX/lib:$LIBRARY_PATH"
 export PKG_CONFIG_PATH="$BUILD_PREFIX/lib/pkgconfig/:$PKG_CONFIG_PATH"
