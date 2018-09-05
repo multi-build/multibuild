@@ -20,11 +20,14 @@ fi
 if [ -n "$TEST_BUILDS" ]; then
     if [ -n "$IS_OSX" ]; then
         source tests/test_library_builders.sh
+        source travis_osx_steps.sh
+        pre_build
     elif [ ! -x "$(command -v docker)" ]; then
         echo "Skipping build tests; no docker available"
     else
         source travis_linux_steps.sh
         build_multilinux $PLAT "source tests/test_library_builders.sh"
+        build_multilinux $PLAT "pre_build"
     fi
 fi
 
