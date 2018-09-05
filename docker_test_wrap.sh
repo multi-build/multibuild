@@ -9,6 +9,10 @@ source $MULTIBUILD_DIR/common_utils.sh
 # Change into root directory of repo
 cd /io
 
+# Path is relative to repository from which we ran
+ENV_VARS_PATH=${ENV_VARS_PATH:-env_vars.sh}
+if [ -r "$ENV_VARS_PATH" ]; then source "$ENV_VARS_PATH"; fi
+
 # Configuration for this package in `config.sh`.
 # This can overwrite `install_run`' and `install_wheel` (called from
 # `install_run`). These are otherwise defined in common_utils.sh.
