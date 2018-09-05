@@ -23,7 +23,6 @@ if [ -n "$TEST_BUILDS" ]; then
     elif [ ! -x "$(command -v docker)" ]; then
         echo "Skipping build tests; no docker available"
     else
-        touch config.sh
         source travis_linux_steps.sh
         build_multilinux $PLAT "source tests/test_library_builders.sh"
     fi

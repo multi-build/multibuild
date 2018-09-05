@@ -169,4 +169,5 @@ matrix:
 
 script:
   - export ENV_VARS_PATH="tests/env_vars.sh"
+  - export CONFIG_PATH="tests/config.sh"
   - source tests/test_multibuild.sh
