@@ -1,5 +1,6 @@
 # Test multibuild utilities
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+export MB_PYTHON_VERSION=$PYTHON_VERSION
 set -x
 source common_utils.sh
 source tests/utils.sh
