@@ -12,7 +12,7 @@ The Travis CI scripts are designed to build *and test*:
 * 64-bit ``manylinux1_x86_64`` wheels, both narrow and wide Unicode builds;
 * 32-bit ``manylinux1_i686`` wheels, both narrow and wide Unicode builds.
 
-You can currently build and test against Pythons 2.7, 3.3, 3.4, 3.5, 3.6, 3.7.
+You can currently build and test against Pythons 2.7, 3.4, 3.5, 3.6, 3.7.
 
 The small innovation here is that you can test against 32-bit builds, and both
 wide and narrow Unicode Python 2 builds, which was not easy on the default
@@ -213,13 +213,6 @@ To use these scripts
             - MB_PYTHON_VERSION=2.7
             - PLAT=i686
             - UNICODE_WIDTH=16
-        - os: linux
-          env:
-            - MB_PYTHON_VERSION=3.3
-        - os: linux
-          env:
-            - MB_PYTHON_VERSION=3.3
-            - PLAT=i686
         - os: linux
           env:
             - MB_PYTHON_VERSION=3.4
