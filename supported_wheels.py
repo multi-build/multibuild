@@ -4,21 +4,32 @@
 from __future__ import print_function
 
 import sys
+from os.path import basename
 
 try:
-    from wheel.install import WheelFile
+    from wheel.install import WHEEL_INFO_RE
 except ImportError:  # As of Wheel 0.32.0
-    from wheel.wheelfile import WheelFile
+    from wheel.wheelfile import WHEEL_INFO_RE
 try:
     from pip.pep425tags import get_supported
 except ImportError:  # pip 10
     from pip._internal.pep425tags import get_supported
 
 
+def tags_for(fname):
+    # Copied from WheelFile code
+    parsed_filename = WHEEL_INFO_RE.match(basename(fname))
+    tags = parsed_filename.groupdict()
+    for pyver in tags['pyver'].split('.'):
+        for abi in tags['abi'].split('.'):
+            for plat in tags['plat'].split('.'):
+                yield (pyver, abi, plat)
+
+
 def main():
     supported = set(get_supported())
     for fname in sys.argv[1:]:
-        tags = set(WheelFile(fname).tags)
+        tags = set(tags_for(fname))
         if supported.intersection(tags):
             print(fname)
 
