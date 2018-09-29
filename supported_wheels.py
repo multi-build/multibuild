@@ -5,7 +5,10 @@ from __future__ import print_function
 
 import sys
 
-from wheel.install import WheelFile
+try:
+    from wheel.install import WheelFile
+except ImportError:  # As of Wheel 0.32.0
+    from wheel.wheelfile import WheelFile
 try:
     from pip.pep425tags import get_supported
 except ImportError:  # pip 10
