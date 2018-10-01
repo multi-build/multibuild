@@ -24,7 +24,7 @@ function before_install {
     virtualenv --python=python venv
     source venv/bin/activate
     python --version # just to check
-    pip install --upgrade pip wheel
+    pip install --upgrade pip wheel==0.31.1
 }
 
 function build_wheel {

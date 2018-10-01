@@ -24,7 +24,7 @@ function before_install {
     export CXX=clang++
     get_macpython_environment $MB_PYTHON_VERSION venv
     source venv/bin/activate
-    pip install --upgrade pip wheel
+    pip install --upgrade pip wheel==0.31.1
 }
 
 # build_wheel function defined in common_utils (via osx_utils)
