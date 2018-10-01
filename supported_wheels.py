@@ -7,9 +7,10 @@ import sys
 from os.path import basename
 
 try:
-    from wheel.install import WHEEL_INFO_RE
+    from wheel.install import WHEEL_INFO_RE as wheel_matcher
 except ImportError:  # As of Wheel 0.32.0
     from wheel.wheelfile import WHEEL_INFO_RE
+    wheel_matcher = WHEEL_INFO_RE.match
 try:
     from pip.pep425tags import get_supported
 except ImportError:  # pip 10
@@ -18,7 +19,7 @@ except ImportError:  # pip 10
 
 def tags_for(fname):
     # Copied from WheelFile code
-    parsed_filename = WHEEL_INFO_RE.match(basename(fname))
+    parsed_filename = wheel_matcher(basename(fname))
     tags = parsed_filename.groupdict()
     for pyver in tags['pyver'].split('.'):
         for abi in tags['abi'].split('.'):
