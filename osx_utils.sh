@@ -198,12 +198,7 @@ function install_pip {
     mkdir -p $DOWNLOADS_SDIR
     local py_mm=`get_py_mm`
     local get_pip_path=$DOWNLOADS_SDIR/get-pip.py
-    # pip 18.0 dropped support for Python 3.3
-    if [ "$py_mm" == "3.3" ]; then
-        curl https://bootstrap.pypa.io/3.3/get-pip.py > $get_pip_path
-    else
-	    curl $GET_PIP_URL > $get_pip_path
-    fi
+    curl $GET_PIP_URL > $get_pip_path
     # Python 2.6 will fail SSL check
     if [ "$py_mm" == "2.6" ]; then
         local pip_args="--trusted-host=pypi.org"
