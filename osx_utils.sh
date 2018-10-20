@@ -121,12 +121,7 @@ function pyinst_fname_for_version {
     #   $py_version (python version in major.minor.extra format)
     local py_version=$1
     local inst_ext=$(pyinst_ext_for_version $py_version)
-    # Python 2.6 has OSX 10.3 suffix
-    if [ "$(lex_ver $py_version)" -le "$(lex_ver 2.6.6)" ]; then
-        local osx_ver=10.3
-    else
-        local osx_ver=10.6
-    fi
+    local osx_ver=10.6
     echo "python-$py_version-macosx${osx_ver}.$inst_ext"
 }
 
@@ -199,10 +194,6 @@ function install_pip {
     local py_mm=`get_py_mm`
     local get_pip_path=$DOWNLOADS_SDIR/get-pip.py
     curl $GET_PIP_URL > $get_pip_path
-    # Python 2.6 will fail SSL check
-    if [ "$py_mm" == "2.6" ]; then
-        local pip_args="--trusted-host=pypi.org"
-    fi
     # Travis VMS now install pip for system python by default - force install
     # even if installed already.
     sudo $PYTHON_EXE $get_pip_path --ignore-installed $pip_args
@@ -297,11 +288,6 @@ function get_macpython_environment {
 
 function install_delocate {
     check_pip
-    if [ $(lex_ver $(get_py_mm)) -lt $(lex_ver 2.7) ]; then
-        # Wheel 0.30 doesn't work for Python 2.6; see:
-        # https://github.com/pypa/wheel/issues/193
-        $PIP_CMD install "wheel<=0.29"
-    fi
     $PIP_CMD install delocate
 }
 

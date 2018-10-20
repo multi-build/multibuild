@@ -1,6 +1,6 @@
 # Tests for manylinux utils
 
-# cpython path calculator
+# CPython path calculator
 [ "$(cpython_path 2.7)" == "/opt/python/cp27-cp27mu" ] || ingest "cp 2.7"
 [ "$(cpython_path 2.7 32)" == "/opt/python/cp27-cp27mu" ] || ingest "cp 2.7 32"
 [ "$(cpython_path 2.7 16)" == "/opt/python/cp27-cp27m" ] || ingest "cp 2.7 16"
