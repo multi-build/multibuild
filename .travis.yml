@@ -78,10 +78,6 @@ matrix:
         - USE_CCACHE=1
     - os: osx
       env:
-        - PYTHON_VERSION=pypy-2.6
-        - VENV=venv
-    - os: osx
-      env:
         - PYTHON_VERSION=pypy-4.0
         - VENV=venv
     - os: osx
