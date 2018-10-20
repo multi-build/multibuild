@@ -205,15 +205,21 @@ function install_pip {
     # Assumes pip will be installed into same directory as $PYTHON_EXE
     check_python
     mkdir -p $DOWNLOADS_SDIR
-    curl $GET_PIP_URL > $DOWNLOADS_SDIR/get-pip.py
-    # Python 2.6 will fail SSL check
     local py_mm=`get_py_mm`
+    local get_pip_path=$DOWNLOADS_SDIR/get-pip.py
+    # pip 18.0 dropped support for Python 3.3
+    if [ "$py_mm" == "3.3" ]; then
+        curl https://bootstrap.pypa.io/3.3/get-pip.py > $get_pip_path
+    else
+	    curl $GET_PIP_URL > $get_pip_path
+    fi
+    # Python 2.6 will fail SSL check
     if [ "$py_mm" == "2.6" ]; then
         local pip_args="--trusted-host=pypi.org"
     fi
     # Travis VMS now install pip for system python by default - force install
     # even if installed already.
-    sudo $PYTHON_EXE $DOWNLOADS_SDIR/get-pip.py --ignore-installed $pip_args
+    sudo $PYTHON_EXE $get_pip_path --ignore-installed $pip_args
     PIP_CMD="sudo $(dirname $PYTHON_EXE)/pip$py_mm"
     # Append pip_args if present (avoiding trailing space cf using variable
     # above).
