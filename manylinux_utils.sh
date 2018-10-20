@@ -23,8 +23,8 @@ function cpython_path {
     local u_suff=u
     # Back-compatibility
     if [ "$u_width" == "u" ]; then u_width=32; fi
-    # For Python >= 3.3, "u" suffix not meaningful
-    if [ $(lex_ver $py_ver) -ge $(lex_ver 3.3) ] ||
+    # For Python >= 3.4, "u" suffix not meaningful
+    if [ $(lex_ver $py_ver) -ge $(lex_ver 3.4) ] ||
         [ "$u_width" == "16" ]; then
         u_suff=""
     elif [ "$u_width" != "32" ]; then
