@@ -23,7 +23,7 @@ The AppVeyor setup is designed to build *and test*:
 * 64-bit Windows ``win_amd64`` wheels;
 * 32-bit Windows ``win32`` wheels.
 
-You can currently build and test against Pythons 2.7, 3.4, 3.5, 3.6.
+You can currently build and test against Pythons 2.7, 3.4, 3.5, 3.6, 3.7.
 
 *****************
 How does it work?
