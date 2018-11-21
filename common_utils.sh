@@ -152,7 +152,7 @@ function untar {
 
 function install_rsync {
     if [ -z "$IS_OSX" ]; then
-        [[ $(type -P rsync) ]] || yum install -y rsync
+        [[ $(type -P rsync) ]] || yum_install rsync
     fi
 }
 
