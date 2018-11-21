@@ -69,6 +69,8 @@ ORIG_OPTS=$-
 set +ex
 [ "$(suppress bad_cmd)" == "$(printf "Running bad_cmd\nbad")" ] \
     || ingest "suppress bad_cmd"
+suppress bash -c '! false' &>/dev/null \
+    || ingest "suppress cmd with space"
 [ "$(suppress good_cmd)" == "Running good_cmd" ] \
     || ingest "suppress good_cmd"
 [ "$(suppress bad_mid_cmd)" == "Running bad_mid_cmd" ] \
