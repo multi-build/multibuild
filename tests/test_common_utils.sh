@@ -64,7 +64,7 @@ function good_cmd {
 }
 
 # Store state of options including -e, -x
-# https://stackoverflow.com/questions/14564746/in-bash-how-to-get-the-current-status-of-set-x?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+# https://stackoverflow.com/questions/14564746/in-bash-how-to-get-the-current-status-of-set-x
 ORIG_OPTS=$-
 set +ex
 [ "$(suppress bad_cmd)" == "$(printf "Running bad_cmd\nbad")" ] \
