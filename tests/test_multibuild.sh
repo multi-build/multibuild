@@ -25,7 +25,10 @@ if [ -n "$TEST_BUILDS" ]; then
     else
         touch config.sh
         source travis_linux_steps.sh
-        build_multilinux $PLAT "source tests/test_library_builders.sh"
+        build_multilinux $PLAT "
+            source tests/test_manylinux_utils_docker.sh
+            source tests/test_library_builders.sh
+        "
     fi
 fi
 

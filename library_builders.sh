@@ -111,7 +111,7 @@ function build_zlib {
     # Gives an old but safe version
     if [ -n "$IS_OSX" ]; then return; fi  # OSX has zlib already
     if [ -e zlib-stamp ]; then return; fi
-    yum install -y zlib-devel
+    yum_install zlib-devel
     touch zlib-stamp
 }
 
@@ -158,7 +158,7 @@ function get_cmake {
     if [ -n "$IS_OSX" ]; then
         brew install cmake > /dev/null
     else
-        yum install -y cmake28 > /dev/null
+        yum_install cmake28 > /dev/null
         cmake=cmake28
     fi
     echo $cmake
@@ -360,7 +360,7 @@ function build_suitesparse {
     if [ -n "$IS_OSX" ]; then
         brew install suite-sparse > /dev/null
     else
-        yum install -y suitesparse-devel > /dev/null
+        yum_install suitesparse-devel > /dev/null
     fi
     touch suitesparse-stamp
 }
