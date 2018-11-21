@@ -117,13 +117,14 @@ function suppress {
     # Set -e stuff agonized over in
     # https://unix.stackexchange.com/questions/296526/set-e-in-a-subshell
     local tmp=$(mktemp tmp.XXXXXXXXX) || return
-    local opts=$-
+    local ERREXIT_SET OUT
     echo "Running $@"
+    if [[ $- = *e* ]]; then ERREXIT_SET=true; fi
     set +e
-    ( set_opts $opts ; $@  > "$tmp" 2>&1 ) ; ret=$?
+    ( if [[ -n $ERREXIT_SET ]]; then set -e; fi; "$@"  > "$tmp" 2>&1 ) ; ret=$?
     [ "$ret" -eq 0 ] || cat "$tmp"
     rm -f "$tmp"
-    set_opts $opts
+    if [[ -n $ERREXIT_SET ]]; then set -e; fi
     return "$ret"
 }
 
