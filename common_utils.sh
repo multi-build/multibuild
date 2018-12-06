@@ -323,7 +323,9 @@ function install_wheel {
     #     MANYLINUX_URL (optional, default "") (via pip_opts function)
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
     if [ -n "$TEST_DEPENDS" ]; then
-        pip install $(pip_opts) $@ $TEST_DEPENDS
+        while read TEST_DEPENDENCY; do
+            pip install $(pip_opts) $@ $TEST_DEPENDENCY
+        done <<< "$TEST_DEPENDS"
     fi
     # Install compatible wheel
     pip install $(pip_opts) $@ \
