@@ -7,6 +7,7 @@ source library_builders.sh
 
 start_spinner
 
+suppress build_bzip2
 suppress build_openssl
 suppress build_libpng
 suppress build_libwebp
