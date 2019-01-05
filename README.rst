@@ -190,7 +190,7 @@ To use these scripts
     # with.  This is set with the MB_PYTHON_VERSION variable.
     python: 3.5
     sudo: required
-    dist: trusty
+    dist: xenial
     services: docker
 
     matrix:
