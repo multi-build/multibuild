@@ -8,6 +8,7 @@ source $MULTIBUILD_DIR/common_utils.sh
 
 MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
+MACPYTHON_DEFAULT_OSX="10.6"
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 DOWNLOADS_SDIR=downloads
 WORKING_SDIR=working
@@ -119,9 +120,10 @@ function pyinst_fname_for_version {
     # echo filename for OSX installer file given Python version
     # Parameters
     #   $py_version (python version in major.minor.extra format)
+    #   $osx_ver    (macosx version in major.minor format, defaults to MACPYTHON_DEFAULT_OSX)
     local py_version=$1
+    local osx_ver=${2:-$MACPYTHON_DEFAULT_OSX}
     local inst_ext=$(pyinst_ext_for_version $py_version)
-    local osx_ver=10.6
     echo "python-$py_version-macosx${osx_ver}.$inst_ext"
 }
 
@@ -130,11 +132,13 @@ function install_macpython {
     # Parameters:
     #     $version : [implementation-]major[.minor[.patch]]
     #         The Python implementation to install, e.g. "3.6" or "pypy-5.4"
+    #     $osx_version: { 10.6|10.9 }. Ignored for pypy
     local version=$1
+    local osx_version=$2
     if [[ "$version" =~ pypy-([0-9\.]+) ]]; then
         install_mac_pypy "${BASH_REMATCH[1]}"
     elif [[ "$version" =~ ([0-9\.]+) ]]; then
-        install_mac_cpython "${BASH_REMATCH[1]}"
+        install_mac_cpython "${BASH_REMATCH[1]}" $osx_version
     else
         echo "config error: Issue parsing this implementation in install_python:"
         echo "    version=$version"
@@ -144,13 +148,16 @@ function install_macpython {
 
 function install_mac_cpython {
     # Installs Python.org Python
-    # Parameter $version
-    # Version given in major or major.minor or major.minor.micro e.g
-    # "3" or "3.4" or "3.4.1".
+    # Parameters
+    #   $py_version
+    #       Version given in major or major.minor or major.minor.micro e.g
+    #       "3" or "3.4" or "3.4.1".
+    #   $osx_version = { 10.6 | 10.9 }
     # sets $PYTHON_EXE variable to python executable
     local py_version=$(fill_pyver $1)
+    local osx_version=$2
     local py_stripped=$(strip_ver_suffix $py_version)
-    local py_inst=$(pyinst_fname_for_version $py_version)
+    local py_inst=$(pyinst_fname_for_version $py_version $osx_version)
     local inst_path=$DOWNLOADS_SDIR/$py_inst
     mkdir -p $DOWNLOADS_SDIR
     curl $MACPYTHON_URL/$py_stripped/${py_inst} > $inst_path
@@ -258,6 +265,7 @@ function get_macpython_environment {
     #     $venv_dir : {directory_name|not defined}
     #         If defined - make virtualenv in this directory, set python / pip
     #         commands accordingly
+    #     $osx_version: {10.6 | 10.9}
     #
     # Installs Python
     # Sets $PYTHON_EXE to path to Python executable
@@ -265,15 +273,15 @@ function get_macpython_environment {
     # If $venv_dir defined, Sets $VIRTUALENV_CMD to virtualenv executable
     # Puts directory of $PYTHON_EXE on $PATH
     local version=$1
-    local venv_dir=$2
-
+    local osx_version=$2
+    local venv_dir=$3
 
     if [ "$USE_CCACHE" == "1" ]; then
         activate_ccache
     fi
     
     remove_travis_ve_pip
-    install_macpython $version
+    install_macpython $version $osx_version
     install_pip
 
     if [ -n "$venv_dir" ]; then
@@ -298,12 +306,20 @@ function repair_wheelhouse {
     delocate-wheel $wheelhouse/*.whl # copies library dependencies into wheel
     # Add platform tags to label wheels as compatible with OSX 10.9 and
     # 10.10.  The wheels will be built against Python.org Python, and so will
-    # in fact be compatible with OSX >= 10.6.  pip < 6.0 doesn't realize
+    # in fact be compatible with OSX >= 10.6 or >=10.9. pip < 6.0 doesn't realize
     # this, so, in case users have older pip, add platform tags to specify
     # compatibility with later OSX.  Not necessary for OSX released well
     # after pip 6.0.  See:
     # https://github.com/MacPython/wiki/wiki/Spinning-wheels#question-will-pip-give-me-a-broken-wheel
-    delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
+    if [ $MB_PYTHON_OSX_VER == "10.6" ]; then
+        delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
+    elif [ $MB_PYTHON_OSX_VER == "10.9" ]; then
+        # assume that 10.9 python is 64-bit arch only
+        delocate-addplat --rm-orig -p macosx_10_10_x86_64 $wheelhouse/*.whl
+    else
+        echo "Invalid python macosx version $MB_PYTHON_OSX_VER" 1>&2
+        exit 1
+    fi
 }
 
 function install_pkg_config {

@@ -51,6 +51,10 @@ matrix:
         - VENV=venv
     - os: osx
       env:
+        - PYTHON_VERSION=2.7
+        - MB_PYTHON_OSX_VER=10.9
+    - os: osx
+      env:
         - PYTHON_VERSION=3.4
     - os: osx
       env:
@@ -69,8 +73,18 @@ matrix:
         - VENV=venv
     - os: osx
       env:
+        - PYTHON_VERSION=3.6
+        - VENV=venv
+        - MB_PYTHON_OSX_VER=10.9
+    - os: osx
+      env:
         - PYTHON_VERSION=3.7
         - VENV=venv
+    - os: osx
+      env:
+        - PYTHON_VERSION=3.7
+        - VENV=venv
+        - MB_PYTHON_OSX_VER=10.9
     - os: osx
       env:
         - PYTHON_VERSION=3.7
@@ -108,8 +122,21 @@ matrix:
       env:
         - PYTHON_VERSION=pypy-6.0
         - VENV=venv
-    # Default OSX (xcode image) is 10.13 (xcode 9.4.1) as of 2018-08-03
-    # See: https://docs.travis-ci.com/user/reference/osx/
+#    # Default OSX (xcode image) is 10.13 (xcode 9.4.1) as of 2018-08-03
+#    # See: https://docs.travis-ci.com/user/reference/osx/
+    - os: osx
+      osx_image: xcode10.1
+      env:
+        - PYTHON_VERSION=3.7
+    - os: osx
+      osx_image: xcode10.1
+      env:
+        - PYTHON_VERSION=3.7
+        - MB_PYTHON_OSX_VER=10.9
+    - os: osx
+      osx_image: xcode10
+      env:
+        - PYTHON_VERSION=3.7
     - os: osx
       osx_image: xcode10.1
       env:
