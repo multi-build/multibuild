@@ -10,7 +10,7 @@ ENV_VARS_PATH=${ENV_VARS_PATH:-env_vars.sh}
 # These load common_utils.sh
 source $MULTIBUILD_DIR/osx_utils.sh
 # osx_utils defines MACPYTHON_DEFAULT_OSX
-MB_PYTHON_OSX_VER=$($MB_PYTHON_OSX_VER:-$MACPYTHON_DEFAULT_OSX)
+MB_PYTHON_OSX_VER=${$MB_PYTHON_OSX_VER:-$MACPYTHON_DEFAULT_OSX}
 if [ -r "$ENV_VARS_PATH" ]; then source "$ENV_VARS_PATH"; fi
 source $MULTIBUILD_DIR/configure_build.sh
 source $MULTIBUILD_DIR/library_builders.sh
