@@ -8,7 +8,8 @@ wheels on the `AppVeyor <https://ci.appveyor.com/>`_ infrastructure.
 
 The Travis CI scripts are designed to build *and test*:
 
-* Dual architecture macOS wheels;
+* Dual 32/64-bit architecture macOS wheels built for macOS 10.6+;
+* 64-bit macOS wheels built for macOS 10.9+;
 * 64-bit ``manylinux1_x86_64`` wheels, both narrow and wide Unicode builds;
 * 32-bit ``manylinux1_i686`` wheels, both narrow and wide Unicode builds.
 
@@ -239,6 +240,10 @@ To use these scripts
           env:
             - MB_PYTHON_VERSION=2.7
         - os: osx
+          env:
+            - MB_PYTHON_VERSION=2.7
+            - MB_PYTHON_OSX_VER=10.9
+        - os: osx
           language: generic
           env:
             - MB_PYTHON_VERSION=3.4
@@ -250,6 +255,22 @@ To use these scripts
           language: generic
           env:
             - MB_PYTHON_VERSION=3.6
+        - os: osx
+          language: generic
+          env:
+            - MB_PYTHON_VERSION=3.6
+        - os: osx
+          language: generic
+          env:
+            - MB_PYTHON_VERSION=3.6
+            - MB_PYTHON_OSX_VER=10.9
+        # Default OSX (xcode image) is 10.13 (xcode 9.4.1) as of 2018-08-03
+        # See: https://docs.travis-ci.com/user/reference/osx/
+        - os: osx
+          osx_image: xcode10.1
+          env:
+            - PYTHON_VERSION=3.7
+            - MB_PYTHON_OSX_VER=10.9
         - os: osx
           language: generic
           env:

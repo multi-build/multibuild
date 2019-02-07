@@ -305,16 +305,17 @@ function repair_wheelhouse {
     install_delocate
     delocate-wheel $wheelhouse/*.whl # copies library dependencies into wheel
     # Add platform tags to label wheels as compatible with OSX 10.9 and
-    # 10.10.  The wheels will be built against Python.org Python, and so will
-    # in fact be compatible with OSX >= 10.6 or >=10.9. pip < 6.0 doesn't realize
-    # this, so, in case users have older pip, add platform tags to specify
-    # compatibility with later OSX.  Not necessary for OSX released well
-    # after pip 6.0.  See:
+    # 10.10.  The wheels are built against Python.org Python, and so will
+    # in fact be compatible with either 10.6+ or 10.9+, depending on the value
+    # of MB_PYTHON_OSX_VER. pip < 6.0 doesn't realize this, so, in case users
+    # have older pip, add platform tags to specify compatibility with later OSX.
+    # Not necessary for OSX released well after pip 6.0.  See:
     # https://github.com/MacPython/wiki/wiki/Spinning-wheels#question-will-pip-give-me-a-broken-wheel
     if [ $MB_PYTHON_OSX_VER == "10.6" ]; then
+        # assume that 10.6-based python is dual arch (32/64-bit)
         delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
     elif [ $MB_PYTHON_OSX_VER == "10.9" ]; then
-        # assume that 10.9 python is 64-bit arch only
+        # assume that 10.9-based python is 64-bit arch only
         delocate-addplat --rm-orig -p macosx_10_10_x86_64 $wheelhouse/*.whl
     else
         echo "Invalid python macosx version $MB_PYTHON_OSX_VER" 1>&2
