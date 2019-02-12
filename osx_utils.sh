@@ -186,7 +186,7 @@ function install_mac_cpython {
     #        "10.6" or "10.9"
     # sets $PYTHON_EXE variable to python executable
     local py_version=$(fill_pyver $1)
-    local $py_osx_ver=$2
+    local py_osx_ver=$2
     local py_stripped=$(strip_ver_suffix $py_version)
     local py_inst=$(pyinst_fname_for_version $py_version $py_osx_ver)
     local inst_path=$DOWNLOADS_SDIR/$py_inst
