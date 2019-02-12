@@ -53,6 +53,7 @@ matrix:
       env:
         - PYTHON_VERSION=2.7
         - MB_PYTHON_OSX_VER=10.9
+        - TEST_BUILDS=1
     - os: osx
       env:
         - PYTHON_VERSION=3.4
@@ -128,11 +129,13 @@ matrix:
       osx_image: xcode10.1
       env:
         - PYTHON_VERSION=3.7
+        - TEST_BUILDS=1
     - os: osx
       osx_image: xcode10.1
       env:
         - PYTHON_VERSION=3.7
         - MB_PYTHON_OSX_VER=10.9
+        - TEST_BUILDS=1
     - os: osx
       osx_image: xcode10
       env:

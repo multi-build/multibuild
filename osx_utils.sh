@@ -138,9 +138,11 @@ function mac_arch_for_pyosx_version {
     # echo arch (intel or x86_64) that cpython builds targetted for the
     # given minimum macOS are targetted for
     # Parameters
-    #   $py_osx_ver (major.minor} the macosx version that python is built
-    #   for, e.g. "10.6" or "10.9"
-    py_osx_ver=$1
+    #   $py_osx_ver (major.minor | not defined}
+    #       if defined, the macosx version that python is built for, e.g.
+    #       "10.6" or "10.9", if not defined, uses the default
+    #       MACPYTHON_DEFAULT_OSX
+    py_osx_ver=${1:-$MACPYTHON_DEFAULT_OSX}
     check_var $py_osx_ver
     if [ $py_osx_ver -eq "10.6" ]; then
         echo "intel"
