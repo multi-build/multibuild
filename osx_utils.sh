@@ -117,24 +117,28 @@ function pyinst_ext_for_version {
 }
 
 function pyinst_fname_for_version {
-    # echo filename for OSX installer file given Python version
+    # echo filename for OSX installer file given Python and minimum
+    # macosx versions
     # Parameters
     #   $py_version (python version in major.minor.extra format)
-    #   $osx_ver    (macosx version in major.minor format, defaults to MACPYTHON_DEFAULT_OSX)
+    #   $py_osx_ver (macosx version in major.minor format.
+    #       Note: this is the version the Python is built for,
+    #       and hence the min version supported, not the version
+    #       of the current system
     local py_version=$1
-    local osx_ver=${2:-$MACPYTHON_DEFAULT_OSX}
+    local py_osx_ver=${2:-$MACPYTHON_DEFAULT_OSX}
     local inst_ext=$(pyinst_ext_for_version $py_version)
-    echo "python-$py_version-macosx${osx_ver}.$inst_ext"
+    echo "python-${py_version}-macosx${py_osx_ver}.${inst_ext}"
 }
 
 
 function mac_arch_for_pyosx_version {
-    # echo arch (intel or x86_64) that the given the minimum macOS that
-    # the python version is targetted for.
+    # echo arch (intel or x86_64) that cpython builds targetted for the
+    # given minimum macOS are targetted for
     # Parameters
     #   $py_osx_ver (python version in major.minor.extra format)
-    #   note this is the version the python is built for, not that of the
-    #   local system
+    #       note this is the version the python is built for, not that of
+    #       the local system
     py_osx_ver=$1
     check_var $py_osx_ver
     if [ $py_osx_ver -eq "10.6" ]; then
@@ -153,13 +157,16 @@ function install_macpython {
     # Parameters:
     #     $version : [implementation-]major[.minor[.patch]]
     #         The Python implementation to install, e.g. "3.6" or "pypy-5.4"
-    #     $osx_version: { 10.6|10.9 }. Ignored for pypy
+    #     $py_osx_ver: major.minor
+    #         the macosx version the python is built for, e.g. "10.6" or "10.9"
+    #         Ignored for pypy
     local version=$1
-    local osx_version=$2
+    local py_osx_ver=$2
     if [[ "$version" =~ pypy-([0-9\.]+) ]]; then
         install_mac_pypy "${BASH_REMATCH[1]}"
     elif [[ "$version" =~ ([0-9\.]+) ]]; then
-        install_mac_cpython "${BASH_REMATCH[1]}" $osx_version
+        check_var $py_osx_ver
+        install_mac_cpython "${BASH_REMATCH[1]}" $py_osx_ver
     else
         echo "config error: Issue parsing this implementation in install_python:"
         echo "    version=$version"
@@ -173,12 +180,13 @@ function install_mac_cpython {
     #   $py_version
     #       Version given in major or major.minor or major.minor.micro e.g
     #       "3" or "3.4" or "3.4.1".
-    #   $osx_version = { 10.6 | 10.9 }
+    #   $py_osx_ver
+    #       the macosx version the python is built for e.g. "10.6" or "10.9"
     # sets $PYTHON_EXE variable to python executable
     local py_version=$(fill_pyver $1)
-    local osx_version=$2
+    local $py_osx_ver=$2
     local py_stripped=$(strip_ver_suffix $py_version)
-    local py_inst=$(pyinst_fname_for_version $py_version $osx_version)
+    local py_inst=$(pyinst_fname_for_version $py_version $py_osx_ver)
     local inst_path=$DOWNLOADS_SDIR/$py_inst
     mkdir -p $DOWNLOADS_SDIR
     curl $MACPYTHON_URL/$py_stripped/${py_inst} > $inst_path
@@ -283,10 +291,11 @@ function get_macpython_environment {
     # Parameters:
     #     $version : [implementation-]major[.minor[.patch]]
     #         The Python implementation to install, e.g. "3.6" or "pypy-5.4"
+    #     $py_osx_ver: [major.minor]
+    #         The macosx version that python is built for, e.g. "10.6" or "10.9"
     #     $venv_dir : {directory_name|not defined}
     #         If defined - make virtualenv in this directory, set python / pip
     #         commands accordingly
-    #     $osx_version: {10.6 | 10.9}
     #
     # Installs Python
     # Sets $PYTHON_EXE to path to Python executable
@@ -294,7 +303,7 @@ function get_macpython_environment {
     # If $venv_dir defined, Sets $VIRTUALENV_CMD to virtualenv executable
     # Puts directory of $PYTHON_EXE on $PATH
     local version=$1
-    local osx_version=$2
+    local py_osx_ver=$2
     local venv_dir=$3
 
     if [ "$USE_CCACHE" == "1" ]; then
@@ -302,7 +311,7 @@ function get_macpython_environment {
     fi
     
     remove_travis_ve_pip
-    install_macpython $version $osx_version
+    install_macpython $version $py_osx_ver
     install_pip
 
     if [ -n "$venv_dir" ]; then
