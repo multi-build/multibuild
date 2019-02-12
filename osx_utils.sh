@@ -127,6 +127,27 @@ function pyinst_fname_for_version {
     echo "python-$py_version-macosx${osx_ver}.$inst_ext"
 }
 
+
+function mac_arch_for_pyosx_version {
+    # echo arch (intel or x86_64) that the given the minimum macOS that
+    # the python version is targetted for.
+    # Parameters
+    #   $py_osx_ver (python version in major.minor.extra format)
+    #   note this is the version the python is built for, not that of the
+    #   local system
+    py_osx_ver=$1
+    check_var $py_osx_ver
+    if [ $py_osx_ver -eq "10.6" ]; then
+        echo "intel"
+    elif [ $py_osx_ver -eq "10.9" ]; then
+        echo "x86_x64"
+    else
+        echo "Invalid python osx version: ${py_osx_ver}, supported values: 10.6 and 10.9"
+        exit 1
+    fi
+    echo
+}
+
 function install_macpython {
     # Install Python and set $PYTHON_EXE to the installed executable
     # Parameters:
@@ -308,17 +329,16 @@ function repair_wheelhouse {
     # 10.10.  The wheels are built against Python.org Python, and so will
     # in fact be compatible with either 10.6+ or 10.9+, depending on the value
     # of MB_PYTHON_OSX_VER. pip < 6.0 doesn't realize this, so, in case users
-    # have older pip, add platform tags to specify compatibility with later OSX.
-    # Not necessary for OSX released well after pip 6.0.  See:
+    # try to install have older pip, add platform tags to specify compatibility
+    # with later OSX. Not necessary for OSX released well after pip 6.0.  See:
     # https://github.com/MacPython/wiki/wiki/Spinning-wheels#question-will-pip-give-me-a-broken-wheel
-    if [ $MB_PYTHON_OSX_VER == "10.6" ]; then
-        # assume that 10.6-based python is dual arch (32/64-bit)
-        delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
-    elif [ $MB_PYTHON_OSX_VER == "10.9" ]; then
-        # assume that 10.9-based python is 64-bit arch only
+    local MAC_ARCH=$(mac_arch_for_pyosx_version $MB_PYTHON_OSX_VER)
+    if [ "$MAC_ARCH" == "x86_x64" ]; then
         delocate-addplat --rm-orig -p macosx_10_10_x86_64 $wheelhouse/*.whl
+    elif [ "$MAC_ARCH" == "intel" ]; then
+        delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
     else
-        echo "Invalid python macosx version $MB_PYTHON_OSX_VER" 1>&2
+        echo "invalid ARCH = '$MAC_ARCH'"
         exit 1
     fi
 }

@@ -15,8 +15,15 @@ BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
 # Default compilation flags for OSX
 # IS_OSX is defined in common_utils.sh
 if [ -n "$IS_OSX" ]; then
-    # Dual arch build by default
-    ARCH_FLAGS=${ARCH_FLAGS:-"-arch i386 -arch x86_64"}
+    MAC_ARCH=$(mac_arch_for_pyosx_version $MB_PYTHON_OSX_VER)
+    if [ "$MAC_ARCH" == "intel" ]; then
+        ARCH_FLAGS=${ARCH_FLAGS:-"-arch i386 -arch x86_64"}
+    elif [ "$MAC_ARCH" == "x86_x64" ]; then
+        ARCH_FLAGS=${ARCH_FLAGS:-"-arch x86_64"}
+    else
+        echo "invalid ARCH = '$MAC_ARCH'"
+        exit 1
+    fi
     # Only set CFLAGS, FFLAGS if they are not already defined.  Build functions
     # can override the arch flags by setting CFLAGS, FFLAGS
     export CFLAGS="${CFLAGS:-$ARCH_FLAGS}"
