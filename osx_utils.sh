@@ -144,9 +144,9 @@ function mac_arch_for_pyosx_version {
     #       MACPYTHON_DEFAULT_OSX
     py_osx_ver=${1:-$MACPYTHON_DEFAULT_OSX}
     check_var $py_osx_ver
-    if [ $py_osx_ver -eq "10.6" ]; then
+    if [[ "$py_osx_ver" == "10.6" ]]; then
         echo "intel"
-    elif [ $py_osx_ver -eq "10.9" ]; then
+    elif [[ "$py_osx_ver" == "10.9" ]]; then
         echo "x86_x64"
     else
         echo "Invalid python osx version: ${py_osx_ver}, supported values: 10.6 and 10.9"
