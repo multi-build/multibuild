@@ -57,9 +57,16 @@ functions and variables in earlier scripts:
 
 See ``travis_osx_steps.sh`` to review source order.
 
-The macOS build / test and phase are on the macOS VM started by Travis CI.
+The macOS build / test phases run on the macOS VM started by Travis CI,
 Therefore any environment variable defined in the ``.travis.yml`` or bash
 shell scripts listed above are available for your build and test.
+
+Note that macOS builds may be targetted either at macOS 10.6 and above
+(dual arch 32/64b) or macOS 10.9 and above (64b only), depending on the
+value of the environment variable `MB_PYTHON_OSX_VER`. These depend on the
+corresponding build of python from https://www.python.org/downloads/mac-osx/.
+Versions of python older than 3.6.5 and 2.7.15 don't have 10.9 / 64-bit only
+installers available.
 
 The ``build_wheel`` function builds the wheel, and the ``install_run``
 function installs the wheel and tests it.  Look in ``common_utils.sh`` for
@@ -258,18 +265,7 @@ To use these scripts
         - os: osx
           language: generic
           env:
-            - MB_PYTHON_VERSION=3.6
-        - os: osx
-          language: generic
-          env:
-            - MB_PYTHON_VERSION=3.6
-            - MB_PYTHON_OSX_VER=10.9
-        # Default OSX (xcode image) is 10.13 (xcode 9.4.1) as of 2018-08-03
-        # See: https://docs.travis-ci.com/user/reference/osx/
-        - os: osx
-          osx_image: xcode10.1
-          env:
-            - PYTHON_VERSION=3.7
+            - MB_PYTHON_VERSION=3.7
             - MB_PYTHON_OSX_VER=10.9
         - os: osx
           language: generic
@@ -314,6 +310,7 @@ To use these scripts
 
     install:
         - build_index_wheel $PROJECT_SPEC
+
 
 * Next create a ``config.sh`` for your project, that fills in any steps you
   need to do before building the wheel (such as building required libraries).
