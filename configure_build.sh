@@ -16,9 +16,9 @@ BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
 # IS_OSX is defined in common_utils.sh
 if [ -n "$IS_OSX" ]; then
     MAC_ARCH=$(mac_arch_for_pyosx_version $MB_PYTHON_OSX_VER)
-    if [ "$MAC_ARCH" == "intel" ]; then
+    if [[ "$MAC_ARCH" == "intel" ]]; then
         ARCH_FLAGS=${ARCH_FLAGS:-"-arch i386 -arch x86_64"}
-    elif [ "$MAC_ARCH" == "x86_x64" ]; then
+    elif [[ "$MAC_ARCH" == "x86_x64" ]]; then
         ARCH_FLAGS=${ARCH_FLAGS:-"-arch x86_64"}
     else
         echo "invalid ARCH = '$MAC_ARCH'"

@@ -349,9 +349,9 @@ function repair_wheelhouse {
     # with later OSX. Not necessary for OSX released well after pip 6.0.  See:
     # https://github.com/MacPython/wiki/wiki/Spinning-wheels#question-will-pip-give-me-a-broken-wheel
     local MAC_ARCH=$(mac_arch_for_pyosx_version $MB_PYTHON_OSX_VER)
-    if [ "$MAC_ARCH" == "x86_x64" ]; then
+    if [[ "$MAC_ARCH" == "x86_x64" ]]; then
         delocate-addplat --rm-orig -p macosx_10_10_x86_64 $wheelhouse/*.whl
-    elif [ "$MAC_ARCH" == "intel" ]; then
+    elif [[ "$MAC_ARCH" == "intel" ]]; then
         delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
     else
         echo "invalid ARCH = '$MAC_ARCH'"
