@@ -61,12 +61,12 @@ The macOS build / test phases run on the macOS VM started by Travis CI,
 Therefore any environment variable defined in the ``.travis.yml`` or bash
 shell scripts listed above are available for your build and test.
 
-Note that macOS builds may be targetted either at macOS 10.6 and above
-(dual arch 32/64b) or macOS 10.9 and above (64b only), depending on the
-value of the environment variable `MB_PYTHON_OSX_VER`. These depend on the
+OS X builds may be targetted either at macOS 10.6+
+(dual arch 64 / 32 bit) or macOS 10.9+ (64b only). These depend on the
 corresponding build of python from https://www.python.org/downloads/mac-osx/.
-Versions of python older than 3.6.5 and 2.7.15 don't have 10.9 / 64-bit only
-installers available.
+At the time of writing, 10.9+ / 64 bit build are supported for python
+versions 3.6.5 / 2.7.15 and above. If you want to build for an older version
+of python, you'll have to target 10.6+ / dual arch.
 
 The ``build_wheel`` function builds the wheel, and the ``install_run``
 function installs the wheel and tests it.  Look in ``common_utils.sh`` for
@@ -196,6 +196,9 @@ To use these scripts
     language: python
     # The Travis Python version is unrelated to the version we build and test
     # with.  This is set with the MB_PYTHON_VERSION variable.
+    # For osx builds only, the minimum supported macOS version and architectures
+    # of any C extensions in the wheel are set with the variable
+    # MB_PYTHON_OSX_VER: 10.9 (64-bit only) or 10.6 (64/32-bit dual arch).
     python: 3.5
     sudo: required
     dist: trusty
