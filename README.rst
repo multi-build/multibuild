@@ -189,7 +189,6 @@ To use these scripts
     # The Travis Python version is unrelated to the version we build and test
     # with.  This is set with the MB_PYTHON_VERSION variable.
     python: 3.5
-    sudo: required
     dist: trusty
     services: docker
 
