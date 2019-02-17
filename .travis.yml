@@ -108,6 +108,10 @@ matrix:
       env:
         - PYTHON_VERSION=pypy-6.0
         - VENV=venv
+    - os: osx
+      env:
+        - PYTHON_VERSION=pypy-7.0
+        - VENV=venv
     # Default OSX (xcode image) is 10.13 (xcode 9.4.1) as of 2018-08-03
     # See: https://docs.travis-ci.com/user/reference/osx/
     - os: osx
