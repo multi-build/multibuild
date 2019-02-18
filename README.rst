@@ -57,7 +57,7 @@ functions and variables in earlier scripts:
 
 See ``travis_osx_steps.sh`` to review source order.
 
-The macOS build / test phases run on the macOS VM started by Travis CI,
+The macOS build / test phases run on the macOS VM started by Travis CI.
 Therefore any environment variable defined in the ``.travis.yml`` or bash
 shell scripts listed above are available for your build and test.
 
