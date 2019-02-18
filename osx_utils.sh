@@ -118,11 +118,11 @@ function pyinst_ext_for_version {
 
 function pyinst_fname_for_version {
     # echo filename for OSX installer file given Python and minimum
-    # macosx versions
+    # macOS versions
     # Parameters
     #   $py_version (python version in major.minor.extra format)
     #   $py_osx_ver: {major.minor | not defined}
-    #       if defined, the macosx version that python is built for, e.g.
+    #       if defined, the macOS version that python is built for, e.g.
     #       "10.6" or "10.9", if not defined, uses the default
     #       MACPYTHON_DEFAULT_OSX
     #       Note: this is the version the Python is built for, and hence
@@ -139,7 +139,7 @@ function mac_arch_for_pyosx_version {
     # given minimum macOS are targetted for
     # Parameters
     #   $py_osx_ver (major.minor | not defined}
-    #       if defined, the macosx version that python is built for, e.g.
+    #       if defined, the macOS version that python is built for, e.g.
     #       "10.6" or "10.9", if not defined, uses the default
     #       MACPYTHON_DEFAULT_OSX
     py_osx_ver=${1:-$MACPYTHON_DEFAULT_OSX}
@@ -161,7 +161,7 @@ function install_macpython {
     #     $version : [implementation-]major[.minor[.patch]]
     #         The Python implementation to install, e.g. "3.6" or "pypy-5.4"
     #     $py_osx_ver: {major.minor | not defined}
-    #       if defined, the macosx version that cpython is built for, e.g.
+    #       if defined, the macOS version that cpython is built for, e.g.
     #       "10.6" or "10.9". Ignored for pypy
     local version=$1
     local py_osx_ver=$2
@@ -184,7 +184,7 @@ function install_mac_cpython {
     #       "3" or "3.4" or "3.4.1".
     #   $py_osx_ver
     #       {major.minor | not defined}
-    #       if defined, the macosx version that python is built for, e.g.
+    #       if defined, the macOS version that python is built for, e.g.
     #        "10.6" or "10.9"
     # sets $PYTHON_EXE variable to python executable
     local py_version=$(fill_pyver $1)
@@ -296,7 +296,7 @@ function get_macpython_environment {
     #     $version : [implementation-]major[.minor[.patch]]
     #         The Python implementation to install, e.g. "3.6" or "pypy-5.4"
     #     $py_osx_ver: {major.minor | not defined}
-    #         if defined, the macosx version that python is built for, e.g.
+    #         if defined, the macOS version that python is built for, e.g.
     #         "10.6" or "10.9", if not defined, uses the default MACPYTHON_DEFAULT_OSX
     #     $venv_dir : {directory_name|not defined}
     #         If defined - make virtualenv in this directory, set python / pip
