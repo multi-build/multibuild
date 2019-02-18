@@ -64,9 +64,9 @@ shell scripts listed above are available for your build and test.
 OS X builds may be targetted either at macOS 10.6+
 (dual arch 64 / 32 bit) or macOS 10.9+ (64b only). These depend on the
 corresponding build of python from https://www.python.org/downloads/mac-osx/.
-At the time of writing, 10.9+ / 64 bit builds are supported for python
+At the time of writing, 10.9+ / 64 bit builds are supported for Python
 versions 3.6.5 / 2.7.15 and above. If you want to build for an older version
-of python, you'll have to target 10.6+ / dual arch.
+of Python, you'll have to target 10.6+ / dual arch.
 
 The ``build_wheel`` function builds the wheel, and the ``install_run``
 function installs the wheel and tests it.  Look in ``common_utils.sh`` for
