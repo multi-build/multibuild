@@ -187,7 +187,6 @@ To use these scripts
 
     # We don't use Travis-provided Python but rather install our own
     language: generic
-    sudo: required
     services: docker
     # A newer distro will also do
     dist: trusty
