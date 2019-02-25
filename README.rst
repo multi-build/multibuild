@@ -189,7 +189,6 @@ To use these scripts
     # You can still specify a language here if you need it for some unrelated logic
     # and you can't use Multibuild-provided Python or other software present on a builder
     language: generic
-    sudo: required
     # Required in Linux to invoke `docker' ourselves
     services: docker
     # A newer distro will also do
