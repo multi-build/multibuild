@@ -185,7 +185,9 @@ To use these scripts
             - secure:
                 "MNKyBWOzu7JAUmC0Y+JhPKfytXxY/ADRmUIMEWZV977FLZPgYctqd+lqel2QIFgdHDO1CIdTSymOOFZckM9ICUXg9Ta+8oBjSvAVWO1ahDcToRM2DLq66fKg+NKimd2OfK7x597h/QmUSl4k8XyvyyXgl5jOiLg/EJxNE2r83IA="
 
-    # We don't use Travis-provided Python but rather install our own
+    # Multibuild doesn't use Travis-provided Python but rather installs its own
+    # You can still specify a language here if you need it for some unrelated logic
+    # and you can't use Multibuild-provided Python or other software present on a builder
     language: generic
     services: docker
     # A newer distro will also do
