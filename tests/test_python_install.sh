@@ -22,8 +22,10 @@ then
 fi
 python_mm="${cpython_version:0:1}.${cpython_version:2:1}"
 
-# Remove implementation prefix
+# extract implementation prefix and version
 if [[ "$PYTHON_VERSION" =~ (pypy-)?([0-9\.]+) ]]; then
+    _impl=${BASH_REMATCH[1]:-"cp"}
+    requested_impl=${_impl:0:2}
     requested_version=${BASH_REMATCH[2]}
 else
     ingest "Error parsing PYTHON_VERSION=$PYTHON_VERSION"
@@ -57,4 +59,19 @@ else # not virtualenv
     if [ "$PIP_CMD" != "sudo $macpie_bin/pip${python_mm}${expected_pip_args}" ]; then
         ingest "Wrong macpython pip '$PIP_CMD'"
     fi
+fi
+
+# for cpython, check macos version and arch are as expected
+distutils_plat=$($PYTHON_EXE -c "import distutils.util; print(distutils.util.get_platform())")
+echo "Python cmd archs: $(lipo -info $(which $PYTHON_EXE))"
+if [[ $requested_impl = 'cp' ]]; then
+    echo "Cpython, checking platform..."
+    expected_tag="macosx-${MB_PYTHON_OSX_VER}-$(mac_cpython_arch_for_osx_ver)"
+    if ! [[ $distutils_plat == $expected_tag ]]; then
+        ingest "Wrong Python platform tag: ${distutils_plat}!=${expected_tag}"
+    fi
+elif [[ $requested_impl = 'py' ]]; then
+    echo "Pypy, skipping platform check..."
+else
+    ingest "Invalid impl: '${requested_impl}', expecting 'cp' or 'py'"
 fi
