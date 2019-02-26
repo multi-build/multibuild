@@ -314,9 +314,6 @@ function get_macpython_environment {
     # Parameters:
     #     $version : [implementation-]major[.minor[.patch]]
     #         The Python implementation to install, e.g. "3.6" or "pypy-5.4"
-    #     $py_osx_ver: {major.minor | not defined}
-    #         if defined, the macosx version that python is built for, e.g.
-    #         "10.6" or "10.9", if not defined, uses the default MACPYTHON_DEFAULT_OSX
     #     $venv_dir : {directory_name|not defined}
     #         If defined - make virtualenv in this directory, set python / pip
     #         commands accordingly
@@ -331,13 +328,13 @@ function get_macpython_environment {
     # If $venv_dir defined, Sets $VIRTUALENV_CMD to virtualenv executable
     # Puts directory of $PYTHON_EXE on $PATH
     local version=$1
-    local py_osx_ver=$2
-    local venv_dir=$3
+    local venv_dir=$2
+    local py_osx_ver=${3:-$MB_PYTHON_OSX_VER}
 
     if [ "$USE_CCACHE" == "1" ]; then
         activate_ccache
     fi
-    
+
     remove_travis_ve_pip
     install_macpython $version $py_osx_ver
     install_pip

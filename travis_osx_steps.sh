@@ -21,7 +21,7 @@ function before_install {
     brew cask uninstall oclint || true    
     export CC=clang
     export CXX=clang++
-    get_macpython_environment $MB_PYTHON_VERSION ${MB_PYTHON_OSX_VER:-""} venv
+    get_macpython_environment $MB_PYTHON_VERSION venv
     source venv/bin/activate
     pip install --upgrade pip wheel
 }
