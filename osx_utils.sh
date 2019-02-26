@@ -133,6 +133,27 @@ function pyinst_fname_for_version {
     echo "python-${py_version}-macosx${py_osx_ver}.${inst_ext}"
 }
 
+function get_macpython_arch {
+    # get arch (e.g. intel or x86_64) from the disutils platform tag
+    distutils_plat=${1:-$(get_distutils_platform)}
+    if [[ $distutils_plat =~ macosx-(10\.[0-9]+)-(.*) ]]; then
+        echo ${BASH_REMATCH[2]}
+    else
+        echo "Error parsing distutils platform '$distutils_plat'"
+        exit 1
+    fi
+}
+
+function get_macpython_osx_ver {
+    # get minimum macOS version (e.g. 10.9) from the disutils platform tag
+    distutils_plat=${1:-$(get_distutils_platform)}
+    if [[ $distutils_plat =~ macosx-(10\.[0-9]+)-(.*) ]]; then
+        echo ${BASH_REMATCH[1]}
+    else
+        echo "Error parsing distutils platform '$distutils_plat'"
+        exit 1
+    fi
+}
 
 function mac_cpython_arch_for_osx_ver {
     # echo arch (intel or x86_64) for cpython python.org builds targetted for
@@ -339,7 +360,6 @@ function install_delocate {
 
 function repair_wheelhouse {
     local wheelhouse=$1
-
     install_delocate
     delocate-wheel $wheelhouse/*.whl # copies library dependencies into wheel
     # Add platform tags to label wheels as compatible with OSX 10.9 and
@@ -349,13 +369,13 @@ function repair_wheelhouse {
     # try to install have older pip, add platform tags to specify compatibility
     # with later OSX. Not necessary for OSX released well after pip 6.0.  See:
     # https://github.com/MacPython/wiki/wiki/Spinning-wheels#question-will-pip-give-me-a-broken-wheel
-    local MAC_ARCH=$(mac_arch_for_pyosx_version $MB_PYTHON_OSX_VER)
-    if [[ "$MAC_ARCH" == "x86_x64" ]]; then
+    local MAC_ARCH=$(get_macpython_arch)
+    if [[ "$MAC_ARCH" == "x86_64" ]]; then
         delocate-addplat --rm-orig -p macosx_10_10_x86_64 $wheelhouse/*.whl
     elif [[ "$MAC_ARCH" == "intel" ]]; then
         delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
     else
-        echo "invalid ARCH = '$MAC_ARCH'"
+        echo "Unexpected ARCH='$MAC_ARCH', supported values are 'x86_64' and 'intel'"
         exit 1
     fi
 }

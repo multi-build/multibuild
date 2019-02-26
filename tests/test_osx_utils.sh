@@ -22,8 +22,16 @@
 # Test utilities for getting Python version versions
 [ "$(get_py_digit)" == "${cpython_version:0:1}" ] || ingest
 [ "$(get_py_mm)" == "${cpython_version:0:3}" ] || ingest
-[ "$(get_py_mm_nodot)" == $(echo "${cpython_version:0:3}" | tr -d .) ] || \
-    ingest
+[ "$(get_py_mm_nodot)" == $(echo "${cpython_version:0:3}" | tr -d .) ] || ingest
+
+# test lookup of arch from cpython macos target build
+[ "$(mac_cpython_arch_for_osx_ver 10.6)" == "intel" ] || ingest
+[ "$(mac_cpython_arch_for_osx_ver 10.9)" == "x86_64" ] || ingest
+
+
+[ "$(get_macpython_arch macosx-10.6-intel)" == "intel" ] || ingest
+[ "$(get_macpython_arch macosx-10.6-x86_64)" == "x86_64" ] || ingest
+[ "$(get_macpython_osx_ver macosx-10.6-intel)" == "10.6" ] || ingest
 
 # Test pkg-config install
 install_pkg_config
