@@ -167,12 +167,11 @@ function mac_cpython_arch_for_osx_ver {
     if [[ "$py_osx_ver" == "10.6" ]]; then
         echo "intel"
     elif [[ "$py_osx_ver" == "10.9" ]]; then
-        echo "x86_x64"
+        echo "x86_64"
     else
-        echo "Invalid python osx version: ${py_osx_ver}, supported values: 10.6 and 10.9"
+        echo "Unexpected python osx version: ${py_osx_ver}, supported values: 10.6 and 10.9"
         exit 1
     fi
-    echo
 }
 
 function install_macpython {
