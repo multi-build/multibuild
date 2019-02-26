@@ -5,6 +5,7 @@ set -e
 # Get needed utilities
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 MB_PYTHON_VERSION=${MB_PYTHON_VERSION:-$TRAVIS_PYTHON_VERSION}
+
 ENV_VARS_PATH=${ENV_VARS_PATH:-env_vars.sh}
 
 # These load common_utils.sh
