@@ -9,6 +9,7 @@ source $MULTIBUILD_DIR/common_utils.sh
 MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
 MACPYTHON_DEFAULT_OSX="10.6"
+MB_PYTHON_OSX_VER=${MB_PYTHON_OSX_VER:-$MACPYTHON_DEFAULT_OSX}
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 DOWNLOADS_SDIR=downloads
 WORKING_SDIR=working
@@ -123,8 +124,7 @@ function pyinst_fname_for_version {
     #   $py_version (python version in major.minor.extra format)
     #   $py_osx_ver: {major.minor | not defined}
     #       if defined, the macosx version that python is built for, e.g.
-    #       "10.6" or "10.9", if not defined, uses the default
-    #       MACPYTHON_DEFAULT_OSX
+    #       "10.6" or "10.9", if not defined, uses the default MACPYTHON_DEFAULT_OSX
     #       Note: this is the version the Python is built for, and hence
     #       the min version supported, NOT the version of the current system
     local py_version=$1
@@ -134,16 +134,15 @@ function pyinst_fname_for_version {
 }
 
 
-function mac_arch_for_pyosx_version {
-    # echo arch (intel or x86_64) that cpython builds targetted for the
-    # given minimum macOS are targetted for
+function mac_cpython_arch_for_osx_ver {
+    # echo arch (intel or x86_64) for cpython python.org builds targetted for
+    # the given minimum macOS version
     # Parameters
     #   $py_osx_ver (major.minor | not defined}
-    #       if defined, the macosx version that python is built for, e.g.
-    #       "10.6" or "10.9", if not defined, uses the default
-    #       MACPYTHON_DEFAULT_OSX
-    py_osx_ver=${1:-$MACPYTHON_DEFAULT_OSX}
-    check_var $py_osx_ver
+    #       the macosx version that python is built for, e.g.
+    #       "10.6" or "10.9", or MB_PYTHON_OSX_VER if undefined
+    #
+    py_osx_ver=${1:-$MB_PYTHON_OSX_VER}
     if [[ "$py_osx_ver" == "10.6" ]]; then
         echo "intel"
     elif [[ "$py_osx_ver" == "10.9" ]]; then
@@ -301,8 +300,10 @@ function get_macpython_environment {
     #     $venv_dir : {directory_name|not defined}
     #         If defined - make virtualenv in this directory, set python / pip
     #         commands accordingly
-    #     NOTE: to use the default for $py_osx_ver while defining $venv_dir, set
-    #     $py_osx_ver to "" (empty string)
+    #     $py_osx_ver: {major.minor | not defined}
+    #         if defined, the macosx version that python is built for, e.g.
+    #         "10.6" or "10.9", if not defined, use the version from the
+    #         environment variable MB_PYTHON_OSX_VER
     #
     # Installs Python
     # Sets $PYTHON_EXE to path to Python executable
