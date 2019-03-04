@@ -10,7 +10,7 @@ source $MULTIBUILD_DIR/common_utils.sh
 cd /io
 
 # Configuration for this package in `config.sh`.
-# This can overwrite `install_run`' and `install_wheel` (called from
+# This can overwrite `install_run` and `install_wheel` (called from
 # `install_run`). These are otherwise defined in common_utils.sh.
 # `config.sh` must define `run_tests` if using the default `install_run`.
 CONFIG_PATH=${CONFIG_PATH:-config.sh}
