@@ -146,7 +146,7 @@ function get_macpython_arch {
 }
 
 function get_macpython_osx_ver {
-    # get minimum macOS version (e.g. 10.9) from the disutils platform tag
+    # get minimum macOS version (e.g. 10.9) from the distutils platform tag
     distutils_plat=${1:-$(get_distutils_platform)}
     if [[ $distutils_plat =~ macosx-(10\.[0-9]+)-(.*) ]]; then
         echo ${BASH_REMATCH[1]}
