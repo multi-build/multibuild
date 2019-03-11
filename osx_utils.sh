@@ -135,7 +135,7 @@ function pyinst_fname_for_version {
 }
 
 function get_macpython_arch {
-    # get arch (e.g. intel or x86_64) from the disutils platform tag
+    # get arch (e.g. intel or x86_64) from the distutils platform tag
     distutils_plat=${1:-$(get_distutils_platform)}
     if [[ $distutils_plat =~ macosx-(10\.[0-9]+)-(.*) ]]; then
         echo ${BASH_REMATCH[2]}
