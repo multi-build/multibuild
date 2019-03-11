@@ -171,12 +171,13 @@ function get_macpython_osx_ver {
 }
 
 function macpython_arch_for_version {
-    # echo arch (e.g. intel or x86_64) that a version of CPython is expected
-    # to be built for, given the minimum macOS version
+    # echo arch (intel or x86_64) that a version of Python is expected
+    # to be built for
     # Parameters
-    #   $py_ver     Python version, e.g. (major.minor.patch) for CPython,
-    #                   or pypy-(major.minor) for PyPy
+    #   $py_ver     Python version, in the format (major.minor.patch) for
+    #               CPython, or pypy-(major.minor) for PyPy
     #   $py_osx_ver minimum macOS version the target Python is built for
+    #               (major.minor)
     local py_ver=$1
     local py_osx_ver=${2:-$MB_PYTHON_OSX_VER}
     check_var $1
@@ -186,7 +187,7 @@ function macpython_arch_for_version {
         elif [[ "$py_osx_ver" == "10.9" ]]; then
             echo "x86_64"
         else
-            echo "Unexpected CPython osx version: ${py_osx_ver}, supported values: 10.6 and 10.9"
+            echo "Unexpected CPython macOS version: ${py_osx_ver}, supported values: 10.6 and 10.9"
             exit 1
         fi
     else
@@ -215,7 +216,7 @@ function macpython_impl_for_version {
 }
 
 function strip_macpython_ver_prefix {
-    # strip the implementation prefix from a Python version string
+    # strip any implementation prefix from a Python version string
     # Parameters:
     #     $version : [implementation-]major[.minor[.patch]]
     #         Python implementation, e.g. "3.6" for CPython or

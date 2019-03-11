@@ -67,6 +67,6 @@ expected_arch=$(macpython_arch_for_version $PYTHON_VERSION)
 if [[ $requested_impl == 'cp' ]]; then
     expected_tag="macosx-$MB_PYTHON_OSX_VER-$expected_arch"
 else
-    expected_tag="macosx-(10.[0-9]+)-$expected_arch"
+    expected_tag="macosx-10.[0-9]+-$expected_arch"
 fi
 [[ $distutils_plat =~ $expected_tag ]] || ingest
