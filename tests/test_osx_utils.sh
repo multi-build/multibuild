@@ -24,7 +24,7 @@
 [ "$(get_py_mm)" == "${cpython_version:0:3}" ] || ingest
 [ "$(get_py_mm_nodot)" == $(echo "${cpython_version:0:3}" | tr -d .) ] || ingest
 
-# test lookup of arch from cpython macos target build
+# test lookup of arch from CPython macOS target build
 [ "$(mac_cpython_arch_for_osx_ver 10.6)" == "intel" ] || ingest
 [ "$(mac_cpython_arch_for_osx_ver 10.9)" == "x86_64" ] || ingest
 
