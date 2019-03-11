@@ -65,7 +65,7 @@ fi
 distutils_plat=$($PYTHON_EXE -c "import distutils.util; print(distutils.util.get_platform())")
 echo "Python cmd archs: $(lipo -info $(which $PYTHON_EXE))"
 if [[ $requested_impl = 'cp' ]]; then
-    echo "Cpython, checking platform..."
+    echo "CPython, checking platform..."
     expected_tag="macosx-${MB_PYTHON_OSX_VER}-$(mac_cpython_arch_for_osx_ver)"
     if ! [[ $distutils_plat == $expected_tag ]]; then
         ingest "Wrong Python platform tag: ${distutils_plat}!=${expected_tag}"
