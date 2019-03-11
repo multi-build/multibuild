@@ -61,7 +61,7 @@ else # not virtualenv
     fi
 fi
 
-# for cpython, check macos version and arch are as expected
+# for CPython, check macOS version and arch are as expected
 distutils_plat=$($PYTHON_EXE -c "import distutils.util; print(distutils.util.get_platform())")
 echo "Python cmd archs: $(lipo -info $(which $PYTHON_EXE))"
 if [[ $requested_impl = 'cp' ]]; then
