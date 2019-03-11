@@ -16,7 +16,7 @@ BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
 # IS_OSX is defined in common_utils.sh
 if [ -n "$IS_OSX" ]; then
     source $MULTIBUILD_DIR/osx_utils.sh
-    PLAT=$(mac_cpython_arch_for_osx_ver)
+    PLAT=$(macpython_arch_for_version $MB_PYTHON_VERSION)
     if [[ $PLAT == intel ]]; then
         ARCH_FLAGS=${ARCH_FLAGS:-"-arch i386 -arch x86_64"}
     elif [[ $PLAT == x86_64 ]]; then

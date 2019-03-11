@@ -170,22 +170,60 @@ function get_macpython_osx_ver {
     fi
 }
 
-function mac_cpython_arch_for_osx_ver {
-    # echo arch (intel or x86_64) for CPython python.org builds targetted for
-    # the given minimum macOS version
+function macpython_arch_for_version {
+    # echo arch (e.g. intel or x86_64) that a version of CPython is expected
+    # to be built for, given the minimum macOS version
     # Parameters
-    #   $py_osx_ver (major.minor | not defined}
-    #       the macosx version that Python is built for, e.g.
-    #       "10.6" or "10.9", or MB_PYTHON_OSX_VER if undefined
-    #
-    py_osx_ver=${1:-$MB_PYTHON_OSX_VER}
-    if [[ "$py_osx_ver" == "10.6" ]]; then
-        echo "intel"
-    elif [[ "$py_osx_ver" == "10.9" ]]; then
-        echo "x86_64"
+    #   $py_ver     Python version, e.g. (major.minor.patch) for CPython,
+    #                   or pypy-(major.minor) for PyPy
+    #   $py_osx_ver minimum macOS version the target Python is built for
+    local py_ver=$1
+    local py_osx_ver=${2:-$MB_PYTHON_OSX_VER}
+    check_var $1
+    if [[ $(macpython_impl_for_version $py_ver) == "cp" ]]; then
+        if [[ "$py_osx_ver" == "10.6" ]]; then
+            echo "intel"
+        elif [[ "$py_osx_ver" == "10.9" ]]; then
+            echo "x86_64"
+        else
+            echo "Unexpected CPython osx version: ${py_osx_ver}, supported values: 10.6 and 10.9"
+            exit 1
+        fi
     else
-        echo "Unexpected python osx version: ${py_osx_ver}, supported values: 10.6 and 10.9"
+        echo "x86_64"
+    fi
+}
+
+function macpython_impl_for_version {
+    # echo Python implementation (cp for CPython, pp for PyPy) given a
+    # suitably formatted version string
+    # Parameters:
+    #     $version : [implementation-]major[.minor[.patch]]
+    #         Python implementation, e.g. "3.6" for CPython or
+    #         "pypy-5.4" for PyPy
+    local version=$1
+    check_var $1
+    if [[ "$version" =~ pypy-([0-9\.]+) ]]; then
+        echo pp
+    elif [[ "$version" =~ ([0-9\.]+) ]]; then
+        echo cp
+    else
+        echo "config error: Issue parsing this implementation in install_python:"
+        echo "    version=$version"
         exit 1
+    fi
+}
+
+function strip_macpython_ver_prefix {
+    # strip the implementation prefix from a Python version string
+    # Parameters:
+    #     $version : [implementation-]major[.minor[.patch]]
+    #         Python implementation, e.g. "3.6" for CPython or
+    #         "pypy-5.4" for PyPy
+    local version=$1
+    check_var $1
+    if [[ "$version" =~ (pypy-)?([0-9\.]+) ]]; then
+        echo ${BASH_REMATCH[2]}
     fi
 }
 
@@ -199,13 +237,14 @@ function install_macpython {
     #       "10.6" or "10.9". Ignored for PyPy
     local version=$1
     local py_osx_ver=$2
-    if [[ "$version" =~ pypy-([0-9\.]+) ]]; then
-        install_mac_pypy "${BASH_REMATCH[1]}"
-    elif [[ "$version" =~ ([0-9\.]+) ]]; then
-        install_mac_cpython "${BASH_REMATCH[1]}" $py_osx_ver
+    local impl=$(macpython_impl_for_version $version)
+    local stripped_ver=$(strip_macpython_ver_prefix $version)
+    if [[ "$impl" == "pp" ]]; then
+        install_mac_pypy $stripped_ver
+    elif [[ "$impl" == "cp" ]]; then
+        install_mac_cpython $stripped_ver $py_osx_ver
     else
-        echo "config error: Issue parsing this implementation in install_python:"
-        echo "    version=$version"
+        echo "Unexpected Python impl: ${impl}"
         exit 1
     fi
 }

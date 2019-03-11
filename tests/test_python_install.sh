@@ -61,17 +61,12 @@ else # not virtualenv
     fi
 fi
 
-# for CPython, check macOS version and arch are as expected
+# check macOS version and arch are as expected
 distutils_plat=$($PYTHON_EXE -c "import distutils.util; print(distutils.util.get_platform())")
-echo "Python cmd archs: $(lipo -info $(which $PYTHON_EXE))"
-if [[ $requested_impl = 'cp' ]]; then
-    echo "CPython, checking platform..."
-    expected_tag="macosx-${MB_PYTHON_OSX_VER}-$(mac_cpython_arch_for_osx_ver)"
-    if ! [[ $distutils_plat == $expected_tag ]]; then
-        ingest "Wrong Python platform tag: ${distutils_plat}!=${expected_tag}"
-    fi
-elif [[ $requested_impl = 'py' ]]; then
-    echo "PyPy, skipping platform check..."
+expected_arch=$(macpython_arch_for_version $PYTHON_VERSION)
+if [[ $requested_impl == 'cp' ]]; then
+    expected_tag="macosx-$MB_PYTHON_OSX_VER-$expected_arch"
 else
-    ingest "Invalid impl: '${requested_impl}', expecting 'cp' or 'py'"
+    expected_tag="macosx-(10.[0-9]+)-$expected_arch"
 fi
+[[ $distutils_plat =~ $expected_tag ]] || ingest
