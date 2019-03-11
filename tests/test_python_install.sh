@@ -71,7 +71,7 @@ if [[ $requested_impl = 'cp' ]]; then
         ingest "Wrong Python platform tag: ${distutils_plat}!=${expected_tag}"
     fi
 elif [[ $requested_impl = 'py' ]]; then
-    echo "Pypy, skipping platform check..."
+    echo "PyPy, skipping platform check..."
 else
     ingest "Invalid impl: '${requested_impl}', expecting 'cp' or 'py'"
 fi
