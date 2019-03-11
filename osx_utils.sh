@@ -135,23 +135,37 @@ function pyinst_fname_for_version {
 }
 
 function get_macpython_arch {
-    # get arch (e.g. intel or x86_64) from the distutils platform tag
-    distutils_plat=${1:-$(get_distutils_platform)}
+    # echo arch (e.g. intel or x86_64), extracted from the distutils platform tag
+    # Parameters
+    #   $distutils_plat   PEP425 style platform tag, or if not provided, calls
+    #                       the function get_distutils_platform, provided by
+    #                       common_utils.sh. Fails if this is not a mac platform
+    #
+    # Note: MUST only be called after the version of python used to build the
+    # target wheel has been installed and is on the path
+    local distutils_plat=${1:-$(get_distutils_platform)}
     if [[ $distutils_plat =~ macosx-(10\.[0-9]+)-(.*) ]]; then
         echo ${BASH_REMATCH[2]}
     else
-        echo "Error parsing distutils platform '$distutils_plat'"
+        echo "Error parsing macOS distutils platform '$distutils_plat'"
         exit 1
     fi
 }
 
 function get_macpython_osx_ver {
-    # get minimum macOS version (e.g. 10.9) from the distutils platform tag
-    distutils_plat=${1:-$(get_distutils_platform)}
+    # echo minimum macOS version (e.g. 10.9) from the distutils platform tag
+    # Parameters
+    #   $distutils_plat   PEP425 style platform tag, or if not provided, calls
+    #                       the function get_distutils_platform, provided by
+    #                       common_utils.sh. Fails if this is not a mac platform
+    #
+    # Note: MUST only be called after the version of python used to build the
+    # target wheel has been installed and is on the path
+    local distutils_plat=${1:-$(get_distutils_platform)}
     if [[ $distutils_plat =~ macosx-(10\.[0-9]+)-(.*) ]]; then
         echo ${BASH_REMATCH[1]}
     else
-        echo "Error parsing distutils platform '$distutils_plat'"
+        echo "Error parsing macOS distutils platform '$distutils_plat'"
         exit 1
     fi
 }
