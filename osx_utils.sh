@@ -141,7 +141,7 @@ function get_macpython_arch {
     #                       the function get_distutils_platform, provided by
     #                       common_utils.sh. Fails if this is not a mac platform
     #
-    # Note: MUST only be called after the version of python used to build the
+    # Note: MUST only be called after the version of Python used to build the
     # target wheel has been installed and is on the path
     local distutils_plat=${1:-$(get_distutils_platform)}
     if [[ $distutils_plat =~ macosx-(10\.[0-9]+)-(.*) ]]; then
