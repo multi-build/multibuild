@@ -195,10 +195,11 @@ To use these scripts
 
     language: python
     # The Travis Python version is unrelated to the version we build and test
-    # with.  This is set with the MB_PYTHON_VERSION variable.
-    # For osx builds only, the minimum supported macOS version and architectures
-    # of any C extensions in the wheel are set with the variable
+    # with.  This is set with the MB_PYTHON_VERSION variable. For some builds,
+    # For CPython macOS builds only, the minimum supported macOS version and
+    # architectures of any C extensions in the wheel are set with the variable
     # MB_PYTHON_OSX_VER: 10.9 (64-bit only) or 10.6 (64/32-bit dual arch).
+    # All PyPy macOS builds are 64-bit only.
     python: 3.5
     sudo: required
     dist: trusty
