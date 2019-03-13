@@ -29,7 +29,7 @@
 [ "$(macpython_arch_for_version 2.7 10.9)" == "x86_64" ] || ingest
 [ "$(macpython_arch_for_version pypy-2.7)" == "x86_64" ] || ingest
 
-# test lookup of arch / min macOS versions from installed python distutils tag
+# test lookup of arch / min macOS versions from installed Python distutils tag
 [ "$(get_macpython_arch macosx-10.6-intel)" == "intel" ] || ingest
 [ "$(get_macpython_arch macosx-10.6-x86_64)" == "x86_64" ] || ingest
 [ "$(get_macpython_osx_ver macosx-10.6-intel)" == "10.6" ] || ingest
