@@ -103,6 +103,14 @@ matrix:
         - VENV=venv
     - os: osx
       env:
+        - PYTHON_VERSION=pypy-5.8
+        - VENV=venv
+    - os: osx
+      env:
+        - PYTHON_VERSION=pypy-5.9
+        - VENV=venv
+    - os: osx
+      env:
         - PYTHON_VERSION=pypy-6.0
         - VENV=venv
     - os: osx
