@@ -8,7 +8,8 @@ wheels on the `AppVeyor <https://ci.appveyor.com/>`_ infrastructure.
 
 The Travis CI scripts are designed to build *and test*:
 
-* Dual architecture macOS wheels;
+* Dual 32/64-bit architecture macOS wheels built for macOS 10.6+;
+* 64-bit macOS wheels built for macOS 10.9+;
 * 64-bit ``manylinux1_x86_64`` wheels, both narrow and wide Unicode builds;
 * 32-bit ``manylinux1_i686`` wheels, both narrow and wide Unicode builds.
 
@@ -56,9 +57,16 @@ functions and variables in earlier scripts:
 
 See ``travis_osx_steps.sh`` to review source order.
 
-The macOS build / test and phase are on the macOS VM started by Travis CI.
+The macOS build / test phases run on the macOS VM started by Travis CI.
 Therefore any environment variable defined in the ``.travis.yml`` or bash
 shell scripts listed above are available for your build and test.
+
+OS X builds may be targetted either at macOS 10.6+
+(dual arch 64 / 32 bit) or macOS 10.9+ (64b only). These depend on the
+corresponding build of python from https://www.python.org/downloads/mac-osx/.
+At the time of writing, 10.9+ / 64 bit builds are supported for Python
+versions 3.6.5 / 2.7.15 and above. If you want to build for an older version
+of Python, you'll have to target 10.6+ / dual arch.
 
 The ``build_wheel`` function builds the wheel, and the ``install_run``
 function installs the wheel and tests it.  Look in ``common_utils.sh`` for
@@ -237,6 +245,10 @@ To use these scripts
             - MB_PYTHON_VERSION=2.7
         - os: osx
           env:
+            - MB_PYTHON_VERSION=2.7
+            - MB_PYTHON_OSX_VER=10.9
+        - os: osx
+          env:
             - MB_PYTHON_VERSION=3.4
         - os: osx
           env:
@@ -245,6 +257,11 @@ To use these scripts
           env:
             - MB_PYTHON_VERSION=3.6
         - os: osx
+          env:
+            - MB_PYTHON_VERSION=3.7
+            - MB_PYTHON_OSX_VER=10.9
+        - os: osx
+          language: generic
           env:
             - MB_PYTHON_VERSION=pypy-5.7
 
@@ -286,6 +303,7 @@ To use these scripts
 
     install:
         - build_index_wheel $PROJECT_SPEC
+
 
 * Next create a ``config.sh`` for your project, that fills in any steps you
   need to do before building the wheel (such as building required libraries).

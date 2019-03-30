@@ -8,18 +8,20 @@ source $MULTIBUILD_DIR/common_utils.sh
 
 MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
+MACPYTHON_DEFAULT_OSX="10.6"
+MB_PYTHON_OSX_VER=${MB_PYTHON_OSX_VER:-$MACPYTHON_DEFAULT_OSX}
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 DOWNLOADS_SDIR=downloads
 WORKING_SDIR=working
 
-# As of 25 December 2018 - latest Python of each version with binary download
+# As of 30 March 2019 - latest Python of each version with binary download
 # available.
 # See: https://www.python.org/downloads/mac-osx/
-LATEST_2p7=2.7.15
+LATEST_2p7=2.7.16
 LATEST_3p4=3.4.4
 LATEST_3p5=3.5.4
 LATEST_3p6=3.6.8
-LATEST_3p7=3.7.2
+LATEST_3p7=3.7.3
 
 
 function check_python {
@@ -116,25 +118,96 @@ function pyinst_ext_for_version {
 }
 
 function pyinst_fname_for_version {
-    # echo filename for OSX installer file given Python version
+    # echo filename for OSX installer file given Python and minimum
+    # macOS versions
     # Parameters
-    #   $py_version (python version in major.minor.extra format)
+    #   $py_version (Python version in major.minor.extra format)
+    #   $py_osx_ver: {major.minor | not defined}
+    #       if defined, the macOS version that Python is built for, e.g.
+    #       "10.6" or "10.9", if not defined, uses the default
+    #       MACPYTHON_DEFAULT_OSX
+    #       Note: this is the version the Python is built for, and hence
+    #       the min version supported, NOT the version of the current system
     local py_version=$1
+    local py_osx_ver=${2:-$MACPYTHON_DEFAULT_OSX}
     local inst_ext=$(pyinst_ext_for_version $py_version)
-    local osx_ver=10.6
-    echo "python-$py_version-macosx${osx_ver}.$inst_ext"
+    echo "python-${py_version}-macosx${py_osx_ver}.${inst_ext}"
 }
 
-function install_macpython {
-    # Install Python and set $PYTHON_EXE to the installed executable
+function get_macpython_arch {
+    # echo arch (e.g. intel or x86_64), extracted from the distutils platform tag
+    # Parameters
+    #   $distutils_plat   PEP425 style platform tag, or if not provided, calls
+    #                       the function get_distutils_platform, provided by
+    #                       common_utils.sh. Fails if this is not a mac platform
+    #
+    # Note: MUST only be called after the version of Python used to build the
+    # target wheel has been installed and is on the path
+    local distutils_plat=${1:-$(get_distutils_platform)}
+    if [[ $distutils_plat =~ macosx-(10\.[0-9]+)-(.*) ]]; then
+        echo ${BASH_REMATCH[2]}
+    else
+        echo "Error parsing macOS distutils platform '$distutils_plat'"
+        exit 1
+    fi
+}
+
+function get_macpython_osx_ver {
+    # echo minimum macOS version (e.g. 10.9) from the distutils platform tag
+    # Parameters
+    #   $distutils_plat   PEP425 style platform tag, or if not provided, calls
+    #                       the function get_distutils_platform, provided by
+    #                       common_utils.sh. Fails if this is not a mac platform
+    #
+    # Note: MUST only be called after the version of Python used to build the
+    # target wheel has been installed and is on the path
+    local distutils_plat=${1:-$(get_distutils_platform)}
+    if [[ $distutils_plat =~ macosx-(10\.[0-9]+)-(.*) ]]; then
+        echo ${BASH_REMATCH[1]}
+    else
+        echo "Error parsing macOS distutils platform '$distutils_plat'"
+        exit 1
+    fi
+}
+
+function macpython_arch_for_version {
+    # echo arch (intel or x86_64) that a version of Python is expected
+    # to be built for
+    # Parameters
+    #   $py_ver     Python version, in the format (major.minor.patch) for
+    #               CPython, or pypy-(major.minor) for PyPy
+    #   $py_osx_ver minimum macOS version the target Python is built for
+    #               (major.minor)
+    local py_ver=$1
+    local py_osx_ver=${2:-$MB_PYTHON_OSX_VER}
+    check_var $1
+    if [[ $(macpython_impl_for_version $py_ver) == "cp" ]]; then
+        if [[ "$py_osx_ver" == "10.6" ]]; then
+            echo "intel"
+        elif [[ "$py_osx_ver" == "10.9" ]]; then
+            echo "x86_64"
+        else
+            echo "Unexpected CPython macOS version: ${py_osx_ver}, supported values: 10.6 and 10.9"
+            exit 1
+        fi
+    else
+        echo "x86_64"
+    fi
+}
+
+function macpython_impl_for_version {
+    # echo Python implementation (cp for CPython, pp for PyPy) given a
+    # suitably formatted version string
     # Parameters:
     #     $version : [implementation-]major[.minor[.patch]]
-    #         The Python implementation to install, e.g. "3.6" or "pypy-5.4"
+    #         Python implementation, e.g. "3.6" for CPython or
+    #         "pypy-5.4" for PyPy
     local version=$1
+    check_var $1
     if [[ "$version" =~ pypy-([0-9\.]+) ]]; then
-        install_mac_pypy "${BASH_REMATCH[1]}"
+        echo pp
     elif [[ "$version" =~ ([0-9\.]+) ]]; then
-        install_mac_cpython "${BASH_REMATCH[1]}"
+        echo cp
     else
         echo "config error: Issue parsing this implementation in install_python:"
         echo "    version=$version"
@@ -142,15 +215,56 @@ function install_macpython {
     fi
 }
 
+function strip_macpython_ver_prefix {
+    # strip any implementation prefix from a Python version string
+    # Parameters:
+    #     $version : [implementation-]major[.minor[.patch]]
+    #         Python implementation, e.g. "3.6" for CPython or
+    #         "pypy-5.4" for PyPy
+    local version=$1
+    check_var $1
+    if [[ "$version" =~ (pypy-)?([0-9\.]+) ]]; then
+        echo ${BASH_REMATCH[2]}
+    fi
+}
+
+function install_macpython {
+    # Install Python and set $PYTHON_EXE to the installed executable
+    # Parameters:
+    #     $version : [implementation-]major[.minor[.patch]]
+    #         The Python implementation to install, e.g. "3.6" or "pypy-5.4"
+    #     $py_osx_ver: {major.minor | not defined}
+    #       if defined, the macOS version that CPython is built for, e.g.
+    #       "10.6" or "10.9". Ignored for PyPy
+    local version=$1
+    local py_osx_ver=$2
+    local impl=$(macpython_impl_for_version $version)
+    local stripped_ver=$(strip_macpython_ver_prefix $version)
+    if [[ "$impl" == "pp" ]]; then
+        install_mac_pypy $stripped_ver
+    elif [[ "$impl" == "cp" ]]; then
+        install_mac_cpython $stripped_ver $py_osx_ver
+    else
+        echo "Unexpected Python impl: ${impl}"
+        exit 1
+    fi
+}
+
 function install_mac_cpython {
     # Installs Python.org Python
-    # Parameter $version
-    # Version given in major or major.minor or major.minor.micro e.g
-    # "3" or "3.4" or "3.4.1".
-    # sets $PYTHON_EXE variable to python executable
+    # Parameters
+    #   $py_version
+    #       Version given in major or major.minor or major.minor.micro e.g
+    #       "3" or "3.4" or "3.4.1".
+    #   $py_osx_ver
+    #       {major.minor | not defined}
+    #       if defined, the macOS version that Python is built for, e.g.
+    #        "10.6" or "10.9"
+    # sets $PYTHON_EXE variable to Python executable
     local py_version=$(fill_pyver $1)
+    local py_osx_ver=$2
     local py_stripped=$(strip_ver_suffix $py_version)
-    local py_inst=$(pyinst_fname_for_version $py_version)
+    local py_inst=$(pyinst_fname_for_version $py_version $py_osx_ver)
     local inst_path=$DOWNLOADS_SDIR/$py_inst
     mkdir -p $DOWNLOADS_SDIR
     curl $MACPYTHON_URL/$py_stripped/${py_inst} > $inst_path
@@ -258,6 +372,9 @@ function get_macpython_environment {
     #     $venv_dir : {directory_name|not defined}
     #         If defined - make virtualenv in this directory, set python / pip
     #         commands accordingly
+    #     $py_osx_ver: {major.minor | not defined}
+    #         if defined, the macOS version that Python is built for, e.g.
+    #         "10.6" or "10.9", if not defined, use the version from MB_PYTHON_OSX_VER
     #
     # Installs Python
     # Sets $PYTHON_EXE to path to Python executable
@@ -266,14 +383,14 @@ function get_macpython_environment {
     # Puts directory of $PYTHON_EXE on $PATH
     local version=$1
     local venv_dir=$2
-
+    local py_osx_ver=${3:-$MB_PYTHON_OSX_VER}
 
     if [ "$USE_CCACHE" == "1" ]; then
         activate_ccache
     fi
-    
+
     remove_travis_ve_pip
-    install_macpython $version
+    install_macpython $version $py_osx_ver
     install_pip
 
     if [ -n "$venv_dir" ]; then
@@ -293,17 +410,24 @@ function install_delocate {
 
 function repair_wheelhouse {
     local wheelhouse=$1
-
     install_delocate
     delocate-wheel $wheelhouse/*.whl # copies library dependencies into wheel
     # Add platform tags to label wheels as compatible with OSX 10.9 and
-    # 10.10.  The wheels will be built against Python.org Python, and so will
-    # in fact be compatible with OSX >= 10.6.  pip < 6.0 doesn't realize
-    # this, so, in case users have older pip, add platform tags to specify
-    # compatibility with later OSX.  Not necessary for OSX released well
-    # after pip 6.0.  See:
+    # 10.10.  The wheels are built against Python.org Python, and so will
+    # in fact be compatible with either 10.6+ or 10.9+, depending on the value
+    # of MB_PYTHON_OSX_VER. pip < 6.0 doesn't realize this, so, in case users
+    # try to install have older pip, add platform tags to specify compatibility
+    # with later OSX. Not necessary for OSX released well after pip 6.0.  See:
     # https://github.com/MacPython/wiki/wiki/Spinning-wheels#question-will-pip-give-me-a-broken-wheel
-    delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
+    local MAC_ARCH=$(get_macpython_arch)
+    if [[ "$MAC_ARCH" == "x86_64" ]]; then
+        delocate-addplat --rm-orig -p macosx_10_10_x86_64 $wheelhouse/*.whl
+    elif [[ "$MAC_ARCH" == "intel" ]]; then
+        delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
+    else
+        echo "Unexpected ARCH='$MAC_ARCH', supported values are 'x86_64' and 'intel'"
+        exit 1
+    fi
 }
 
 function install_pkg_config {

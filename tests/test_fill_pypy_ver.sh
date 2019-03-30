@@ -12,8 +12,8 @@
 [ "$(fill_pypy_ver 5.7)" == $LATEST_PP_5p7 ] || ingest
 [ "$(fill_pypy_ver 5.8)" == $LATEST_PP_5p8 ] || ingest
 [ "$(fill_pypy_ver 5.9)" == $LATEST_PP_5p9 ] || ingest
-[ "$(fill_pypy_ver 5.10)" == $LATEST_PP_5p10 ] || ingest
 [ "$(fill_pypy_ver 6.0)" == $LATEST_PP_6p0 ] || ingest
 [ "$(fill_pypy_ver 7.0)" == $LATEST_PP_7p0 ] || ingest
+[ "$(fill_pypy_ver 7.1)" == $LATEST_PP_7p1 ] || ingest
 [ "$(fill_pypy_ver 4.0.1)" == "4.0.1" ] || ingest
 [ "$(fill_pypy_ver 5.0.1)" == "5.0.1" ] || ingest

@@ -8,7 +8,7 @@ source tests/test_common_utils.sh
 source tests/test_fill_submodule.sh
 if [ -n "$IS_OSX" ]; then
     source osx_utils.sh
-    get_macpython_environment $PYTHON_VERSION $VENV
+    get_macpython_environment $PYTHON_VERSION ${VENV:-""} $MB_PYTHON_OSX_VER
     source tests/test_python_install.sh
     source tests/test_fill_pyver.sh
     source tests/test_fill_pypy_ver.sh
@@ -19,6 +19,7 @@ else
 fi
 if [ -n "$TEST_BUILDS" ]; then
     if [ -n "$IS_OSX" ]; then
+        MB_PYTHON_VERSION=${MB_PYTHON_VERSION:-$PYTHON_VERSION}
         source tests/test_library_builders.sh
     elif [ ! -x "$(command -v docker)" ]; then
         echo "Skipping build tests; no docker available"
