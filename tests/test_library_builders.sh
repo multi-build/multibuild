@@ -19,7 +19,7 @@ suppress build_swig
 # Run here just for the output, even though they fail.
 (set +e ;
     build_github fredrik-johansson/arb 2.16.0 ;
-    build_github glennrp/libpng v1.6.36 ;
+    build_github glennrp/libpng v1.6.37 ;
     build_github wbhart/mpir mpir-3.0.0
     )
 suppress build_flex
