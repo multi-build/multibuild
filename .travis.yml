@@ -33,11 +33,6 @@ matrix:
         - USE_CCACHE=1
     # OSX builds
     - os: osx
-      osx_image: xcode6.4
-      env:
-        - PYTHON_VERSION=2.7
-        - VENV=venv
-    - os: osx
       env:
         - PYTHON_VERSION=2.7
         - TEST_BUILDS=1
@@ -192,10 +187,6 @@ matrix:
         - PYTHON_VERSION=3.5
     - os: osx
       osx_image: xcode7.3
-      env:
-        - PYTHON_VERSION=3.5
-    - os: osx
-      osx_image: xcode6.4
       env:
         - PYTHON_VERSION=3.5
 
