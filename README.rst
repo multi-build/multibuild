@@ -13,7 +13,7 @@ The Travis CI scripts are designed to build *and test*:
 * 64-bit ``manylinux1_x86_64`` wheels, both narrow and wide Unicode builds;
 * 32-bit ``manylinux1_i686`` wheels, both narrow and wide Unicode builds.
 
-You can currently build and test against Pythons 2.7, 3.4, 3.5, 3.6, 3.7.
+You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7.
 
 The small innovation here is that you can test against 32-bit builds, and both
 wide and narrow Unicode Python 2 builds, which was not easy on the default
@@ -24,7 +24,7 @@ The AppVeyor setup is designed to build *and test*:
 * 64-bit Windows ``win_amd64`` wheels;
 * 32-bit Windows ``win32`` wheels.
 
-You can currently build and test against Pythons 2.7, 3.4, 3.5, 3.6, 3.7.
+You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7.
 
 *****************
 How does it work?
@@ -226,13 +226,6 @@ To use these scripts
             - UNICODE_WIDTH=16
         - os: linux
           env:
-            - MB_PYTHON_VERSION=3.4
-        - os: linux
-          env:
-            - MB_PYTHON_VERSION=3.4
-            - PLAT=i686
-        - os: linux
-          env:
             - MB_PYTHON_VERSION=3.5
         - os: linux
           env:
@@ -253,10 +246,6 @@ To use these scripts
           env:
             - MB_PYTHON_VERSION=2.7
             - MB_PYTHON_OSX_VER=10.9
-        - os: osx
-          language: generic
-          env:
-            - MB_PYTHON_VERSION=3.4
         - os: osx
           language: generic
           env:

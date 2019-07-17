@@ -5,10 +5,8 @@
 [ "$(pyinst_ext_for_version 2.7.9)" == pkg ] || ingest
 [ "$(pyinst_ext_for_version 2.7)" == pkg ] || ingest
 [ "$(pyinst_ext_for_version 2)" == pkg ] || ingest
-[ "$(pyinst_ext_for_version 3.4.1)" == dmg ] || ingest
-[ "$(pyinst_ext_for_version 3.4.2)" == pkg ] || ingest
 [ "$(pyinst_ext_for_version 3.5.0)" == pkg ] || ingest
-[ "$(pyinst_ext_for_version 3.4)" == pkg ] || ingest
+[ "$(pyinst_ext_for_version 3.5)" == pkg ] || ingest
 [ "$(pyinst_ext_for_version 3)" == pkg ] || ingest
 
 [ "$(pyinst_fname_for_version 2.7.14)" == "python-2.7.14-macosx10.6.pkg" ] || ingest

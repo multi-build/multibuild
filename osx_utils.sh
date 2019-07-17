@@ -18,7 +18,6 @@ WORKING_SDIR=working
 # available.
 # See: https://www.python.org/downloads/mac-osx/
 LATEST_2p7=2.7.16
-LATEST_3p4=3.4.4
 LATEST_3p5=3.5.4
 LATEST_3p6=3.6.8
 LATEST_3p7=3.7.3
@@ -84,8 +83,6 @@ function fill_pyver {
         echo $LATEST_3p6
     elif [ $ver == "3.5" ]; then
         echo $LATEST_3p5
-    elif [ $ver == "3.4" ]; then
-        echo $LATEST_3p4
     else
         echo "Can't fill version $ver" 1>&2
         exit 1
@@ -109,11 +106,7 @@ function pyinst_ext_for_version {
             echo "dmg"
         fi
     elif [ $py_0 -ge 3 ]; then
-        if [ "$(lex_ver $py_version)" -ge "$(lex_ver 3.4.2)" ]; then
-            echo "pkg"
-        else
-            echo "dmg"
-        fi
+		echo "pkg"
     fi
 }
 
@@ -255,7 +248,7 @@ function install_mac_cpython {
     # Parameters
     #   $py_version
     #       Version given in major or major.minor or major.minor.micro e.g
-    #       "3" or "3.4" or "3.4.1".
+    #       "3" or "3.7" or "3.7.1".
     #   $py_osx_ver
     #       {major.minor | not defined}
     #       if defined, the macOS version that Python is built for, e.g.
@@ -286,7 +279,7 @@ function install_mac_pypy {
     # Installs pypy.org PyPy
     # Parameter $version
     # Version given in major or major.minor or major.minor.micro e.g
-    # "3" or "3.4" or "3.4.1".
+    # "3" or "3.7" or "3.7.1".
     # sets $PYTHON_EXE variable to python executable
     local py_version=$(fill_pypy_ver $1)
     local py_build=$(get_pypy_build_prefix $py_version)$py_version-osx64

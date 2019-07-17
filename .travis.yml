@@ -53,13 +53,6 @@ matrix:
         - VENV=venv
     - os: osx
       env:
-        - PYTHON_VERSION=3.4
-    - os: osx
-      env:
-        - PYTHON_VERSION=3.4
-        - VENV=venv
-    - os: osx
-      env:
         - PYTHON_VERSION=3.5
     - os: osx
       env:
