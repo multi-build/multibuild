@@ -61,7 +61,7 @@ The macOS build / test phases run on the macOS VM started by Travis CI.
 Therefore any environment variable defined in the ``.travis.yml`` or bash
 shell scripts listed above are available for your build and test.
 
-OS X builds may be targetted either at macOS 10.6+
+macOS builds may be targeted either at macOS 10.6+
 (dual arch 64 / 32 bit) or macOS 10.9+ (64b only). These depend on the
 corresponding build of python from https://www.python.org/downloads/mac-osx/.
 At the time of writing, 10.9+ / 64 bit builds are supported for Python
@@ -193,10 +193,20 @@ To use these scripts
             - secure:
                 "MNKyBWOzu7JAUmC0Y+JhPKfytXxY/ADRmUIMEWZV977FLZPgYctqd+lqel2QIFgdHDO1CIdTSymOOFZckM9ICUXg9Ta+8oBjSvAVWO1ahDcToRM2DLq66fKg+NKimd2OfK7x597h/QmUSl4k8XyvyyXgl5jOiLg/EJxNE2r83IA="
 
-    # Multibuild doesn't use Travis-provided Python but rather installs its own
-    # You can still specify a language here if you need it for some unrelated logic
-    # and you can't use Multibuild-provided Python or other software present on a builder
+    # You will likely prefer "language: generic" for travis configuration,
+    # rather than, say "language: python". Multibuild doesn't use
+    # Travis-provided Python but rather installs and uses its own, where the
+    # Python version is set from the MB_PYTHON_VERSION variable. You can still
+    # specify a language here if you need it for some unrelated logic and you
+    # can't use Multibuild-provided Python or other software present on a
+    # builder.
     language: generic
+
+    # For CPython macOS builds only, the minimum supported macOS version and
+    # architectures of any C extensions in the wheel are set with the variable
+    # MB_PYTHON_OSX_VER: 10.9 (64-bit only) or 10.6 (64/32-bit dual arch).
+    # All PyPy macOS builds are 64-bit only.
+
     # Required in Linux to invoke `docker' ourselves
     services: docker
     # A newer distro will also do
