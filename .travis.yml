@@ -13,21 +13,21 @@ env:
 matrix:
   include:
     - os: linux
-      dist: precise
+      dist: trusty
     # 64-bit builds
     - os: linux
-      dist: trusty
+      dist: xenial
       env:
         - TEST_BUILDS=1
     # 32-bit builds
     - os: linux
-      dist: trusty
+      dist: xenial
       env:
         - TEST_BUILDS=1
         - PLAT=i686
     # Builds with caching
     - os: linux
-      dist: trusty
+      dist: xenial
       env:
         - TEST_BUILDS=1
         - USE_CCACHE=1

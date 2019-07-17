@@ -209,8 +209,10 @@ To use these scripts
 
     # Required in Linux to invoke `docker' ourselves
     services: docker
-    # A newer distro will also do
-    dist: trusty
+
+    # Host distribution.  This is the distribution from which we run the build
+    # and test containers, via docker.
+    dist: xenial
 
     matrix:
       include:
