@@ -412,22 +412,6 @@ function repair_wheelhouse {
     local wheelhouse=$1
     install_delocate
     delocate-wheel $wheelhouse/*.whl # copies library dependencies into wheel
-    # Add platform tags to label wheels as compatible with OSX 10.9 and
-    # 10.10.  The wheels are built against Python.org Python, and so will
-    # in fact be compatible with either 10.6+ or 10.9+, depending on the value
-    # of MB_PYTHON_OSX_VER. pip < 6.0 doesn't realize this, so, in case users
-    # try to install have older pip, add platform tags to specify compatibility
-    # with later OSX. Not necessary for OSX released well after pip 6.0.  See:
-    # https://github.com/MacPython/wiki/wiki/Spinning-wheels#question-will-pip-give-me-a-broken-wheel
-    local MAC_ARCH=$(get_macpython_arch)
-    if [[ "$MAC_ARCH" == "x86_64" ]]; then
-        delocate-addplat --rm-orig -p macosx_10_10_x86_64 $wheelhouse/*.whl
-    elif [[ "$MAC_ARCH" == "intel" ]]; then
-        delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
-    else
-        echo "Unexpected ARCH='$MAC_ARCH', supported values are 'x86_64' and 'intel'"
-        exit 1
-    fi
 }
 
 function install_pkg_config {
