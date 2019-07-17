@@ -84,6 +84,7 @@ function build_multilinux {
     docker run --rm \
         -e BUILD_COMMANDS="$build_cmds" \
         -e PYTHON_VERSION="$MB_PYTHON_VERSION" \
+        -e MB_PYTHON_VERSION="$MB_PYTHON_VERSION" \
         -e UNICODE_WIDTH="$UNICODE_WIDTH" \
         -e BUILD_COMMIT="$BUILD_COMMIT" \
         -e CONFIG_PATH="$CONFIG_PATH" \
