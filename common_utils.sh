@@ -337,6 +337,7 @@ function install_run {
     install_wheel
     mkdir tmp_for_test
     (cd tmp_for_test && run_tests)
+    rmdir tmp_for_test 2>/dev/null
 }
 
 function fill_submodule {
