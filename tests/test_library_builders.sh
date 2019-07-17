@@ -4,6 +4,7 @@ export BUILD_PREFIX="${PWD}/builds"
 rm_mkdir $BUILD_PREFIX
 source configure_build.sh
 source library_builders.sh
+source tests/utils.sh
 
 start_spinner
 
@@ -39,4 +40,10 @@ suppress build_ragel
 suppress build_cfitsio
 suppress build_new_zlib
 
+[ ${MB_PYTHON_VERSION+x} ] || ingest "\$MB_PYTHON_VERSION is not set"
+[ "$MB_PYTHON_VERSION" == "$PYTHON_VERSION" ] || ingest "\$MB_PYTHON_VERSION must be equal to \$PYTHON_VERSION"
+
 stop_spinner
+
+# Exit 1 if any test errors
+barf
