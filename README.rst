@@ -193,21 +193,16 @@ To use these scripts
             - secure:
                 "MNKyBWOzu7JAUmC0Y+JhPKfytXxY/ADRmUIMEWZV977FLZPgYctqd+lqel2QIFgdHDO1CIdTSymOOFZckM9ICUXg9Ta+8oBjSvAVWO1ahDcToRM2DLq66fKg+NKimd2OfK7x597h/QmUSl4k8XyvyyXgl5jOiLg/EJxNE2r83IA="
 
-    language: python
-    # The Travis Python version is unrelated to the version we build and test
-    # with.  This is set with the MB_PYTHON_VERSION variable. For some builds,
-    # For CPython macOS builds only, the minimum supported macOS version and
-    # architectures of any C extensions in the wheel are set with the variable
-    # MB_PYTHON_OSX_VER: 10.9 (64-bit only) or 10.6 (64/32-bit dual arch).
-    # All PyPy macOS builds are 64-bit only.
-    python: 3.5
-    dist: trusty
+    # Multibuild doesn't use Travis-provided Python but rather installs its own
+    # You can still specify a language here if you need it for some unrelated logic
+    # and you can't use Multibuild-provided Python or other software present on a builder
+    language: generic
+    # Required in Linux to invoke `docker' ourselves
     services: docker
+    # A newer distro will also do
+    dist: trusty
 
     matrix:
-      exclude:
-        # Exclude the default Python 3.5 build
-        - python: 3.5
       include:
         - os: linux
           env: MB_PYTHON_VERSION=2.7
@@ -246,7 +241,6 @@ To use these scripts
             - MB_PYTHON_VERSION=3.6
             - PLAT=i686
         - os: osx
-          language: generic
           env:
             - MB_PYTHON_VERSION=2.7
         - os: osx
@@ -254,19 +248,15 @@ To use these scripts
             - MB_PYTHON_VERSION=2.7
             - MB_PYTHON_OSX_VER=10.9
         - os: osx
-          language: generic
           env:
             - MB_PYTHON_VERSION=3.4
         - os: osx
-          language: generic
           env:
             - MB_PYTHON_VERSION=3.5
         - os: osx
-          language: generic
           env:
             - MB_PYTHON_VERSION=3.6
         - os: osx
-          language: generic
           env:
             - MB_PYTHON_VERSION=3.7
             - MB_PYTHON_OSX_VER=10.9
