@@ -337,7 +337,7 @@ function install_run {
     install_wheel
     mkdir tmp_for_test
     (cd tmp_for_test && run_tests)
-    rmdir tmp_for_test 2>/dev/null
+    rmdir tmp_for_test  2>/dev/null || echo "Cannot remove tmp_for_test"
 }
 
 function fill_submodule {
