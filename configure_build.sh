@@ -9,7 +9,7 @@ if [ -n "$CONFIGURE_BUILD_SOURCED" ]; then
 fi
 CONFIGURE_BUILD_SOURCED=1
 
-PLAT="${PLAT:x86_64}"
+PLAT="${PLAT:-x86_64}"
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
 
 # Default compilation flags for OSX
