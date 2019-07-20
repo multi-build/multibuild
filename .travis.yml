@@ -6,10 +6,6 @@ cache:
   directories:
    - $HOME/.ccache
 
-env:
-  global:
-    - PLAT=x86_64
-
 matrix:
   include:
     - os: linux
