@@ -43,7 +43,7 @@ function build_wheel {
     #     WHEEL_SDIR (optional)
     local repo_dir=${1:-$REPO_DIR}
     [ -z "$repo_dir" ] && echo "repo_dir not defined" && exit 1
-    local plat=${2:-$PLAT}
+    local plat=${2:-${PLAT:-x86_64}}
     build_multilinux $plat "build_wheel $repo_dir"
 }
 
@@ -61,7 +61,7 @@ function build_index_wheel {
     #     WHEEL_SDIR (optional)
     local project_spec=$1
     [ -z "$project_spec" ] && echo "project_spec not defined" && exit 1
-    local plat=${2:-$PLAT}
+    local plat=${2:-${PLAT:-x86_64}}
     build_multilinux $plat "build_index_wheel $project_spec"
 }
 
@@ -112,7 +112,7 @@ function install_run {
     #  WHEEL_SDIR (optional)
     #  MANYLINUX_URL (optional)
     #  TEST_DEPENDS  (optional)
-    local plat=${1:-$PLAT}
+    local plat=${1:-${PLAT:-x86_64}}
     bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
     local docker_image="matthewbrett/trusty:$bitness"
     docker pull $docker_image
