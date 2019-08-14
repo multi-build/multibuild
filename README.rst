@@ -207,7 +207,7 @@ To use these scripts
     # MB_PYTHON_OSX_VER: 10.9 (64-bit only) or 10.6 (64/32-bit dual arch).
     # All PyPy macOS builds are 64-bit only.
 
-    # Required in Linux to invoke `docker' ourselves
+    # Required in Linux to invoke `docker` ourselves
     services: docker
 
     # Host distribution.  This is the distribution from which we run the build
