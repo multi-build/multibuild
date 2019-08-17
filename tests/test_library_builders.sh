@@ -11,6 +11,10 @@ export BUILD_PREFIX="${PWD}/builds"
 rm_mkdir $BUILD_PREFIX
 source configure_build.sh
 source library_builders.sh
+
+echo "Lookee here"
+echo $PATH
+
 source tests/utils.sh
 
 start_spinner
