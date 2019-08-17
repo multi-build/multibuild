@@ -46,3 +46,5 @@ fi
 export CPPFLAGS="-I$BUILD_PREFIX/include $CPPFLAGS"
 export LIBRARY_PATH="$BUILD_PREFIX/lib:$LIBRARY_PATH"
 export PKG_CONFIG_PATH="$BUILD_PREFIX/lib/pkgconfig/:$PKG_CONFIG_PATH"
+# Add binary path for configure utils etc
+export PATH="$BUILD_PREFIX/bin:$PATH"
