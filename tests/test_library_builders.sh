@@ -2,7 +2,9 @@
 
 # The environment
 uname -a
-ldd --version
+
+# Glibc version
+(which ldd && ldd --version) || true
 
 # Smoke test
 export BUILD_PREFIX="${PWD}/builds"
