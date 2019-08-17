@@ -1,4 +1,9 @@
 # Test some library builders
+
+# The environment
+uname -a
+ldd --version
+
 # Smoke test
 export BUILD_PREFIX="${PWD}/builds"
 rm_mkdir $BUILD_PREFIX

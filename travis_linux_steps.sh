@@ -13,6 +13,11 @@ set -e
 
 MANYLINUX_URL=${MANYLINUX_URL:-https://5cf40426d9f06eb7461d-6fe47d9331aba7cd62fc36c7196769e4.ssl.cf2.rackcdn.com}
 
+# Default Manylinux version
+# Warning: ignored if DOCKER_IMAGE variable is set.
+# See build_multilinux function.
+MB_ML_VER=${MB_ML_VER:-1}
+
 # Get our own location on this filesystem
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 
@@ -70,15 +75,16 @@ function build_multilinux {
     #
     # Depends on
     #     MB_PYTHON_VERSION
+    #     MB_ML_VER
     #     UNICODE_WIDTH (optional)
     #     BUILD_DEPENDS (optional)
-    #     DOCKER_IMAGE (optional)  
+    #     DOCKER_IMAGE (optional)
     #     MANYLINUX_URL (optional)
     #     WHEEL_SDIR (optional)
     local plat=$1
     [ -z "$plat" ] && echo "plat not defined" && exit 1
     local build_cmds="$2"
-    local docker_image=${DOCKER_IMAGE:-quay.io/pypa/manylinux1_\$plat}
+    local docker_image=${DOCKER_IMAGE:-quay.io/pypa/manylinux${MB_ML_VER}_\$plat}
     docker_image=$(eval echo "$docker_image")
     retry docker pull $docker_image
     docker run --rm \
@@ -95,6 +101,7 @@ function build_multilinux {
         -e USE_CCACHE="$USE_CCACHE" \
         -e REPO_DIR="$repo_dir" \
         -e PLAT="$PLAT" \
+        -e MB_ML_VER="$MB_ML_VER" \
         -v $PWD:/io \
         -v $HOME:/parent-home \
         $docker_image /io/$MULTIBUILD_DIR/docker_build_wrap.sh
