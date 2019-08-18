@@ -3,17 +3,19 @@
 # The environment
 uname -a
 
-# Glibc version
-(which ldd && ldd --version) || true
-
-# Smoke test
-export BUILD_PREFIX="${PWD}/builds"
-rm_mkdir $BUILD_PREFIX
-source configure_build.sh
-source library_builders.sh
-
-echo "Lookee here"
-echo $PATH
+if [ -n "$IS_OSX" ]; then
+    # Building on macOS
+    export BUILD_PREFIX="${PWD}/builds"
+    rm_mkdir $BUILD_PREFIX
+    source configure_build.sh
+    source library_builders.sh
+else
+    # Building on Linux
+    # Glibc version
+    ldd --version
+    # configure_build.sh, library_builders.sh sourced in
+    # docker_build_wrap.sh
+fi
 
 source tests/utils.sh
 
