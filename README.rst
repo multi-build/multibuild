@@ -10,8 +10,8 @@ The Travis CI scripts are designed to build *and test*:
 
 * Dual 32/64-bit architecture macOS wheels built for macOS 10.6+;
 * 64-bit macOS wheels built for macOS 10.9+;
-* 64-bit ``manylinux1_x86_64`` wheels, both narrow and wide Unicode builds;
-* 32-bit ``manylinux1_i686`` wheels, both narrow and wide Unicode builds.
+* 64-bit ``manylinuxX_x86_64`` wheels, both narrow and wide Unicode builds, where `X` is any valid Manylinux version, such as `1`, or `2010`.
+* 32-bit ``manylinuxX_i686`` wheels, both narrow and wide Unicode builds.
 
 You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7.
 
@@ -75,11 +75,30 @@ default definitions of these functions.  See below for more details.
 Manylinux
 =========
 
-The build phase is in a Manylinux1 Docker container, but the test phase is in
+The build phase is in a Manylinux Docker container, but the test phase is in
 a clean Ubuntu 14.04 container.
+
 
 Build phase
 -----------
+
+Specify the Manylinux version to build for with the `MB_ML_VER` environment variable.  The default version is `1`.  Versions that are currently valid are:
+
+* `1` (see [PEP 513](https://www.python.org/dev/peps/pep-0513);
+* `2010` (see PEP
+  571](https://www.python.org/dev/peps/pep-0571).
+
+At some point `2014` will be a valid version - see [PEP
+599](https://www.python.org/dev/peps/pep-0599).
+
+The environment variable specified which Manylinux docker container you are building in.
+
+The `PLAT` environment variable can be one of `x86_64` or `i686`, specifying 64-bit and 32-bit builds, respectively.  The default is 64-bit.
+
+At the time of writing, Manylinux2010 only supports 64-bit
+builds, so `MB_ML_VER=2010` and `PLAT=i686` is an invalid
+combination, and will generate an error when trying to find the
+matching Docker image.
 
 ``multibuild/travis_linux_steps.sh`` defines the ``build_wheel`` function,
 which starts up the Manylinux1 Docker container to run a wrapper script
