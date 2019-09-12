@@ -91,7 +91,7 @@ function is_function {
     (set +e; $(declare -Ff "$1" > /dev/null) && echo true)
 }
 
-function gh-clone {
+function gh_clone {
     git clone https://github.com/$1
 }
 
