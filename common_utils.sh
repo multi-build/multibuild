@@ -95,6 +95,10 @@ function gh_clone {
     git clone https://github.com/$1
 }
 
+# gh-clone was renamed to gh_clone, so we have this alias for
+# backwards compatibility.
+alias gh-clone=gh_clone
+
 function set_opts {
     # Set options from input options string (in $- format).
     local opts=$1
