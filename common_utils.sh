@@ -91,9 +91,13 @@ function is_function {
     (set +e; $(declare -Ff "$1" > /dev/null) && echo true)
 }
 
-function gh-clone {
+function gh_clone {
     git clone https://github.com/$1
 }
+
+# gh-clone was renamed to gh_clone, so we have this alias for
+# backwards compatibility.
+alias gh-clone=gh_clone
 
 function set_opts {
     # Set options from input options string (in $- format).
