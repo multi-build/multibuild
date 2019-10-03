@@ -15,6 +15,12 @@ matrix:
       dist: xenial
       env:
         - TEST_BUILDS=1
+    # 64-bit builds, manylinux2014
+    - os: linux
+      dist: xenial
+      env:
+        - TEST_BUILDS=1
+        - MB_ML_VER=2010
     # 32-bit builds
     - os: linux
       dist: xenial
