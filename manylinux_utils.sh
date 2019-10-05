@@ -19,8 +19,14 @@ function cpython_path {
     #
     # For back-compatibility "u" as u_width also means "32"
     local py_ver="${1:-2.7}"
+    local abi_suff=m
     local u_width="${2:-${UNICODE_WIDTH}}"
     local u_suff=u
+    # Python 3.8 and up no longer uses the PYMALLOC 'm' suffix
+    # https://github.com/pypa/wheel/pull/303
+    if [ $(lex_ver $py_ver) -ge $(lex_ver 3.8) ]; then
+        abi_suff=""
+    fi
     # Back-compatibility
     if [ "$u_width" == "u" ]; then u_width=32; fi
     # For Python >= 3.4, "u" suffix not meaningful
@@ -32,7 +38,7 @@ function cpython_path {
         exit 1
     fi
     local no_dots=$(echo $py_ver | tr -d .)
-    echo "/opt/python/cp${no_dots}-cp${no_dots}m${u_suff}"
+    echo "/opt/python/cp${no_dots}-cp${no_dots}$abi_suff${u_suff}"
 }
 
 function repair_wheelhouse {

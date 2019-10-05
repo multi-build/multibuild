@@ -80,6 +80,12 @@ matrix:
         - USE_CCACHE=1
     - os: osx
       env:
+        - PYTHON_VERSION=3.8
+        - VENV=venv
+        - MB_PYTHON_OSX_VER=10.9
+        - MB_ML_VER=2010
+    - os: osx
+      env:
         - PYTHON_VERSION=pypy-4.0
         - VENV=venv
     - os: osx
@@ -143,6 +149,12 @@ matrix:
       osx_image: xcode10
       env:
         - PYTHON_VERSION=3.7
+    - os: osx
+      osx_image: xcode10
+      env:
+        - PYTHON_VERSION=3.8
+        - MB_PYTHON_OSX_VER=10.9
+        - MB_ML_VER=2010
     - os: osx
       osx_image: xcode10.1
       env:
