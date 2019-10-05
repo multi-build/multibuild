@@ -82,6 +82,7 @@ matrix:
       env:
         - PYTHON_VERSION=3.8
         - VENV=venv
+        - MB_PYTHON_OSX_VER=10.9
         - MB_ML_VER=2010
     - os: osx
       env:
@@ -152,6 +153,7 @@ matrix:
       osx_image: xcode10
       env:
         - PYTHON_VERSION=3.8
+        - MB_PYTHON_OSX_VER=10.9
         - MB_ML_VER=2010
     - os: osx
       osx_image: xcode10.1
