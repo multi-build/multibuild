@@ -21,6 +21,7 @@ LATEST_2p7=2.7.16
 LATEST_3p5=3.5.4
 LATEST_3p6=3.6.8
 LATEST_3p7=3.7.4
+LATEST_3p8=3.8.0rc1
 
 
 function check_python {
@@ -83,6 +84,8 @@ function fill_pyver {
         echo $LATEST_3p6
     elif [ $ver == "3.5" ]; then
         echo $LATEST_3p5
+    elif [ $ver == "3.8" ]; then
+        echo $LATEST_3p8
     else
         echo "Can't fill version $ver" 1>&2
         exit 1
