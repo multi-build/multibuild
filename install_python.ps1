@@ -21,7 +21,14 @@ if ($env:PYTHON -eq "C:\Python${req_nodot}-x64") {
 $py_url = "https://www.python.org/ftp/python"
 Write-Host "Installing Python ${req_ver}$exe_suffix..." -ForegroundColor Cyan
 $exePath = "$env:TEMP\python-${req_ver}${exe_suffix}.exe"
-$downloadFile = "$py_url/${req_ver}/python-${req_ver}${exe_suffix}.exe"
+
+if ($req_nodot -eq "38") {
+    $downloadFile = "$py_url/${req_ver}/python-${req_ver}rc1${exe_suffix}.exe"
+}
+else {
+    $downloadFile = "$py_url/${req_ver}/python-${req_ver}${exe_suffix}.exe"
+}
+
 Write-Host "Downloading $downloadFile..."
 (New-Object Net.WebClient).DownloadFile($downloadFile, $exePath)
 Write-Host "Installing..."
