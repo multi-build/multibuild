@@ -7,8 +7,9 @@ $py_exe = "${env:PYTHON}\Python.exe"
 if ( [System.IO.File]::Exists($py_exe) ) {
     exit 0
 }
-$req_nodot = $env:PYTHON -replace '\D+Python(\d+)(?:-x64)?','$1'
+$req_nodot = $env:PYTHON -replace '\D+Python(\d+(?:rc\d+))(?:-x64)?','$1'
 $req_ver = $req_nodot -replace '(\d)(\d+)','$1.$2.0'
+$req_dir = $req_nodot -replace '(\d)(\d+)(.*)','$1.$2.0'
 
 if ($env:PYTHON -eq "C:\Python${req_nodot}-x64") {
     $exe_suffix="-amd64"
@@ -21,13 +22,7 @@ if ($env:PYTHON -eq "C:\Python${req_nodot}-x64") {
 $py_url = "https://www.python.org/ftp/python"
 Write-Host "Installing Python ${req_ver}$exe_suffix..." -ForegroundColor Cyan
 $exePath = "$env:TEMP\python-${req_ver}${exe_suffix}.exe"
-
-if ($req_nodot -eq "38") {
-    $downloadFile = "$py_url/${req_ver}/python-${req_ver}rc1${exe_suffix}.exe"
-}
-else {
-    $downloadFile = "$py_url/${req_ver}/python-${req_ver}${exe_suffix}.exe"
-}
+$downloadFile = "$py_url/${req_dir}/python-${req_ver}${exe_suffix}.exe"
 
 Write-Host "Downloading $downloadFile..."
 (New-Object Net.WebClient).DownloadFile($downloadFile, $exePath)
