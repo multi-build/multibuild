@@ -8,10 +8,10 @@ wheels on the `AppVeyor <https://ci.appveyor.com/>`_ infrastructure.
 
 The Travis CI scripts are designed to build *and test*:
 
-* Dual 32/64-bit architecture macOS wheels built for macOS 10.6+;
-* 64-bit macOS wheels built for macOS 10.9+;
-* 64-bit ``manylinuxX_x86_64`` wheels, both narrow and wide Unicode builds, where `X` is any valid Manylinux version, such as `1`, or `2010`.
-* 32-bit ``manylinuxX_i686`` wheels, both narrow and wide Unicode builds.
+* Dual 32/64-bit architecture macOS wheels built for macOS 10.6+
+* 64-bit macOS wheels built for macOS 10.9+
+* 64-bit ``manylinuxX_x86_64`` wheels, both narrow and wide Unicode builds, where `X` is any valid Manylinux version, such as `1`, or `2010`
+* 32-bit ``manylinuxX_i686`` wheels, both narrow and wide Unicode builds
 
 You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7.
 
@@ -21,8 +21,8 @@ Travis CI configurations.
 
 The AppVeyor setup is designed to build *and test*:
 
-* 64-bit Windows ``win_amd64`` wheels;
-* 32-bit Windows ``win32`` wheels.
+* 64-bit Windows ``win_amd64`` wheels
+* 32-bit Windows ``win32`` wheels
 
 You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7.
 
@@ -61,12 +61,12 @@ The macOS build / test phases run on the macOS VM started by Travis CI.
 Therefore any environment variable defined in the ``.travis.yml`` or bash
 shell scripts listed above are available for your build and test.
 
-macOS builds may be targeted either at macOS 10.6+
-(dual arch 64 / 32 bit) or macOS 10.9+ (64b only). These depend on the
-corresponding build of python from https://www.python.org/downloads/mac-osx/.
-At the time of writing, 10.9+ / 64 bit builds are supported for Python
-versions 3.6.5 / 2.7.15 and above. If you want to build for an older version
-of Python, you'll have to target 10.6+ / dual arch.
+CPython build options are controlled mainly by the following 2 environment variables. Normally the right thing to do is to leave these unset, and rely on defaults:
+
+* `MB_PYTHON_OSX_VER` sets the minimum macOS SDK version targetted. The only allowed values are 10.6 and 10.9. If unset, it defaults to 10.9 when building with CPython versions 3.6.5 / 2.7.15 and above, and 10.6 for older versions.
+* `PLAT` sets the archicture(s) built, either `x86_64` or `intel` for 64-bit or 64/32-bit dual arch, respectively.  If unset, it is inferred from `MB_PYTHON_OSX_VER` - `x86_64` for 10.9 and `intel` for 10.6.
+
+PyPy builds are always 64-bit 10.9+.
 
 The ``build_wheel`` function builds the wheel, and the ``install_run``
 function installs the wheel and tests it.  Look in ``common_utils.sh`` for
@@ -201,7 +201,6 @@ To use these scripts
             # that you need, that are also specified in BUILD_DEPENDS, this will be
             # a separate install.
             - TEST_DEPENDS="numpy scipy pytest"
-            - PLAT=x86_64
             - UNICODE_WIDTH=32
             - WHEELHOUSE_UPLOADER_USERNAME=travis-worker
             # Following generated with
@@ -269,18 +268,14 @@ To use these scripts
             - MB_PYTHON_VERSION=2.7
         - os: osx
           env:
-            - MB_PYTHON_VERSION=2.7
-            - MB_PYTHON_OSX_VER=10.9
-        - os: osx
-          env:
             - MB_PYTHON_VERSION=3.5
+            - MB_PYTHON_OSX_VER=10.6
         - os: osx
           env:
             - MB_PYTHON_VERSION=3.6
         - os: osx
           env:
             - MB_PYTHON_VERSION=3.7
-            - MB_PYTHON_OSX_VER=10.9
         - os: osx
           language: generic
           env:
