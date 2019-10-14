@@ -4,7 +4,9 @@
 [ "$(fill_pyver 2.7.8)" == "2.7.8" ] || ingest
 [ "$(fill_pyver 2.6)" == $LATEST_2p6 ] || ingest
 [ "$(fill_pyver 2.6.2)" == "2.6.2" ] || ingest
-[ "$(fill_pyver 3)" == $LATEST_3p7 ] || ingest
+[ "$(fill_pyver 3)" == $LATEST_3p8 ] || ingest
+[ "$(fill_pyver 3.8.0)" == "3.8.0" ] || ingest
+[ "$(fill_pyver 3.8)" == $LATEST_3p8 ] || ingest
 [ "$(fill_pyver 3.7.0)" == "3.7.0" ] || ingest
 [ "$(fill_pyver 3.7)" == $LATEST_3p7 ] || ingest
 [ "$(fill_pyver 3.6)" == $LATEST_3p6 ] || ingest
