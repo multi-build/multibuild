@@ -364,7 +364,7 @@ function fill_submodule {
 
 PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
 
-# As of 2019-05-15, the latest verions of PyPy.
+# As of 2019-10-15, the latest verions of PyPy.
 LATEST_PP_4p0=4.0.1
 LATEST_PP_4=$LATEST_PP_4p0
 
@@ -383,7 +383,8 @@ LATEST_PP_6=$LATEST_PP_6p0
 
 LATEST_PP_7p0=7.0.0
 LATEST_PP_7p1=7.1.1
-LATEST_PP_7=$LATEST_PP_7p1
+LATEST_PP_7p2=7.2.0
+LATEST_PP_7=$LATEST_PP_7p2
 
 function unroll_version {
     # Convert major or major.minor format to major.minor.micro using the above
