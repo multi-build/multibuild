@@ -6,7 +6,7 @@
 $py_exe = "${env:PYTHON}\Python.exe"
 if ( [System.IO.File]::Exists($py_exe) ) {
     echo "$py_exe exists"
-    exit 1
+    exit 0
 }
 $req_nodot = $env:PYTHON -replace '\D+Python(\d+(?:rc\d+)?)(-x64)?','$1'
 $req_ver = $req_nodot -replace '(\d)(\d+)','$1.$2.0'
