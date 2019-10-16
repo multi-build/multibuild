@@ -5,22 +5,22 @@
 
 $py_exe = "${env:PYTHON}\Python.exe"
 if ( [System.IO.File]::Exists($py_exe) ) {
-    exit 0
+    echo "$py_exe exists"
+    exit 1
 }
-$req_nodot = $env:PYTHON -replace '\D+Python(\d+(?:rc\d+))(?:-x64)?','$1'
+$req_nodot = $env:PYTHON -replace '\D+Python(\d+(?:rc\d+)?)(-x64)?','$1'
 $req_ver = $req_nodot -replace '(\d)(\d+)','$1.$2.0'
 $req_dir = $req_nodot -replace '(\d)(\d+)(.*)','$1.$2.0'
+$last_three = $env:PYTHON[-3 .. -1] -join ''
 
-if ($env:PYTHON -eq "C:\Python${req_nodot}-x64") {
+if ($last_three -eq "x64") {
     $exe_suffix="-amd64"
-} elseif ($env:PYTHON -eq "C:\Python${req_nodot}") {
-    $exe_suffix=""
 } else {
-    exit 0
+    $exe_suffix=""
 }
 
 $py_url = "https://www.python.org/ftp/python"
-Write-Host "Installing Python ${req_ver}$exe_suffix..." -ForegroundColor Cyan
+Write-Host "Installing Python ${req_dir}/${req_ver}$exe_suffix to $env:Python ..." -ForegroundColor Cyan
 $exePath = "$env:TEMP\python-${req_ver}${exe_suffix}.exe"
 $downloadFile = "$py_url/${req_dir}/python-${req_ver}${exe_suffix}.exe"
 
