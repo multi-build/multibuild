@@ -83,3 +83,9 @@ test_script:
     - ps: .\install_python.ps1
     - set PYTHON=C:\Python38-x64
     - ps: .\install_python.ps1
+    - set PYTHON=C:\Python38rc1-x64
+    - ps: .\install_python.ps1
+    - set PYTHON=C:\Python38
+    - ps: .\install_python.ps1
+    - set PYTHON=C:\Python38rc1
+    - ps: .\install_python.ps1
