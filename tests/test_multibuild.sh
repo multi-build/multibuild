@@ -8,6 +8,11 @@ source tests/test_common_utils.sh
 source tests/test_fill_submodule.sh
 if [ -n "$IS_OSX" ]; then
     source osx_utils.sh
+
+    # To work round:
+    # https://travis-ci.community/t/syntax-error-unexpected-keyword-rescue-expecting-keyword-end-in-homebrew/5623
+    brew update
+
     get_macpython_environment $PYTHON_VERSION ${VENV:-""} $MB_PYTHON_OSX_VER
     source tests/test_python_install.sh
     source tests/test_fill_pyver.sh
