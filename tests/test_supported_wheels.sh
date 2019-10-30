@@ -6,7 +6,7 @@ else
     pip_install="$PIP_CMD install"
 fi
 # Current wheel versions not available for older Pythons
-lpv=$(lex_ver $PYTHON_VERSION)
+lpv=$(lex_ver $MB_PYTHON_VERSION)
 if [ $lpv -ge $(lex_ver 3.5) ] || [ $lpv -lt $(lex_ver 3) ]; then
     for whl in wheel==0.31.1 wheel==0.32.0 wheel; do
         $pip_install -U $whl

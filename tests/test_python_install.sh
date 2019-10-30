@@ -23,12 +23,12 @@ fi
 python_mm="${cpython_version:0:1}.${cpython_version:2:1}"
 
 # extract implementation prefix and version
-if [[ "$PYTHON_VERSION" =~ (pypy-)?([0-9\.]+) ]]; then
+if [[ "$MB_PYTHON_VERSION" =~ (pypy-)?([0-9\.]+) ]]; then
     _impl=${BASH_REMATCH[1]:-"cp"}
     requested_impl=${_impl:0:2}
     requested_version=${BASH_REMATCH[2]}
 else
-    ingest "Error parsing PYTHON_VERSION=$PYTHON_VERSION"
+    ingest "Error parsing MB_PYTHON_VERSION=$MB_PYTHON_VERSION"
 fi
 
 # simple regex match, a 2.7 pattern will match 2.7.11, but not 2
@@ -63,7 +63,7 @@ fi
 
 # check macOS version and arch are as expected
 distutils_plat=$($PYTHON_EXE -c "import distutils.util; print(distutils.util.get_platform())")
-expected_arch=$(macpython_arch_for_version $PYTHON_VERSION)
+expected_arch=$(macpython_arch_for_version $MB_PYTHON_VERSION)
 if [[ $requested_impl == 'cp' ]]; then
     expected_tag="macosx-$MB_PYTHON_OSX_VER-$expected_arch"
 else
