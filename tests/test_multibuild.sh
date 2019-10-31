@@ -25,12 +25,13 @@ else
 fi
 if [ -n "$TEST_BUILDS" ]; then
     if [ -n "$IS_OSX" ]; then
+        # This checked in test_library_builders.
+        # Will be set automatically by docker call in build_multilinux below.
+        PYTHON_VERSION=${MB_PYTHON_VERSION}
         source tests/test_library_builders.sh
     elif [ ! -x "$(command -v docker)" ]; then
         echo "Skipping build tests; no docker available"
     else
-        # Docker builds use PYTHON_VERSION
-        export PYTHON_VERSION=${MB_PYTHON_VERSION}
         touch config.sh
         source travis_linux_steps.sh
         my_plat=${PLAT:-x86_64}
