@@ -9,13 +9,15 @@
 [ "$(pyinst_ext_for_version 3.5)" == pkg ] || ingest
 [ "$(pyinst_ext_for_version 3)" == pkg ] || ingest
 
-[ "$(pyinst_fname_for_version 2.7.14)" == "python-2.7.14-macosx10.6.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 2.7.15)" == "python-2.7.15-macosx10.6.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 3.6.8)" == "python-3.6.8-macosx10.6.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 3.7.1)" == "python-3.7.1-macosx10.6.pkg" ] || ingest
+macos_ver="${MACPYTHON_DEFAULT_OSX}"
+[ "$(pyinst_fname_for_version 2.7.14)" == "python-2.7.14-macosx${macos_ver}.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 2.7.15)" == "python-2.7.15-macosx${macos_ver}.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 3.6.8)" == "python-3.6.8-macosx${macos_ver}.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 3.7.1)" == "python-3.7.1-macosx${macos_ver}.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 3.8.0)" == "python-3.8.0-macosx${macos_ver}.pkg" ] || ingest
 
-[ "$(pyinst_fname_for_version 2.7.15 10.9)" == "python-2.7.15-macosx10.9.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 3.7.1 10.9)" == "python-3.7.1-macosx10.9.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 2.7.15 10.11)" == "python-2.7.15-macosx10.11.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 3.7.1 10.12)" == "python-3.7.1-macosx10.12.pkg" ] || ingest
 
 # Test utilities for getting Python version versions
 [ "$(get_py_digit)" == "${cpython_version:0:1}" ] || ingest

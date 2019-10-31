@@ -9,6 +9,10 @@ source $MULTIBUILD_DIR/common_utils.sh
 MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
 MACPYTHON_DEFAULT_OSX="10.6"
+if [ "$(lex_ver $MB_PYTHON_VERSION)" -ge "$(lex_ver 3.8)" ]; then
+    # At 3.8 Python.org dropped the 10.6 installer.
+    MACPYTHON_DEFAULT_OSX="10.9"
+fi
 MB_PYTHON_OSX_VER=${MB_PYTHON_OSX_VER:-$MACPYTHON_DEFAULT_OSX}
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 DOWNLOADS_SDIR=downloads
