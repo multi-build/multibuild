@@ -84,16 +84,15 @@ Build phase
 
 Specify the Manylinux version to build for with the `MB_ML_VER` environment variable.  The default version is `1`.  Versions that are currently valid are:
 
-* `1` (see [PEP 513](https://www.python.org/dev/peps/pep-0513);
-* `2010` (see [PEP
+* `1` corresponding to manylinux1 (see [PEP 513](https://www.python.org/dev/peps/pep-0513);
+* `2010`  corresponding to manylinux2010 (see [PEP
   571](https://www.python.org/dev/peps/pep-0571).
-
-At some point `2014` will be a valid version - see [PEP
-599](https://www.python.org/dev/peps/pep-0599).
+* `2014` corresponding to manylinux2014 (see [PEP
+  599](https://www.python.org/dev/peps/pep-0599).
 
 The environment variable specified which Manylinux docker container you are building in.
 
-The `PLAT` environment variable can be one of `x86_64` or `i686`, specifying 64-bit and 32-bit builds, respectively.  The default is 64-bit.
+The `PLAT` environment variable can be one of `x86_64`, `i686` or `aarch64`, specifying 64-bit x86, 32-bit x86, and 64-bit ARM builds, respectively.  The default is `x86_64`.
 
 At the time of writing, Manylinux2010 only supports 64-bit
 builds, so `MB_ML_VER=2010` and `PLAT=i686` is an invalid

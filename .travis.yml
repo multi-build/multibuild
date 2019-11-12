@@ -20,7 +20,7 @@ matrix:
       dist: xenial
       env:
         - TEST_BUILDS=1
-    # 64-bit builds, manylinux2014
+    # 64-bit builds, manylinux2010
     - os: linux
       dist: xenial
       env:
@@ -208,6 +208,15 @@ matrix:
       osx_image: xcode7.3
       env:
         - MB_PYTHON_VERSION=3.5
+    # ARM aarch 64 builds
+    - os: linux
+      arch: arm64
+      env:
+        - MB_PYTHON_VERSION=3.7
+        - MB_ML_VER=2014 
+        - TEST_BUILDS=1
+        - PLAT=aarch64
+
 
 script:
   - export ENV_VARS_PATH="tests/env_vars.sh"
