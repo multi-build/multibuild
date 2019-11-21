@@ -94,8 +94,8 @@ function build_openblas {
     if [ -n "$IS_OSX" ]; then
         brew install openblas
         brew link --force openblas
-    elif [-n "$IS_AARCH64"]; then
-        sudo apt install libopenblas-dev
+    elif [ -n "$IS_AARCH64" ]; then
+        apt install libopenblas-dev
         return;
     else
         mkdir -p $ARCHIVE_SDIR
