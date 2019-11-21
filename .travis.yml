@@ -21,193 +21,193 @@ matrix:
       env:
         - TEST_BUILDS=1
     # 64-bit builds, manylinux2010
-    - os: linux
-      dist: xenial
-      env:
-        - TEST_BUILDS=1
-        - MB_ML_VER=2010
-    # 32-bit builds
-    - os: linux
-      dist: xenial
-      env:
-        - TEST_BUILDS=1
-        - PLAT=i686
-    # Builds with caching
-    - os: linux
-      dist: xenial
-      env:
-        - TEST_BUILDS=1
-        - USE_CCACHE=1
-    # OSX builds
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=2.7
-        - TEST_BUILDS=1
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=2.7
-        - MB_PYTHON_OSX_VER=10.9
-        - TEST_BUILDS=1
-    - os: osx
-      language: objective-c
-      env:
-        - MB_PYTHON_VERSION=2.7
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=3.5
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=3.5
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=3.6
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=3.6
-        - VENV=venv
-        - MB_PYTHON_OSX_VER=10.9
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=3.7
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=3.7
-        - VENV=venv
-        - MB_PYTHON_OSX_VER=10.9
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=3.7
-        - VENV=venv
-        - USE_CCACHE=1
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=3.8
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-4.0
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-5.0
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-5.1
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-5.3
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-5.4
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-5.6
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-5.7
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-5.8
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-5.9
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-6.0
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-7.0
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-7.1
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-7.2
-        - VENV=venv
-    # Default OSX (xcode image) is 10.13 (xcode 9.4.1) as of 2018-08-03
-    # See: https://docs.travis-ci.com/user/reference/osx/
-    - os: osx
-      osx_image: xcode10.1
-      env:
-        - MB_PYTHON_VERSION=3.7
-        - TEST_BUILDS=1
-    - os: osx
-      osx_image: xcode10.1
-      env:
-        - MB_PYTHON_VERSION=3.7
-        - MB_PYTHON_OSX_VER=10.9
-        - TEST_BUILDS=1
-    - os: osx
-      osx_image: xcode10
-      env:
-        - MB_PYTHON_VERSION=3.7
-    - os: osx
-      osx_image: xcode10
-      env:
-        - MB_PYTHON_VERSION=3.8
-    - os: osx
-      osx_image: xcode10.1
-      env:
-        - MB_PYTHON_VERSION=3.5
-    - os: osx
-      osx_image: xcode10
-      env:
-        - MB_PYTHON_VERSION=3.5
-    - os: osx
-      osx_image: xcode9.4
-      env:
-        - MB_PYTHON_VERSION=3.5
-    - os: osx
-      osx_image: xcode9.3
-      env:
-        - MB_PYTHON_VERSION=3.5
-    - os: osx
-      osx_image: xcode9.2
-      env:
-        - MB_PYTHON_VERSION=3.5
-    - os: osx
-      osx_image: xcode9.1
-      env:
-        - MB_PYTHON_VERSION=3.5
-    - os: osx
-      osx_image: xcode9
-      env:
-        - MB_PYTHON_VERSION=3.5
-    - os: osx
-      osx_image: xcode8.3
-      env:
-        - MB_PYTHON_VERSION=3.5
-    - os: osx
-      osx_image: xcode8.2
-      env:
-        - MB_PYTHON_VERSION=3.5
-    - os: osx
-      osx_image: xcode8.1
-      env:
-        - MB_PYTHON_VERSION=3.5
-    - os: osx
-      osx_image: xcode8
-      env:
-        - MB_PYTHON_VERSION=3.5
-    - os: osx
-      osx_image: xcode7.3
-      env:
-        - MB_PYTHON_VERSION=3.5
+#    - os: linux
+#      dist: xenial
+#      env:
+#        - TEST_BUILDS=1
+#        - MB_ML_VER=2010
+#    # 32-bit builds
+#    - os: linux
+#      dist: xenial
+#      env:
+#        - TEST_BUILDS=1
+#        - PLAT=i686
+#    # Builds with caching
+#    - os: linux
+#      dist: xenial
+#      env:
+#        - TEST_BUILDS=1
+#        - USE_CCACHE=1
+#    # OSX builds
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=2.7
+#        - TEST_BUILDS=1
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=2.7
+#        - MB_PYTHON_OSX_VER=10.9
+#        - TEST_BUILDS=1
+#    - os: osx
+#      language: objective-c
+#      env:
+#        - MB_PYTHON_VERSION=2.7
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=3.5
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=3.5
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=3.6
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=3.6
+#        - VENV=venv
+#        - MB_PYTHON_OSX_VER=10.9
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=3.7
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=3.7
+#        - VENV=venv
+#        - MB_PYTHON_OSX_VER=10.9
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=3.7
+#        - VENV=venv
+#        - USE_CCACHE=1
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=3.8
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=pypy-4.0
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=pypy-5.0
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=pypy-5.1
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=pypy-5.3
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=pypy-5.4
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=pypy-5.6
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=pypy-5.7
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=pypy-5.8
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=pypy-5.9
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=pypy-6.0
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=pypy-7.0
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=pypy-7.1
+#        - VENV=venv
+#    - os: osx
+#      env:
+#        - MB_PYTHON_VERSION=pypy-7.2
+#        - VENV=venv
+#    # Default OSX (xcode image) is 10.13 (xcode 9.4.1) as of 2018-08-03
+#    # See: https://docs.travis-ci.com/user/reference/osx/
+#    - os: osx
+#      osx_image: xcode10.1
+#      env:
+#        - MB_PYTHON_VERSION=3.7
+#        - TEST_BUILDS=1
+#    - os: osx
+#      osx_image: xcode10.1
+#      env:
+#        - MB_PYTHON_VERSION=3.7
+#        - MB_PYTHON_OSX_VER=10.9
+#        - TEST_BUILDS=1
+#    - os: osx
+#      osx_image: xcode10
+#      env:
+#        - MB_PYTHON_VERSION=3.7
+#    - os: osx
+#      osx_image: xcode10
+#      env:
+#        - MB_PYTHON_VERSION=3.8
+#    - os: osx
+#      osx_image: xcode10.1
+#      env:
+#        - MB_PYTHON_VERSION=3.5
+#    - os: osx
+#      osx_image: xcode10
+#      env:
+#        - MB_PYTHON_VERSION=3.5
+#    - os: osx
+#      osx_image: xcode9.4
+#      env:
+#        - MB_PYTHON_VERSION=3.5
+#    - os: osx
+#      osx_image: xcode9.3
+#      env:
+#        - MB_PYTHON_VERSION=3.5
+#    - os: osx
+#      osx_image: xcode9.2
+#      env:
+#        - MB_PYTHON_VERSION=3.5
+#    - os: osx
+#      osx_image: xcode9.1
+#      env:
+#        - MB_PYTHON_VERSION=3.5
+#    - os: osx
+#      osx_image: xcode9
+#      env:
+#        - MB_PYTHON_VERSION=3.5
+#    - os: osx
+#      osx_image: xcode8.3
+#      env:
+#        - MB_PYTHON_VERSION=3.5
+#    - os: osx
+#      osx_image: xcode8.2
+#      env:
+#        - MB_PYTHON_VERSION=3.5
+#    - os: osx
+#      osx_image: xcode8.1
+#      env:
+#        - MB_PYTHON_VERSION=3.5
+#    - os: osx
+#      osx_image: xcode8
+#      env:
+#        - MB_PYTHON_VERSION=3.5
+#    - os: osx
+#      osx_image: xcode7.3
+#      env:
+#        - MB_PYTHON_VERSION=3.5
     # ARM aarch 64 builds
     - os: linux
       arch: arm64
