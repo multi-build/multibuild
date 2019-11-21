@@ -13,6 +13,7 @@ set -e
 
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 if [ $(uname) == "Darwin" ]; then IS_OSX=1; fi
+if [ "$(PLAT)" == "aarch64" ]; then IS_AARCH64=1; fi
 
 # Work round bug in travis xcode image described at
 # https://github.com/direnv/direnv/issues/210
