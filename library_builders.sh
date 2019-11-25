@@ -95,7 +95,8 @@ function build_openblas {
         brew install openblas
         brew link --force openblas
     elif [ -n "$IS_AARCH64" ]; then
-        apt install libopenblas-dev
+        yum install epel-release -y
+        yum install openblas-devel -y
         return;
     else
         mkdir -p $ARCHIVE_SDIR
