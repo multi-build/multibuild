@@ -64,7 +64,7 @@ variables:
 
 * ``MB_PYTHON_VER`` selects the Python version built for, in the format ``major.minor.patch`` for CPython, or ``pypy-major.minor`` for PyPy
 * ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version targetted. For CPython it may be set to 10.9 or 10.6 (the default). It is currently ignored for PyPy builds.
-* ``PLAT`` sets the archicture(s) built, either ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. The default is the same as the Python version selected by ``MB_PYTHON_VER`` and ``MB_PYTHON_OSX_VER``: 64-bit for PyPy or CPython 10.9 builds, and 64/32-bit for CPython 10.6 builds. For normal useage you should not need to set this variable.
+* ``PLAT`` sets the archicture(s) built, either ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. The default is the same as the Python version selected by ``MB_PYTHON_VER`` and ``MB_PYTHON_OSX_VER``: 64-bit for PyPy or CPython 10.9 builds, and 64/32-bit for CPython 10.6 builds. For normal usage you should not need to set this variable.
 
 Valid combinations of ``MB_PYTHON_VER`` and ``MB_PYTHON_OSX_VER`` for CPython correspond to Python versions available for download at `python.org <https://www.python.org/downloads/mac-osx/>`_.
 
