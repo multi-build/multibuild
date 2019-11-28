@@ -64,7 +64,7 @@ variables:
 
 * ``MB_PYTHON_VER`` selects the Python version built for, in the format ``major.minor.patch`` for CPython, or ``pypy-major.minor`` for PyPy
 * ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version targetted. For CPython it may be set to 10.9 or 10.6 (the default). It is currently ignored for PyPy builds.
-* ``PLAT`` sets the archicture(s) built, either ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. The default is the same as the Python version selected by ``MB_PYTHON_VER`` and ``MB_PYTHON_OSX_VER``: 64-bit for PyPy or CPython 10.9 builds, and 64/32-bit for CPython 10.6 builds. For normal usage you should not need to set this variable.
+* ``PLAT`` sets the architecture(s) built, either ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. The default is the same as the Python version selected by ``MB_PYTHON_VER`` and ``MB_PYTHON_OSX_VER``: 64-bit for PyPy or CPython 10.9 builds, and 64/32-bit for CPython 10.6 builds. For normal usage you should not need to set this variable.
 
 Valid combinations of ``MB_PYTHON_VER`` and ``MB_PYTHON_OSX_VER`` for CPython correspond to Python versions available for download at `python.org <https://www.python.org/downloads/mac-osx/>`_.
 
@@ -151,7 +151,7 @@ default the function that is run on macOS, and in the Manylinux container for
 the build phase, is defined in ``multibuild/common_utils.sh``.  You can
 override the default function in the project ``config.sh`` file (see below).
 
-If you are building a wheel from pypi, rather than from a source repository,
+If you are building a wheel from PyPI, rather than from a source repository,
 you can use the ``build_index_wheel`` command, again defined in
 ``multibuild/common_utils.sh``.
 
@@ -196,7 +196,7 @@ To use these scripts
             # Commit from your-project that you want to build
             - BUILD_COMMIT=v0.1.0
             # pip dependencies to _build_ your project
-            - BUILD_DEPENDS="Cython numpy"
+            - BUILD_DEPENDS="cython numpy"
             # pip dependencies to _test_ your project.  Include any dependencies
             # that you need, that are also specified in BUILD_DEPENDS, this will be
             # a separate install.
