@@ -86,10 +86,13 @@ actual="$(set -e; suppress bad_mid_cmd)"
 # Reset options
 set_opts $ORIG_OPTS
 
-# On Linux docker containers in travis, can be x86_64, i686, or aarch64
+# On Linux docker containers in travis, can be x86_64, i686, s390x, ppc64le, or
+# aarch64
 [ "$(get_platform)" == x86_64 ] || \
     [ "$(get_platform)" == i686 ] || \
     [ "$(get_platform)" == aarch64 ] || \
+    [ "$(get_platform)" == ppc64le ] || \
+    [ "$(get_platform)" == s390x ] || \
     exit 1
 
 # Crudest possible check for get_distutils_platform

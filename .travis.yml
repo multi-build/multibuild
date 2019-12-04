@@ -15,12 +15,12 @@ matrix:
   include:
     - os: linux
       dist: trusty
-    # 64-bit builds
-    - os: linux
-      dist: xenial
-      env:
-        - TEST_BUILDS=1
-    # 64-bit builds, manylinux2010
+#    # 64-bit builds
+#    - os: linux
+#      dist: xenial
+#      env:
+#        - TEST_BUILDS=1
+#    # 64-bit builds, manylinux2010
 #    - os: linux
 #      dist: xenial
 #      env:
@@ -32,6 +32,12 @@ matrix:
 #      env:
 #        - TEST_BUILDS=1
 #        - PLAT=i686
+    - os: linux
+      dist: xenial
+      env:
+        - TEST_BUILDS=1
+        - PLAT=i686
+        - MB_ML_VER=2010
 #    # Builds with caching
 #    - os: linux
 #      dist: xenial
@@ -216,7 +222,22 @@ matrix:
         - MB_ML_VER=2014 
         - TEST_BUILDS=1
         - PLAT=aarch64
-
+    #  s390x builds
+    - os: linux
+      arch: s390x
+      env:
+        - MB_PYTHON_VERSION=3.7
+        - MB_ML_VER=2014 
+        - TEST_BUILDS=1
+        - PLAT=s390x
+    #  ppc64le builds
+    - os: linux
+      arch: ppc64le
+      env:
+        - MB_PYTHON_VERSION=3.7
+        - MB_ML_VER=2014 
+        - TEST_BUILDS=1
+        - PLAT=ppc64le
 
 script:
   - export ENV_VARS_PATH="tests/env_vars.sh"

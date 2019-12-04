@@ -94,7 +94,7 @@ function build_openblas {
     if [ -n "$IS_OSX" ]; then
         brew install openblas
         brew link --force openblas
-    elif [ -n "$IS_AARCH64" ]; then
+    elif [ ! -v IS_X86 ]; then
 		# Skip this for now until we can build a suitable tar.gz
         return;
     else

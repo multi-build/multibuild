@@ -92,12 +92,9 @@ Specify the Manylinux version to build for with the `MB_ML_VER` environment vari
 
 The environment variable specified which Manylinux docker container you are building in.
 
-The `PLAT` environment variable can be one of `x86_64`, `i686` or `aarch64`, specifying 64-bit x86, 32-bit x86, and 64-bit ARM builds, respectively.  The default is `x86_64`.
-
-At the time of writing, Manylinux2010 only supports 64-bit
-builds, so `MB_ML_VER=2010` and `PLAT=i686` is an invalid
-combination, and will generate an error when trying to find the
-matching Docker image.
+The `PLAT` environment variable can be one of `x86_64`, `i686` `s390x`,
+`ppc64le`, or `aarch64`, specifying 64-bit x86, 32-bit x86, 64-bit s390x,
+PowerPC, and ARM builds, respectively.  The default is `x86_64`.
 
 ``multibuild/travis_linux_steps.sh`` defines the ``build_wheel`` function,
 which starts up the Manylinux1 Docker container to run a wrapper script

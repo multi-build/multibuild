@@ -13,7 +13,6 @@ set -e
 
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 if [ $(uname) == "Darwin" ]; then IS_OSX=1; fi
-if [ "$PLAT" == "aarch64" ]; then IS_AARCH64=1; fi
 
 # Work round bug in travis xcode image described at
 # https://github.com/direnv/direnv/issues/210
@@ -310,6 +309,9 @@ function get_platform {
     # Report platform as given by uname
     python -c 'import platform; print(platform.uname()[4])'
 }
+
+if [ "$(get_platform)" == x86_64 ] || \
+    [ "$(get_platform)" == i686 ]; then IS_X86=1; fi
 
 function get_distutils_platform {
     # Report platform as given by distutils get_platform.
