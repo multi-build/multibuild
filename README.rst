@@ -82,19 +82,21 @@ a clean Ubuntu 14.04 container.
 Build phase
 -----------
 
-Specify the Manylinux version to build for with the `MB_ML_VER` environment variable.  The default version is `1`.  Versions that are currently valid are:
+Specify the Manylinux version to build for with the ``MB_ML_VER`` environment
+variable.  The default version is ``1``.  Versions that are currently valid are:
 
-* `1` corresponding to manylinux1 (see [PEP 513](https://www.python.org/dev/peps/pep-0513);
-* `2010`  corresponding to manylinux2010 (see [PEP
+* ``1`` corresponding to manylinux1 (see [PEP 513](https://www.python.org/dev/peps/pep-0513);
+* ``2010``  corresponding to manylinux2010 (see [PEP
   571](https://www.python.org/dev/peps/pep-0571).
-* `2014` corresponding to manylinux2014 (see [PEP
-  599](https://www.python.org/dev/peps/pep-0599).
+* ``2014`` corresponding to manylinux2014 and adds more architectures to ``PLAT``
+  (see [PEP 599](https://www.python.org/dev/peps/pep-0599).
 
 The environment variable specified which Manylinux docker container you are building in.
 
-The `PLAT` environment variable can be one of `x86_64`, `i686` `s390x`,
-`ppc64le`, or `aarch64`, specifying 64-bit x86, 32-bit x86, 64-bit s390x,
-PowerPC, and ARM builds, respectively.  The default is `x86_64`.
+The ``PLAT`` environment variable can be one of ``x86_64``, ``i686`` ``s390x``,
+``ppc64le``, or ``aarch64``, specifying 64-bit x86, 32-bit x86, 64-bit s390x,
+PowerPC, and ARM builds, respectively.  The default is ``x86_64``. Only ``x86_64``
+and ``i686`` are valild on manylinux1 and manylinux2010.
 
 ``multibuild/travis_linux_steps.sh`` defines the ``build_wheel`` function,
 which starts up the Manylinux1 Docker container to run a wrapper script
