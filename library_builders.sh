@@ -25,7 +25,7 @@ XZ_VERSION="${XZ_VERSION:-5.2.2}"
 LIBYAML_VERSION="${LIBYAML_VERSION:-0.2.2}"
 SZIP_VERSION="${SZIP_VERSION:-2.1.1}"
 HDF5_VERSION="${HDF5_VERSION:-1.10.4}"
-LIBAEC_VERSION="${LIBAEC_VERSION:-0.3.3}"
+LIBAEC_VERSION="${LIBAEC_VERSION:-1.0.4}"
 LZO_VERSION=${LZO_VERSION:-2.10}
 LZF_VERSION="${LZF_VERSION:-3.6}"
 BLOSC_VERSION=${BLOSC_VERSION:-1.10.2}
@@ -239,10 +239,10 @@ function build_hdf5 {
 
 function build_libaec {
     if [ -e libaec-stamp ]; then return; fi
-    local root_name=libaec-0.3.3
+    local root_name=libaec-1.0.4
     local tar_name=${root_name}.tar.gz
     # Note URL will change for each version
-    fetch_unpack https://gitlab.dkrz.de/k202009/libaec/uploads/48398bd5b7bc05a3edb3325abfeac864/${tar_name}
+    fetch_unpack https://gitlab.dkrz.de/k202009/libaec/uploads/ea0b7d197a950b0c110da8dfdecbb71f/${tar_name}
     (cd $root_name \
         && ./configure --prefix=$BUILD_PREFIX \
         && make \
