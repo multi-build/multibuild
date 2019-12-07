@@ -9,12 +9,16 @@
 [ "$(pyinst_ext_for_version 3.5)" == pkg ] || ingest
 [ "$(pyinst_ext_for_version 3)" == pkg ] || ingest
 
-macos_ver="${MACPYTHON_DEFAULT_OSX}"
-[ "$(pyinst_fname_for_version 2.7.14)" == "python-2.7.14-macosx${macos_ver}.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 2.7.15)" == "python-2.7.15-macosx${macos_ver}.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 3.6.8)" == "python-3.6.8-macosx${macos_ver}.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 3.7.1)" == "python-3.7.1-macosx${macos_ver}.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 3.8.0)" == "python-3.8.0-macosx${macos_ver}.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 2.7.14)" == "python-2.7.14-macosx10.6.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 2.7.15)" == "python-2.7.15-macosx10.9.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 3.6.8)" == "python-3.6.8-macosx10.9.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 3.7.1)" == "python-3.7.1-macosx10.9.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 3.8.0)" == "python-3.8.0-macosx10.9.pkg" ] || ingest
+
+[ "$(pyinst_fname_for_version 2.7.14 10.6)" == "python-2.7.14-macosx10.6.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 2.7.15 10.6)" == "python-2.7.15-macosx10.6.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 3.6.8 10.6)" == "python-3.6.8-macosx10.6.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 3.7.1 10.6)" == "python-3.7.1-macosx10.6.pkg" ] || ingest
 
 [ "$(pyinst_fname_for_version 2.7.15 10.11)" == "python-2.7.15-macosx10.11.pkg" ] || ingest
 [ "$(pyinst_fname_for_version 3.7.1 10.12)" == "python-3.7.1-macosx10.12.pkg" ] || ingest
@@ -39,6 +43,22 @@ macos_ver="${MACPYTHON_DEFAULT_OSX}"
 [ "$(strip_macpython_ver_prefix pypy-5.4)" == "5.4" ] || ingest
 [ "$(macpython_impl_for_version 3.7.2)" == "cp" ] || ingest
 [ "$(macpython_impl_for_version pypy-5.4)" == "pp" ] || ingest
+
+# Test lookup of available macOS SDK build targets from python version
+[ "$(macpython_sdk_list_for_version 3.8)"    == "10.9" ] || ingest
+[ "$(macpython_sdk_list_for_version 3.7.5)"  == "10.6 10.9" ] || ingest
+[ "$(macpython_sdk_list_for_version 3.7)"    == "10.6 10.9" ] || ingest
+[ "$(macpython_sdk_list_for_version 3.6.5)"  == "10.6 10.9" ] || ingest
+[ "$(macpython_sdk_list_for_version 3.6)"    == "10.6 10.9" ] || ingest
+[ "$(macpython_sdk_list_for_version 3.5)"    == "10.6" ] || ingest
+[ "$(macpython_sdk_list_for_version 2.7)"    == "10.6 10.9" ] || ingest
+[ "$(macpython_sdk_list_for_version 2.7.14)" == "10.6" ] || ingest
+[ "$(macpython_sdk_list_for_version 2.7.15)" == "10.6 10.9" ] || ingest
+
+[ "$(macpython_sdk_for_version 3.8)"    == "10.9" ] || ingest
+[ "$(macpython_sdk_for_version 3.5)"    == "10.6" ] || ingest
+[ "$(macpython_sdk_for_version 2.7)"    == "10.9" ] || ingest
+[ "$(macpython_sdk_for_version 2.7.14)" == "10.6" ] || ingest
 
 # Test pkg-config install
 install_pkg_config

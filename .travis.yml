@@ -42,11 +42,11 @@ matrix:
     - os: osx
       env:
         - MB_PYTHON_VERSION=2.7
+        - MB_PYTHON_OSX_VER=10.6
         - TEST_BUILDS=1
     - os: osx
       env:
         - MB_PYTHON_VERSION=2.7
-        - MB_PYTHON_OSX_VER=10.9
         - TEST_BUILDS=1
     - os: osx
       language: objective-c
@@ -63,21 +63,21 @@ matrix:
     - os: osx
       env:
         - MB_PYTHON_VERSION=3.6
+        - MB_PYTHON_OSX_VER=10.6
         - VENV=venv
     - os: osx
       env:
         - MB_PYTHON_VERSION=3.6
         - VENV=venv
-        - MB_PYTHON_OSX_VER=10.9
     - os: osx
       env:
         - MB_PYTHON_VERSION=3.7
+        - MB_PYTHON_OSX_VER=10.6
         - VENV=venv
     - os: osx
       env:
         - MB_PYTHON_VERSION=3.7
         - VENV=venv
-        - MB_PYTHON_OSX_VER=10.9
     - os: osx
       env:
         - MB_PYTHON_VERSION=3.7

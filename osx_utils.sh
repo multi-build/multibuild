@@ -8,12 +8,6 @@ source $MULTIBUILD_DIR/common_utils.sh
 
 MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
-MACPYTHON_DEFAULT_OSX="10.6"
-if [ "$(lex_ver $MB_PYTHON_VERSION)" -ge "$(lex_ver 3.8)" ]; then
-    # At 3.8 Python.org dropped the 10.6 installer.
-    MACPYTHON_DEFAULT_OSX="10.9"
-fi
-MB_PYTHON_OSX_VER=${MB_PYTHON_OSX_VER:-$MACPYTHON_DEFAULT_OSX}
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 DOWNLOADS_SDIR=downloads
 WORKING_SDIR=working
@@ -96,6 +90,36 @@ function fill_pyver {
     fi
 }
 
+function macpython_sdk_list_for_version {
+    # return a list of SDK targets supported for a given CPython version
+    # Parameters
+    #   $py_version (python version in major.minor.extra format)
+    # eg
+    #  macpython_sdks_for_version 2.7.15
+    #  >> 10.6 10.9
+    local _ver=$(fill_pyver $1)
+    local _major=${_ver%%.*}
+    local _return
+
+    if [ "$_major" -eq "2" ]; then
+        _return="10.6"
+        [ $(lex_ver $_ver) -ge $(lex_ver 2.7.15) ] && _return="$_return 10.9"
+    elif [ "$_major" -eq "3" ]; then
+        [ $(lex_ver $_ver) -lt $(lex_ver 3.8)    ] && _return="10.6"
+        [ $(lex_ver $_ver) -ge $(lex_ver 3.6.5)  ] && _return="$_return 10.9"
+    else
+        echo "Error version=${_ver}, expecting 2.x or 3.x" 1>&2
+        exit 1
+    fi
+    echo $_return
+}
+
+function macpython_sdk_for_version {
+    # assumes the output of macpython_sdk_list_for_version is a list
+    # of SDK vesions XX.Y in sorted order, eg "10.6 10.9" or "10.9"
+    echo $(macpython_sdk_list_for_version $1) | awk -F' ' '{print $NF}'
+}
+
 function pyinst_ext_for_version {
     # echo "pkg" or "dmg" depending on the passed Python version
     # Parameters
@@ -123,13 +147,11 @@ function pyinst_fname_for_version {
     # Parameters
     #   $py_version (Python version in major.minor.extra format)
     #   $py_osx_ver: {major.minor | not defined}
-    #       if defined, the macOS version that Python is built for, e.g.
-    #       "10.6" or "10.9", if not defined, uses the default
-    #       MACPYTHON_DEFAULT_OSX
-    #       Note: this is the version the Python is built for, and hence
-    #       the min version supported, NOT the version of the current system
+    #       if defined, the minimum macOS SDK version that Python is
+    #       built for, eg: "10.6" or "10.9", if not defined, infers
+    #       this from $py_version using macpython_sdk_for_version
     local py_version=$1
-    local py_osx_ver=${2:-$MACPYTHON_DEFAULT_OSX}
+    local py_osx_ver=${2:-$(macpython_sdk_for_version $py_version)}
     local inst_ext=$(pyinst_ext_for_version $py_version)
     echo "python-${py_version}-macosx${py_osx_ver}.${inst_ext}"
 }
