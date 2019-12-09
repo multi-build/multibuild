@@ -116,7 +116,7 @@ function macpython_sdk_list_for_version {
 
 function macpython_sdk_for_version {
     # assumes the output of macpython_sdk_list_for_version is a list
-    # of SDK vesions XX.Y in sorted order, eg "10.6 10.9" or "10.9"
+    # of SDK versions XX.Y in sorted order, eg "10.6 10.9" or "10.9"
     echo $(macpython_sdk_list_for_version $1) | awk -F' ' '{print $NF}'
 }
 
