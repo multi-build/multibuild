@@ -9,6 +9,7 @@ source tests/test_fill_submodule.sh
 
 if [ -n "$IS_OSX" ]; then
     source osx_utils.sh
+    MB_PYTHON_OSX_VER=${MB_PYTHON_OSX_VER:-$(macpython_sdk_for_version $MB_PYTHON_VERSION)}
 
     # To work round:
     # https://travis-ci.community/t/syntax-error-unexpected-keyword-rescue-expecting-keyword-end-in-homebrew/5623
