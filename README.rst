@@ -60,11 +60,11 @@ shell scripts listed above are available for your build and test.
 Build options are controlled mainly by the following environment
 variables:
 
-* ``MB_PYTHON_VER`` selects the Python version built for, in the format ``major.minor.patch`` for CPython, or ``pypy-major.minor`` for PyPy.
-* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version targetted, where more than one is available for the selected `MB_PYTHON_VER`. It defaults to the latest, and in most cases does not need to be set explicitly.
-* ``PLAT`` sets the architecture(s) built for, either ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. For normal usage you should not need to set this variable either.
+* ``MB_PYTHON_VER`` selects the Python version targetted, in the format ``major.minor.patch`` for CPython, or ``pypy-major.minor`` for PyPy.
+* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version targetted for any C extensions in the wheel being build. Its only used for CPython builds, and defaults to the latest available. In most this is sufficient and you should not need to set it explicitly.
+* ``PLAT`` sets the architecture(s) built for, either ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. It defaults to the arches supported by the target Python version (the ones selected by ``MB_PYTHON_VER`` and ``MB_PYTHON_OSX_VER``). For normal usage you should not need to set this variable either.
 
-Valid combinations of ``MB_PYTHON_VER`` and ``MB_PYTHON_OSX_VER`` for CPython correspond to Python versions available for download at `python.org <https://www.python.org/downloads/mac-osx/>`_.
+Valid combinations of ``MB_PYTHON_VER`` and ``MB_PYTHON_OSX_VER`` for CPython correspond to CPython versions available for download at `python.org <https://www.python.org/downloads/mac-osx/>`_.
 
 The ``build_wheel`` function builds the wheel, and ``install_run``
 function installs and tests it.  Look in ``multibuild/common_utils.sh`` for
