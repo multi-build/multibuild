@@ -15,7 +15,7 @@ The Travis CI scripts are designed to build *and test*:
 
 You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7 and 3.8
 
-The small innovation here is that you can test against 32-bit builds, and both
+The small innovation here is that you can test against Linux 32-bit builds, both
 wide and narrow Unicode Python 2 builds, which was not easy on the default
 Travis CI configurations.
 
