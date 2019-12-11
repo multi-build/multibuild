@@ -9,11 +9,11 @@ wheels on the `AppVeyor <https://ci.appveyor.com/>`_ infrastructure.
 The Travis CI scripts are designed to build *and test*:
 
 * 64-bit macOS wheels built for macOS 10.9+
-* 32/64-bit amacOS wheels built for macOS 10.6+
+* 32/64-bit macOS wheels built for macOS 10.6+
 * 64-bit ``manylinuxX_x86_64`` wheels, both narrow and wide Unicode builds, where `X` is any valid Manylinux version, such as `1`, or `2010`
 * 32-bit ``manylinuxX_i686`` wheels, both narrow and wide Unicode builds
 
-You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8
+You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7 and 3.8
 
 The small innovation here is that you can test against 32-bit builds, and both
 wide and narrow Unicode Python 2 builds, which was not easy on the default
@@ -53,7 +53,7 @@ The following bash scripts are sourced in this order::
 
 See ``multibuild/travis_osx_steps.sh``
 
-The macOS build / test phases run on a VM started by Travis CI.
+The macOS build / test phases run on a macOS VM started by Travis CI.
 Therefore any environment variable defined in ``.travis.yml`` or the bash
 shell scripts listed above are available for your build and test.
 
@@ -68,7 +68,8 @@ Valid combinations of ``MB_PYTHON_VER`` and ``MB_PYTHON_OSX_VER`` for CPython co
 
 The ``build_wheel`` function builds the wheel, and ``install_run``
 function installs and tests it.  Look in ``multibuild/common_utils.sh`` for
-default definitions of these functions.  See below for more details.
+default definitions of these functions.  See below for more details, many of which are common
+to macOS and Linux.
 
 Manylinux
 =========
