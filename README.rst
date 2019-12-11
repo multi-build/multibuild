@@ -8,14 +8,14 @@ wheels on the `AppVeyor <https://ci.appveyor.com/>`_ infrastructure.
 
 The Travis CI scripts are designed to build *and test*:
 
-* Dual 32/64-bit architecture macOS wheels built for macOS 10.6+
 * 64-bit macOS wheels built for macOS 10.9+
+* 64/32-bit macOS wheels built for macOS 10.6+
 * 64-bit ``manylinuxX_x86_64`` wheels, both narrow and wide Unicode builds, where `X` is any valid Manylinux version, such as `1`, or `2010`
 * 32-bit ``manylinuxX_i686`` wheels, both narrow and wide Unicode builds
 
-You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7.
+You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7 and 3.8
 
-The small innovation here is that you can test against 32-bit builds, and both
+The small innovation here is that you can test against Linux 32-bit builds, both
 wide and narrow Unicode Python 2 builds, which was not easy on the default
 Travis CI configurations.
 
@@ -36,15 +36,13 @@ test wheels.
 Configuration is by overriding the default build function, and defining a test
 function.
 
-The bash scripts are layered, in the sense that they loaded in the following
-sequence:
+The bash scripts are layered, in the sense that they are composed of a number of scripts
+which are sourced in sequence, each one potentially overriding previous ones.
 
 macOS
 =====
 
-These bash scripts get sourced one after the other,
-so that functions and variables defined in later scripts can overwrite
-functions and variables in earlier scripts::
+The following bash scripts are sourced in this order::
 
     multibuild/common_utils.sh
     multibuild/osx_utils.sh
@@ -53,7 +51,7 @@ functions and variables in earlier scripts::
     multibuild/library_builders.sh
     config.sh
 
-See ``multibuild/travis_osx_steps.sh`` to review the source order.
+See ``multibuild/travis_osx_steps.sh``
 
 The macOS build / test phases run on the macOS VM started by Travis CI.
 Therefore any environment variable defined in ``.travis.yml`` or the bash
@@ -62,15 +60,19 @@ shell scripts listed above are available for your build and test.
 Build options are controlled mainly by the following environment
 variables:
 
-* ``MB_PYTHON_VER`` selects the Python version built for, in the format ``major.minor.patch`` for CPython, or ``pypy-major.minor`` for PyPy
-* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version targetted. For CPython it may be set to 10.9 or 10.6 (the default). It is currently ignored for PyPy builds.
-* ``PLAT`` sets the architecture(s) built, either ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. The default is the same as the Python version selected by ``MB_PYTHON_VER`` and ``MB_PYTHON_OSX_VER``: 64-bit for PyPy or CPython 10.9 builds, and 64/32-bit for CPython 10.6 builds. For normal usage you should not need to set this variable.
+* ``MB_PYTHON_VER`` sets the Python version targetted: ``major.minor.patch`` for CPython, or ``pypy-major.minor`` for PyPy.
+* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C extensions. For CPython targets it may be set to 10.6 or 10.9, provided a corresponding Python build is available at `python.org <https://www.python.org/downloads/mac-osx/>`_. It defaults to the highest version available. It's ignored for PyPy targets.
+* ``PLAT`` sets the architectures built for any C extensions: ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. It defaults to the same arches as the target Python version: 64-bit for CPython macOS 10.9 or PyPy, and 64/32-bit for CPython 10.6.
 
-Valid combinations of ``MB_PYTHON_VER`` and ``MB_PYTHON_OSX_VER`` for CPython correspond to Python versions available for download at `python.org <https://www.python.org/downloads/mac-osx/>`_.
+In most cases it's best to rely on the defaults for ``MB_PYTHON_OSX_VER`` and ``PLAT``, rather than setting them explicitly. Examples of exceptions to this guideline include: 
 
-The ``build_wheel`` function builds the wheel, and the ``install_run``
-function installs the wheel and tests it.  Look in ``multibuild/common_utils.sh`` for
-default definitions of these functions.  See below for more details.
+* setting ``MB_PYTHON_OSX_VER=10.6`` to build a 10.6 64/32-bit CPython wheel for Python 2.7 (default for 2.7 is 10.9 64-bit)
+* setting ``MB_PYTHON_OSX_VER=10.6 and PLAT=x86_64`` to build a 10.6 64-bit only wheel (10.6 would normally be 64/32-bit). Such a wheel would still have a platform tag of ``macosx_10_6_intel`` , advertising support for both 64 and 32-bit, but wouldnt work in 32-bit mode. This may be OK given how unlikely it is that there is still anyone actually running Python on macOS in 32-bit mode.
+
+The ``build_wheel`` function builds the wheel, and ``install_run``
+function installs and tests it.  Look in ``multibuild/common_utils.sh`` for
+default definitions of these functions.  See below for more details, many of which are common
+to macOS and Linux.
 
 Manylinux
 =========
@@ -103,14 +105,14 @@ matching Docker image.
 ``multibuild/travis_linux_steps.sh`` defines the ``build_wheel`` function,
 which starts up the Manylinux1 Docker container to run a wrapper script
 ``multibuild/docker_build_wrap.sh``, that (within the container) sources the
-following bash scripts:
+following bash scripts::
 
-* multibuild/common_utils.sh
-* multibuild/manylinux_utils.sh
-* env_vars.sh
-* multibuild/configure_build.sh
-* multibuild/library_builders.sh
-* config.sh
+    multibuild/common_utils.sh
+    multibuild/manylinux_utils.sh
+    env_vars.sh
+    multibuild/configure_build.sh
+    multibuild/library_builders.sh
+    config.sh
 
 See ``docker_build_wrap.sh`` to review the order of script sourcing.
 
@@ -129,10 +131,10 @@ Testing is in an Ubuntu 14.04 Docker container - see
 ``multibuild/docker_test_wrap.sh``.  ``multibuild/travis_linux_steps.sh``
 defines the ``install_run`` function, which starts up the testing Docker
 container with a wrapper script ``multibuild/docker_test_wrap.sh``.  The
-wrapper script sources the following bash scripts:
+wrapper script sources the following bash scripts::
 
-* multibuild/common_utils.sh
-* config.sh
+    multibuild/common_utils.sh
+    config.sh
 
 See ``docker_test_wrap.sh`` for script source order.
 
@@ -222,7 +224,11 @@ To use these scripts
 
     # For CPython macOS builds only, the minimum supported macOS version and
     # architectures of any C extensions in the wheel are set with the variable
-    # MB_PYTHON_OSX_VER: 10.9 (64-bit only) or 10.6 (64/32-bit dual arch).
+    # MB_PYTHON_OSX_VER: 10.9 (64-bit only) or 10.6 (64/32-bit dual arch). By
+    # default this is set to the highest available for the Python version selected
+    # using MB_PYTHON_VERSION. You should only need to set this explicitly if you
+    # are building a 10.6 dual-arch build for a CPython version where both a 10.9 and
+    # 10.6 build are available (for example, 2.7 or 3.7).
     # All PyPy macOS builds are 64-bit only.
 
     # Required in Linux to invoke `docker` ourselves
@@ -266,10 +272,10 @@ To use these scripts
         - os: osx
           env:
             - MB_PYTHON_VERSION=2.7
+            - MB_PYTHON_OSX_VER=10.6
         - os: osx
           env:
             - MB_PYTHON_VERSION=2.7
-            - MB_PYTHON_OSX_VER=10.9
         - os: osx
           env:
             - MB_PYTHON_VERSION=3.5
@@ -279,7 +285,13 @@ To use these scripts
         - os: osx
           env:
             - MB_PYTHON_VERSION=3.7
-            - MB_PYTHON_OSX_VER=10.9
+            - MB_PYTHON_OSX_VER=10.6
+        - os: osx
+          env:
+            - MB_PYTHON_VERSION=3.7
+        - os: osx
+          env:
+            - MB_PYTHON_VERSION=3.8
         - os: osx
           language: generic
           env:
