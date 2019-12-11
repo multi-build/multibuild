@@ -36,7 +36,7 @@ test wheels.
 Configuration is by overriding the default build function, and defining a test
 function.
 
-The bash scripts are layered, in the sense that they are composed of a number scripts
+The bash scripts are layered, in the sense that they are composed of a number of scripts
 which are sourced in sequence, each one potentially overriding previous ones.
 
 macOS
@@ -53,7 +53,7 @@ The following bash scripts are sourced in this order::
 
 See ``multibuild/travis_osx_steps.sh``
 
-The macOS build / test phases run on a macOS VM started by Travis CI.
+The macOS build / test phases run on the macOS VM started by Travis CI.
 Therefore any environment variable defined in ``.travis.yml`` or the bash
 shell scripts listed above are available for your build and test.
 
@@ -61,13 +61,13 @@ Build options are controlled mainly by the following environment
 variables:
 
 * ``MB_PYTHON_VER`` sets the Python version targetted: ``major.minor.patch`` for CPython, or ``pypy-major.minor`` for PyPy.
-* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C extensions. For CPython targets it may be set to 10.6 or 10.9, provided a corresponding Python build is available at `python.org <https://www.python.org/downloads/mac-osx/>`_. It defaults to the highest version available. Its ignored for PyPy targets.
+* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C extensions. For CPython targets it may be set to 10.6 or 10.9, provided a corresponding Python build is available at `python.org <https://www.python.org/downloads/mac-osx/>`_. It defaults to the highest version available. It's ignored for PyPy targets.
 * ``PLAT`` sets the architectures built for any C extensions: ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. It defaults to the same arches as the target Python version: 64-bit for CPython macOS 10.9 or PyPy, and 64/32-bit for CPython 10.6.
 
-In most cases its best to rely on the defaults for ``MB_PYTHON_OSX_VER`` and ``PLAT``, rather than setting them explicitly. Examples of exceptions to this guideline include: 
+In most cases it's best to rely on the defaults for ``MB_PYTHON_OSX_VER`` and ``PLAT``, rather than setting them explicitly. Examples of exceptions to this guideline include: 
 
 * setting ``MB_PYTHON_OSX_VER=10.6`` to build a 10.6 64/32-bit CPython wheel for Python 2.7 (default for 2.7 is 10.9 64-bit)
-* setting ``MB_PYTHON_OSX_VER=10.6 and PLAT=x86_64`` to build a 10.6 64-bit only wheel (10.6 would normally be 64/32-bit). Such a wheel would still have a platform tag of ``macosx_10_6_intel`` , advertisting support for both 64 and 32-bit, but wouldnt work in 32-bit mode. This may be OK given how unlikely it is that there is still anyone actually running Python on macOS in 32-bit mode.
+* setting ``MB_PYTHON_OSX_VER=10.6 and PLAT=x86_64`` to build a 10.6 64-bit only wheel (10.6 would normally be 64/32-bit). Such a wheel would still have a platform tag of ``macosx_10_6_intel`` , advertising support for both 64 and 32-bit, but wouldnt work in 32-bit mode. This may be OK given how unlikely it is that there is still anyone actually running Python on macOS in 32-bit mode.
 
 The ``build_wheel`` function builds the wheel, and ``install_run``
 function installs and tests it.  Look in ``multibuild/common_utils.sh`` for
