@@ -76,14 +76,14 @@ function fill_pyver {
         echo $ver
     elif [ $ver == 2 ] || [ $ver == "2.7" ]; then
         echo $LATEST_2p7
-    elif [ $ver == 3 ] || [ $ver == "3.7" ]; then
+    elif [ $ver == 3 ] || [ $ver == "3.8" ]; then
+        echo $LATEST_3p8
+    elif [ $ver == "3.7" ]; then
         echo $LATEST_3p7
     elif [ $ver == "3.6" ]; then
         echo $LATEST_3p6
     elif [ $ver == "3.5" ]; then
         echo $LATEST_3p5
-    elif [ $ver == "3.8" ]; then
-        echo $LATEST_3p8
     else
         echo "Can't fill version $ver" 1>&2
         exit 1
