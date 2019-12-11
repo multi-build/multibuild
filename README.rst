@@ -61,10 +61,11 @@ Build options are controlled mainly by the following environment
 variables:
 
 * ``MB_PYTHON_VER`` selects the Python version targetted, in the format ``major.minor.patch`` for CPython, or ``pypy-major.minor`` for PyPy.
-* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version targetted for any C extensions in the wheel being build. Its only used for CPython builds, and defaults to the latest available. In most this is sufficient and you should not need to set it explicitly.
-* ``PLAT`` sets the architecture(s) built for, either ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. It defaults to the arches supported by the target Python version (the ones selected by ``MB_PYTHON_VER`` and ``MB_PYTHON_OSX_VER``). For normal usage you should not need to set this variable either.
+* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C extensions being built. Its currently ignored for PyPy targets. For CPython targets it may be set to 10.6 or 10.9, and defaults to the highest available, which is usually the right choice. 
+* ``PLAT`` sets the architecture(s) built for, either ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. It defaults to 64-bit for CPython macOS 10.9 or PyPy, and 64/32-bit for CPython 10.6 targets. 
 
-Valid combinations of ``MB_PYTHON_VER`` and ``MB_PYTHON_OSX_VER`` for CPython correspond to CPython versions available for download at `python.org <https://www.python.org/downloads/mac-osx/>`_.
+In most cases, ``MB_PYTHON_OSX_VER`` and ``PLAT`` dont need to be set explicitly. If ``MB_PYTHON_OSX_VER`` is set for a CPython target, it must correspose to a build available for download at `python.org <https://www.python.org/downloads/mac-osx/>`_ for the Python version set by ``MB_PYTHON_VER``
+Its pretty rare that you'd want to set ``PLAT`` at all - an example might be if you want to save build time by not building the 32-bit arch for a CPython 10.6 target, accepting that technically you'd be breaking spec, even if practically its very unlikely someone would try to use the wheel in 32 bit mode.
 
 The ``build_wheel`` function builds the wheel, and ``install_run``
 function installs and tests it.  Look in ``multibuild/common_utils.sh`` for
