@@ -9,7 +9,7 @@ wheels on the `AppVeyor <https://ci.appveyor.com/>`_ infrastructure.
 The Travis CI scripts are designed to build *and test*:
 
 * 64-bit macOS wheels built for macOS 10.9+
-* 32/64-bit macOS wheels built for macOS 10.6+
+* 64/32-bit macOS wheels built for macOS 10.6+
 * 64-bit ``manylinuxX_x86_64`` wheels, both narrow and wide Unicode builds, where `X` is any valid Manylinux version, such as `1`, or `2010`
 * 32-bit ``manylinuxX_i686`` wheels, both narrow and wide Unicode builds
 
