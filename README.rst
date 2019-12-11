@@ -60,12 +60,13 @@ shell scripts listed above are available for your build and test.
 Build options are controlled mainly by the following environment
 variables:
 
-* ``MB_PYTHON_VER`` selects the Python version targetted, in the format ``major.minor.patch`` for CPython, or ``pypy-major.minor`` for PyPy.
-* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C extensions being built. Its currently ignored for PyPy targets. For CPython targets it may be set to 10.6 or 10.9, and defaults to the highest available, which is usually the right choice. 
-* ``PLAT`` sets the architecture(s) built for, either ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. It defaults to 64-bit for CPython macOS 10.9 or PyPy, and 64/32-bit for CPython 10.6 targets. 
+* ``MB_PYTHON_VER`` sets the Python version targetted: ``major.minor.patch`` for CPython, or ``pypy-major.minor`` for PyPy.
+* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C extensions. For CPython targets it may be set to 10.6 or 10.9, provided a corresponding Python build is available at `python.org <https://www.python.org/downloads/mac-osx/>`_. It defaults to the highest version available. Its ignored for PyPy targets.
+* ``PLAT`` sets the architectures built for any C extensions: ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. It defaults to the same arches as the target Python version: 64-bit for CPython macOS 10.9 or PyPy, and 64/32-bit for CPython 10.6.
 
-In most cases, ``MB_PYTHON_OSX_VER`` and ``PLAT`` dont need to be set explicitly. If ``MB_PYTHON_OSX_VER`` is set for a CPython target, it must correspose to a build available for download at `python.org <https://www.python.org/downloads/mac-osx/>`_ for the Python version set by ``MB_PYTHON_VER``.
-Its pretty rare that you'd want to set ``PLAT`` at all - an example might be if you want to save build time by not building the 32-bit arch for a CPython 10.6 target, accepting that technically you'd be breaking spec, even if practically its very unlikely someone would try to use the wheel in 32 bit mode.
+In most cases its best to rely on the defaults for ``MB_PYTHON_OSX_VER`` and ``PLAT``, rather than setting them explicitly. Examples of exceptions to this guideline include: 
+* setting ``MB_PYTHON_OSX_VER=10.6`` to build a 10.6 64/32-bit CPython wheel for Python 2.7 (default for 2.7 is 10.9 64-bit)
+* setting ``MB_PYTHON_OSX_VER=10.6 and PLAT=x86_64``to build a 10.6 64-bit only wheel (10.6 would normally be 64/32-bit). Such a wheel would still have a platform tag of ``macosx_10_6_intel`, advertisting support for both 64 and 32-bit, but wouldnt work in 32-bit mode. This may be OK given how unlikely it is that there is still anyone actually running Python on macOS in 32-bit mode.
 
 The ``build_wheel`` function builds the wheel, and ``install_run``
 function installs and tests it.  Look in ``multibuild/common_utils.sh`` for
