@@ -15,17 +15,17 @@ ZLIB_VERSION="${ZLIB_VERSION:-1.2.10}"
 LIBPNG_VERSION="${LIBPNG_VERSION:-1.6.21}"
 BZIP2_VERSION="${BZIP2_VERSION:-1.0.6}"
 FREETYPE_VERSION="${FREETYPE_VERSION:-2.6.3}"
-TIFF_VERSION="${TIFF_VERSION:-4.0.6}"
+TIFF_VERSION="${TIFF_VERSION:-4.1.0}"
 JPEG_VERSION="${JPEG_VERSION:-9b}"
 OPENJPEG_VERSION="${OPENJPEG_VERSION:-2.1}"
-LCMS2_VERSION="${LCMS2_VERSION:-2.7}"
+LCMS2_VERSION="${LCMS2_VERSION:-2.9}"
 GIFLIB_VERSION="${GIFLIB_VERSION:-5.1.3}"
 LIBWEBP_VERSION="${LIBWEBP_VERSION:-0.5.0}"
 XZ_VERSION="${XZ_VERSION:-5.2.2}"
-LIBYAML_VERSION="${LIBYAML_VERSION:-0.1.5}"
+LIBYAML_VERSION="${LIBYAML_VERSION:-0.2.2}"
 SZIP_VERSION="${SZIP_VERSION:-2.1.1}"
 HDF5_VERSION="${HDF5_VERSION:-1.10.4}"
-LIBAEC_VERSION="${LIBAEC_VERSION:-0.3.3}"
+LIBAEC_VERSION="${LIBAEC_VERSION:-1.0.4}"
 LZO_VERSION=${LZO_VERSION:-2.10}
 LZF_VERSION="${LZF_VERSION:-3.6}"
 BLOSC_VERSION=${BLOSC_VERSION:-1.10.2}
@@ -40,7 +40,7 @@ RAGEL_VERSION=${RAGEL_VERSION:-6.10}
 FLEX_VERSION=${FLEX_VERSION:-2.6.4}
 BISON_VERSION=${BISON_VERSION:-3.0.4}
 FFTW_VERSION=${FFTW_VERSION:-3.3.7}
-CFITSIO_VERSION=${CFITSIO_VERSION:-3370}
+CFITSIO_VERSION=${CFITSIO_VERSION:-3450}
 OPENSSL_ROOT=openssl-1.0.2t
 # Hash from https://www.openssl.org/source/openssl-1.0.2?.tar.gz.sha256
 OPENSSL_HASH=14cb464efe7ac6b54799b34456bd69558a749a4931ecfd9cf9f71d7881cac7bc
@@ -94,6 +94,9 @@ function build_openblas {
     if [ -n "$IS_OSX" ]; then
         brew install openblas
         brew link --force openblas
+    elif [ ! -v IS_X86 ]; then
+		# Skip this for now until we can build a suitable tar.gz
+        return;
     else
         mkdir -p $ARCHIVE_SDIR
         local plat=${1:-${PLAT:-x86_64}}
@@ -236,10 +239,10 @@ function build_hdf5 {
 
 function build_libaec {
     if [ -e libaec-stamp ]; then return; fi
-    local root_name=libaec-0.3.3
+    local root_name=libaec-1.0.4
     local tar_name=${root_name}.tar.gz
     # Note URL will change for each version
-    fetch_unpack https://gitlab.dkrz.de/k202009/libaec/uploads/48398bd5b7bc05a3edb3325abfeac864/${tar_name}
+    fetch_unpack https://gitlab.dkrz.de/k202009/libaec/uploads/ea0b7d197a950b0c110da8dfdecbb71f/${tar_name}
     (cd $root_name \
         && ./configure --prefix=$BUILD_PREFIX \
         && make \

@@ -102,7 +102,7 @@ alias gh-clone=gh_clone
 function set_opts {
     # Set options from input options string (in $- format).
     local opts=$1
-    local chars="exhimBH"
+    local chars="exhmBH"
     for (( i=0; i<${#chars}; i++ )); do
         char=${chars:$i:1}
         [ -n "${opts//[^${char}]/}" ] && set -$char || set +$char
@@ -309,6 +309,9 @@ function get_platform {
     # Report platform as given by uname
     python -c 'import platform; print(platform.uname()[4])'
 }
+
+if [ "$(get_platform)" == x86_64 ] || \
+    [ "$(get_platform)" == i686 ]; then IS_X86=1; fi
 
 function get_distutils_platform {
     # Report platform as given by distutils get_platform.

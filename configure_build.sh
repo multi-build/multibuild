@@ -41,6 +41,7 @@ else
     export CFLAGS="${CFLAGS:-$STRIP_FLAGS}"
     export CXXFLAGS="${CXXFLAGS:-$STRIP_FLAGS}"
     export FFLAGS="${FFLAGS:-$STRIP_FLAGS}"
+    yum install -y libtool
 fi
 
 # Promote BUILD_PREFIX on search path to any newly built libs
