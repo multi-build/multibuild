@@ -102,7 +102,7 @@ alias gh-clone=gh_clone
 function set_opts {
     # Set options from input options string (in $- format).
     local opts=$1
-    local chars="exhimBH"
+    local chars="exhmBH"
     for (( i=0; i<${#chars}; i++ )); do
         char=${chars:$i:1}
         [ -n "${opts//[^${char}]/}" ] && set -$char || set +$char
@@ -310,6 +310,9 @@ function get_platform {
     python -c 'import platform; print(platform.uname()[4])'
 }
 
+if [ "$(get_platform)" == x86_64 ] || \
+    [ "$(get_platform)" == i686 ]; then IS_X86=1; fi
+
 function get_distutils_platform {
     # Report platform as given by distutils get_platform.
     # This is the platform tag that pip will use.
@@ -364,7 +367,7 @@ function fill_submodule {
 
 PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
 
-# As of 2019-05-15, the latest verions of PyPy.
+# As of 2019-10-15, the latest verions of PyPy.
 LATEST_PP_4p0=4.0.1
 LATEST_PP_4=$LATEST_PP_4p0
 
@@ -383,7 +386,8 @@ LATEST_PP_6=$LATEST_PP_6p0
 
 LATEST_PP_7p0=7.0.0
 LATEST_PP_7p1=7.1.1
-LATEST_PP_7=$LATEST_PP_7p1
+LATEST_PP_7p2=7.2.0
+LATEST_PP_7=$LATEST_PP_7p2
 
 function unroll_version {
     # Convert major or major.minor format to major.minor.micro using the above

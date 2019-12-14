@@ -8,21 +8,21 @@ wheels on the `AppVeyor <https://ci.appveyor.com/>`_ infrastructure.
 
 The Travis CI scripts are designed to build *and test*:
 
-* Dual 32/64-bit architecture macOS wheels built for macOS 10.6+;
-* 64-bit macOS wheels built for macOS 10.9+;
-* 64-bit ``manylinuxX_x86_64`` wheels, both narrow and wide Unicode builds, where `X` is any valid Manylinux version, such as `1`, or `2010`.
-* 32-bit ``manylinuxX_i686`` wheels, both narrow and wide Unicode builds.
+* 64-bit macOS wheels built for macOS 10.9+
+* 64/32-bit macOS wheels built for macOS 10.6+
+* 64-bit ``manylinuxX_x86_64`` wheels, both narrow and wide Unicode builds, where `X` is any valid Manylinux version, such as `1`, or `2010`
+* 32-bit ``manylinuxX_i686`` wheels, both narrow and wide Unicode builds
 
-You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7.
+You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7 and 3.8
 
-The small innovation here is that you can test against 32-bit builds, and both
+The small innovation here is that you can test against Linux 32-bit builds, both
 wide and narrow Unicode Python 2 builds, which was not easy on the default
 Travis CI configurations.
 
 The AppVeyor setup is designed to build *and test*:
 
-* 64-bit Windows ``win_amd64`` wheels;
-* 32-bit Windows ``win32`` wheels.
+* 64-bit Windows ``win_amd64`` wheels
+* 32-bit Windows ``win32`` wheels
 
 You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7.
 
@@ -36,41 +36,43 @@ test wheels.
 Configuration is by overriding the default build function, and defining a test
 function.
 
-The bash scripts are layered, in the sense that they loaded in the following
-sequence:
+The bash scripts are layered, in the sense that they are composed of a number of scripts
+which are sourced in sequence, each one potentially overriding previous ones.
 
 macOS
 =====
 
-See ``multibuild/travis_osx_steps.sh``.
+The following bash scripts are sourced in this order::
 
-For build and test phases, these bash scripts get sourced one after the other,
-so that functions and variables defined in later scripts can overwrite
-functions and variables in earlier scripts:
+    multibuild/common_utils.sh
+    multibuild/osx_utils.sh
+    env_vars.sh
+    multibuild/configure_build.sh
+    multibuild/library_builders.sh
+    config.sh
 
-* multibuild/common_utils.sh
-* multibuild/osx_utils.sh
-* env_vars.sh
-* multibuild/configure_build.sh
-* multibuild/library_builders.sh
-* config.sh
-
-See ``travis_osx_steps.sh`` to review source order.
+See ``multibuild/travis_osx_steps.sh``
 
 The macOS build / test phases run on the macOS VM started by Travis CI.
-Therefore any environment variable defined in the ``.travis.yml`` or bash
+Therefore any environment variable defined in ``.travis.yml`` or the bash
 shell scripts listed above are available for your build and test.
 
-macOS builds may be targeted either at macOS 10.6+
-(dual arch 64 / 32 bit) or macOS 10.9+ (64b only). These depend on the
-corresponding build of python from https://www.python.org/downloads/mac-osx/.
-At the time of writing, 10.9+ / 64 bit builds are supported for Python
-versions 3.6.5 / 2.7.15 and above. If you want to build for an older version
-of Python, you'll have to target 10.6+ / dual arch.
+Build options are controlled mainly by the following environment
+variables:
 
-The ``build_wheel`` function builds the wheel, and the ``install_run``
-function installs the wheel and tests it.  Look in ``common_utils.sh`` for
-default definitions of these functions.  See below for more details.
+* ``MB_PYTHON_VER`` sets the Python version targetted: ``major.minor.patch`` for CPython, or ``pypy-major.minor`` for PyPy.
+* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C extensions. For CPython targets it may be set to 10.6 or 10.9, provided a corresponding Python build is available at `python.org <https://www.python.org/downloads/mac-osx/>`_. It defaults to the highest version available. It's ignored for PyPy targets.
+* ``PLAT`` sets the architectures built for any C extensions: ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. It defaults to the same arches as the target Python version: 64-bit for CPython macOS 10.9 or PyPy, and 64/32-bit for CPython 10.6.
+
+In most cases it's best to rely on the defaults for ``MB_PYTHON_OSX_VER`` and ``PLAT``, rather than setting them explicitly. Examples of exceptions to this guideline include: 
+
+* setting ``MB_PYTHON_OSX_VER=10.6`` to build a 10.6 64/32-bit CPython wheel for Python 2.7 (default for 2.7 is 10.9 64-bit)
+* setting ``MB_PYTHON_OSX_VER=10.6 and PLAT=x86_64`` to build a 10.6 64-bit only wheel (10.6 would normally be 64/32-bit). Such a wheel would still have a platform tag of ``macosx_10_6_intel`` , advertising support for both 64 and 32-bit, but wouldnt work in 32-bit mode. This may be OK given how unlikely it is that there is still anyone actually running Python on macOS in 32-bit mode.
+
+The ``build_wheel`` function builds the wheel, and ``install_run``
+function installs and tests it.  Look in ``multibuild/common_utils.sh`` for
+default definitions of these functions.  See below for more details, many of which are common
+to macOS and Linux.
 
 Manylinux
 =========
@@ -82,35 +84,33 @@ a clean Ubuntu 14.04 container.
 Build phase
 -----------
 
-Specify the Manylinux version to build for with the `MB_ML_VER` environment variable.  The default version is `1`.  Versions that are currently valid are:
+Specify the Manylinux version to build for with the ``MB_ML_VER`` environment
+variable. The default version is ``1``.  Versions that are currently valid are:
 
-* `1` (see [PEP 513](https://www.python.org/dev/peps/pep-0513);
-* `2010` (see [PEP
+* ``1`` corresponding to manylinux1 (see [PEP 513](https://www.python.org/dev/peps/pep-0513);
+* ``2010``  corresponding to manylinux2010 (see [PEP
   571](https://www.python.org/dev/peps/pep-0571).
-
-At some point `2014` will be a valid version - see [PEP
-599](https://www.python.org/dev/peps/pep-0599).
+* ``2014`` corresponding to manylinux2014 and adds more architectures to ``PLAT``
+  (see [PEP 599](https://www.python.org/dev/peps/pep-0599).
 
 The environment variable specified which Manylinux docker container you are building in.
 
-The `PLAT` environment variable can be one of `x86_64` or `i686`, specifying 64-bit and 32-bit builds, respectively.  The default is 64-bit.
-
-At the time of writing, Manylinux2010 only supports 64-bit
-builds, so `MB_ML_VER=2010` and `PLAT=i686` is an invalid
-combination, and will generate an error when trying to find the
-matching Docker image.
+The ``PLAT`` environment variable can be one of ``x86_64``, ``i686`` ``s390x``,
+``ppc64le``, or ``aarch64``, specifying 64-bit x86, 32-bit x86, 64-bit s390x,
+PowerPC, and ARM builds, respectively.  The default is ``x86_64``. Only ``x86_64``
+and ``i686`` are valid on manylinux1 and manylinux2010.
 
 ``multibuild/travis_linux_steps.sh`` defines the ``build_wheel`` function,
 which starts up the Manylinux1 Docker container to run a wrapper script
 ``multibuild/docker_build_wrap.sh``, that (within the container) sources the
-following bash scripts:
+following bash scripts::
 
-* multibuild/common_utils.sh
-* multibuild/manylinux_utils.sh
-* env_vars.sh
-* multibuild/configure_build.sh
-* multibuild/library_builders.sh
-* config.sh
+    multibuild/common_utils.sh
+    multibuild/manylinux_utils.sh
+    env_vars.sh
+    multibuild/configure_build.sh
+    multibuild/library_builders.sh
+    config.sh
 
 See ``docker_build_wrap.sh`` to review the order of script sourcing.
 
@@ -129,10 +129,10 @@ Testing is in an Ubuntu 14.04 Docker container - see
 ``multibuild/docker_test_wrap.sh``.  ``multibuild/travis_linux_steps.sh``
 defines the ``install_run`` function, which starts up the testing Docker
 container with a wrapper script ``multibuild/docker_test_wrap.sh``.  The
-wrapper script sources the following bash scripts:
+wrapper script sources the following bash scripts::
 
-* multibuild/common_utils.sh
-* config.sh
+    multibuild/common_utils.sh
+    config.sh
 
 See ``docker_test_wrap.sh`` for script source order.
 
@@ -151,7 +151,7 @@ default the function that is run on macOS, and in the Manylinux container for
 the build phase, is defined in ``multibuild/common_utils.sh``.  You can
 override the default function in the project ``config.sh`` file (see below).
 
-If you are building a wheel from pypi, rather than from a source repository,
+If you are building a wheel from PyPI, rather than from a source repository,
 you can use the ``build_index_wheel`` command, again defined in
 ``multibuild/common_utils.sh``.
 
@@ -196,12 +196,11 @@ To use these scripts
             # Commit from your-project that you want to build
             - BUILD_COMMIT=v0.1.0
             # pip dependencies to _build_ your project
-            - BUILD_DEPENDS="Cython numpy"
+            - BUILD_DEPENDS="cython numpy"
             # pip dependencies to _test_ your project.  Include any dependencies
             # that you need, that are also specified in BUILD_DEPENDS, this will be
             # a separate install.
             - TEST_DEPENDS="numpy scipy pytest"
-            - PLAT=x86_64
             - UNICODE_WIDTH=32
             - WHEELHOUSE_UPLOADER_USERNAME=travis-worker
             # Following generated with
@@ -223,7 +222,11 @@ To use these scripts
 
     # For CPython macOS builds only, the minimum supported macOS version and
     # architectures of any C extensions in the wheel are set with the variable
-    # MB_PYTHON_OSX_VER: 10.9 (64-bit only) or 10.6 (64/32-bit dual arch).
+    # MB_PYTHON_OSX_VER: 10.9 (64-bit only) or 10.6 (64/32-bit dual arch). By
+    # default this is set to the highest available for the Python version selected
+    # using MB_PYTHON_VERSION. You should only need to set this explicitly if you
+    # are building a 10.6 dual-arch build for a CPython version where both a 10.9 and
+    # 10.6 build are available (for example, 2.7 or 3.7).
     # All PyPy macOS builds are 64-bit only.
 
     # Required in Linux to invoke `docker` ourselves
@@ -267,10 +270,10 @@ To use these scripts
         - os: osx
           env:
             - MB_PYTHON_VERSION=2.7
+            - MB_PYTHON_OSX_VER=10.6
         - os: osx
           env:
             - MB_PYTHON_VERSION=2.7
-            - MB_PYTHON_OSX_VER=10.9
         - os: osx
           env:
             - MB_PYTHON_VERSION=3.5
@@ -280,7 +283,13 @@ To use these scripts
         - os: osx
           env:
             - MB_PYTHON_VERSION=3.7
-            - MB_PYTHON_OSX_VER=10.9
+            - MB_PYTHON_OSX_VER=10.6
+        - os: osx
+          env:
+            - MB_PYTHON_VERSION=3.7
+        - os: osx
+          env:
+            - MB_PYTHON_VERSION=3.8
         - os: osx
           language: generic
           env:
