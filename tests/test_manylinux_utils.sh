@@ -1,4 +1,4 @@
-# Tests for manylinux utils
+# Tests for manylinux utils that can run outside docker
 
 # CPython path calculator
 [ "$(cpython_path 2.7)" == "/opt/python/cp27-cp27mu" ] || ingest "cp 2.7"

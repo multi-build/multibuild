@@ -117,13 +117,14 @@ function suppress {
     # Set -e stuff agonized over in
     # https://unix.stackexchange.com/questions/296526/set-e-in-a-subshell
     local tmp=$(mktemp tmp.XXXXXXXXX) || return
-    local opts=$-
+    local errexit_set
     echo "Running $@"
+    if [[ $- = *e* ]]; then errexit_set=true; fi
     set +e
-    ( set_opts $opts ; $@  > "$tmp" 2>&1 ) ; ret=$?
+    ( if [[ -n $errexit_set ]]; then set -e; fi; "$@"  > "$tmp" 2>&1 ) ; ret=$?
     [ "$ret" -eq 0 ] || cat "$tmp"
     rm -f "$tmp"
-    set_opts $opts
+    if [[ -n $errexit_set ]]; then set -e; fi
     return "$ret"
 }
 
@@ -151,7 +152,7 @@ function untar {
 
 function install_rsync {
     if [ -z "$IS_OSX" ]; then
-        [[ $(type -P rsync) ]] || yum install -y rsync
+        [[ $(type -P rsync) ]] || yum_install rsync
     fi
 }
 
