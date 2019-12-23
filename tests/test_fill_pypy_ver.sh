@@ -16,5 +16,6 @@
 [ "$(fill_pypy_ver 7.0)" == $LATEST_PP_7p0 ] || ingest
 [ "$(fill_pypy_ver 7.1)" == $LATEST_PP_7p1 ] || ingest
 [ "$(fill_pypy_ver 7.2)" == $LATEST_PP_7p2 ] || ingest
+[ "$(fill_pypy_ver 7.3)" == $LATEST_PP_7p3 ] || ingest
 [ "$(fill_pypy_ver 4.0.1)" == "4.0.1" ] || ingest
 [ "$(fill_pypy_ver 5.0.1)" == "5.0.1" ] || ingest

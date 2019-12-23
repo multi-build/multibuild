@@ -388,7 +388,8 @@ LATEST_PP_6=$LATEST_PP_6p0
 LATEST_PP_7p0=7.0.0
 LATEST_PP_7p1=7.1.1
 LATEST_PP_7p2=7.2.0
-LATEST_PP_7=$LATEST_PP_7p2
+LATEST_PP_7p3=7.3.0
+LATEST_PP_7=$LATEST_PP_7p3
 
 function unroll_version {
     # Convert major or major.minor format to major.minor.micro using the above
