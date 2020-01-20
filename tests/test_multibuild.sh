@@ -25,6 +25,7 @@ else
     source tests/test_manylinux_utils.sh
 fi
 if [ -n "$TEST_BUILDS" ]; then
+    MB_PYTHON_VERSION=${MB_PYTHON_VERSION:-3.7}
     if [ -n "$IS_OSX" ]; then
         # This checked in test_library_builders.
         # Will be set automatically by docker call in build_multilinux below.
@@ -40,6 +41,7 @@ if [ -n "$TEST_BUILDS" ]; then
             source tests/test_manylinux_utils_docker.sh
             source tests/test_library_builders.sh
         "
+        build_multilinux $my_plat "pip install simplejson"
     fi
 fi
 

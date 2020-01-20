@@ -9,7 +9,6 @@ source $MULTIBUILD_DIR/common_utils.sh
 MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
-DOWNLOADS_SDIR=downloads
 WORKING_SDIR=working
 
 # As of 19 Dec 2019 - latest Python of each version with binary download
@@ -226,7 +225,7 @@ function macpython_impl_for_version {
     #         "pypy-5.4" for PyPy
     local version=$1
     check_var $1
-    if [[ "$version" =~ pypy-([0-9\.]+) ]]; then
+    if [[ "$version" =~ ^pypy ]]; then
         echo pp
     elif [[ "$version" =~ ([0-9\.]+) ]]; then
         echo cp
@@ -254,7 +253,7 @@ function install_macpython {
     # Install Python and set $PYTHON_EXE to the installed executable
     # Parameters:
     #     $version : [implementation-]major[.minor[.patch]]
-    #         The Python implementation to install, e.g. "3.6" or "pypy-5.4"
+    #         The Python implementation to install, e.g. "3.6", "pypy-5.4" or "pypy3.6-7.2"
     #     $py_osx_ver: {major.minor | not defined}
     #       if defined, the macOS version that CPython is built for, e.g.
     #       "10.6" or "10.9". Ignored for PyPy
@@ -263,7 +262,7 @@ function install_macpython {
     local impl=$(macpython_impl_for_version $version)
     local stripped_ver=$(strip_macpython_ver_prefix $version)
     if [[ "$impl" == "pp" ]]; then
-        install_mac_pypy $stripped_ver
+        install_pypy $version
     elif [[ "$impl" == "cp" ]]; then
         install_mac_cpython $stripped_ver $py_osx_ver
     else
@@ -301,43 +300,6 @@ function install_mac_cpython {
     local inst_cmd="/Applications/Python ${py_mm}/Install Certificates.command"
     if [ -e "$inst_cmd" ]; then
         sh "$inst_cmd"
-    fi
-}
-
-function install_mac_pypy {
-    # Installs pypy.org PyPy
-    # Parameter $version
-    # Version given in major or major.minor or major.minor.micro e.g
-    # "3" or "3.7" or "3.7.1".
-    # sets $PYTHON_EXE variable to python executable
-    local py_version=$(fill_pypy_ver $1)
-    local py_build=$(get_pypy_build_prefix $py_version)$py_version-osx64
-    local py_zip=$py_build.tar.bz2
-    local zip_path=$DOWNLOADS_SDIR/$py_zip
-    mkdir -p $DOWNLOADS_SDIR
-    wget -nv $PYPY_URL/${py_zip} -P $DOWNLOADS_SDIR
-    untar $zip_path
-    PYTHON_EXE=$(realpath $py_build/bin/pypy)
-}
-
-function install_pip {
-    # Generic install pip
-    # Gets needed version from version implied by $PYTHON_EXE
-    # Installs pip into python given by $PYTHON_EXE
-    # Assumes pip will be installed into same directory as $PYTHON_EXE
-    check_python
-    mkdir -p $DOWNLOADS_SDIR
-    local py_mm=`get_py_mm`
-    local get_pip_path=$DOWNLOADS_SDIR/get-pip.py
-    curl $GET_PIP_URL > $get_pip_path
-    # Travis VMS now install pip for system python by default - force install
-    # even if installed already.
-    sudo $PYTHON_EXE $get_pip_path --ignore-installed $pip_args
-    PIP_CMD="sudo $(dirname $PYTHON_EXE)/pip$py_mm"
-    # Append pip_args if present (avoiding trailing space cf using variable
-    # above).
-    if [ -n "$pip_args" ]; then
-        PIP_CMD="$PIP_CMD $pip_args"
     fi
 }
 
