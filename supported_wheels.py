@@ -28,7 +28,12 @@ def tags_for(fname):
 
 
 def main():
-    supported = set(get_supported())
+    # Up to pip < 20, get_supported() returns a list of tuples; from pip >= 20,
+    # it returns a list of packaging.tags.Tag objects. We try to support both.
+    supported = {
+        (tag.interpreter, tag.abi, tag.platform) if not isinstance(tag, tuple) else tag
+        for tag in get_supported()
+    }
     for fname in sys.argv[1:]:
         tags = set(tags_for(fname))
         if supported.intersection(tags):
