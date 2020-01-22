@@ -5,6 +5,7 @@ if [ -z "$PIP_CMD" ]; then
 else
     pip_install="$PIP_CMD install"
 fi
+$pip_install packaging
 # Current wheel versions not available for older Pythons.
 lpv=$(lex_ver $MB_PYTHON_VERSION)
 # Check no errors.
