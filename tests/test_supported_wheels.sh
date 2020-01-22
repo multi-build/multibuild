@@ -30,12 +30,19 @@ if [ $(uname) == 'Darwin' ]; then
     other_ver=$([ "$our_ver" == "37" ] && echo "38" || echo "37")
     good_whl="tornado-5.1-cp${our_ver}-cp${our_ver}m-macosx_10_9_x86_64.whl"
     bad_whl="tornado-5.1-cp${other_ver}-cp${other_ver}m-macosx_10_9_x86_64.whl"
-    if [ "$($PYTHON_EXE supported_wheels.py $bad_wheel)" != "" ]; then
-        echo "$bad_wheel not supported, but supported wheels says it is."
+    if [ "$($PYTHON_EXE supported_wheels.py $bad_whl)" != "" ]; then
+        echo "$bad_whl not supported, but supported wheels says it is."
         RET=1
     fi
-    if [ "$($PYTHON_EXE supported_wheels.py $good_wheel)" != "$good_wheel" ]; then
-        echo "$good_wheel supported, but supported wheels says it is not."
+    if [ "$($PYTHON_EXE supported_wheels.py $good_whl)" != "$good_whl" ]; then
+        echo "$good_whl supported, but supported wheels says it is not."
+        RET=1
+    fi
+    good_whl2="mypkg-0.3-cp${our_ver}-cp${our_ver}m-macosx_10_9_x86_64.whl"
+    both="$good_whl
+$good_whl2"
+    if [ "$($PYTHON_EXE supported_wheels.py $good_whl $good_whl2)" != "$both" ]; then
+        echo "$good_whl, $good_whl2 supported, supported_wheels does not return both."
         RET=1
     fi
 fi
