@@ -45,5 +45,9 @@ $good_whl2"
         echo "$good_whl, $good_whl2 supported, supported_wheels does not return both."
         RET=1
     fi
+    if [ "$($PYTHON_EXE supported_wheels.py $good_whl $bad_whl $good_whl2)" != "$both" ]; then
+        echo "$good_whl, $good_whl2 supported, $bad_whl not; supported_wheels disagrees."
+        RET=1
+    fi
 fi
 
