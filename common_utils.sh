@@ -45,7 +45,7 @@ function stop_spinner {
     if [ ! -n "$MB_SPINNER_PID" ]; then
         return
     fi
-    
+
     kill $MB_SPINNER_PID
     unset MB_SPINNER_PID
 
@@ -335,9 +335,15 @@ function install_wheel {
             pip install $(pip_opts) $@ $TEST_DEPENDENCY
         done <<< "$TEST_DEPENDS"
     fi
+
+    local supported_wheels=$(python $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
+    if [ -z "$supported_wheels" ]; then
+        echo "ERROR: no supported wheels found"
+        exit 1
+    fi
     # Install compatible wheel
-    pip install $(pip_opts) $@ \
-        $(python $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
+    pip install $(pip_opts) $@ $supported_wheels
+
 }
 
 function install_run {

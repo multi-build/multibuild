@@ -34,10 +34,10 @@ def main():
         (tag.interpreter, tag.abi, tag.platform) if not isinstance(tag, tuple) else tag
         for tag in get_supported()
     }
-    for fname in sys.argv[1:]:
-        tags = set(tags_for(fname))
-        if supported.intersection(tags):
-            print(fname)
+    # for fname in sys.argv[1:]:
+    #     tags = set(tags_for(fname))
+    #     if supported.intersection(tags):
+    #         print(fname)
 
 
 if __name__ == '__main__':
