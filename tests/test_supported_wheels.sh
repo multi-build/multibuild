@@ -1,10 +1,11 @@
 # Test supported wheels script
 PYTHON_EXE=${PYTHON_EXE:-python}
 if [ -z "$PIP_CMD" ]; then
-    pip_install="pip install --user"
+    pip_install="$PYTHON_EXE -m pip install --user"
 else
     pip_install="$PIP_CMD install"
 fi
+# Needed for supported_wheels script
 $pip_install packaging
 # Current wheel versions not available for older Pythons.
 lpv=$(lex_ver $MB_PYTHON_VERSION)
@@ -28,7 +29,7 @@ fi
 # Test that wheels for versions other than our own, not supported.
 if [ $(uname) == 'Darwin' ]; then
     # 2>&1 because Python 2.7 version goes to stderr
-    our_ver=$(python --version 2>&1 | awk '{print $2}' | awk -F '.' '{print $1$2}')
+    our_ver=$($PYTHON_EXE --version 2>&1 | awk '{print $2}' | awk -F '.' '{print $1$2}')
     other_ver=$([ "$our_ver" == "37" ] && echo "38" || echo "37")
     good_whl="tornado-5.1-cp${our_ver}-cp${our_ver}m-macosx_10_9_x86_64.whl"
     bad_whl="tornado-5.1-cp${other_ver}-cp${other_ver}m-macosx_10_9_x86_64.whl"
