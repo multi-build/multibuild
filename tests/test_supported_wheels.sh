@@ -27,13 +27,14 @@ if [ $lpv -ge $(lex_ver 3.5) ] || [ $lpv -lt $(lex_ver 3) ]; then
 fi
 
 # Test that wheels for versions other than our own, not supported.
-if [ $(uname) == 'Darwin' ]; then
-    # Via Python to avoid differences between 2.7, 3.x, and CPython / PyPy
+py_impl=$($PYTHON_EXE -c 'import platform; print(platform.python_implementation())')
+if [ "$py_impl" == 'CPython' ] && [ $(uname) == 'Darwin' ]; then
     our_ver=$($PYTHON_EXE -c 'import sys; print("{}{}".format(*sys.version_info[:2]))')
     other_ver=$([ "$our_ver" == "37" ] && echo "36" || echo "37")
     # Python <= 3.7 needs m for API tag.
     api_m=$([ $our_ver -le 37 ] && echo "m") || :
-    good_whl="tornado-5.1-cp${our_ver}-cp${our_ver}${api_m}-macosx_10_9_x86_64.whl"
+    whl_suff="cp${our_ver}-cp${our_ver}${api_m}-macosx_10_9_x86_64.whl"
+    good_whl="tornado-5.1-${whl_suff}"
     bad_whl="tornado-5.1-cp${other_ver}-cp${other_ver}m-macosx_10_9_x86_64.whl"
     if [ "$($PYTHON_EXE supported_wheels.py $bad_whl)" != "" ]; then
         echo "$bad_whl not supported, but supported wheels says it is."
@@ -43,7 +44,7 @@ if [ $(uname) == 'Darwin' ]; then
         echo "$good_whl supported, but supported wheels says it is not."
         RET=1
     fi
-    good_whl2="mypkg-0.3-cp${our_ver}-cp${our_ver}m-macosx_10_9_x86_64.whl"
+    good_whl2="mypkg-0.3-${whl_suff}"
     both="$good_whl
 $good_whl2"
     if [ "$($PYTHON_EXE supported_wheels.py $good_whl $good_whl2)" != "$both" ]; then
