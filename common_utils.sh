@@ -432,7 +432,11 @@ function install_pypy {
     "ppc64le") suffix="ppc64le";;
     "s30x")    suffix="s390x";;
     "aarch64")  suffix="aarch64";;
-    *) echo unknown platform $PLAT; exit 1;;
+    *) if [ -z "$IS_OSX" ]; then
+            suffix = "osx64";
+       else
+            echo unknown platform $PLAT; exit 1
+       fi;;
     esac
 
     # Need to convert pypy-7.2 to pypy2.7-v7.2.0 and pypy3.6-7.3 to pypy3.6-v7.3.0
@@ -526,6 +530,10 @@ function install_pip {
     # even if installed already.
     $PYTHON_EXE $get_pip_path --ignore-installed $pip_args
     PIP_CMD=$(dirname $PYTHON_EXE)/pip$py_mm
+    if [ "$USER" != "root" ]; then
+        # inside a docker, there is no sudo but the user is already root
+        PIP_CMD="sudo $PIP_CMD"
+    fi
     # Append pip_args if present (avoiding trailing space cf using variable
     # above).
     if [ -n "$pip_args" ]; then
