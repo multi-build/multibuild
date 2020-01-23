@@ -28,10 +28,10 @@ fi
 
 # Test that wheels for versions other than our own, not supported.
 if [ $(uname) == 'Darwin' ]; then
-    # 2>&1 because Python 2.7 version goes to stderr
-    our_ver=$($PYTHON_EXE --version 2>&1 | awk '{print $2}' | awk -F '.' '{print $1$2}')
+    # Via Python to avoid differences between 2.7, 3.x, and CPython / PyPy
+    our_ver=$($PYTHON_EXE -c 'import sys; print("{}{}".format(*sys.version_info[:2]))')
     other_ver=$([ "$our_ver" == "37" ] && echo "36" || echo "37")
-    # Python < 38 needs m for API tag.
+    # Python <= 3.7 needs m for API tag.
     api_m=$([ $our_ver -le 37 ] && echo "m") || :
     good_whl="tornado-5.1-cp${our_ver}-cp${our_ver}${api_m}-macosx_10_9_x86_64.whl"
     bad_whl="tornado-5.1-cp${other_ver}-cp${other_ver}m-macosx_10_9_x86_64.whl"
