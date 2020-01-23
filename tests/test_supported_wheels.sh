@@ -30,8 +30,9 @@ fi
 if [ $(uname) == 'Darwin' ]; then
     # 2>&1 because Python 2.7 version goes to stderr
     our_ver=$($PYTHON_EXE --version 2>&1 | awk '{print $2}' | awk -F '.' '{print $1$2}')
-    other_ver=$([ "$our_ver" == "37" ] && echo "38" || echo "37")
-    good_whl="tornado-5.1-cp${our_ver}-cp${our_ver}m-macosx_10_9_x86_64.whl"
+    other_ver=$([ "$our_ver" == "37" ] && echo "36" || echo "37")
+    api_m=$([ $our_ver -le 37 ] && echo "m")
+    good_whl="tornado-5.1-cp${our_ver}-cp${our_ver}${api_m}-macosx_10_9_x86_64.whl"
     bad_whl="tornado-5.1-cp${other_ver}-cp${other_ver}m-macosx_10_9_x86_64.whl"
     if [ "$($PYTHON_EXE supported_wheels.py $bad_whl)" != "" ]; then
         echo "$bad_whl not supported, but supported wheels says it is."
