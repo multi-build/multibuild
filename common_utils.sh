@@ -336,6 +336,7 @@ function install_wheel {
         done <<< "$TEST_DEPENDS"
     fi
     # Install compatible wheel
+    pip install packaging
     pip install $(pip_opts) $@ \
         $(python $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
 }

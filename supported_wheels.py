@@ -6,15 +6,13 @@ from __future__ import print_function
 import sys
 from os.path import basename
 
+from packaging.tags import sys_tags
+
 try:
     from wheel.install import WHEEL_INFO_RE as wheel_matcher
 except ImportError:  # As of Wheel 0.32.0
     from wheel.wheelfile import WHEEL_INFO_RE
     wheel_matcher = WHEEL_INFO_RE.match
-try:
-    from pip.pep425tags import get_supported
-except ImportError:  # pip 10
-    from pip._internal.pep425tags import get_supported
 
 
 def tags_for(fname):
@@ -28,11 +26,8 @@ def tags_for(fname):
 
 
 def main():
-    # Up to pip < 20, get_supported() returns a list of tuples; from pip >= 20,
-    # it returns a list of packaging.tags.Tag objects. We try to support both.
-    supported = {
-        (tag.interpreter, tag.abi, tag.platform) if not isinstance(tag, tuple) else tag
-        for tag in get_supported()
+    supported = {(tag.interpreter, tag.abi, tag.platform)
+                 for tag in sys_tags()
     }
     for fname in sys.argv[1:]:
         tags = set(tags_for(fname))
