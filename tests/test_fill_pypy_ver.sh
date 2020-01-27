@@ -1,9 +1,7 @@
 # Test Python version fill utility, for pypy
-[ "$(fill_pypy_ver 4)" == $LATEST_PP_4 ] || ingest "lpp4"
 [ "$(fill_pypy_ver 5)" == $LATEST_PP_5 ] || ingest "lpp5"
 [ "$(fill_pypy_ver 6)" == $LATEST_PP_6 ] || ingest "lpp6"
 [ "$(fill_pypy_ver 7)" == $LATEST_PP_7 ] || ingest "lpp7"
-[ "$(fill_pypy_ver 4.0)" == $LATEST_PP_4p0 ] || ingest
 [ "$(fill_pypy_ver 5.0)" == $LATEST_PP_5p0 ] || ingest
 [ "$(fill_pypy_ver 5.1)" == $LATEST_PP_5p1 ] || ingest
 [ "$(fill_pypy_ver 5.3)" == $LATEST_PP_5p3 ] || ingest
@@ -16,5 +14,4 @@
 [ "$(fill_pypy_ver 7.0)" == $LATEST_PP_7p0 ] || ingest
 [ "$(fill_pypy_ver 7.1)" == $LATEST_PP_7p1 ] || ingest
 [ "$(fill_pypy_ver 7.2)" == $LATEST_PP_7p2 ] || ingest
-[ "$(fill_pypy_ver 4.0.1)" == "4.0.1" ] || ingest
-[ "$(fill_pypy_ver 5.0.1)" == "5.0.1" ] || ingest
+[ "$(fill_pypy_ver 7.3)" == $LATEST_PP_7p3 ] || ingest
