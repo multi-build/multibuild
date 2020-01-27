@@ -432,10 +432,10 @@ function install_pypy {
     "ppc64le") suffix="ppc64le";;
     "s30x")    suffix="s390x";;
     "aarch64")  suffix="aarch64";;
-    *) if [ -z "$IS_OSX" ]; then
-            suffix = "osx64";
+    *) if [ -n "$IS_OSX" ]; then
+            suffix="osx64";
        else
-            echo unknown platform $PLAT; exit 1
+            echo unknown platform "$PLAT"; exit 1
        fi;;
     esac
 
