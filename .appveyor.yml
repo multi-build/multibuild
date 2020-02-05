@@ -1,1 +1,91 @@
+environment:
+  global:
+    REPO_DIR: python-appveyor-demo
+    PACKAGE_NAME: python_appveyor_demo
+    BUILD_COMMIT: master
+    BUILD_DEPENDS: "cython"
+    TEST_DEPENDS: "nose"
 
+  matrix:
+    - PYTHON: "C:\\Miniconda"
+      PYTHON_VERSION: "2.7"
+      PYTHON_ARCH: "32"
+    - PYTHON: "C:\\Miniconda-x64"
+      PYTHON_VERSION: "2.7"
+      PYTHON_ARCH: "64"
+    - PYTHON: "C:\\Miniconda35"
+      PYTHON_VERSION: "3.5"
+      PYTHON_ARCH: "32"
+    - PYTHON: "C:\\Miniconda35-x64"
+      PYTHON_VERSION: "3.5"
+      PYTHON_ARCH: "64"
+    - PYTHON: "C:\\Miniconda36"
+      PYTHON_VERSION: "3.6"
+      PYTHON_ARCH: "32"
+    - PYTHON: "C:\\Miniconda36-x64"
+      PYTHON_VERSION: "3.6"
+      PYTHON_ARCH: "64"
+    - PYTHON: "C:\\Miniconda37"
+      PYTHON_VERSION: "3.7"
+      PYTHON_ARCH: "32"
+    - PYTHON: "C:\\Miniconda37-x64"
+      PYTHON_VERSION: "3.7"
+      PYTHON_ARCH: "64"
+
+# We always use a 64-bit machine, but can build x86 distributions
+# with the TARGET_ARCH variable.
+platform:
+    - x64
+
+matrix:
+    fast_finish: true
+
+install:
+    # Install miniconda and fix headers
+    - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PYTHON%\Library\bin;%PATH%
+    - conda info
+
+    # Check that we have the expected version and architecture for Python
+    - python --version
+    - python -c "import struct; print(struct.calcsize('P') * 8)"
+
+    # clone a origsel/python-appveyor-demo
+    # this repo includes a simple package to test appveyor
+    - git clone git://github.com/ogrisel/python-appveyor-demo.git
+
+build_script:
+    # Install build requirements
+    - conda install --yes %BUILD_DEPENDS%
+
+    # build wheel:
+    - cd %REPO_DIR%
+    - git checkout %BUILD_COMMIT%
+    - python setup.py bdist_wheel
+    - ls dist/*
+
+test_script:
+    # create test env
+    - conda create --yes -n test_env python=%PYTHON_VERSION% %TEST_DEPENDS%
+    - activate test_env
+
+    # install from wheel
+    - pip install --no-index --find-links dist/ %PACKAGE_NAME%
+
+    # run tests from install wheel
+    - cd ..
+    - python -m pyappveyordemo.tests.test_extension
+
+    # Smoke test of install_python script
+    # Use C:\PythonXY, C:\PythonXY-x64, C:\PythonXYrcZ, or C:\PythonXYrcZ-x64
+    - set PYTHON=C:\Python37
+    - ps: .\install_python.ps1
+    - set PYTHON=C:\Python37-x64
+    - ps: .\install_python.ps1
+    - set PYTHON=C:\Python38-x64
+    - ps: .\install_python.ps1
+    - set PYTHON=C:\Python38rc1-x64
+    - ps: .\install_python.ps1
+    - set PYTHON=C:\Python38
+    - ps: .\install_python.ps1
+    - set PYTHON=C:\Python38rc1
+    - ps: .\install_python.ps1
