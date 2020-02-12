@@ -35,8 +35,17 @@ if [ "$USE_CCACHE" == "1" ]; then
     activate_ccache
 fi
 
-# Set PATH for chosen Python, Unicode width
-export PATH="$(cpython_path $PYTHON_VERSION $UNICODE_WIDTH)/bin:$PATH"
+# The following also sets PYTHON_EXE and PIP_CMD
+if [ "${PYTHON_VERSION:0:4}" == "pypy" ]; then
+  install_pypy $PYTHON_VERSION
+  export PATH=$(dirname $PYTHON_EXE):$PATH
+else
+  # Set PATH for chosen Python, Unicode width
+  PYTHON_EXE=$(cpython_path $PYTHON_VERSION $UNICODE_WIDTH)/bin/python
+  ls $(dirname $PYTHON_EXE)
+  export PATH="$(dirname $PYTHON_EXE):$PATH"
+  install_pip
+fi
 
 # Configuration for this package, possibly overriding `build_wheel` defined in
 # `common_utils.sh` via `manylinux_utils.sh`.

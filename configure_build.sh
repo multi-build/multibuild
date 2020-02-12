@@ -10,6 +10,7 @@ fi
 CONFIGURE_BUILD_SOURCED=1
 
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
+MB_ML_VER=${MB_ML_VER:-1}
 
 # IS_OSX is defined in common_utils.sh
 if [ -n "$IS_OSX" ]; then
@@ -41,7 +42,15 @@ else
     export CFLAGS="${CFLAGS:-$STRIP_FLAGS}"
     export CXXFLAGS="${CXXFLAGS:-$STRIP_FLAGS}"
     export FFLAGS="${FFLAGS:-$STRIP_FLAGS}"
-    yum install -y libtool
+    if [[ $MB_ML_VER == "1" ]]; then
+        if [ "${MB_PYTHON_VERSION:0:4}" == "pypy" ]; then
+            yum install -y libtool wget
+        else
+            yum install -y libtool
+        fi
+    elif [ "${MB_PYTHON_VERSION:0:4}" == "pypy" ]; then
+        yum install -y wget
+    fi
 fi
 
 # Promote BUILD_PREFIX on search path to any newly built libs

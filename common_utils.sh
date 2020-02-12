@@ -12,6 +12,10 @@ COMMON_UTILS_SOURCED=1
 set -e
 
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
+DOWNLOADS_SDIR=downloads
+PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
+GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
+
 if [ $(uname) == "Darwin" ]; then IS_OSX=1; fi
 
 # Work round bug in travis xcode image described at
@@ -372,12 +376,7 @@ function fill_submodule {
     (cd "$repo_dir" && git remote set-url origin $origin_url)
 }
 
-PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
-
-# As of 2019-10-15, the latest verions of PyPy.
-LATEST_PP_4p0=4.0.1
-LATEST_PP_4=$LATEST_PP_4p0
-
+# As of 2020-01-15, the latest verions of PyPy.
 LATEST_PP_5p0=5.0.1
 LATEST_PP_5p1=5.1.1
 LATEST_PP_5p3=5.3.1
@@ -394,7 +393,8 @@ LATEST_PP_6=$LATEST_PP_6p0
 LATEST_PP_7p0=7.0.0
 LATEST_PP_7p1=7.1.1
 LATEST_PP_7p2=7.2.0
-LATEST_PP_7=$LATEST_PP_7p2
+LATEST_PP_7p3=7.3.0
+LATEST_PP_7=$LATEST_PP_7p3
 
 function unroll_version {
     # Convert major or major.minor format to major.minor.micro using the above
@@ -415,6 +415,55 @@ function unroll_version {
     fi
 }
 
+function install_pypy {
+    # Installs pypy.org PyPy
+    # Parameter $version
+    # Version given in major or major.minor or major.minor.micro e.g
+    # "3" or "3.7" or "3.7.1".
+    # Uses $PLAT
+    # sets $PYTHON_EXE variable to python executable
+
+    local version=$1
+    suffix=linux64
+    case "$PLAT" in
+    "x86_64")  suffix="linux64";;
+    "i686")    suffix="linux32";;
+    "darwin")  suffix="osx64";;
+    "ppc64le") suffix="ppc64le";;
+    "s30x")    suffix="s390x";;
+    "aarch64")  suffix="aarch64";;
+    *) if [ -n "$IS_OSX" ]; then
+            suffix="osx64";
+       else
+            echo unknown platform "$PLAT"; exit 1
+       fi;;
+    esac
+
+    # Need to convert pypy-7.2 to pypy2.7-v7.2.0 and pypy3.6-7.3 to pypy3.6-v7.3.0
+    local prefix=$(get_pypy_build_prefix $version)
+    # since prefix is pypy3.6v7.2 or pypy2.7v7.2, grab the 4th (0-index) letter
+    local major=${prefix:4:1}
+    # get the pypy version 7.2.0
+    local py_version=$(fill_pypy_ver $(echo $version | cut -f2 -d-))
+
+    local py_build=$prefix$py_version-$suffix
+    local py_zip=$py_build.tar.bz2
+    local zip_path=$DOWNLOADS_SDIR/$py_zip
+    mkdir -p $DOWNLOADS_SDIR
+    wget -nv $PYPY_URL/${py_zip} -P $DOWNLOADS_SDIR
+    untar $zip_path
+    # bug/feature: pypy package for pypy3 only has bin/pypy3 :(
+    if [ "$major" == "3" ] && [ ! -x "$py_build/bin/pypy" ]; then
+        ln $py_build/bin/pypy3 $py_build/bin/pypy
+    fi
+    PYTHON_EXE=$(realpath $py_build/bin/pypy)
+    $PYTHON_EXE -mensurepip
+    if [ "$major" == "3" ] && [ ! -x "$py_build/bin/pip" ]; then
+        ln $py_build/bin/pip3 $py_build/bin/pip
+    fi
+    PIP_CMD=pip
+}
+
 function fill_pypy_ver {
     # Convert major or major.minor format to major.minor.micro
     # Parameters:
@@ -427,9 +476,13 @@ function fill_pypy_ver {
 function get_pypy_build_prefix {
     # Return the file prefix of a PyPy file
     # Parameters:
-    #   $version : pypy2 version number
+    #   $version : pypy version number, for example pypy-7.2 or pypy3.6-7.2
     local version=$1
-    if [[ $version =~ ([0-9]+)\.([0-9]+) ]]; then
+    if [[ $version =~ pypy([0-9]+)\.([0-9]+)-([0-9]+)\.([0-9]+) ]]; then
+        local py_major=${BASH_REMATCH[1]}
+        local py_minor=${BASH_REMATCH[2]}
+        echo "pypy$py_major.$py_minor-v"
+    elif [[ $version =~ ([0-9]+)\.([0-9]+) ]]; then
         local major=${BASH_REMATCH[1]}
         local minor=${BASH_REMATCH[2]}
         if (( $major > 6 )); then
@@ -440,7 +493,7 @@ function get_pypy_build_prefix {
             echo "pypy-"
         fi
     else
-        echo "error: expected version number, got $1" 1>&2
+        echo "error: expected version like pypy-7.2 or pypy3.6-7.2, got $1" 1>&2
         exit 1
     fi
 }
@@ -462,3 +515,49 @@ retry () {
     }
     return 0
 }
+
+function install_pip {
+    # Generic install pip
+    # Gets needed version from version implied by $PYTHON_EXE
+    # Installs pip into python given by $PYTHON_EXE
+    # Assumes pip will be installed into same directory as $PYTHON_EXE
+    check_python
+    mkdir -p $DOWNLOADS_SDIR
+    local py_mm=`get_py_mm`
+    local get_pip_path=$DOWNLOADS_SDIR/get-pip.py
+    curl $GET_PIP_URL > $get_pip_path
+    # Travis VMS now install pip for system python by default - force install
+    # even if installed already.
+    $PYTHON_EXE $get_pip_path --ignore-installed $pip_args
+    PIP_CMD=$(dirname $PYTHON_EXE)/pip$py_mm
+    if [ "$USER" != "root" ]; then
+        # inside a docker, there is no sudo but the user is already root
+        PIP_CMD="sudo $PIP_CMD"
+    fi
+    # Append pip_args if present (avoiding trailing space cf using variable
+    # above).
+    if [ -n "$pip_args" ]; then
+        PIP_CMD="$PIP_CMD $pip_args"
+    fi
+}
+
+function check_python {
+    if [ -z "$PYTHON_EXE" ]; then
+        echo "PYTHON_EXE variable not defined"
+        exit 1
+    fi
+}
+
+function check_pip {
+    if [ -z "$PIP_CMD" ]; then
+        echo "PIP_CMD variable not defined"
+        exit 1
+    fi
+}
+
+function get_py_mm {
+    check_python
+    $PYTHON_EXE -c "import sys; print('{0}.{1}'.format(*sys.version_info[0:2]))"
+}
+
+

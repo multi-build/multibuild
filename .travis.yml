@@ -44,6 +44,12 @@ matrix:
       env:
         - TEST_BUILDS=1
         - USE_CCACHE=1
+    # Build with pypy3
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=pypy3.6-7.3
+        - MB_ML_VER=2014
+        - TEST_BUILDS=1
     # OSX builds
     - os: osx
       env:
@@ -108,6 +114,7 @@ matrix:
     - os: osx
       env:
         - MB_PYTHON_VERSION=pypy-7.2
+        - TEST_BUILDS=1
         - VENV=venv
     # Default OSX (xcode image) is 10.13 (xcode 9.4.1) as of 2018-08-03
     # See: https://docs.travis-ci.com/user/reference/osx/
@@ -183,7 +190,7 @@ matrix:
       arch: arm64
       env:
         - MB_PYTHON_VERSION=3.7
-        - MB_ML_VER=2014 
+        - MB_ML_VER=2014
         - TEST_BUILDS=1
         - PLAT=aarch64
     #  s390x builds
@@ -191,7 +198,7 @@ matrix:
       arch: s390x
       env:
         - MB_PYTHON_VERSION=3.7
-        - MB_ML_VER=2014 
+        - MB_ML_VER=2014
         - TEST_BUILDS=1
         - PLAT=s390x
     #  ppc64le builds
@@ -199,7 +206,7 @@ matrix:
       arch: ppc64le
       env:
         - MB_PYTHON_VERSION=3.7
-        - MB_ML_VER=2014 
+        - MB_ML_VER=2014
         - TEST_BUILDS=1
         - PLAT=ppc64le
 

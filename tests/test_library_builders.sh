@@ -50,7 +50,10 @@ if [ -z "$IS_OSX" ]; then
     suppress build_lzo
 fi
 suppress build_ragel
-suppress build_cfitsio
+if [ -z "$IS_OSX" ]; then
+    # already installed in the macOS image, so `brew install cfitsio` fails
+    suppress build_cfitsio
+fi
 suppress build_new_zlib
 suppress build_hdf5
 
