@@ -8,43 +8,62 @@ source $MULTIBUILD_DIR/configure_build.sh
 # For OpenBLAS
 GF_LIB_URL="https://3f23b170c54c2533c070-1c8a9b3114517dc5fe17b7c3f8c63a43.ssl.cf2.rackcdn.com"
 
+function set_lib_version_hash {
+    # set variables with version and hash if not set previously. If version is already set, do not
+    # try to set/modify hash, as this might usually result in hash mismatch
+    local name=$1
+    local version=$2
+    local sha256_hash=$3
+    local version_var="${name}_VERSION"
+    local hash_var="${name}_HASH"
+    if [ -z "${!version_var}" ] ; then
+	# set variable using printf, declare doesn't support -g in Centos 5/6
+	printf -v "${version_var}" '%s' "${version}"
+        if [ -n "${sha256_hash}" ] ; then
+	  printf -v "${hash_var}" '%s' "${sha256_hash}"
+        fi
+    fi
+}
+
 # Recipes for building some libraries
-OPENBLAS_VERSION="${OPENBLAS_VERSION:-0.2.18}"
+# To set different version set <LIBRARY>_VERSION and <LIBRARY>_HASH variables or use set_lib_version_hash
+# as below. For example to change LIBPNG version use LIBPNG_VERSION and LIBPNG_HASH variables. The latter
+# is optional and if not provided hash will not be checked
+
+# no hash for openblas as it's downloading binaries and they are platform dependant
+set_lib_version_hash OPENBLAS "0.2.18"
 # We use system zlib by default - see build_new_zlib
-ZLIB_VERSION="${ZLIB_VERSION:-1.2.10}"
-LIBPNG_VERSION="${LIBPNG_VERSION:-1.6.21}"
-BZIP2_VERSION="${BZIP2_VERSION:-1.0.6}"
-FREETYPE_VERSION="${FREETYPE_VERSION:-2.6.3}"
-TIFF_VERSION="${TIFF_VERSION:-4.1.0}"
-JPEG_VERSION="${JPEG_VERSION:-9b}"
-OPENJPEG_VERSION="${OPENJPEG_VERSION:-2.1}"
-LCMS2_VERSION="${LCMS2_VERSION:-2.9}"
-GIFLIB_VERSION="${GIFLIB_VERSION:-5.1.3}"
-LIBWEBP_VERSION="${LIBWEBP_VERSION:-0.5.0}"
-XZ_VERSION="${XZ_VERSION:-5.2.2}"
-LIBYAML_VERSION="${LIBYAML_VERSION:-0.2.2}"
-SZIP_VERSION="${SZIP_VERSION:-2.1.1}"
-HDF5_VERSION="${HDF5_VERSION:-1.10.5}"
-LIBAEC_VERSION="${LIBAEC_VERSION:-1.0.4}"
-LZO_VERSION=${LZO_VERSION:-2.10}
-LZF_VERSION="${LZF_VERSION:-3.6}"
-BLOSC_VERSION=${BLOSC_VERSION:-1.10.2}
-SNAPPY_VERSION="${SNAPPY_VERSION:-1.1.3}"
-CURL_VERSION=${CURL_VERSION:-7.49.1}
-NETCDF_VERSION=${NETCDF_VERSION:-4.4.1.1}
-SWIG_VERSION=${SWIG_VERSION:-4.0.1}
-PCRE_VERSION=${PCRE_VERSION:-8.38}
-SUITESPARSE_VERSION=${SUITESPARSE_VERSION:-4.5.6}
-LIBTOOL_VERSION=${LIBTOOL_VERSION:-2.4.6}
-RAGEL_VERSION=${RAGEL_VERSION:-6.10}
-FLEX_VERSION=${FLEX_VERSION:-2.6.4}
-BISON_VERSION=${BISON_VERSION:-3.0.4}
-FFTW_VERSION=${FFTW_VERSION:-3.3.7}
-CFITSIO_VERSION=${CFITSIO_VERSION:-3450}
-OPENSSL_ROOT=openssl-1.0.2u
-# Hash from https://www.openssl.org/source/openssl-1.0.2?.tar.gz.sha256
-OPENSSL_HASH=ecd0c6ffb493dd06707d38b14bb4d8c2288bb7033735606569d8f90f89669d16
-OPENSSL_DOWNLOAD_URL=https://www.openssl.org/source
+set_lib_version_hash ZLIB     "1.2.10"  "8d7e9f698ce48787b6e1c67e6bff79e487303e66077e25cb9784ac8835978017"
+set_lib_version_hash LIBPNG   "1.6.21"  "b36a3c124622c8e1647f360424371394284f4c6c4b384593e478666c59ff42d3"
+set_lib_version_hash BZIP2    "1.0.6"   "a2848f34fcd5d6cf47def00461fcb528a0484d8edef8208d6d2e2909dc61d9cd"
+set_lib_version_hash FREETYPE "2.6.3"   "7942096c40ee6fea882bd4207667ad3f24bff568b96b10fd3885e11a7baad9a3"
+set_lib_version_hash TIFF     "4.1.0"   "5d29f32517dadb6dbcd1255ea5bbc93a2b54b94fbf83653b4d65c7d6775b8634"
+set_lib_version_hash JPEG     "9b"      "240fd398da741669bf3c90366f58452ea59041cacc741a489b99f2f6a0bad052"
+set_lib_version_hash OPENJPEG "2.1"     "4afc996cd5e0d16360d71c58216950bcb4ce29a3272360eb29cadb1c8bce4efc"
+set_lib_version_hash LCMS2    "2.9"     "48c6fdf98396fa245ed86e622028caf49b96fa22f3e5734f853f806fbc8e7d20"
+set_lib_version_hash GIFLIB   "5.1.3"   "21d73688f54f881cdf1393acbc9af2fe9b3be54d53ace6f5a11c8c3a4646bd01"
+set_lib_version_hash LIBWEBP  "0.5.0"   "5cd3bb7b623aff1f4e70bd611dc8dbabbf7688fd5eb225b32e02e09e37dfb274"
+set_lib_version_hash XZ       "5.2.2"   "73df4d5d34f0468bd57d09f2d8af363e95ed6cc3a4a86129d2f2c366259902a2"
+# change of version in LIBAEC not supported, see build_libaec
+set_lib_version_hash LIBAEC   "1.0.4"   "f2b1b232083bd8beaf8a54a024225de3dd72a673a9bcdf8c3ba96c39483f4309"
+set_lib_version_hash LIBYAML  "0.2.2"   "4a9100ab61047fd9bd395bcef3ce5403365cafd55c1e0d0299cde14958e47be9"
+set_lib_version_hash SZIP     "2.1.1"   "21ee958b4f2d4be2c9cabfa5e1a94877043609ce86fde5f286f105f7ff84d412"
+set_lib_version_hash HDF5     "1.10.5"  "6d4ce8bf902a97b050f6f491f4268634e252a63dadd6656a1a9be5b7b7726fa8"
+set_lib_version_hash LZO      "2.10"    "c0f892943208266f9b6543b3ae308fab6284c5c90e627931446fb49b4221a072"
+set_lib_version_hash LZF      "3.6"     "9c5de01f7b9ccae40c3f619d26a7abec9986c06c36d260c179cedd04b89fb46a"
+set_lib_version_hash BLOSC    "1.10.2"  "c8ea29677056dd8a3d27929b4490a339b9516ca3562f3d50a1c84bab109bb278"
+set_lib_version_hash SNAPPY   "1.1.3"   "2f1e82adf0868c9e26a5a7a3115111b6da7e432ddbac268a7ca2fae2a247eef3"
+set_lib_version_hash CURL     "7.49.1"  "ff3e80c1ca6a068428726cd7dd19037a47cc538ce58ef61c59587191039b2ca6"
+set_lib_version_hash NETCDF   "4.4.1.1" "7f040a0542ed3f6d27f3002b074e509614e18d6c515b2005d1537fec01b24909"
+set_lib_version_hash SWIG     "4.0.1"   "7a00b4d0d53ad97a14316135e2d702091cd5f193bb58bcfcd8bc59d41e7887a9"
+set_lib_version_hash PCRE     "8.38"    "9883e419c336c63b0cb5202b09537c140966d585e4d0da66147dc513da13e629"
+set_lib_version_hash LIBTOOL  "2.4.6"   "e3bd4d5d3d025a36c21dd6af7ea818a2afcd4dfc1ea5a17b39d7854bcd0c06e3"
+set_lib_version_hash RAGEL    "6.10"    "5f156edb65d20b856d638dd9ee2dfb43285914d9aa2b6ec779dac0270cd56c3f"
+set_lib_version_hash FLEX     "2.6.4"   "e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995"
+set_lib_version_hash BISON    "3.0.4"   "b67fd2daae7a64b5ba862c66c07c1addb9e6b1b05c5f2049392cfd8a2172952e"
+set_lib_version_hash FFTW     "3.3.7"   "3b609b7feba5230e8f6dd8d245ddbefac324c5a6ae4186947670d9ac2cd25573"
+set_lib_version_hash CFITSIO  "3450"    "bf6012dbe668ecb22c399c4b7b2814557ee282c74a7d5dc704eb17c30d9fb92e"
+set_lib_version_hash OPENSSL  "1.0.2u"  "ecd0c6ffb493dd06707d38b14bb4d8c2288bb7033735606569d8f90f89669d16"
 
 
 ARCHIVE_SDIR=${ARCHIVE_DIR:-archives}
