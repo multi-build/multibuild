@@ -119,9 +119,11 @@ function install_run {
     #  WHEEL_SDIR (optional)
     #  MANYLINUX_URL (optional)
     #  TEST_DEPENDS  (optional)
+    #  MB_TEST_VER (optional)
     local plat=${1:-${PLAT:-x86_64}}
+    local mb_test_ver=${MB_TEST_VER:-"matthewbrett/trusty:"}
     bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
-    local docker_image="matthewbrett/trusty:$bitness"
+    local docker_image=$mb_test_ver$bitness
     docker pull $docker_image
     docker run --rm \
         -e PYTHON_VERSION="$MB_PYTHON_VERSION" \

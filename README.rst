@@ -24,7 +24,7 @@ The AppVeyor setup is designed to build *and test*:
 * 64-bit Windows ``win_amd64`` wheels
 * 32-bit Windows ``win32`` wheels
 
-You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7.
+You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8
 
 *****************
 How does it work?
@@ -78,7 +78,7 @@ Manylinux
 =========
 
 The build phase is in a Manylinux Docker container, but the test phase is in
-a clean Ubuntu 14.04 container.
+a clean container.
 
 
 Build phase
@@ -125,11 +125,21 @@ real ``build_wheel`` function, which now comes (by default) from
 Test phase
 ----------
 
-Testing is in an Ubuntu 14.04 Docker container - see
-``multibuild/docker_test_wrap.sh``.  ``multibuild/travis_linux_steps.sh``
-defines the ``install_run`` function, which starts up the testing Docker
-container with a wrapper script ``multibuild/docker_test_wrap.sh``.  The
-wrapper script sources the following bash scripts::
+Specify the version to test with the ``MB_TEST_VER`` environment variable. The
+default version is ``matthewbrett/trusty:``. A suffix will be added by the
+``PLAT`` choice: ``i686`` will add ``32``, all others will add ``64``.
+Versions that are currently valid are:
+
+* ``matthewbrett/trusty:`` (32 or 64)
+* ``multibuild/bionic`` (32 only)
+* ``multibuild/xenial`` (64 only)
+
+See ``multibuild/docker_test_wrap.sh``.
+
+``multibuild/travis_linux_steps.sh`` defines the ``install_run`` function,
+which starts up the testing Docker container with the wrapper script
+``multibuild/docker_test_wrap.sh``. The wrapper script sources the following
+bash scripts::
 
     multibuild/common_utils.sh
     config.sh

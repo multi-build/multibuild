@@ -26,6 +26,7 @@ matrix:
       env:
         - TEST_BUILDS=1
         - MB_ML_VER=2010
+        - MB_TEST_VER=multibuild/xenial
     # 32-bit builds
     - os: linux
       dist: xenial
@@ -38,6 +39,7 @@ matrix:
         - TEST_BUILDS=1
         - PLAT=i686
         - MB_ML_VER=2010
+        - MB_TEST_VER=multibuild/bionic
     # Builds with caching
     - os: linux
       dist: xenial
