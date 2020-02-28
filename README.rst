@@ -125,14 +125,12 @@ real ``build_wheel`` function, which now comes (by default) from
 Test phase
 ----------
 
-Specify the version to test with the ``MB_TEST_VER`` environment variable. The
-default version is ``matthewbrett/trusty:``. A suffix will be added by the
-``PLAT`` choice: ``i686`` will add ``32``, all others will add ``64``.
-Versions that are currently valid are:
+Specify the version to test with the ``DOCKER_TEST_IMAGE`` environment variable. The
+default version is ``matthewbrett/trusty:64``, or for ``i686`` platforms
+``matthewbrett/trusty:32``. Other versions that are currently valid are:
 
-* ``matthewbrett/trusty:`` (32 or 64)
-* ``multibuild/bionic`` (32 only)
-* ``multibuild/xenial`` (64 only)
+* ``multibuild/bionic32`` (32 only)
+* ``multibuild/xenial64`` (64 only)
 
 See ``multibuild/docker_test_wrap.sh``.
 

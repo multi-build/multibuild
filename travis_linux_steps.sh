@@ -121,9 +121,13 @@ function install_run {
     #  TEST_DEPENDS  (optional)
     #  MB_TEST_VER (optional)
     local plat=${1:-${PLAT:-x86_64}}
-    local mb_test_ver=${MB_TEST_VER:-"matthewbrett/trusty:"}
-    bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
-    local docker_image=$mb_test_ver$bitness
+    local mb_test_ver=${DOCKER_TEST_IMAGE:-"matthewbrett/trusty:"}
+    if [ -z "$DOCKER_TEST_IMAGE" ]; then
+        local bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
+        local docker_image="matthewbrett/trusty:$bitness"
+    else
+        local docker_image=$DOCKER_TEST_IMAGE
+    fi
     docker pull $docker_image
     docker run --rm \
         -e PYTHON_VERSION="$MB_PYTHON_VERSION" \

@@ -43,6 +43,9 @@ if [ -n "$TEST_BUILDS" ]; then
         "
         build_multilinux $my_plat "pip install simplejson"
     fi
+    build_index_wheel simplejson
+    CONFIG_PATH=tests/config.sh
+    install_run $PLAT
 fi
 
 source tests/test_supported_wheels.sh
