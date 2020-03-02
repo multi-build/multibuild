@@ -195,6 +195,7 @@ matrix:
         - MB_ML_VER=2014
         - TEST_BUILDS=1
         - PLAT=aarch64
+        - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
     #  s390x builds
     - os: linux
       arch: s390x
@@ -203,6 +204,7 @@ matrix:
         - MB_ML_VER=2014
         - TEST_BUILDS=1
         - PLAT=s390x
+        - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
     #  ppc64le builds
     - os: linux
       arch: ppc64le
@@ -211,6 +213,7 @@ matrix:
         - MB_ML_VER=2014
         - TEST_BUILDS=1
         - PLAT=ppc64le
+        - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
 
 script:
   - export ENV_VARS_PATH="tests/env_vars.sh"

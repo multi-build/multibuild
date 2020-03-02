@@ -333,17 +333,22 @@ function install_wheel {
     #     WHEEL_SDIR  (optional, default "wheelhouse")
     #     TEST_DEPENDS  (optional, default "")
     #     MANYLINUX_URL (optional, default "") (via pip_opts function)
+    set -x
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
     if [ -n "$TEST_DEPENDS" ]; then
         while read TEST_DEPENDENCY; do
             pip install $(pip_opts) $@ $TEST_DEPENDENCY
         done <<< "$TEST_DEPENDS"
     fi
-
+    ls .
+    which pip
+    which python
     pip install packaging
+    get_platform
     local supported_wheels=$(python $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
     if [ -z "$supported_wheels" ]; then
         echo "ERROR: no supported wheels found"
+        ls $wheelhouse/*.whl
         exit 1
     fi
     # Install compatible wheel
