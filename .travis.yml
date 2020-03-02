@@ -52,6 +52,7 @@ matrix:
         - MB_PYTHON_VERSION=pypy3.6-7.3
         - MB_ML_VER=2014
         - TEST_BUILDS=1
+        - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
     # OSX builds
     - os: osx
       env:
@@ -103,19 +104,7 @@ matrix:
         - VENV=venv
     - os: osx
       env:
-        - MB_PYTHON_VERSION=pypy-6.0
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-7.0
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-7.1
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-7.2
+        - MB_PYTHON_VERSION=pypy-7.3
         - TEST_BUILDS=1
         - VENV=venv
     # Default OSX (xcode image) is 10.13 (xcode 9.4.1) as of 2018-08-03
