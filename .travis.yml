@@ -26,7 +26,7 @@ matrix:
       env:
         - TEST_BUILDS=1
         - MB_ML_VER=2010
-        - DOCKER_TEST_IMAGE=multibuild/xenial64
+        - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
     # 32-bit builds
     - os: linux
       dist: xenial
@@ -39,7 +39,7 @@ matrix:
         - TEST_BUILDS=1
         - PLAT=i686
         - MB_ML_VER=2010
-        - DOCKER_TEST_IMAGE=multibuild/bionic32
+        - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
     # Builds with caching
     - os: linux
       dist: xenial

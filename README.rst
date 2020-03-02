@@ -125,12 +125,18 @@ real ``build_wheel`` function, which now comes (by default) from
 Test phase
 ----------
 
-Specify the version to test with the ``DOCKER_TEST_IMAGE`` environment variable. The
-default version is ``matthewbrett/trusty:64``, or for ``i686`` platforms
-``matthewbrett/trusty:32``. Other versions that are currently valid are:
+Specify the version to test with the ``DOCKER_TEST_IMAGE`` environment
+variable. The default version is dependent on ``PLAT``:
 
-* ``multibuild/bionic32`` (32 only)
-* ``multibuild/xenial64`` (64 only)
+* ``matthewbrett/trusty:64``, for ``x86_64``
+* ``matthewbrett/trusty:32`` for ``i686``
+* ``multibuild/xenial_arm64v8`` for ``aarch64``
+* ``multibuild/xenial_ppc64le`` for ``ppc64le``
+* ``mutlibuild/xenial_s390x`` for ``s390x``
+
+Other valid values are any in https://hub.docker.com/orgs/multibuild/repositories,
+using the correct platform code. Alternatively, you can use the substitution
+pattern ``multibuild/xenial_{PLAT}`` in the ``.travis.yml`` file.
 
 See ``multibuild/docker_test_wrap.sh``.
 
