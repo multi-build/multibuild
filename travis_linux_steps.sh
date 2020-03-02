@@ -127,7 +127,7 @@ function install_run {
     else
         # aarch64 is called arm64v8 in Ubuntu
         local plat_subst=$([ "$plat" == aarch64 ] && echo arm64v8 || echo $plat)
-        local docker_image="${DOCKER_TEST_IMAGE/\{plat_subst\}/$plat_subst}"
+        local docker_image="${DOCKER_TEST_IMAGE/\{PLAT\}/$plat_subst}"
     fi
     docker pull $docker_image
     docker run --rm \
