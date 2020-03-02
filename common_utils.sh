@@ -582,7 +582,7 @@ function cpython_path {
     if [ $(lex_ver $py_ver) -ge $(lex_ver 3.4) ] ||
         [ "$u_width" == "16" ]; then
         u_suff=""
-    elif [ "$u_width" == ""]; then
+    elif [ "$u_width" == "" ]; then
         u_width="32"
     elif [ "$u_width" != "32" ]; then
         echo "Incorrect u_width value $u_width"
