@@ -56,7 +56,7 @@ else # not virtualenv
     if [ "$PYTHON_EXE" != "$macpie_bin/python$python_mm" ]; then
         ingest "Wrong macpython python cmd '$PYTHON_EXE'"
     fi
-    if [ "$PIP_CMD" != "sudo $macpie_bin/pip${python_mm}${expected_pip_args}" ]; then
+    if [ "$PIP_CMD" != "sudo $PYTHON_EXE -m pip${expected_pip_args}" ]; then
         ingest "Wrong macpython pip '$PIP_CMD'"
     fi
 fi

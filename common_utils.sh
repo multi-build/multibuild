@@ -546,7 +546,7 @@ function install_pip {
     # Travis VMS now install pip for system python by default - force install
     # even if installed already.
     $PYTHON_EXE $get_pip_path --ignore-installed $pip_args
-    PIP_CMD=$(dirname $PYTHON_EXE)/pip$py_mm
+    PIP_CMD="$PYTHON_EXE -m pip"
     if [ "$USER" != "root" ]; then
         # inside a docker, there is no sudo but the user is already root
         PIP_CMD="sudo $PIP_CMD"
