@@ -63,15 +63,18 @@ function stop_spinner {
 }
 
 function abspath {
+    # Can work with any Python; need not be our installed Python.
     python -c "import os.path; print(os.path.abspath('$1'))"
 }
 
 function relpath {
     # Path of first input relative to second (or $PWD if not specified)
+    # Can work with any Python; need not be our installed Python.
     python -c "import os.path; print(os.path.relpath('$1','${2:-$PWD}'))"
 }
 
 function realpath {
+    # Can work with any Python; need not be our installed Python.
     python -c "import os; print(os.path.realpath('$1'))"
 }
 
@@ -262,7 +265,8 @@ function bdist_wheel_cmd {
     # fixed with bdist_wheel:
     # https://github.com/warner/python-versioneer/issues/121
     local abs_wheelhouse=$1
-    python setup.py bdist_wheel
+    check_python
+    $PYTHON_EXE setup.py bdist_wheel
     cp dist/*.whl $abs_wheelhouse
 }
 
@@ -318,7 +322,8 @@ function pip_opts {
 
 function get_platform {
     # Report platform as given by uname
-    python -c 'import platform; print(platform.uname()[4])'
+    check_python
+    $PYTHON_EXE -c 'import platform; print(platform.uname()[4])'
 }
 
 if [ "$(get_platform)" == x86_64 ] || \
@@ -327,7 +332,8 @@ if [ "$(get_platform)" == x86_64 ] || \
 function get_distutils_platform {
     # Report platform as given by distutils get_platform.
     # This is the platform tag that pip will use.
-    python -c "import distutils.util; print(distutils.util.get_platform())"
+    check_python
+    $PYTHON_EXE -c "import distutils.util; print(distutils.util.get_platform())"
 }
 
 function install_wheel {
@@ -340,19 +346,24 @@ function install_wheel {
     #     TEST_DEPENDS  (optional, default "")
     #     MANYLINUX_URL (optional, default "") (via pip_opts function)
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
+    check_pip
     if [ -n "$TEST_DEPENDS" ]; then
         while read TEST_DEPENDENCY; do
-            $PYTHON_EXE -mpip install $(pip_opts) $@ $TEST_DEPENDENCY
+            $PIP_EXE install $(pip_opts) $@ $TEST_DEPENDENCY
         done <<< "$TEST_DEPENDS"
     fi
-    $PYTHON_EXE -mpip install packaging
+
+    check_python
+    check_pip
+
+    $PIP_EXE install packaging
     local supported_wheels=$($PYTHON_EXE $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
     if [ -z "$supported_wheels" ]; then
         echo "ERROR: no supported wheels found"
         exit 1
     fi
     # Install compatible wheel
-    $PYTHON_EXE -mpip install $(pip_opts) $@ $supported_wheels
+    $PIP_EXE install $(pip_opts) $@ $supported_wheels
 }
 
 function install_run {
