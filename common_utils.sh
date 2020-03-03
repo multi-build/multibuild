@@ -322,8 +322,8 @@ function pip_opts {
 
 function get_platform {
     # Report platform as given by uname
-    check_python
-    $PYTHON_EXE -c 'import platform; print(platform.uname()[4])'
+    # Use any Python that comes to hand.
+    python -c 'import platform; print(platform.uname()[4])'
 }
 
 if [ "$(get_platform)" == x86_64 ] || \
