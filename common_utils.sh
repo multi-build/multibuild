@@ -336,18 +336,18 @@ function install_wheel {
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
     if [ -n "$TEST_DEPENDS" ]; then
         while read TEST_DEPENDENCY; do
-            python -mpip install $(pip_opts) $@ $TEST_DEPENDENCY
+            $PYTHON_EXE -mpip install $(pip_opts) $@ $TEST_DEPENDENCY
         done <<< "$TEST_DEPENDS"
     fi
-    python -mpip install packaging
-    local supported_wheels=$(python $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
+    $PYTHON_EXE -mpip install packaging
+    local supported_wheels=$($PYTHON_EXE $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
     if [ -z "$supported_wheels" ]; then
         echo "ERROR: no supported wheels found"
         ls $wheelhouse/*.whl
         exit 1
     fi
     # Install compatible wheel
-    python -mpip install $(pip_opts) $@ $supported_wheels
+    $PYTHON_EXE -mpip install $(pip_opts) $@ $supported_wheels
 }
 
 function install_run {

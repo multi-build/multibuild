@@ -1,4 +1,4 @@
 function run_tests {
-    python -c "import simplejson"
+    $PYTHON_EXE -c "import simplejson"
 }
 
