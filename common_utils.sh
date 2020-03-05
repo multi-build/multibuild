@@ -16,6 +16,12 @@ DOWNLOADS_SDIR=downloads
 PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 
+# Unicode width, default 32. Used here and in travis_linux_steps.sh
+# In docker_build_wrap.sh it is passed in when calling "docker run"
+# The docker test images also use it when choosing the python to run
+# with, so it is passed in when calling "docker run" for tests.
+UNICODE_WIDTH=${UNICODE_WIDTH:-32}
+
 if [ $(uname) == "Darwin" ]; then IS_OSX=1; fi
 
 # Work round bug in travis xcode image described at
@@ -343,7 +349,6 @@ function install_wheel {
     local supported_wheels=$($PYTHON_EXE $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
     if [ -z "$supported_wheels" ]; then
         echo "ERROR: no supported wheels found"
-        ls $wheelhouse/*.whl
         exit 1
     fi
     # Install compatible wheel

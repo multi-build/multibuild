@@ -11,9 +11,6 @@ set -e
 # Change into root directory of repo
 cd /io
 
-# Unicode width, default 32
-UNICODE_WIDTH=${UNICODE_WIDTH:-32}
-
 # Location of wheels, default "wheelhouse"
 WHEEL_SDIR=${WHEEL_SDIR:-wheelhouse}
 
