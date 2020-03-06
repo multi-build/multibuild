@@ -16,6 +16,12 @@ DOWNLOADS_SDIR=downloads
 PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 
+# Unicode width, default 32. Used here and in travis_linux_steps.sh
+# In docker_build_wrap.sh it is passed in when calling "docker run"
+# The docker test images also use it when choosing the python to run
+# with, so it is passed in when calling "docker run" for tests.
+UNICODE_WIDTH=${UNICODE_WIDTH:-32}
+
 if [ $(uname) == "Darwin" ]; then IS_OSX=1; fi
 
 # Work round bug in travis xcode image described at
@@ -336,18 +342,17 @@ function install_wheel {
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
     if [ -n "$TEST_DEPENDS" ]; then
         while read TEST_DEPENDENCY; do
-            pip install $(pip_opts) $@ $TEST_DEPENDENCY
+            $PYTHON_EXE -mpip install $(pip_opts) $@ $TEST_DEPENDENCY
         done <<< "$TEST_DEPENDS"
     fi
-
-    pip install packaging
-    local supported_wheels=$(python $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
+    $PYTHON_EXE -mpip install packaging
+    local supported_wheels=$($PYTHON_EXE $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
     if [ -z "$supported_wheels" ]; then
         echo "ERROR: no supported wheels found"
         exit 1
     fi
     # Install compatible wheel
-    pip install $(pip_opts) $@ $supported_wheels
+    $PYTHON_EXE -mpip install $(pip_opts) $@ $supported_wheels
 }
 
 function install_run {
@@ -458,6 +463,7 @@ function install_pypy {
     fi
     PYTHON_EXE=$(realpath $py_build/bin/pypy)
     $PYTHON_EXE -mensurepip
+    $PYTHON_EXE -mpip install --upgrade pip setuptools wheel
     if [ "$major" == "3" ] && [ ! -x "$py_build/bin/pip" ]; then
         ln $py_build/bin/pip3 $py_build/bin/pip
     fi
@@ -560,4 +566,33 @@ function get_py_mm {
     $PYTHON_EXE -c "import sys; print('{0}.{1}'.format(*sys.version_info[0:2]))"
 }
 
-
+function cpython_path {
+    # Return path to cpython given
+    # * version (of form "2.7")
+    # * u_width ("16" or "32" default "32")
+    #
+    # For back-compatibility "u" as u_width also means "32"
+    local py_ver="${1:-2.7}"
+    local abi_suff=m
+    local u_width="${2:-${UNICODE_WIDTH}}"
+    local u_suff=u
+    # Python 3.8 and up no longer uses the PYMALLOC 'm' suffix
+    # https://github.com/pypa/wheel/pull/303
+    if [ $(lex_ver $py_ver) -ge $(lex_ver 3.8) ]; then
+        abi_suff=""
+    fi
+    # Back-compatibility
+    if [ "$u_width" == "u" ]; then u_width=32; fi
+    # For Python >= 3.4, "u" suffix not meaningful
+    if [ $(lex_ver $py_ver) -ge $(lex_ver 3.4) ] ||
+        [ "$u_width" == "16" ]; then
+        u_suff=""
+    elif [ "$u_width" == "" ]; then
+        u_width="32"
+    elif [ "$u_width" != "32" ]; then
+        echo "Incorrect u_width value $u_width"
+        exit 1
+    fi
+    local no_dots=$(echo $py_ver | tr -d .)
+    echo "/opt/python/cp${no_dots}-cp${no_dots}$abi_suff${u_suff}"
+}

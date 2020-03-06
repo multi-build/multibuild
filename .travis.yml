@@ -26,6 +26,7 @@ matrix:
       env:
         - TEST_BUILDS=1
         - MB_ML_VER=2010
+        - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
     # 32-bit builds
     - os: linux
       dist: xenial
@@ -38,6 +39,7 @@ matrix:
         - TEST_BUILDS=1
         - PLAT=i686
         - MB_ML_VER=2010
+        - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
     # Builds with caching
     - os: linux
       dist: xenial
@@ -50,6 +52,7 @@ matrix:
         - MB_PYTHON_VERSION=pypy3.6-7.3
         - MB_ML_VER=2014
         - TEST_BUILDS=1
+        - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
     # OSX builds
     - os: osx
       env:
@@ -101,19 +104,7 @@ matrix:
         - VENV=venv
     - os: osx
       env:
-        - MB_PYTHON_VERSION=pypy-6.0
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-7.0
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-7.1
-        - VENV=venv
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=pypy-7.2
+        - MB_PYTHON_VERSION=pypy-7.3
         - TEST_BUILDS=1
         - VENV=venv
     # Default OSX (xcode image) is 10.13 (xcode 9.4.1) as of 2018-08-03
@@ -193,6 +184,7 @@ matrix:
         - MB_ML_VER=2014
         - TEST_BUILDS=1
         - PLAT=aarch64
+        - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
     #  s390x builds
     - os: linux
       arch: s390x
@@ -201,6 +193,7 @@ matrix:
         - MB_ML_VER=2014
         - TEST_BUILDS=1
         - PLAT=s390x
+        - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
     #  ppc64le builds
     - os: linux
       arch: ppc64le
@@ -209,6 +202,7 @@ matrix:
         - MB_ML_VER=2014
         - TEST_BUILDS=1
         - PLAT=ppc64le
+        - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
 
 script:
   - export ENV_VARS_PATH="tests/env_vars.sh"

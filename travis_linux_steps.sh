@@ -119,9 +119,16 @@ function install_run {
     #  WHEEL_SDIR (optional)
     #  MANYLINUX_URL (optional)
     #  TEST_DEPENDS  (optional)
+    #  MB_TEST_VER (optional)
     local plat=${1:-${PLAT:-x86_64}}
-    bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
-    local docker_image="matthewbrett/trusty:$bitness"
+    if [ -z "$DOCKER_TEST_IMAGE" ]; then
+        local bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
+        local docker_image="matthewbrett/trusty:$bitness"
+    else
+        # aarch64 is called arm64v8 in Ubuntu
+        local plat_subst=$([ "$plat" == aarch64 ] && echo arm64v8 || echo $plat)
+        local docker_image="${DOCKER_TEST_IMAGE/\{PLAT\}/$plat_subst}"
+    fi
     docker pull $docker_image
     docker run --rm \
         -e PYTHON_VERSION="$MB_PYTHON_VERSION" \

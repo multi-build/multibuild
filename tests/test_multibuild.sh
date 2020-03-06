@@ -31,6 +31,7 @@ if [ -n "$TEST_BUILDS" ]; then
         # Will be set automatically by docker call in build_multilinux below.
         PYTHON_VERSION=${MB_PYTHON_VERSION}
         source tests/test_library_builders.sh
+        source tests/config.sh
     elif [ ! -x "$(command -v docker)" ]; then
         echo "Skipping build tests; no docker available"
     else
@@ -42,7 +43,10 @@ if [ -n "$TEST_BUILDS" ]; then
             source tests/test_library_builders.sh
         "
         build_multilinux $my_plat "pip install simplejson"
+        CONFIG_PATH=tests/config.sh
     fi
+    build_index_wheel simplejson
+    install_run $PLAT
 fi
 
 source tests/test_supported_wheels.sh

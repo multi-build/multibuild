@@ -2,6 +2,13 @@
 # Install and test steps on Linux
 set -e
 
+# "python" and "pip" are already on the path as part of the docker
+# startup code in choose_python.sh, but the following are required and not
+# necessarily already set
+
+PYTHON_EXE=${PYTHON_EXE:-python}
+PIP_CMD=${PIP_CMD:-pip}
+
 # Get needed utilities
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 source $MULTIBUILD_DIR/common_utils.sh
