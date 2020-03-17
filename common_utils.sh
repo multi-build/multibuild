@@ -349,21 +349,21 @@ function install_wheel {
     check_pip
     if [ -n "$TEST_DEPENDS" ]; then
         while read TEST_DEPENDENCY; do
-            $PIP_EXE install $(pip_opts) $@ $TEST_DEPENDENCY
+            $PIP_CMD install $(pip_opts) $@ $TEST_DEPENDENCY
         done <<< "$TEST_DEPENDS"
     fi
 
     check_python
     check_pip
 
-    $PIP_EXE install packaging
+    $PIP_CMD install packaging
     local supported_wheels=$($PYTHON_EXE $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
     if [ -z "$supported_wheels" ]; then
         echo "ERROR: no supported wheels found"
         exit 1
     fi
     # Install compatible wheel
-    $PIP_EXE install $(pip_opts) $@ $supported_wheels
+    $PIP_CMD install $(pip_opts) $@ $supported_wheels
 }
 
 function install_run {
