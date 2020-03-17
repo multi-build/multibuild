@@ -2,10 +2,19 @@
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 set -x
 source common_utils.sh
-source tests/utils.sh
+# This is normally set
+# - on linux via docker_build_wrap.sh, docker_test_wrap.sh
+# - on macOS via make_workon_env or install_macpython,
+#   which is called by get_macpython_environment which is called by before_install
+# We call it here so that these pre-install tests succeed
+PYTHON_EXE=python
 
+source tests/utils.sh
 source tests/test_common_utils.sh
 source tests/test_fill_submodule.sh
+
+# make sure it is set via one of the mechanisms above
+unset PYTHON_EXE
 
 if [ -n "$IS_OSX" ]; then
     source osx_utils.sh
