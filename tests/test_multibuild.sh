@@ -2,18 +2,20 @@
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 set -x
 source common_utils.sh
-source tests/utils.sh
+# This is normally set
+# - on linux via docker_build_wrap.sh, docker_test_wrap.sh
+# - on macOS via make_workon_env or install_macpython,
+#   which is called by get_macpython_environment which is called by before_install
+# We call it here so that these pre-install tests succeed
+PYTHON_EXE=python
 
+source tests/utils.sh
 source tests/test_common_utils.sh
 source tests/test_fill_submodule.sh
 
 if [ -n "$IS_OSX" ]; then
     source osx_utils.sh
     MB_PYTHON_OSX_VER=${MB_PYTHON_OSX_VER:-$(macpython_sdk_for_version $MB_PYTHON_VERSION)}
-
-    # To work round:
-    # https://travis-ci.community/t/syntax-error-unexpected-keyword-rescue-expecting-keyword-end-in-homebrew/5623
-    brew update
 
     get_macpython_environment $MB_PYTHON_VERSION ${VENV:-""} $MB_PYTHON_OSX_VER
     source tests/test_python_install.sh
