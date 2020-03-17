@@ -13,6 +13,9 @@ source tests/utils.sh
 source tests/test_common_utils.sh
 source tests/test_fill_submodule.sh
 
+# make sure it is set via one of the mechanisms above
+unset PYTHON_EXE
+
 if [ -n "$IS_OSX" ]; then
     source osx_utils.sh
     MB_PYTHON_OSX_VER=${MB_PYTHON_OSX_VER:-$(macpython_sdk_for_version $MB_PYTHON_VERSION)}
