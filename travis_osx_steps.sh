@@ -23,10 +23,6 @@ function before_install {
     export CC=clang
     export CXX=clang++
 
-    # To work round:
-    # https://travis-ci.community/t/syntax-error-unexpected-keyword-rescue-expecting-keyword-end-in-homebrew/5623
-    brew update
-
     get_macpython_environment $MB_PYTHON_VERSION venv
     source venv/bin/activate
     pip install --upgrade pip wheel
