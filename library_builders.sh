@@ -41,9 +41,9 @@ FLEX_VERSION=${FLEX_VERSION:-2.6.4}
 BISON_VERSION=${BISON_VERSION:-3.0.4}
 FFTW_VERSION=${FFTW_VERSION:-3.3.7}
 CFITSIO_VERSION=${CFITSIO_VERSION:-3450}
-OPENSSL_ROOT=openssl-1.0.2u
-# Hash from https://www.openssl.org/source/openssl-1.0.2?.tar.gz.sha256
-OPENSSL_HASH=ecd0c6ffb493dd06707d38b14bb4d8c2288bb7033735606569d8f90f89669d16
+OPENSSL_ROOT=openssl-1.1.1f
+# Hash from https://www.openssl.org/source/openssl-1.1.1?.tar.gz.sha256
+OPENSSL_HASH=186c6bfe6ecfba7a5b48c47f8a1673d0f3b0e5ba2e25602dd23b629975da3f35
 OPENSSL_DOWNLOAD_URL=https://www.openssl.org/source
 
 
