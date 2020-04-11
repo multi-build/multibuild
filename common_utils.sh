@@ -169,42 +169,51 @@ function install_rsync {
     fi
 }
 
-function fetch_unpack {
+function fetch {
     # Fetch input archive name from input URL
     # Parameters
     #    url - URL from which to fetch archive
     #    archive_fname (optional) archive name
     #
-    # Echos unpacked directory and file names.
+    # Echos downloaded archive name
     #
     # If `archive_fname` not specified then use basename from `url`
     # If `archive_fname` already present at download location, use that instead.
     local url=$1
     if [ -z "$url" ];then echo "url not defined"; exit 1; fi
-    local archive_fname=${2:-$(basename $url)}
+    local archive_fname=${2:-$(basename "$url")}
     local arch_sdir="${ARCHIVE_SDIR:-archives}"
     # Make the archive directory in case it doesn't exist
-    mkdir -p $arch_sdir
+    mkdir -p "$arch_sdir"
     local out_archive="${arch_sdir}/${archive_fname}"
     # If the archive is not already in the archives directory, get it.
     if [ ! -f "$out_archive" ]; then
         # Source it from multibuild archives if available.
         local our_archive="${MULTIBUILD_DIR}/archives/${archive_fname}"
         if [ -f "$our_archive" ]; then
-            ln -s $our_archive $out_archive
+            ln -s "$our_archive" "$out_archive"
         else
             # Otherwise download it.
-            curl -L $url > $out_archive
+            curl -L "$url" > "$out_archive"
         fi
     fi
+    echo -n "$out_archive"
+}
+
+function unpack {
     # Unpack archive, refreshing contents, echoing dir and file
     # names.
+    local out_archive="$1"
     rm_mkdir arch_tmp
     install_rsync
     (cd arch_tmp && \
-        untar ../$out_archive && \
-        ls -1d * &&
-        rsync --delete -ah * ..)
+        untar "../$out_archive" && \
+        ls -1d -- * &&
+        rsync --delete -ah -- * ..)
+}
+
+function fetch_unpack {
+    unpack "$(fetch "$1" "$2")"
 }
 
 function clean_code {
