@@ -11,8 +11,6 @@
 #  install_run
 set -e
 
-MANYLINUX_URL=${MANYLINUX_URL:-https://5cf40426d9f06eb7461d-6fe47d9331aba7cd62fc36c7196769e4.ssl.cf2.rackcdn.com}
-
 # Default Manylinux version
 # Warning: ignored if DOCKER_IMAGE variable is set.
 # See build_multilinux function.
