@@ -25,11 +25,12 @@ if [ -n "$IS_OSX" ]; then
         echo "invalid platform = '$PLAT', supported values are 'intel' or 'x86_64'"
         exit 1
     fi
-    # Only set CFLAGS, FFLAGS if they are not already defined.  Build functions
-    # can override the arch flags by setting CFLAGS, FFLAGS
+    # Only set CFLAGS, FFLAGS, LDFLAGS if they are not already defined.  Build functions
+    # can override the arch flags by setting CFLAGS, FFLAGS, LDFLAGS
     export CFLAGS="${CFLAGS:-$ARCH_FLAGS}"
     export CXXFLAGS="${CXXFLAGS:-$ARCH_FLAGS}"
     export FFLAGS="${FFLAGS:-$ARCH_FLAGS}"
+    export LDFLAGS="${LDFLAGS}"
 
     # Disable homebrew auto-update
     export HOMEBREW_NO_AUTO_UPDATE=1
@@ -39,9 +40,10 @@ else
     # Strip all binaries after compilation.
     STRIP_FLAGS=${STRIP_FLAGS:-"-Wl,-strip-all"}
 
-    export CFLAGS="${CFLAGS:-$STRIP_FLAGS}"
-    export CXXFLAGS="${CXXFLAGS:-$STRIP_FLAGS}"
-    export FFLAGS="${FFLAGS:-$STRIP_FLAGS}"
+    export CFLAGS="${CFLAGS}"
+    export CXXFLAGS="${CXXFLAGS}"
+    export FFLAGS="${FFLAGS}"
+    export LDFLAGS="${LDFLAGS:-$STRIP_FLAGS}"
     if [[ $MB_ML_VER == "1" ]]; then
         if [ "${MB_PYTHON_VERSION:0:4}" == "pypy" ]; then
             yum install -y libtool wget
