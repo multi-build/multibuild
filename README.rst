@@ -64,7 +64,7 @@ variables:
 * ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C extensions. For CPython targets it may be set to 10.6 or 10.9, provided a corresponding Python build is available at `python.org <https://www.python.org/downloads/mac-osx/>`_. It defaults to the highest version available. It's ignored for PyPy targets.
 * ``PLAT`` sets the architectures built for any C extensions: ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. It defaults to the same arches as the target Python version: 64-bit for CPython macOS 10.9 or PyPy, and 64/32-bit for CPython 10.6.
 
-In most cases it's best to rely on the defaults for ``MB_PYTHON_OSX_VER`` and ``PLAT``, rather than setting them explicitly. Examples of exceptions to this guideline include: 
+In most cases it's best to rely on the defaults for ``MB_PYTHON_OSX_VER`` and ``PLAT``, rather than setting them explicitly. Examples of exceptions to this guideline include:
 
 * setting ``MB_PYTHON_OSX_VER=10.6`` to build a 10.6 64/32-bit CPython wheel for Python 2.7 (default for 2.7 is 10.9 64-bit)
 * setting ``MB_PYTHON_OSX_VER=10.6 and PLAT=x86_64`` to build a 10.6 64-bit only wheel (10.6 would normally be 64/32-bit). Such a wheel would still have a platform tag of ``macosx_10_6_intel`` , advertising support for both 64 and 32-bit, but wouldnt work in 32-bit mode. This may be OK given how unlikely it is that there is still anyone actually running Python on macOS in 32-bit mode.
@@ -390,7 +390,6 @@ To use these scripts
 
 * For the Windows wheels, create an ``appveyor.yml`` file, something like:
 
-  - https://github.com/MacPython/numpy-wheels/blob/master/.appveyor.yml
   - https://github.com/MacPython/astropy-wheels/blob/master/appveyor.yml
   - https://github.com/MacPython/nipy-wheels/blob/master/appveyor.yml
   - https://github.com/MacPython/pytables-wheels/blob/master/appveyor.yml
