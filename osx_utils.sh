@@ -11,14 +11,14 @@ MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 WORKING_SDIR=working
 
-# As of 10 Mar 2020 - latest Python of each version with binary download
+# As of 14 May 2020 - latest Python of each version with binary download
 # available.
 # See: https://www.python.org/downloads/mac-osx/
 LATEST_2p7=2.7.17
 LATEST_3p5=3.5.4
 LATEST_3p6=3.6.8
 LATEST_3p7=3.7.7
-LATEST_3p8=3.8.2
+LATEST_3p8=3.8.3
 
 
 function check_python {
