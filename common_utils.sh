@@ -440,7 +440,6 @@ function install_pypy {
     # sets $PYTHON_EXE variable to python executable
 
     local version=$1
-    suffix=linux64
     case "$PLAT" in
     "x86_64")  suffix="linux64";;
     "i686")    suffix="linux32";;
