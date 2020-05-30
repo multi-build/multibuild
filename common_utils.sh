@@ -440,19 +440,18 @@ function install_pypy {
     # sets $PYTHON_EXE variable to python executable
 
     local version=$1
-    case "$PLAT" in
-    "x86_64")  suffix="linux64";;
-    "i686")    suffix="linux32";;
-    "darwin")  suffix="osx64";;
-    "ppc64le") suffix="ppc64le";;
-    "s390x")    suffix="s390x";;
-    "aarch64")  suffix="aarch64";;
-    *) if [ -n "$IS_OSX" ]; then
-            suffix="osx64";
-       else
-            echo unknown platform "$PLAT"; exit 1
-       fi;;
-    esac
+    if [ -n "$IS_OSX" ]; then
+       suffix="osx64"
+    else
+       case "$PLAT" in
+       "x86_64")  suffix="linux64";;
+       "i686")    suffix="linux32";;
+       "ppc64le") suffix="ppc64le";;
+       "s390x")   suffix="s390x";;
+       "aarch64") suffix="aarch64";;
+       *) echo unknown platform "$PLAT"; exit 1;;
+       esac
+    fi
 
     # Need to convert pypy-7.2 to pypy2.7-v7.2.0 and pypy3.6-7.3 to pypy3.6-v7.3.0
     local prefix=$(get_pypy_build_prefix $version)
