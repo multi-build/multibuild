@@ -260,10 +260,10 @@ function install_macpython {
     local version=$1
     local py_osx_ver=$2
     local impl=$(macpython_impl_for_version $version)
-    local stripped_ver=$(strip_macpython_ver_prefix $version)
     if [[ "$impl" == "pp" ]]; then
         install_pypy $version
     elif [[ "$impl" == "cp" ]]; then
+        local stripped_ver=$(strip_macpython_ver_prefix $version)
         install_mac_cpython $stripped_ver $py_osx_ver
     else
         echo "Unexpected Python impl: ${impl}"
