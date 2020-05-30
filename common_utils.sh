@@ -446,7 +446,7 @@ function install_pypy {
     "i686")    suffix="linux32";;
     "darwin")  suffix="osx64";;
     "ppc64le") suffix="ppc64le";;
-    "s30x")    suffix="s390x";;
+    "s390x")    suffix="s390x";;
     "aarch64")  suffix="aarch64";;
     *) if [ -n "$IS_OSX" ]; then
             suffix="osx64";
