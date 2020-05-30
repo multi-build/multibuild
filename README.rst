@@ -87,11 +87,10 @@ Build phase
 Specify the Manylinux version to build for with the ``MB_ML_VER`` environment
 variable. The default version is ``1``.  Versions that are currently valid are:
 
-* ``1`` corresponding to manylinux1 (see [PEP 513](https://www.python.org/dev/peps/pep-0513);
-* ``2010``  corresponding to manylinux2010 (see [PEP
-  571](https://www.python.org/dev/peps/pep-0571).
+* ``1`` corresponding to manylinux1 (see `PEP 513 <https://www.python.org/dev/peps/pep-0513>`_).
+* ``2010``  corresponding to manylinux2010 (see `PEP 571 <https://www.python.org/dev/peps/pep-0571>`_).
 * ``2014`` corresponding to manylinux2014 and adds more architectures to ``PLAT``
-  (see [PEP 599](https://www.python.org/dev/peps/pep-0599).
+  (see `PEP 599 <https://www.python.org/dev/peps/pep-0599>`_).
 
 The environment variable specified which Manylinux docker container you are building in.
 
