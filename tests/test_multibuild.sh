@@ -43,10 +43,8 @@ if [ -n "$TEST_BUILDS" ]; then
         touch config.sh
         source travis_linux_steps.sh
         my_plat=${PLAT:-x86_64}
-        build_multilinux $my_plat "
-            source tests/test_manylinux_utils_docker.sh
-            source tests/test_library_builders.sh
-        "
+        build_multilinux $my_plat "source tests/test_manylinux_utils_docker.sh"
+        build_multilinux $my_plat "source tests/test_library_builders.sh"
         build_multilinux $my_plat "pip install simplejson"
         CONFIG_PATH=tests/config.sh
     fi
