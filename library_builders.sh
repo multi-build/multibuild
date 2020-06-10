@@ -370,7 +370,14 @@ function build_libtool {
 }
 
 function build_ragel {
-    build_simple ragel $RAGEL_VERSION https://www.colm.net/files/ragel
+    local htprefix=https
+    if [ -n "$IS_OSX" ]; then
+        # Invalid certificate, when using macOS curl.
+        # https://security.stackexchange.com/questions/232445/https-connection-to-specific-sites-fail-with-curl-on-macos
+        # Cert will likely be removed by Safari update in due course.
+        htprefix=http
+    fi
+    build_simple ragel $RAGEL_VERSION ${htprefix}://www.colm.net/files/ragel
 }
 
 function build_bison {
