@@ -23,7 +23,7 @@ fi
 python_mm="${cpython_version:0:1}.${cpython_version:2:1}"
 
 # extract implementation prefix and version
-if [[ "$MB_PYTHON_VERSION" =~ (pypy-)?([0-9\.]+) ]]; then
+if [[ "$MB_PYTHON_VERSION" =~ (pypy[0-9\.]*-)?([0-9\.]+) ]]; then
     _impl=${BASH_REMATCH[1]:-"cp"}
     requested_impl=${_impl:0:2}
     requested_version=${BASH_REMATCH[2]}
