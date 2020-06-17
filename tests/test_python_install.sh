@@ -52,8 +52,14 @@ if [ -n "$VENV" ]; then  # in virtualenv
         ingest "Wrong virtualenv pip '$PIP_CMD'"
     fi
 else # not virtualenv
-    macpie_bin="$MACPYTHON_PY_PREFIX/$python_mm/bin"
-    if [ "$PYTHON_EXE" != "$macpie_bin/python$python_mm" ]; then
+    if [[ $requested_impl == 'cp' ]]; then
+        macpie_bin="$MACPYTHON_PY_PREFIX/$python_mm/bin"
+        bin_name="python$python_mm"
+    else
+        macpie_bin="$PWD/pypy$python_mm-v$implementer_version-osx64/bin"
+        bin_name="pypy"
+    fi
+    if [ "$PYTHON_EXE" != "$macpie_bin/$bin_name" ]; then
         ingest "Wrong macpython python cmd '$PYTHON_EXE'"
     fi
     if [ "$PIP_CMD" != "sudo $macpie_bin/pip${python_mm}${expected_pip_args}" ]; then
