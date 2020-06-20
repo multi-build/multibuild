@@ -23,7 +23,7 @@ fi
 python_mm="${cpython_version:0:1}.${cpython_version:2:1}"
 
 # extract implementation prefix and version
-if [[ "$MB_PYTHON_VERSION" =~ (pypy-)?([0-9\.]+) ]]; then
+if [[ "$MB_PYTHON_VERSION" =~ (pypy[0-9\.]*-)?([0-9\.]+) ]]; then
     _impl=${BASH_REMATCH[1]:-"cp"}
     requested_impl=${_impl:0:2}
     requested_version=${BASH_REMATCH[2]}
@@ -52,8 +52,14 @@ if [ -n "$VENV" ]; then  # in virtualenv
         ingest "Wrong virtualenv pip '$PIP_CMD'"
     fi
 else # not virtualenv
-    macpie_bin="$MACPYTHON_PY_PREFIX/$python_mm/bin"
-    if [ "$PYTHON_EXE" != "$macpie_bin/python$python_mm" ]; then
+    if [[ $requested_impl == 'cp' ]]; then
+        macpie_bin="$MACPYTHON_PY_PREFIX/$python_mm/bin"
+        bin_name="python$python_mm"
+    else
+        macpie_bin="$PWD/pypy$python_mm-v$implementer_version-osx64/bin"
+        bin_name="pypy"
+    fi
+    if [ "$PYTHON_EXE" != "$macpie_bin/$bin_name" ]; then
         ingest "Wrong macpython python cmd '$PYTHON_EXE'"
     fi
     if [ "$PIP_CMD" != "sudo $macpie_bin/pip${python_mm}${expected_pip_args}" ]; then
