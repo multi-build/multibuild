@@ -157,8 +157,10 @@ function get_cmake {
     if [ -n "$IS_OSX" ]; then
         brew install cmake > /dev/null
     else
-        yum_install cmake28 > /dev/null
-        cmake=cmake28
+        if [ "`yum search cmake | grep ^cmake28\.`" ]; then
+            cmake=cmake28
+        fi
+        yum_install $cmake > /dev/null
     fi
     echo $cmake
 }
