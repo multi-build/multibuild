@@ -4,6 +4,10 @@
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 source $MULTIBUILD_DIR/common_utils.sh
 
+function build_xz {
+	echo "Skip building xz"
+}
+
 function get_platform {
     # Report platform as given by uname
     python -c 'import platform; print(platform.uname()[4])'

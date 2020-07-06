@@ -23,10 +23,10 @@ ENV_VARS_PATH=${ENV_VARS_PATH:-env_vars.sh}
 # Always pull in common and library builder utils
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 # These routines also source common_utils.sh
-source $MULTIBUILD_DIR/manylinux_utils.sh
 if [ -r "$ENV_VARS_PATH" ]; then source "$ENV_VARS_PATH"; fi
 source $MULTIBUILD_DIR/configure_build.sh
 source $MULTIBUILD_DIR/library_builders.sh
+source $MULTIBUILD_DIR/manylinux_utils.sh
 
 if [ "$USE_CCACHE" == "1" ]; then
     activate_ccache
