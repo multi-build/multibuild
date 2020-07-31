@@ -152,7 +152,7 @@ function build_tiff {
     build_simple tiff $TIFF_VERSION https://download.osgeo.org/libtiff
 }
 
-function get_cmake {
+function get_modern_cmake {
     local cmake=cmake
     if [ -n "$IS_OSX" ]; then
         brew install cmake > /dev/null
@@ -165,13 +165,18 @@ function get_cmake {
     echo $cmake
 }
 
+function get_cmake {
+	>&2 echo "get_cmake has been deprecated. Please use get_modern_cmake instead."
+	get_modern_cmake
+}
+
 function build_openjpeg {
     if [ -e openjpeg-stamp ]; then return; fi
     build_zlib
     build_libpng
     build_tiff
     build_lcms2
-    local cmake=$(get_cmake)
+    local cmake=$(get_modern_cmake)
     local archive_prefix="v"
     if [ $(lex_ver $OPENJPEG_VERSION) -lt $(lex_ver 2.1.1) ]; then
         archive_prefix="version."
@@ -254,7 +259,7 @@ function build_libaec {
 
 function build_blosc {
     if [ -e blosc-stamp ]; then return; fi
-    local cmake=$(get_cmake)
+    local cmake=$(get_modern_cmake)
     fetch_unpack https://github.com/Blosc/c-blosc/archive/v${BLOSC_VERSION}.tar.gz
     (cd c-blosc-${BLOSC_VERSION} \
         && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX . \

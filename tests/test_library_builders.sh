@@ -56,7 +56,7 @@ if [ -z "$IS_OSX" ]; then
 fi
 suppress build_new_zlib
 suppress build_hdf5
-suppress get_cmake
+suppress get_modern_cmake
 
 [ ${MB_PYTHON_VERSION+x} ] || ingest "\$MB_PYTHON_VERSION is not set"
 [ "$MB_PYTHON_VERSION" == "$PYTHON_VERSION" ] || ingest "\$MB_PYTHON_VERSION must be equal to \$PYTHON_VERSION"
