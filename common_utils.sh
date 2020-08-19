@@ -13,7 +13,7 @@ set -e
 
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 DOWNLOADS_SDIR=downloads
-PYPY_URL=https://bitbucket.org/pypy/pypy/downloads
+PYPY_URL=https://downloads.python.org/pypy
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 
 # Unicode width, default 32. Used here and in travis_linux_steps.sh
