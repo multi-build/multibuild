@@ -40,7 +40,7 @@ suppress build_flex
 suppress build_openblas
 suppress build_tiff
 suppress build_lcms2
-suppress build_xz
+suppress ensure_xz
 suppress build_freetype
 suppress build_libyaml
 if [ -z "$IS_OSX" ]; then

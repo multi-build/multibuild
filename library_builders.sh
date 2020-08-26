@@ -148,7 +148,7 @@ function build_bzip2 {
 function build_tiff {
     build_zlib
     build_jpeg
-    build_xz
+    ensure_xz
     build_simple tiff $TIFF_VERSION https://download.osgeo.org/libtiff
 }
 
@@ -199,6 +199,12 @@ function build_giflib {
 
 function build_xz {
     build_simple xz $XZ_VERSION https://tukaani.org/xz
+}
+
+function ensure_xz {
+	if [[ ! $(type -P "xz") ]]; then
+		build_xz
+	fi
 }
 
 function build_libwebp {
