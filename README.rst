@@ -15,14 +15,14 @@ Rackspace finally stopped subsidizing this container, and the Rackspace of
 using https://anaconda.org/scipy-wheels-nightly/ for weekly uploads and
 https://anaconda.org/multibuild-wheels-staging for staging wheels to PyPI.
 
-Another option is to use Github for staging --- as do Cython for Travis-CI and for
-Appveyor.  Here is the numpy code (for running on Travis-CI) to upload to
+Another option is to use GitHub for staging --- as do Cython for Travis CI and for
+AppVeyor.  Here is the NumPy code (for running on Travis CI) to upload to
 Anaconda https://github.com/MacPython/numpy-wheels/blob/master/.travis.yml#L99
 
-For projects housed under the MacPython Github organization, you have access to
+For projects housed under the MacPython GitHub organization, you have access to
 Anaconda upload tokens via the "Organization Secrets"
 https://github.com/MacPython/numexpr-wheels/settings/secrets . You can use
-these to move to github actions (they provide x86 machines for Windows, Linux
+these to move to GitHub Actions (they provide x86 machines for Windows, Linux
 and Mac). Otherwise we (please raise an issue here) will need to negotiate
 getting you tokens.
 
