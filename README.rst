@@ -2,6 +2,34 @@
 Utilities for building on Travis CI and AppVeyor
 ################################################
 
+*****************************
+Update: Uploads and Rackspace
+*****************************
+
+The original Multibuild default was to upload wheels to a Rackspace container,
+where Rackspace kindly donated the hosting to the Scikit-learn team.  We had
+a URL pointing to the Rackspace container: `http://wheels.scipy.org`.
+
+Rackspace finally stopped subsidizing this container, and the Rackspace of
+`http://wheels.scipy.org` is no more. Projects using Multibuild have moved to
+using https://anaconda.org/scipy-wheels-nightly/ for weekly uploads and
+https://anaconda.org/multibuild-wheels-staging for staging wheels to PyPI.
+
+Another option is to use Github for staging --- as do Cython for Travis-CI and for
+Appveyor.  Here is the numpy code (for running on Travis-CI) to upload to
+Anaconda https://github.com/MacPython/numpy-wheels/blob/master/.travis.yml#L99
+
+For projects housed under the MacPython Github organization, you have access to
+Anaconda upload tokens via the "Organization Secrets"
+https://github.com/MacPython/numexpr-wheels/settings/secrets . You can use
+these to move to github actions (they provide x86 machines for Windows, Linux
+and Mac). Otherwise we (please raise an issue here) will need to negotiate
+getting you tokens.
+
+************
+Introduction
+************
+
 A set of scripts to automate builds of macOS and Manylinux1 wheels on the
 `Travis CI <https://travis-ci.org/>`_ infrastructure, and also Windows
 wheels on the `AppVeyor <https://ci.appveyor.com/>`_ infrastructure.
@@ -213,16 +241,8 @@ To use these scripts
             # pip dependencies to _test_ your project.  Include any dependencies
             # that you need, that are also specified in BUILD_DEPENDS, this will be
             # a separate install.
-            - TEST_DEPENDS="numpy scipy pytest"
-            - UNICODE_WIDTH=32
-            - WHEELHOUSE_UPLOADER_USERNAME=travis-worker
-            # Following generated with
-            # travis encrypt -r your-org/your-project-wheels WHEELHOUSE_UPLOADER_SECRET=<the api key>
-            # This is for Rackspace uploads.  Contact Matthew Brett, or the
-            # scikit-learn team, for # permission (and the API key) to upload to
-            # the Rackspace account used here, or use your own account.
-            - secure:
-                "MNKyBWOzu7JAUmC0Y+JhPKfytXxY/ADRmUIMEWZV977FLZPgYctqd+lqel2QIFgdHDO1CIdTSymOOFZckM9ICUXg9Ta+8oBjSvAVWO1ahDcToRM2DLq66fKg+NKimd2OfK7x597h/QmUSl4k8XyvyyXgl5jOiLg/EJxNE2r83IA="
+            # Now see the Uploads section for the stuff you need to
+            # upload your wheels after CI has built them.
 
     # You will likely prefer "language: generic" for travis configuration,
     # rather than, say "language: python". Multibuild doesn't use
@@ -322,15 +342,8 @@ To use these scripts
         - install_run $PLAT
 
     after_success:
-        # Upload wheels to Rackspace container
-        - pip install wheelhouse-uploader
-        # This uploads the wheels to a Rackspace container owned by the
-        # scikit-learn team, available at http://wheels.scipy.org.  See above
-        # for information on using this account or choosing another.
-        - python -m wheelhouse_uploader upload --local-folder
-            ${TRAVIS_BUILD_DIR}/wheelhouse/
-            --no-update-index
-            wheels
+        # Here you should put the code to upload your wheels
+        # See the Uploads section for more details.
 
   The example above is for a project building from a Git submodule.  If you
   aren't building from a submodule, but want to use ``pip`` to build from a
