@@ -15,9 +15,12 @@ Rackspace finally stopped subsidizing this container, and the Rackspace of
 using https://anaconda.org/scipy-wheels-nightly/ for weekly uploads and
 https://anaconda.org/multibuild-wheels-staging for staging wheels to PyPI.
 
-Another option is to use GitHub for staging --- as do Cython for Travis CI and for
-AppVeyor.  Here is the NumPy code (for running on Travis CI) to upload to
-Anaconda https://github.com/MacPython/numpy-wheels/blob/master/.travis.yml#L99
+Another option is to use GitHub for staging --- as do Cython `for Travis CI
+<https://github.com/MacPython/cython-wheels/blob/master/.travis.yml#L144>`_
+and `for AppVeyor
+<https://github.com/MacPython/cython-wheels/blob/master/appveyor.yml#L118>`_.
+Here is the NumPy code (for running on Travis CI) to upload to Anaconda:
+https://github.com/MacPython/numpy-wheels/blob/master/.travis.yml#L99
 
 For projects housed under the MacPython GitHub organization, you have access to
 Anaconda upload tokens via the "Organization Secrets"
