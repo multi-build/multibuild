@@ -56,16 +56,11 @@ matrix:
     # OSX builds
     - os: osx
       env:
-        - MB_PYTHON_VERSION=2.7
+        - MB_PYTHON_VERSION=2.7.17 # 2.7.18 doesnt have a 10.6 build
         - MB_PYTHON_OSX_VER=10.6
         - TEST_BUILDS=1
         - OPENSSL_ROOT=openssl-1.0.2u
         - OPENSSL_HASH=ecd0c6ffb493dd06707d38b14bb4d8c2288bb7033735606569d8f90f89669d16
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=2.7
-        - MB_PYTHON_OSX_VER=10.9
-        - TEST_BUILDS=1
     - os: osx
       env:
         - MB_PYTHON_VERSION=2.7
