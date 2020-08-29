@@ -51,9 +51,11 @@
 [ "$(macpython_sdk_list_for_version 3.6.5)"  == "10.6 10.9" ] || ingest
 [ "$(macpython_sdk_list_for_version 3.6)"    == "10.6 10.9" ] || ingest
 [ "$(macpython_sdk_list_for_version 3.5)"    == "10.6" ] || ingest
-[ "$(macpython_sdk_list_for_version 2.7)"    == "10.6 10.9" ] || ingest
+[ "$(macpython_sdk_list_for_version 2.7)"    == "10.9" ] || ingest
 [ "$(macpython_sdk_list_for_version 2.7.14)" == "10.6" ] || ingest
 [ "$(macpython_sdk_list_for_version 2.7.15)" == "10.6 10.9" ] || ingest
+[ "$(macpython_sdk_list_for_version 2.7.17)" == "10.6 10.9" ] || ingest
+[ "$(macpython_sdk_list_for_version 2.7.18)" == "10.9" ] || ingest
 
 [ "$(macpython_sdk_for_version 3.8)"    == "10.9" ] || ingest
 [ "$(macpython_sdk_for_version 3.5)"    == "10.6" ] || ingest
