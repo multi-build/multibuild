@@ -21,7 +21,13 @@ if [ -n "$IS_MACOS" ]; then
     MB_PYTHON_OSX_VER=${MB_PYTHON_OSX_VER:-$(macpython_sdk_for_version $MB_PYTHON_VERSION)}
     PLAT=${PLAT:-$(macpython_arch_for_version $MB_PYTHON_VERSION)}
 
+    # exit early if this cmd is expected to fail (and does)
+    if [[ -n $OSX_ENV_EXPECT_FAIL ]]; then
+      expect_return 22 get_macpython_environment $MB_PYTHON_VERSION ${VENV:-""} $MB_PYTHON_OSX_VER
+      exit 0
+    fi
     get_macpython_environment $MB_PYTHON_VERSION ${VENV:-""} $MB_PYTHON_OSX_VER
+
     source tests/test_python_install.sh
     source tests/test_fill_pyver.sh
     source tests/test_fill_pypy_ver.sh
