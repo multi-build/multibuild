@@ -153,6 +153,7 @@ function build_tiff {
 }
 
 function get_modern_cmake {
+    # Install cmake >= 2.8
     local cmake=cmake
     if [ -n "$IS_OSX" ]; then
         brew install cmake > /dev/null
