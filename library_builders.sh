@@ -148,19 +148,27 @@ function build_bzip2 {
 function build_tiff {
     build_zlib
     build_jpeg
-    build_xz
+    ensure_xz
     build_simple tiff $TIFF_VERSION https://download.osgeo.org/libtiff
 }
 
-function get_cmake {
+function get_modern_cmake {
+    # Install cmake >= 2.8
     local cmake=cmake
     if [ -n "$IS_OSX" ]; then
         brew install cmake > /dev/null
     else
-        yum_install cmake28 > /dev/null
-        cmake=cmake28
+        if [ "`yum search cmake | grep ^cmake28\.`" ]; then
+            cmake=cmake28
+        fi
+        yum_install $cmake > /dev/null
     fi
     echo $cmake
+}
+
+function get_cmake {
+	>&2 echo "get_cmake has been deprecated. Please use get_modern_cmake instead."
+	get_modern_cmake
 }
 
 function build_openjpeg {
@@ -169,7 +177,7 @@ function build_openjpeg {
     build_libpng
     build_tiff
     build_lcms2
-    local cmake=$(get_cmake)
+    local cmake=$(get_modern_cmake)
     local archive_prefix="v"
     if [ $(lex_ver $OPENJPEG_VERSION) -lt $(lex_ver 2.1.1) ]; then
         archive_prefix="version."
@@ -192,6 +200,12 @@ function build_giflib {
 
 function build_xz {
     build_simple xz $XZ_VERSION https://tukaani.org/xz
+}
+
+function ensure_xz {
+	if [[ ! $(type -P "xz") ]]; then
+		build_xz
+	fi
 }
 
 function build_libwebp {
@@ -252,7 +266,7 @@ function build_libaec {
 
 function build_blosc {
     if [ -e blosc-stamp ]; then return; fi
-    local cmake=$(get_cmake)
+    local cmake=$(get_modern_cmake)
     fetch_unpack https://github.com/Blosc/c-blosc/archive/v${BLOSC_VERSION}.tar.gz
     (cd c-blosc-${BLOSC_VERSION} \
         && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX . \

@@ -40,7 +40,7 @@ suppress build_flex
 suppress build_openblas
 suppress build_tiff
 suppress build_lcms2
-suppress build_xz
+suppress ensure_xz
 suppress build_freetype
 suppress build_libyaml
 if [ -z "$IS_OSX" ]; then
@@ -56,6 +56,7 @@ if [ -z "$IS_OSX" ]; then
 fi
 suppress build_new_zlib
 suppress build_hdf5
+suppress get_modern_cmake
 
 [ ${MB_PYTHON_VERSION+x} ] || ingest "\$MB_PYTHON_VERSION is not set"
 [ "$MB_PYTHON_VERSION" == "$PYTHON_VERSION" ] || ingest "\$MB_PYTHON_VERSION must be equal to \$PYTHON_VERSION"
