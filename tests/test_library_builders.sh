@@ -24,7 +24,6 @@ start_spinner
 suppress build_bzip2
 suppress build_openssl
 suppress build_libpng
-suppress build_libwebp
 suppress build_szip
 suppress build_swig
 # We need to find a failable test for build_github
@@ -38,9 +37,10 @@ suppress build_swig
     )
 suppress build_flex
 suppress build_openblas
-suppress build_tiff
-suppress build_lcms2
 suppress ensure_xz
+suppress build_tiff
+suppress build_libwebp
+suppress build_lcms2
 suppress build_freetype
 suppress build_libyaml
 if [ -z "$IS_OSX" ]; then
