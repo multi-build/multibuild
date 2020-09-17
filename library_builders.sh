@@ -5,11 +5,12 @@ MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 source $MULTIBUILD_DIR/_gfortran_utils.sh
 source $MULTIBUILD_DIR/configure_build.sh
 
-# For OpenBLAS
 GF_LIB_URL="https://3f23b170c54c2533c070-1c8a9b3114517dc5fe17b7c3f8c63a43.ssl.cf2.rackcdn.com"
+# For OpenBLAS
+OPENBLAS_LIB_URL="https://anaconda.org/multibuild-wheels-staging/openblas-libs"
 
 # Recipes for building some libraries
-OPENBLAS_VERSION="${OPENBLAS_VERSION:-0.2.18}"
+OPENBLAS_VERSION="${OPENBLAS_VERSION:-0.3.10}"
 # We use system zlib by default - see build_new_zlib
 ZLIB_VERSION="${ZLIB_VERSION:-1.2.10}"
 LIBPNG_VERSION="${LIBPNG_VERSION:-1.6.21}"
@@ -89,18 +90,40 @@ function build_github {
     touch "${name}-stamp"
 }
 
+function openblas_get {
+    # Get an openblas compiled library from
+    # https://anaconda.org/multibuild-wheels-staging/openblas-libs
+    # The general form of the link is (under the URL above)
+    # URL/v0.3.10/downloads/openblas-v0.3.10-manylinux2010_x86_64.tar.gz
+    local plat=${1:-$}
+    # qual could be 64 to get a 64-bit version
+    local qual=$2
+    local prefix=openblas${qual}-v$OPENBLAS_VERSION
+    local manylinux=manylinux${MB_ML_VER:-1}
+    local fname="$prefix-${manylinux}_${plat}.tar.gz"
+    local out_fname="${ARCHIVE_SDIR}/$fname"
+    if [ ! -e "$out_fname" ]; then
+        local webname=${OPENBLAS_LIB_URL}/v${OPENBLAS_VERSION}/download/${fname}
+        curl -L "$webname" > $out_fname || exit 1
+        # make sure it is not an HTML document of download failure
+        local ok=$(file $out_fname | grep "HTML document")
+        if [ -n "$ok" ]; then
+            echo Fetching "${OPENBLAS_LIB_URL}/$fname" failed;
+            exit 1;
+        fi
+    fi
+    echo "$out_fname"
+}
+
 function build_openblas {
     if [ -e openblas-stamp ]; then return; fi
     if [ -n "$IS_OSX" ]; then
         brew install openblas
         brew link --force openblas
-    elif [ ! -v IS_X86 ]; then
-		# Skip this for now until we can build a suitable tar.gz
-        return;
     else
         mkdir -p $ARCHIVE_SDIR
         local plat=${1:-${PLAT:-x86_64}}
-        local tar_path=$(abspath $(_mb_get_gf_lib "openblas-${OPENBLAS_VERSION}" "$plat"))
+        local tar_path=$(abspath $(openblas_get $plat))
         (cd / && tar zxf $tar_path)
     fi
     touch openblas-stamp
