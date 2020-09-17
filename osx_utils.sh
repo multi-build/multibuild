@@ -14,7 +14,7 @@ WORKING_SDIR=working
 # As of 18 August 2020 - latest Python of each version with binary download
 # available.
 # See: https://www.python.org/downloads/mac-osx/
-LATEST_2p7=2.7.17
+LATEST_2p7=2.7.18
 LATEST_3p5=3.5.4
 LATEST_3p6=3.6.8
 LATEST_3p7=3.7.9
@@ -101,7 +101,7 @@ function macpython_sdk_list_for_version {
     local _return
 
     if [ "$_major" -eq "2" ]; then
-        _return="10.6"
+        [ $(lex_ver $_ver) -lt $(lex_ver 2.7.18) ] && _return="10.6"
         [ $(lex_ver $_ver) -ge $(lex_ver 2.7.15) ] && _return="$_return 10.9"
     elif [ "$_major" -eq "3" ]; then
         [ $(lex_ver $_ver) -lt $(lex_ver 3.8)    ] && _return="10.6"
