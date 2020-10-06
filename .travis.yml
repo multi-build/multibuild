@@ -106,6 +106,10 @@ matrix:
         - VENV=venv
     - os: osx
       env:
+        - MB_PYTHON_VERSION=3.9
+        - VENV=venv
+    - os: osx
+      env:
         - MB_PYTHON_VERSION=pypy-7.3
         - TEST_BUILDS=1
         - VENV=venv
@@ -130,6 +134,10 @@ matrix:
       osx_image: xcode10
       env:
         - MB_PYTHON_VERSION=3.8
+    - os: osx
+      osx_image: xcode10
+      env:
+        - MB_PYTHON_VERSION=3.9
     - os: osx
       osx_image: xcode10.1
       env:
