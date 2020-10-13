@@ -44,7 +44,7 @@ The Travis CI scripts are designed to build *and test*:
 * 64-bit ``manylinuxX_x86_64`` wheels, both narrow and wide Unicode builds, where `X` is any valid Manylinux version, such as `1`, or `2010`
 * 32-bit ``manylinuxX_i686`` wheels, both narrow and wide Unicode builds
 
-You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7 and 3.8
+You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8 and 3.9
 
 The small innovation here is that you can test against Linux 32-bit builds, both
 wide and narrow Unicode Python 2 builds, which was not easy on the default
@@ -326,6 +326,9 @@ To use these scripts
         - os: osx
           env:
             - MB_PYTHON_VERSION=3.8
+        - os: osx
+          env:
+            - MB_PYTHON_VERSION=3.9
         - os: osx
           language: generic
           env:
