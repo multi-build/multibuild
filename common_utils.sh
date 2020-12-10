@@ -392,7 +392,7 @@ function fill_submodule {
     (cd "$repo_dir" && git remote set-url origin $origin_url)
 }
 
-# As of 2020-04-14, the latest verions of PyPy.
+# As of 2020-04-14, the latest versions of PyPy.
 LATEST_PP_5p0=5.0.1
 LATEST_PP_5p1=5.1.1
 LATEST_PP_5p3=5.3.1
