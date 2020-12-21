@@ -57,7 +57,11 @@ else # not virtualenv
         bin_name="python$python_mm"
     else
         macpie_bin="$PWD/pypy$python_mm-v$implementer_version-osx64/bin"
-        bin_name="pypy"
+        if [ "$(lex_ver $implementer_version)" -ge "$(lex_ver 7.3.2)" ]; then
+            bin_name="pypy3"
+        else
+            bin_name="pypy"
+        fi
     fi
     if [ "$PYTHON_EXE" != "$macpie_bin/$bin_name" ]; then
         ingest "Wrong macpython python cmd '$PYTHON_EXE'"
