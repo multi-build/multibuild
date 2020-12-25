@@ -96,6 +96,7 @@ matrix:
         - MB_PYTHON_VERSION=3.7
         - VENV=venv
     - os: osx
+      osx_image: xcode10.2
       env:
         - MB_PYTHON_VERSION=3.7
         - VENV=venv
