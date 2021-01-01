@@ -21,8 +21,10 @@ if [ -n "$IS_OSX" ]; then
         ARCH_FLAGS=${ARCH_FLAGS:-"-arch i386 -arch x86_64"}
     elif [[ $PLAT == x86_64 ]]; then
         ARCH_FLAGS=${ARCH_FLAGS:-"-arch x86_64"}
+    elif [[ $PLAT == arm64 ]]; then
+        ARCH_FLAGS=${ARCH_FLAGS:-"-arch arm64"}
     else
-        echo "invalid platform = '$PLAT', supported values are 'intel' or 'x86_64'"
+        echo "invalid platform = '$PLAT', supported values are 'intel', 'x86_64' or 'arm64'"
         exit 1
     fi
     # Only set CFLAGS, FFLAGS if they are not already defined.  Build functions
