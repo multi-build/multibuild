@@ -200,7 +200,7 @@ function untar {
         gz|tgz) tar -zxf $in_fname ;;
         bz2) tar -jxf $in_fname ;;
         zip) unzip -qq $in_fname ;;
-        xz) unxz -c $in_fname | tar -xf ;;
+        xz) unxz -c $in_fname | tar -xf - ;;
         *) echo Did not recognize extension $extension; exit 1 ;;
     esac
 }
