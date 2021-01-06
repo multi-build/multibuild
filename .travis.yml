@@ -82,6 +82,13 @@ matrix:
       env:
         - MB_PYTHON_VERSION=3.5
         - VENV=venv
+    # this is expected to fail
+    # 3.5 / 10.9 build doesn't exist
+    - os: osx
+      env:
+        - MB_PYTHON_VERSION=3.5
+        - MB_PYTHON_OSX_VER=10.9
+        - OSX_ENV_EXPECT_FAIL=true
     - os: osx
       env:
         - MB_PYTHON_VERSION=3.6
