@@ -117,7 +117,7 @@ function openblas_get {
 
 function build_openblas {
     if [ -e openblas-stamp ]; then return; fi
-    if [ -n "$IS_OSX" ]; then
+    if [ -n "$IS_MACOS" ]; then
         brew install openblas
         brew link --force openblas
     else
@@ -131,7 +131,7 @@ function build_openblas {
 
 function build_zlib {
     # Gives an old but safe version
-    if [ -n "$IS_OSX" ]; then return; fi  # OSX has zlib already
+    if [ -n "$IS_MACOS" ]; then return; fi  # OSX has zlib already
     if [ -e zlib-stamp ]; then return; fi
     yum_install zlib-devel
     touch zlib-stamp
@@ -159,7 +159,7 @@ function build_libpng {
 }
 
 function build_bzip2 {
-    if [ -n "$IS_OSX" ]; then return; fi  # OSX has bzip2 libs already
+    if [ -n "$IS_MACOS" ]; then return; fi  # OSX has bzip2 libs already
     if [ -e bzip2-stamp ]; then return; fi
     fetch_unpack https://sourceware.org/pub/bzip2/bzip2-${BZIP2_VERSION}.tar.gz
     (cd bzip2-${BZIP2_VERSION} \
@@ -178,7 +178,7 @@ function build_tiff {
 function get_modern_cmake {
     # Install cmake >= 2.8
     local cmake=cmake
-    if [ -n "$IS_OSX" ]; then
+    if [ -n "$IS_MACOS" ]; then
         brew install cmake > /dev/null
     else
         if [ "`yum search cmake | grep ^cmake28\.`" ]; then
@@ -294,7 +294,7 @@ function build_blosc {
     (cd c-blosc-${BLOSC_VERSION} \
         && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX . \
         && make install)
-    if [ -n "$IS_OSX" ]; then
+    if [ -n "$IS_MACOS" ]; then
         # Fix blosc library id bug
         for lib in $(ls ${BUILD_PREFIX}/lib/libblosc*.dylib); do
             install_name_tool -id $lib $lib
@@ -324,7 +324,7 @@ function build_lzf {
 function build_curl {
     if [ -e curl-stamp ]; then return; fi
     local flags="--prefix=$BUILD_PREFIX"
-    if [ -n "$IS_OSX" ]; then
+    if [ -n "$IS_MACOS" ]; then
         flags="$flags --with-darwinssl"
     else  # manylinux
         flags="$flags --with-ssl"
@@ -332,7 +332,7 @@ function build_curl {
     fi
     fetch_unpack https://curl.haxx.se/download/curl-${CURL_VERSION}.tar.gz
     (cd curl-${CURL_VERSION} \
-        && if [ -z "$IS_OSX" ]; then \
+        && if [ -z "$IS_MACOS" ]; then \
         LIBS=-ldl ./configure $flags; else \
         ./configure $flags; fi\
         && make -j4 \
@@ -346,7 +346,7 @@ function check_sha256sum {
     local sha256=$2
     if [ -z "$sha256" ]; then echo "Need SHA256 hash"; exit 1; fi
     echo "${sha256}  ${fname}" > ${fname}.sha256
-    if [ -n "$IS_OSX" ]; then
+    if [ -n "$IS_MACOS" ]; then
         shasum -a 256 -c ${fname}.sha256
     else
         sha256sum -c ${fname}.sha256
@@ -383,7 +383,7 @@ function build_pcre {
 
 function build_swig {
     if [ -e swig-stamp ]; then return; fi
-    if [ -n "$IS_OSX" ]; then
+    if [ -n "$IS_MACOS" ]; then
         brew install swig > /dev/null
     else
         build_pcre
@@ -394,7 +394,7 @@ function build_swig {
 
 function build_suitesparse {
     if [ -e suitesparse-stamp ]; then return; fi
-    if [ -n "$IS_OSX" ]; then
+    if [ -n "$IS_MACOS" ]; then
         brew install suite-sparse > /dev/null
     else
         yum_install suitesparse-devel > /dev/null
@@ -408,7 +408,7 @@ function build_libtool {
 
 function build_ragel {
     local htprefix=https
-    if [ -n "$IS_OSX" ]; then
+    if [ -n "$IS_MACOS" ]; then
         # Invalid certificate, when using macOS curl.
         # https://security.stackexchange.com/questions/232445/https-connection-to-specific-sites-fail-with-curl-on-macos
         # Cert will likely be removed by Safari update in due course.
@@ -481,7 +481,7 @@ function build_fftw {
 
 function build_cfitsio {
     if [ -e cfitsio-stamp ]; then return; fi
-    if [ -n "$IS_OSX" ]; then
+    if [ -n "$IS_MACOS" ]; then
         brew install cfitsio
     else
         # cannot use build_simple because cfitsio has no dash between name and version

@@ -16,7 +16,7 @@ source tests/test_fill_submodule.sh
 # make sure it is set via one of the mechanisms above
 unset PYTHON_EXE
 
-if [ -n "$IS_OSX" ]; then
+if [ -n "$IS_MACOS" ]; then
     source osx_utils.sh
     MB_PYTHON_OSX_VER=${MB_PYTHON_OSX_VER:-$(macpython_sdk_for_version $MB_PYTHON_VERSION)}
     PLAT=${PLAT:-$(macpython_arch_for_version $MB_PYTHON_VERSION)}
@@ -32,7 +32,7 @@ else
 fi
 if [ -n "$TEST_BUILDS" ]; then
     MB_PYTHON_VERSION=${MB_PYTHON_VERSION:-3.7}
-    if [ -n "$IS_OSX" ]; then
+    if [ -n "$IS_MACOS" ]; then
         # This checked in test_library_builders.
         # Will be set automatically by docker call in build_multilinux below.
         PYTHON_VERSION=${MB_PYTHON_VERSION}

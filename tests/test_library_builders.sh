@@ -3,7 +3,7 @@
 # The environment
 uname -a
 
-if [ -n "$IS_OSX" ]; then
+if [ -n "$IS_MACOS" ]; then
     # Building on macOS
     export BUILD_PREFIX="${PWD}/builds"
     rm_mkdir $BUILD_PREFIX
@@ -43,14 +43,14 @@ suppress build_lcms2
 suppress ensure_xz
 suppress build_freetype
 suppress build_libyaml
-if [ -z "$IS_OSX" ]; then
+if [ -z "$IS_MACOS" ]; then
     # Gives compiler conformance error on macOS Sierra:
     # https://gist.github.com/5e20e137ea51fa8ca9fc443191f9d463
     # https://gist.github.com/ad86c474f3c0b7ec74290bb13f9414af
     suppress build_lzo
 fi
 suppress build_ragel
-if [ -z "$IS_OSX" ]; then
+if [ -z "$IS_MACOS" ]; then
     # already installed in the macOS image, so `brew install cfitsio` fails
     suppress build_cfitsio
 fi
