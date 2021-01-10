@@ -1,5 +1,5 @@
 # Find, load common utilities
-# Defines IS_OSX, fetch_unpack
+# Defines IS_MACOS, fetch_unpack
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 source $MULTIBUILD_DIR/common_utils.sh
 
@@ -12,8 +12,8 @@ CONFIGURE_BUILD_SOURCED=1
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
 MB_ML_VER=${MB_ML_VER:-1}
 
-# IS_OSX is defined in common_utils.sh
-if [ -n "$IS_OSX" ]; then
+# IS_MACOS is defined in common_utils.sh
+if [ -n "$IS_MACOS" ]; then
     # Default compilation flags for OSX
     source $MULTIBUILD_DIR/osx_utils.sh
     PLAT=${PLAT:-$(macpython_arch_for_version $MB_PYTHON_VERSION)}

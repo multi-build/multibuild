@@ -372,7 +372,7 @@ To use these scripts
   You also need this file to specify how to run your tests::
 
     # Define custom utilities
-    # Test for macOS with [ -n "$IS_OSX" ]
+    # Test for macOS with [ -n "$IS_MACOS" ]
 
     function pre_build {
         # Any stuff that you need to do before you start building the wheels

@@ -22,7 +22,7 @@ GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 # with, so it is passed in when calling "docker run" for tests.
 UNICODE_WIDTH=${UNICODE_WIDTH:-32}
 
-if [ $(uname) == "Darwin" ]; then IS_OSX=1; fi
+if [ $(uname) == "Darwin" ]; then IS_MACOS=1; IS_OSX=1; fi
 
 # Work round bug in travis xcode image described at
 # https://github.com/direnv/direnv/issues/210
@@ -164,7 +164,7 @@ function untar {
 }
 
 function install_rsync {
-    if [ -z "$IS_OSX" ]; then
+    if [ -z "$IS_MACOS" ]; then
         [[ $(type -P rsync) ]] || yum_install rsync
     fi
 }
@@ -441,7 +441,7 @@ function install_pypy {
 
     local version=$1
     case "$PLAT" in
-    "x86_64")  if [ -n "$IS_OSX" ]; then
+    "x86_64")  if [ -n "$IS_MACOS" ]; then
                    suffix="osx64";
                else
                    suffix="linux64";
