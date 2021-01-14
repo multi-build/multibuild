@@ -300,6 +300,7 @@ function run_command_universal2 {
           export FCFLAGS+=" -arch arm64"
           export FC=$FC_ARM64
           export LDFLAGS+=" -arch arm64 -L$BUILD_PREFIX/lib -Wl,-rpath,$BUILD_PREFIX/lib ${FC_ARM64_LDFLAGS:-}"
+          # This would automatically let autoconf know that we are cross compiling for arm64 darwin
           export host_alias="aarch64-apple-darwin20.0.0"
           $@
         )
