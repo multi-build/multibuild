@@ -289,7 +289,7 @@ function run_command_universal2 {
     if [[ "${PLAT:-}" == "universal2" || "${PLAT:-}" == "arm64" ]]; then
         export BUILD_PREFIX=/opt/arm64-builds
         sudo mkdir -p $BUILD_PREFIX
-        sudo chown -R $USER:$USER $BUILD_PREFIX
+        sudo chown -R $USER $BUILD_PREFIX
         export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
         export CFLAGS+=" -arch arm64 -I$BUILD_PREFIX/include"
         export CXXFLAGS+=" -arch arm64 -I$BUILD_PREFIX/include"
