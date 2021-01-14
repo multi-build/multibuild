@@ -61,7 +61,6 @@ fi
 export CPPFLAGS_BACKUP="$CPPFLAGS"
 export LIBRARY_PATH_BACKUP="$LIBRARY_PATH"
 export PKG_CONFIG_PATH_BACKUP="$PKG_CONFIG_PATH"
-export PATH_BACKUP="$PATH"
 
 function update_env_for_build_prefix {
   # Promote BUILD_PREFIX on search path to any newly built libs
@@ -69,7 +68,7 @@ function update_env_for_build_prefix {
   export LIBRARY_PATH="$BUILD_PREFIX/lib:$LIBRARY_PATH_BACKUP"
   export PKG_CONFIG_PATH="$BUILD_PREFIX/lib/pkgconfig/:$PKG_CONFIG_PATH_BACKUP"
   # Add binary path for configure utils etc
-  export PATH="$BUILD_PREFIX/bin:$PATH_BACKUP"
+  export PATH="$BUILD_PREFIX/bin:$PATH"
 }
 
 update_env_for_build_prefix
