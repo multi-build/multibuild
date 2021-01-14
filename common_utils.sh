@@ -270,22 +270,49 @@ function bdist_wheel_cmd {
     cp dist/*.whl $abs_wheelhouse
 }
 
+function run_command_universal2 {
+    if [[ "${PLAT:-}" == "arm64" ]]; then
+        export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
+    fi
+    if [[ "${PLAT:-}" == "universal2" ]]; then
+        export _PYTHON_HOST_PLATFORM="macosx-10.9-x86_64"
+        export CFLAGS+=" -arch x86_64"
+        export CXXFLAGS+=" -arch x86_64"
+        export ARCHFLAGS+=" -arch x86_64"
+        $@
+
+        export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
+        export BUILD_PREFIX=/usr/local-arm64
+        mkdir -p /usr/local-arm64
+        export CFLAGS+=" -arch arm64"
+        export CXXFLAGS+=" -arch arm64"
+        export ARCHFLAGS+=" -arch arm64"
+        export LDFLAGS+=" -arch arm64 -L$BUILD_PREFIX/lib -Wl,-rpath,$BUILD_PREFIX/lib ${FC_ARM64_LDFLAGS:-}"
+        export FCFLAGS+=" -arch arm64"
+        export FC=$FC_ARM64
+        export host_alias="aarch64-apple-darwin20.0.0"
+        $@
+    else
+        $@
+    fi
+}
+
 function build_pip_wheel {
     # Standard wheel building command with pip wheel
-    build_wheel_cmd "pip_wheel_cmd" $@
+    run_command_universal2 build_wheel_cmd "pip_wheel_cmd" $@
 }
 
 function build_bdist_wheel {
     # Wheel building with bdist_wheel. See bdist_wheel_cmd
-    build_wheel_cmd "bdist_wheel_cmd" $@
+    run_command_universal2 build_wheel_cmd "bdist_wheel_cmd" $@
 }
 
 function build_wheel {
     # Set default building method to pip
-    build_pip_wheel $@
+    run_command_universal2 build_pip_wheel $@
 }
 
-function build_index_wheel {
+function build_index_wheel_cmd {
     # Builds wheel from some index, usually pypi
     #
     # Parameters:
@@ -314,6 +341,10 @@ function build_index_wheel {
     fi
     pip wheel $(pip_opts) $@ -w $wheelhouse --no-deps $project_spec
     repair_wheelhouse $wheelhouse
+}
+
+function build_index_wheel {
+    run_command_universal2 build_index_wheel_cmd $@
 }
 
 function pip_opts {

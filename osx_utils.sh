@@ -103,7 +103,9 @@ function macpython_sdk_list_for_version {
     local _major=${_ver%%.*}
     local _return
 
-    if [ "$_major" -eq "2" ]; then
+    if [ "${PLAT:-}" == "arm64" ] || [ "${PLAT:-}" == "universal2" ]; then
+        _return="11.0"
+    elif [ "$_major" -eq "2" ]; then
         [ $(lex_ver $_ver) -lt $(lex_ver 2.7.18) ] && _return="10.6"
         [ $(lex_ver $_ver) -ge $(lex_ver 2.7.15) ] && _return="$_return 10.9"
     elif [ "$_major" -eq "3" ]; then
@@ -155,7 +157,11 @@ function pyinst_fname_for_version {
     local py_version=$1
     local py_osx_ver=${2:-$(macpython_sdk_for_version $py_version)}
     local inst_ext=$(pyinst_ext_for_version $py_version)
-    echo "python-${py_version}-macosx${py_osx_ver}.${inst_ext}"
+    if [ "${PLAT:-}" == "arm64" ] || [ "${PLAT:-}" == "universal2" ]; then
+      echo "python-${py_version}-macos${py_osx_ver}.${inst_ext}"
+    else
+      echo "python-${py_version}-macosx${py_osx_ver}.${inst_ext}"
+    fi
 }
 
 function get_macpython_arch {
