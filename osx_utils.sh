@@ -174,7 +174,7 @@ function get_macpython_arch {
     # Note: MUST only be called after the version of Python used to build the
     # target wheel has been installed and is on the path
     local distutils_plat=${1:-$(get_distutils_platform)}
-    if [[ $distutils_plat =~ macosx-(10\.[0-9]+)-(.*) ]]; then
+    if [[ $distutils_plat =~ macosx-(1[0-9]\.[0-9]+)-(.*) ]]; then
         echo ${BASH_REMATCH[2]}
     else
         echo "Error parsing macOS distutils platform '$distutils_plat'"
@@ -192,7 +192,7 @@ function get_macpython_osx_ver {
     # Note: MUST only be called after the version of Python used to build the
     # target wheel has been installed and is on the path
     local distutils_plat=${1:-$(get_distutils_platform)}
-    if [[ $distutils_plat =~ macosx-(10\.[0-9]+)-(.*) ]]; then
+    if [[ $distutils_plat =~ macosx-(1[0-9]\.[0-9]+)-(.*) ]]; then
         echo ${BASH_REMATCH[1]}
     else
         echo "Error parsing macOS distutils platform '$distutils_plat'"
