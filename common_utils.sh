@@ -281,6 +281,7 @@ function run_command_universal2 {
         export ARCHFLAGS+=" -arch x86_64"
         $@
 
+        rm -rf *-stamp
         export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
         export BUILD_PREFIX=/usr/local-arm64
         mkdir -p /usr/local-arm64
