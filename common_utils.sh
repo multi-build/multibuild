@@ -285,10 +285,10 @@ function run_command_universal2 {
 
         rm -rf *-stamp
         export PLAT="arm64"
-        export BUILD_PREFIX=/usr/local-arm64
-        mkdir -p /usr/local-arm64
     fi
     if [[ "${PLAT:-}" == "universal2" || "${PLAT:-}" == "arm64" ]]; then
+        export BUILD_PREFIX=/opt/arm64-builds
+        mkdir -p $BUILD_PREFIX || sudo mkdir -p $BUILD_PREFIX
         export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
         export CFLAGS+=" -arch arm64"
         export CXXFLAGS+=" -arch arm64"
