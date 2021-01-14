@@ -272,9 +272,11 @@ function bdist_wheel_cmd {
 
 function run_command_universal2 {
     if [[ "${PLAT:-}" == "arm64" ]]; then
-        export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
+        export PLAT_BACKUP="arm64"
     fi
     if [[ "${PLAT:-}" == "universal2" ]]; then
+        export PLAT_BACKUP="universal2"
+        export PLAT="x86_64"
         export _PYTHON_HOST_PLATFORM="macosx-10.9-x86_64"
         export CFLAGS+=" -arch x86_64"
         export CXXFLAGS+=" -arch x86_64"
@@ -282,9 +284,12 @@ function run_command_universal2 {
         $@
 
         rm -rf *-stamp
-        export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
+        export PLAT="arm64"
         export BUILD_PREFIX=/usr/local-arm64
         mkdir -p /usr/local-arm64
+    fi
+    if [[ "${PLAT:-}" == "universal2" || "${PLAT:-}" == "arm64" ]]; then
+        export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
         export CFLAGS+=" -arch arm64"
         export CXXFLAGS+=" -arch arm64"
         export ARCHFLAGS+=" -arch arm64"
@@ -293,6 +298,7 @@ function run_command_universal2 {
         export FC=$FC_ARM64
         export host_alias="aarch64-apple-darwin20.0.0"
         $@
+        export PLAT="$PLAT_BACKUP"
     else
         $@
     fi
