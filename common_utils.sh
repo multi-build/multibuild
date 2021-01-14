@@ -290,8 +290,8 @@ function run_command_universal2 {
         export BUILD_PREFIX=/opt/arm64-builds
         mkdir -p $BUILD_PREFIX || sudo mkdir -p $BUILD_PREFIX
         export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
-        export CFLAGS+=" -arch arm64"
-        export CXXFLAGS+=" -arch arm64"
+        export CFLAGS+=" -arch arm64 -I$BUILD_PREFIX/include"
+        export CXXFLAGS+=" -arch arm64 -I$BUILD_PREFIX/include"
         export ARCHFLAGS+=" -arch arm64"
         export LDFLAGS+=" -arch arm64 -L$BUILD_PREFIX/lib -Wl,-rpath,$BUILD_PREFIX/lib ${FC_ARM64_LDFLAGS:-}"
         export FCFLAGS+=" -arch arm64"
