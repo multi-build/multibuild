@@ -271,9 +271,6 @@ function bdist_wheel_cmd {
 }
 
 function run_command_universal2 {
-    if [[ "${PLAT:-}" == "arm64" ]]; then
-        export PLAT_BACKUP="arm64"
-    fi
     if [[ "${PLAT:-}" == "universal2" ]]; then
         export PLAT_BACKUP="universal2"
         (
@@ -289,22 +286,42 @@ function run_command_universal2 {
         rm -rf *-stamp
     fi
     if [[ "${PLAT:-}" == "universal2" || "${PLAT:-}" == "arm64" ]]; then
-        export PLAT="arm64"
-        export BUILD_PREFIX=/opt/arm64-builds
-        sudo mkdir -p $BUILD_PREFIX
-        sudo chown -R $USER $BUILD_PREFIX
-        update_env_for_build_prefix
-        export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
-        export CFLAGS+=" -arch arm64"
-        export CXXFLAGS+=" -arch arm64"
-        export CPPFLAGS+=" -arch arm64"
-        export ARCHFLAGS+=" -arch arm64"
-        export FCFLAGS+=" -arch arm64"
-        export FC=$FC_ARM64
-        export LDFLAGS+=" -arch arm64 -L$BUILD_PREFIX/lib -Wl,-rpath,$BUILD_PREFIX/lib ${FC_ARM64_LDFLAGS:-}"
-        export host_alias="aarch64-apple-darwin20.0.0"
-        $@
-        export PLAT="$PLAT_BACKUP"
+        (
+          export PLAT="arm64"
+          export BUILD_PREFIX=/opt/arm64-builds
+          sudo mkdir -p $BUILD_PREFIX
+          sudo chown -R $USER $BUILD_PREFIX
+          update_env_for_build_prefix
+          export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
+          export CFLAGS+=" -arch arm64"
+          export CXXFLAGS+=" -arch arm64"
+          export CPPFLAGS+=" -arch arm64"
+          export ARCHFLAGS+=" -arch arm64"
+          export FCFLAGS+=" -arch arm64"
+          export FC=$FC_ARM64
+          export LDFLAGS+=" -arch arm64 -L$BUILD_PREFIX/lib -Wl,-rpath,$BUILD_PREFIX/lib ${FC_ARM64_LDFLAGS:-}"
+          export host_alias="aarch64-apple-darwin20.0.0"
+          $@
+        )
+
+        local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
+        mkdir -p wheelhouse2
+        if [[ "${PLAT:-}" == "universal2" ]]; then
+           for whl in $wheelhouse/*.whl; do
+              if [[ "$whl" == *macosx_10_9_x86_64.whl ]]; then
+                  whl_base=$(echo $whl | rev | cut -c 23- | rev)
+                  echo $whl_base
+                  if [[ -f "${whl_base}macosx_11_0_arm64.whl" ]]; then
+                      delocate-fuse $whl "${whl_base}macosx_11_0_arm64.whl" -w wheelhouse2
+                      mv wheelhouse2/$(basename $whl) $wheelhouse/$(basename ${whl_base})macosx_10_9_universal2.whl
+                      # Since we want one wheel thats installable for testing we are deleting the 10_9_x86_64 wheel.
+                      # We are not deleting arm64 wheel because the size is lower and homebrew/conda-forge python
+                      # will use them by default
+                      rm $whl
+                  fi
+              fi
+           done
+        fi
     else
         $@
     fi
