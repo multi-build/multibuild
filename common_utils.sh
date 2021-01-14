@@ -246,7 +246,7 @@ function build_wheel_cmd {
     if [ -n "$(is_function "pre_build")" ]; then pre_build; fi
     stop_spinner
     if [ -n "$BUILD_DEPENDS" ]; then
-        ${PIP_CMD:-pip} install $(pip_opts) $BUILD_DEPENDS
+        pip install $(pip_opts) $BUILD_DEPENDS
     fi
     (cd $repo_dir && $cmd $wheelhouse)
     repair_wheelhouse $wheelhouse
@@ -254,7 +254,7 @@ function build_wheel_cmd {
 
 function pip_wheel_cmd {
     local abs_wheelhouse=$1
-    ${PIP_CMD:-pip} wheel $(pip_opts) -w $abs_wheelhouse --no-deps .
+    pip wheel $(pip_opts) -w $abs_wheelhouse --no-deps .
 }
 
 function bdist_wheel_cmd {
@@ -350,9 +350,9 @@ function build_index_wheel_cmd {
     if [ -n "$(is_function "pre_build")" ]; then pre_build; fi
     stop_spinner
     if [ -n "$BUILD_DEPENDS" ]; then
-        ${PIP_CMD:-pip} install $(pip_opts) $@ $BUILD_DEPENDS
+        pip install $(pip_opts) $@ $BUILD_DEPENDS
     fi
-    ${PIP_CMD:-pip} wheel $(pip_opts) $@ -w $wheelhouse --no-deps $project_spec
+    pip wheel $(pip_opts) $@ -w $wheelhouse --no-deps $project_spec
     repair_wheelhouse $wheelhouse
 }
 
