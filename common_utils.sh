@@ -302,6 +302,7 @@ function run_command_universal2 {
         export FCFLAGS+=" -arch arm64"
         export FC=$FC_ARM64
         export LDFLAGS+=" -arch arm64 -L$BUILD_PREFIX/lib -Wl,-rpath,$BUILD_PREFIX/lib ${FC_ARM64_LDFLAGS:-}"
+        export host_alias="aarch64-apple-darwin20.0.0"
         $@
         export PLAT="$PLAT_BACKUP"
     else
