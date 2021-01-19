@@ -462,7 +462,6 @@ function fuse_macos_intel_arm64 {
     for whl in $wheelhouse/*.whl; do
        if [[ "$whl" == *macosx_${py_osx_ver}_x86_64.whl ]]; then
            whl_base=$(echo $whl | rev | cut -c 23- | rev)
-           echo $whl_base
            if [[ -f "${whl_base}macosx_11_0_arm64.whl" ]]; then
                delocate-fuse $whl "${whl_base}macosx_11_0_arm64.whl" -w tmp_fused_wheelhouse
                mv tmp_fused_wheelhouse/$(basename $whl) $wheelhouse/$(basename ${whl_base})macosx_${py_osx_ver}_universal2.whl
