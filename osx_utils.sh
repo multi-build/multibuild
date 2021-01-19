@@ -425,6 +425,7 @@ function activate_ccache {
 }
 
 function macos_intel_build_wrap {
+    # Wrap build for single arch x86_64 wheels
     local py_osx_ver=$(echo ${MB_PYTHON_OSX_VER:-10.9} | sed "s/\./_/g")
     export PLAT="x86_64"
     export _PYTHON_HOST_PLATFORM="macosx-${py_osx_ver}-x86_64"
@@ -437,6 +438,7 @@ function macos_intel_build_wrap {
 }
 
 function macos_arm64_build_wrap {
+    # Wrap build for single arch arm_64 wheels
     export PLAT="arm64"
     export BUILD_PREFIX=/opt/arm64-builds
     sudo mkdir -p $BUILD_PREFIX
