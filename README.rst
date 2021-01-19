@@ -342,11 +342,6 @@ To use these scripts
             - MB_PYTHON_VERSION=pypy-5.7
 
     before_install:
-        # Setup xcode and compilers to use the new SDK for universal2 and arm64 builds
-        - if [ "$PLAT" == "universal2" ] || [ "$PLAT" == "arm64" ]; then
-              sudo xcode-select -switch /Applications/Xcode_12.2.app fi
-              export SDKROOT=/Applications/Xcode_12.2.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk
-          fi
         - source multibuild/common_utils.sh
         - source multibuild/travis_steps.sh
         - before_install

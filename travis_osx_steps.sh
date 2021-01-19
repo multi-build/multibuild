@@ -8,6 +8,14 @@ MB_PYTHON_VERSION=${MB_PYTHON_VERSION:-$TRAVIS_PYTHON_VERSION}
 
 ENV_VARS_PATH=${ENV_VARS_PATH:-env_vars.sh}
 
+if [ "$PLAT" == "universal2" ] || [ "$PLAT" == "arm64" ]; then
+  if [ "$TRAVIS" == "true" ]; then
+    # Setup xcode and compilers to use the new SDK for universal2 and arm64 builds
+    sudo xcode-select -switch /Applications/Xcode_12.2.app
+    export SDKROOT=/Applications/Xcode_12.2.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk
+  fi
+fi
+
 # These load common_utils.sh
 source $MULTIBUILD_DIR/osx_utils.sh
 MB_PYTHON_OSX_VER=${MB_PYTHON_OSX_VER:-$(macpython_sdk_for_version $MB_PYTHON_VERSION)}
