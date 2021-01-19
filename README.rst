@@ -272,8 +272,8 @@ To use these scripts
     # and test containers, via docker.
     dist: xenial
 
-    # osx image that enables Apple silicon builds
-    osx_image: xcode12u
+    # osx image that enables building Apple silicon libraries
+    osx_image: xcode12.2
 
     matrix:
       include:
