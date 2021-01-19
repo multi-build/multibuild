@@ -456,14 +456,14 @@ function macos_arm64_build_wrap {
 
 function fuse_macos_intel_arm64 {
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
-    mkdir -p wheelhouse2
+    mkdir -p tmp_fused_wheelhouse
     for whl in $wheelhouse/*.whl; do
        if [[ "$whl" == *macosx_10_9_x86_64.whl ]]; then
            whl_base=$(echo $whl | rev | cut -c 23- | rev)
            echo $whl_base
            if [[ -f "${whl_base}macosx_11_0_arm64.whl" ]]; then
-               delocate-fuse $whl "${whl_base}macosx_11_0_arm64.whl" -w wheelhouse2
-               mv wheelhouse2/$(basename $whl) $wheelhouse/$(basename ${whl_base})macosx_10_9_universal2.whl
+               delocate-fuse $whl "${whl_base}macosx_11_0_arm64.whl" -w tmp_fused_wheelhouse
+               mv tmp_fused_wheelhouse/$(basename $whl) $wheelhouse/$(basename ${whl_base})macosx_10_9_universal2.whl
                # Since we want one wheel thats installable for testing we are deleting the 10_9_x86_64 wheel.
                # We are not deleting arm64 wheel because the size is lower and homebrew/conda-forge python
                # will use them by default
