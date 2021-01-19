@@ -451,6 +451,8 @@ To use these scripts
      Once the two wheels are created, these two are merged. Both the
      ``arm64`` and ``universal2`` wheels are outputs for this build.
 
+  In multibuild we are going with option 2. You can override this behaviour by
+  overriding the function ``wrap_wheel_builder``.
   To build Apple silicon builds, you should use a CI service with Xcode 12 with
   universal build support and make sure that xcode is the default.
 
