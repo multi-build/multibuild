@@ -426,7 +426,7 @@ function activate_ccache {
 
 function macos_intel_build_wrap {
     # Wrap build for single arch x86_64 wheels
-    local py_osx_ver=$(echo ${MB_PYTHON_OSX_VER:-10.9} | sed "s/\./_/g")
+    local py_osx_ver=$(echo ${MB_PYTHON_OSX_VER:-$(macpython_sdk_for_version ${MB_PYTHON_VERSION})} | sed "s/\./_/g")
     export PLAT="x86_64"
     export _PYTHON_HOST_PLATFORM="macosx-${py_osx_ver}-x86_64"
     export CFLAGS+=" -arch x86_64"
@@ -459,7 +459,7 @@ function macos_arm64_build_wrap {
 
 function fuse_macos_intel_arm64 {
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
-    local py_osx_ver=$(echo ${MB_PYTHON_OSX_VER:-10.9} | sed "s/\./_/g")
+    local py_osx_ver=$(echo ${MB_PYTHON_OSX_VER:-$(macpython_sdk_for_version ${MB_PYTHON_VERSION})} | sed "s/\./_/g")
     mkdir -p tmp_fused_wheelhouse
     for whl in $wheelhouse/*.whl; do
        if [[ "$whl" == *macosx_${py_osx_ver}_x86_64.whl ]]; then
