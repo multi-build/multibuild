@@ -429,8 +429,8 @@ To use these scripts
 * For Apple silicon support you can either create an ``arm64`` wheel or
   a ``universal2`` wheel by supplying ``PLAT`` env variable.
   ``universal2`` builds work on both ``arm64`` and ``x86_64`` platforms
-  and also allows the ability to switch the architecture on ``universal2``
-  python builds on Apple silicon machines where ``x86_64`` can be run
+  and also make it possible for the wheel code to work when switching the
+  architecture on Apple silicon machines where ``x86_64`` can be run
   using Rosetta2 emulation.
 
   There are two ways to build ``universal2`` builds.
