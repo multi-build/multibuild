@@ -479,8 +479,6 @@ function wrap_wheel_builder {
     if [[ "${PLAT:-}" == "universal2" ]]; then
         (macos_intel_build_wrap $@)
         rm -rf *-stamp
-    fi
-    if [[ "${PLAT:-}" == "universal2" ]]; then
         (macos_arm64_build_wrap $@)
         fuse_macos_intel_arm64 $@
     elif [[ "${PLAT:-}" == "arm64" ]]; then
