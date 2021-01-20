@@ -444,7 +444,7 @@ To use these scripts
      not be identical which is required when building the wheel as a ``universal2``
      wheel. If you are using Fortran, ``gfortran`` doesn't support fat binaries.
 
-  2. Build ``arm64`` and ``x86_64`` wheels seperately and fuse them.
+  2. Build ``arm64`` and ``x86_64`` wheels separately and fuse them.
      For this to work, we need to build the C/C++ libraries twice. Therefore,
      the library building is once called with ``BUILD_PREFIX=${BUILD_PREFIX:-/usr/local}``
      for ``x86_64`` and then called again with ``BUILD_PREFIX=/opt/arm64-builds``.
