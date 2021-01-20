@@ -466,7 +466,7 @@ function fuse_macos_intel_arm64 {
            if [[ -f "${whl_base}macosx_11_0_arm64.whl" ]]; then
                delocate-fuse $whl "${whl_base}macosx_11_0_arm64.whl" -w tmp_fused_wheelhouse
                mv tmp_fused_wheelhouse/$(basename $whl) $wheelhouse/$(basename ${whl_base})macosx_${py_osx_ver}_universal2.whl
-               # Since we want one wheel thats installable for testing we are deleting the *_x86_64 wheel.
+               # Since we want one wheel that's installable for testing we are deleting the *_x86_64 wheel.
                # We are not deleting arm64 wheel because the size is lower and homebrew/conda-forge python
                # will use them by default
                rm $whl

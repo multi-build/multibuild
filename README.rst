@@ -436,7 +436,7 @@ To use these scripts
   There are two ways to build ``universal2`` builds.
   1. Build with ``-arch x86_64 -arch arm64``.
      These flags instruct the C/C++ compiler to compile twice and create a
-     fat object/executable/library. This is the easiest, but have several
+     fat object/executable/library. This is the easiest, but has several
      drawbacks. If you are using C/C++ libraries that are built using
      library_builders, it's highly likely that they don't build correctly
      because most build systems and packages don't support building fat binaries.
