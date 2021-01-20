@@ -480,7 +480,7 @@ function wrap_wheel_builder {
         (macos_intel_build_wrap $@)
         rm -rf *-stamp
         (macos_arm64_build_wrap $@)
-        fuse_macos_intel_arm64 $@
+        fuse_macos_intel_arm64
     elif [[ "${PLAT:-}" == "arm64" ]]; then
         (macos_arm64_build_wrap $@)
     else
