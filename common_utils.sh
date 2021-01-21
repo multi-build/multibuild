@@ -270,22 +270,27 @@ function bdist_wheel_cmd {
     cp dist/*.whl $abs_wheelhouse
 }
 
+function wrap_wheel_builder {
+    # Wrapper for build commands, overwritten by macOS for universal2 or arm64 wheel building
+    $@
+}
+
 function build_pip_wheel {
     # Standard wheel building command with pip wheel
-    build_wheel_cmd "pip_wheel_cmd" $@
+    wrap_wheel_builder build_wheel_cmd "pip_wheel_cmd" $@
 }
 
 function build_bdist_wheel {
     # Wheel building with bdist_wheel. See bdist_wheel_cmd
-    build_wheel_cmd "bdist_wheel_cmd" $@
+    wrap_wheel_builder build_wheel_cmd "bdist_wheel_cmd" $@
 }
 
 function build_wheel {
     # Set default building method to pip
-    build_pip_wheel $@
+    wrap_wheel_builder build_pip_wheel $@
 }
 
-function build_index_wheel {
+function build_index_wheel_cmd {
     # Builds wheel from some index, usually pypi
     #
     # Parameters:
@@ -314,6 +319,10 @@ function build_index_wheel {
     fi
     pip wheel $(pip_opts) $@ -w $wheelhouse --no-deps $project_spec
     repair_wheelhouse $wheelhouse
+}
+
+function build_index_wheel {
+    wrap_wheel_builder build_index_wheel_cmd $@
 }
 
 function pip_opts {

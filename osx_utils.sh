@@ -103,7 +103,9 @@ function macpython_sdk_list_for_version {
     local _major=${_ver%%.*}
     local _return
 
-    if [ "$_major" -eq "2" ]; then
+    if [ "${PLAT}" = "arm64" ]; then
+        _return="11.0"
+    elif [ "$_major" -eq "2" ]; then
         [ $(lex_ver $_ver) -lt $(lex_ver 2.7.18) ] && _return="10.6"
         [ $(lex_ver $_ver) -ge $(lex_ver 2.7.15) ] && _return="$_return 10.9"
     elif [ "$_major" -eq "3" ]; then
@@ -155,7 +157,11 @@ function pyinst_fname_for_version {
     local py_version=$1
     local py_osx_ver=${2:-$(macpython_sdk_for_version $py_version)}
     local inst_ext=$(pyinst_ext_for_version $py_version)
-    echo "python-${py_version}-macosx${py_osx_ver}.${inst_ext}"
+    if [ "${PLAT:-}" == "arm64" ] || [ "${PLAT:-}" == "universal2" ]; then
+      echo "python-${py_version}-macos11.0.${inst_ext}"
+    else
+      echo "python-${py_version}-macosx${py_osx_ver}.${inst_ext}"
+    fi
 }
 
 function get_macpython_arch {
@@ -168,7 +174,7 @@ function get_macpython_arch {
     # Note: MUST only be called after the version of Python used to build the
     # target wheel has been installed and is on the path
     local distutils_plat=${1:-$(get_distutils_platform)}
-    if [[ $distutils_plat =~ macosx-(10\.[0-9]+)-(.*) ]]; then
+    if [[ $distutils_plat =~ macosx-(1[0-9]\.[0-9]+)-(.*) ]]; then
         echo ${BASH_REMATCH[2]}
     else
         echo "Error parsing macOS distutils platform '$distutils_plat'"
@@ -186,7 +192,7 @@ function get_macpython_osx_ver {
     # Note: MUST only be called after the version of Python used to build the
     # target wheel has been installed and is on the path
     local distutils_plat=${1:-$(get_distutils_platform)}
-    if [[ $distutils_plat =~ macosx-(10\.[0-9]+)-(.*) ]]; then
+    if [[ $distutils_plat =~ macosx-(1[0-9]\.[0-9]+)-(.*) ]]; then
         echo ${BASH_REMATCH[1]}
     else
         echo "Error parsing macOS distutils platform '$distutils_plat'"
@@ -416,4 +422,66 @@ function activate_ccache {
 
     # Prove to the developer that ccache is activated
     echo "Using C compiler: $(which clang)"
+}
+
+function macos_intel_build_setup {
+    # Setup build for single arch x86_64 wheels
+    export PLAT="x86_64"
+    export _PYTHON_HOST_PLATFORM="macosx-${MB_PYTHON_OSX_VER}-x86_64"
+    export CFLAGS+=" -arch x86_64"
+    export CXXFLAGS+=" -arch x86_64"
+    export ARCHFLAGS+=" -arch x86_64"
+    export CPPFLAGS+=" -arch x86_64"
+    export LDFLAGS+=" -arch x86_64"
+}
+
+function macos_arm64_build_setup {
+    # Setup build for single arch arm_64 wheels
+    export PLAT="arm64"
+    export BUILD_PREFIX=/opt/arm64-builds
+    sudo mkdir -p $BUILD_PREFIX
+    sudo chown -R $USER $BUILD_PREFIX
+    update_env_for_build_prefix
+    export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
+    export CFLAGS+=" -arch arm64"
+    export CXXFLAGS+=" -arch arm64"
+    export CPPFLAGS+=" -arch arm64"
+    export ARCHFLAGS+=" -arch arm64"
+    export FCFLAGS+=" -arch arm64"
+    export FC=$FC_ARM64
+    export LDFLAGS+=" -arch arm64 -L$BUILD_PREFIX/lib -Wl,-rpath,$BUILD_PREFIX/lib ${FC_ARM64_LDFLAGS:-}"
+    # This would automatically let autoconf know that we are cross compiling for arm64 darwin
+    export host_alias="aarch64-apple-darwin20.0.0"
+}
+
+function fuse_macos_intel_arm64 {
+    local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
+    local py_osx_ver=$(echo ${MB_PYTHON_OSX_VER} | sed "s/\./_/g")
+    mkdir -p tmp_fused_wheelhouse
+    for whl in $wheelhouse/*.whl; do
+       if [[ "$whl" == *macosx_${py_osx_ver}_x86_64.whl ]]; then
+           whl_base=$(echo $whl | rev | cut -c 23- | rev)
+           if [[ -f "${whl_base}macosx_11_0_arm64.whl" ]]; then
+               delocate-fuse $whl "${whl_base}macosx_11_0_arm64.whl" -w tmp_fused_wheelhouse
+               mv tmp_fused_wheelhouse/$(basename $whl) $wheelhouse/$(basename ${whl_base})macosx_${py_osx_ver}_universal2.whl
+               # Since we want one wheel that's installable for testing we are deleting the *_x86_64 wheel.
+               # We are not deleting arm64 wheel because the size is lower and homebrew/conda-forge python
+               # will use them by default
+               rm $whl
+           fi
+       fi
+    done
+}
+
+function wrap_wheel_builder {
+    if [[ "${PLAT:-}" == "universal2" ]]; then
+        (macos_intel_build_setup && $@)
+        rm -rf *-stamp
+        (macos_arm64_build_setup && $@)
+        fuse_macos_intel_arm64
+    elif [[ "${PLAT:-}" == "arm64" ]]; then
+        (macos_arm64_build_setup && $@)
+    else
+        $@
+    fi
 }

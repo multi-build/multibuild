@@ -272,6 +272,9 @@ To use these scripts
     # and test containers, via docker.
     dist: xenial
 
+    # osx image that enables building Apple silicon libraries
+    osx_image: xcode12.2
+
     matrix:
       include:
         - os: linux
@@ -326,6 +329,10 @@ To use these scripts
         - os: osx
           env:
             - MB_PYTHON_VERSION=3.8
+        - os: osx
+          env:
+            - MB_PYTHON_VERSION=3.9
+            - PLAT="universal2"
         - os: osx
           env:
             - MB_PYTHON_VERSION=3.9
@@ -418,6 +425,36 @@ To use these scripts
 
 * Make sure your project is set up to build on AppVeyor, and you should now
   be ready (for what could be another round of slow debugging).
+
+* For Apple silicon support you can either create an ``arm64`` wheel or
+  a ``universal2`` wheel by supplying ``PLAT`` env variable.
+  ``universal2`` builds work on both ``arm64`` and ``x86_64`` platforms
+  and also make it possible for the wheel code to work when switching the
+  architecture on Apple silicon machines where ``x86_64`` can be run
+  using Rosetta2 emulation.
+
+  There are two ways to build ``universal2`` builds.
+  1. Build with ``-arch x86_64 -arch arm64``.
+     These flags instruct the C/C++ compiler to compile twice and create a
+     fat object/executable/library. This is the easiest, but has several
+     drawbacks. If you are using C/C++ libraries that are built using
+     library_builders, it's highly likely that they don't build correctly
+     because most build systems and packages don't support building fat binaries.
+     We could possibly build them separately and fuse them, but the headers might
+     not be identical which is required when building the wheel as a ``universal2``
+     wheel. If you are using Fortran, ``gfortran`` doesn't support fat binaries.
+
+  2. Build ``arm64`` and ``x86_64`` wheels separately and fuse them.
+     For this to work, we need to build the C/C++ libraries twice. Therefore,
+     the library building is once called with ``BUILD_PREFIX=${BUILD_PREFIX:-/usr/local}``
+     for ``x86_64`` and then called again with ``BUILD_PREFIX=/opt/arm64-builds``.
+     Once the two wheels are created, these two are merged. Both the
+     ``arm64`` and ``universal2`` wheels are outputs for this build.
+
+  In multibuild we are going with option 2. You can override this behaviour by
+  overriding the function ``wrap_wheel_builder``.
+  To build Apple silicon builds, you should use a CI service with Xcode 12 with
+  universal build support and make sure that xcode is the default.
 
 If your project depends on NumPy, you will want to build against the earliest
 NumPy that your project supports - see `forward, backward NumPy compatibility

@@ -21,8 +21,13 @@ if [ -n "$IS_MACOS" ]; then
         ARCH_FLAGS=${ARCH_FLAGS:-"-arch i386 -arch x86_64"}
     elif [[ $PLAT == x86_64 ]]; then
         ARCH_FLAGS=${ARCH_FLAGS:-"-arch x86_64"}
+    elif [[ $PLAT == arm64 ]]; then
+        ARCH_FLAGS=${ARCH_FLAGS:-"-arch arm64"}
+    elif [[ $PLAT == universal2 ]]; then
+        # Do nothing as we are going with fusing wheels
+        ARCH_FLAGS=${ARCH_FLAGS:-}
     else
-        echo "invalid platform = '$PLAT', supported values are 'intel' or 'x86_64'"
+        echo "Invalid platform = '$PLAT'. Supported values are 'intel', 'x86_64', 'arm64' or 'universal2'"
         exit 1
     fi
     # Only set CFLAGS, FFLAGS if they are not already defined.  Build functions
@@ -53,9 +58,17 @@ else
     fi
 fi
 
-# Promote BUILD_PREFIX on search path to any newly built libs
-export CPPFLAGS="-I$BUILD_PREFIX/include $CPPFLAGS"
-export LIBRARY_PATH="$BUILD_PREFIX/lib:$LIBRARY_PATH"
-export PKG_CONFIG_PATH="$BUILD_PREFIX/lib/pkgconfig/:$PKG_CONFIG_PATH"
-# Add binary path for configure utils etc
-export PATH="$BUILD_PREFIX/bin:$PATH"
+export CPPFLAGS_BACKUP="$CPPFLAGS"
+export LIBRARY_PATH_BACKUP="$LIBRARY_PATH"
+export PKG_CONFIG_PATH_BACKUP="$PKG_CONFIG_PATH"
+
+function update_env_for_build_prefix {
+  # Promote BUILD_PREFIX on search path to any newly built libs
+  export CPPFLAGS="-I$BUILD_PREFIX/include $CPPFLAGS_BACKUP"
+  export LIBRARY_PATH="$BUILD_PREFIX/lib:$LIBRARY_PATH_BACKUP"
+  export PKG_CONFIG_PATH="$BUILD_PREFIX/lib/pkgconfig/:$PKG_CONFIG_PATH_BACKUP"
+  # Add binary path for configure utils etc
+  export PATH="$BUILD_PREFIX/bin:$PATH"
+}
+
+update_env_for_build_prefix
