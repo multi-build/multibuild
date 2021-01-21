@@ -271,7 +271,7 @@ function bdist_wheel_cmd {
 }
 
 function wrap_wheel_builder {
-    # Wrapper for build command, overwritten by macOS for universal2 wheel building
+    # Wrapper for build commands, overwritten by macOS for universal2 or arm64 wheel building
     $@
 }
 
