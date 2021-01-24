@@ -436,7 +436,7 @@ function macos_intel_native_build_setup {
 }
 
 function macos_intel_cross_build_setup {
-    echo "universal2 builds on arm64 is not supported yet."
+    echo "universal2 builds on arm64 are not supported yet."
     exit 1
 }
 
