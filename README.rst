@@ -434,6 +434,7 @@ To use these scripts
   using Rosetta2 emulation.
 
   There are two ways to build ``universal2`` builds.
+
   1. Build with ``-arch x86_64 -arch arm64``.
      These flags instruct the C/C++ compiler to compile twice and create a
      fat object/executable/library. This is the easiest, but has several
