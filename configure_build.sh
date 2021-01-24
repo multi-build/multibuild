@@ -27,7 +27,7 @@ if [ -n "$IS_MACOS" ]; then
         # Do nothing as we are going with fusing wheels
         ARCH_FLAGS=${ARCH_FLAGS:-}
     else
-        echo "invalid platform = '$PLAT', supported values are 'intel' or 'x86_64' or 'arm64' or 'universal2'"
+        echo "Invalid platform = '$PLAT'. Supported values are 'intel', 'x86_64', 'arm64' or 'universal2'"
         exit 1
     fi
     # Only set CFLAGS, FFLAGS if they are not already defined.  Build functions
