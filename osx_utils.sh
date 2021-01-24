@@ -424,8 +424,8 @@ function activate_ccache {
     echo "Using C compiler: $(which clang)"
 }
 
-function macos_intel_build_setup {
-    # Setup build for single arch x86_64 wheels
+function macos_intel_native_build_setup {
+    # Setup cross build for single arch x86_64 wheels
     export PLAT="x86_64"
     export _PYTHON_HOST_PLATFORM="macosx-${MB_PYTHON_OSX_VER}-x86_64"
     export CFLAGS+=" -arch x86_64"
@@ -435,8 +435,13 @@ function macos_intel_build_setup {
     export LDFLAGS+=" -arch x86_64"
 }
 
-function macos_arm64_build_setup {
-    # Setup build for single arch arm_64 wheels
+function macos_intel_cross_build_setup {
+    echo "universal2 builds on arm64 is not supported yet."
+    exit 1
+}
+
+function macos_arm64_cross_build_setup {
+    # Setup cross build for single arch arm_64 wheels
     export PLAT="arm64"
     export BUILD_PREFIX=/opt/arm64-builds
     sudo mkdir -p $BUILD_PREFIX
@@ -454,6 +459,13 @@ function macos_arm64_build_setup {
     export LDFLAGS+=" -arch arm64 -L$BUILD_PREFIX/lib -Wl,-rpath,$BUILD_PREFIX/lib ${FC_ARM64_LDFLAGS:-}"
     # This would automatically let autoconf know that we are cross compiling for arm64 darwin
     export host_alias="aarch64-apple-darwin20.0.0"
+}
+
+function macos_arm64_native_build_setup {
+    # Setup native build for single arch arm_64 wheels
+    export PLAT="arm64"
+    export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
+    $@
 }
 
 function fuse_macos_intel_arm64 {
@@ -477,12 +489,23 @@ function fuse_macos_intel_arm64 {
 
 function wrap_wheel_builder {
     if [[ "${PLAT:-}" == "universal2" ]]; then
-        (macos_intel_build_setup && $@)
-        rm -rf *-stamp
-        (macos_arm64_build_setup && $@)
-        fuse_macos_intel_arm64
-    elif [[ "${PLAT:-}" == "arm64" && "(uname -m)" != "arm64" ]]; then
-        (macos_arm64_build_setup && $@)
+        if [[ "$(uname -m)" == "arm64" ]]; then
+            (macos_intel_cross_build_setup && $@)
+            rm -rf *-stamp
+            (macos_arm64_native_build_setup && $@)
+            fuse_macos_intel_arm64
+        else
+            (macos_intel_native_build_setup && $@)
+            rm -rf *-stamp
+            (macos_arm64_cross_build_setup && $@)
+            fuse_macos_intel_arm64
+        fi
+    elif [[ "${PLAT:-}" == "arm64" ]]; then
+        if [[ "$(uname -m)" == "arm64" ]]; then
+            (macos_arm64_native_build_setup && $@)
+        else
+            (macos_arm64_cross_build_setup && $@)
+        fi
     else
         $@
     fi
