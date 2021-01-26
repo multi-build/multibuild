@@ -425,7 +425,7 @@ function activate_ccache {
 }
 
 function macos_intel_native_build_setup {
-    # Setup cross build for single arch x86_64 wheels
+    # Setup native build for single arch x86_64 wheels
     export PLAT="x86_64"
     export _PYTHON_HOST_PLATFORM="macosx-${MB_PYTHON_OSX_VER}-x86_64"
     export CFLAGS+=" -arch x86_64"
