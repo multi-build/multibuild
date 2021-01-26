@@ -329,6 +329,12 @@ function pip_opts {
     [ -n "$MANYLINUX_URL" ] && echo "--find-links $MANYLINUX_URL"
 }
 
+function get_os {
+    # Report OS as given by uname
+    # Use any Python that comes to hand.
+    python -c 'import platform; print(platform.uname()[0])'
+}
+
 function get_platform {
     # Report platform as given by uname
     # Use any Python that comes to hand.
