@@ -14,6 +14,8 @@ set -e
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 DOWNLOADS_SDIR=downloads
 PYPY_URL=https://downloads.python.org/pypy
+# For back-compatibility.  We use the "ensurepip" module now
+# instead of get-pip.py
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 
 # Unicode width, default 32. Used here and in travis_linux_steps.sh
@@ -542,6 +544,9 @@ retry () {
 
 function install_pip {
     # Generic install pip
+    echo "Deprecated - please see pip installs within the individual"
+    echo "install functions for each Python type."
+    echo "Multibuild itself no longer uses this function."
     # Gets needed version from version implied by $PYTHON_EXE
     # Installs pip into python given by $PYTHON_EXE
     # Assumes pip will be installed into same directory as $PYTHON_EXE

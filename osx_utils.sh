@@ -8,7 +8,6 @@ source $MULTIBUILD_DIR/common_utils.sh
 
 MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
-GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 WORKING_SDIR=working
 
 # As of 22 December 2020 - latest Python of each version with binary download
@@ -384,7 +383,10 @@ function get_macpython_environment {
 
     remove_travis_ve_pip
     install_macpython $version $py_osx_ver
-    install_pip
+    # Assume ensurepip available.
+    $PYTHON_EXE -m ensurepip
+    PIP_CMD="$PYTHON_EXE -m pip"
+    $PIP_CMD install --upgrade pip
 
     if [ -n "$venv_dir" ]; then
         install_virtualenv
