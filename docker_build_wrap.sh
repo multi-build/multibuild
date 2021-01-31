@@ -41,7 +41,9 @@ else
   PYTHON_EXE=$(cpython_path $PYTHON_VERSION $UNICODE_WIDTH)/bin/python
   ls $(dirname $PYTHON_EXE)
   export PATH="$(dirname $PYTHON_EXE):$PATH"
-  install_pip
+  # We can assume ensurepip is available and up to date.
+  $PYTHON_EXE -m ensurepip
+  PIP_CMD="$PYTHON_EXE -m pip"
 fi
 
 # Configuration for this package, possibly overriding `build_wheel` defined in
