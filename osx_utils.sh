@@ -383,10 +383,17 @@ function get_macpython_environment {
 
     remove_travis_ve_pip
     install_macpython $version $py_osx_ver
-    # Assume ensurepip available.
-    $PYTHON_EXE -m ensurepip
     PIP_CMD="$PYTHON_EXE -m pip"
-    $PIP_CMD install --upgrade pip
+    # Python 3.5 no longer compatible with latest pip
+    if [ "$(get_py_mm)" == "3.5" ]; then
+        # https://stackoverflow.com/a/29751768/1939576
+        curl -LO https://bootstrap.pypa.io/3.5/get-pip.py
+        $PYTHON_EXE get-pip.py
+        rm get-pip.py
+    else
+        $PYTHON_EXE -m ensurepip
+        $PIP_CMD install --upgrade pip
+    fi
 
     if [ -n "$venv_dir" ]; then
         install_virtualenv
