@@ -2,6 +2,11 @@
 # Wheel build, install, run test steps on OSX
 set -e
 
+if ([ "$GITHUB_WORKFLOW" != "" ] || [ "$PIPELINE_WORKSPACE" != "" ]) && [ "$SDKROOT" == "" ] && ([ "$PLAT" == "arm64" ] || [ "$PLAT" == "universal2" ]); then
+    sudo xcode-select -switch /Applications/Xcode_12.2.app
+    export SDKROOT=/Applications/Xcode_12.2.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk
+fi
+
 # Get needed utilities
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 MB_PYTHON_VERSION=${MB_PYTHON_VERSION:-$TRAVIS_PYTHON_VERSION}
