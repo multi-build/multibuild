@@ -2,9 +2,16 @@
 # Wheel build, install, run test steps on OSX
 set -e
 
-if ([ "$GITHUB_WORKFLOW" != "" ] || [ "$PIPELINE_WORKSPACE" != "" ]) && [ "$SDKROOT" == "" ] && ([ "$PLAT" == "arm64" ] || [ "$PLAT" == "universal2" ]); then
-    sudo xcode-select -switch /Applications/Xcode_12.2.app
-    export SDKROOT=/Applications/Xcode_12.2.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk
+if [ "$PLAT" == "arm64" ] || [ "$PLAT" == "universal2" ]; then
+  if [[ "$(xcrun -show-sdk-version)" == 10.*  ]]; then
+    if ([ "$GITHUB_WORKFLOW" != "" ] || [ "$PIPELINE_WORKSPACE" != "" ]) && [ -d /Applications/Xcode_12.2.app ]; then
+      sudo xcode-select -switch /Applications/Xcode_12.2.app
+    else
+      echo "Need SDK>=11 for arm64 builds. Please run xcode-select to select a newer SDK"
+      exit 1
+    fi
+  fi
+  export SDKROOT=${SDKROOT:-$(xcrun -show-sdk-path)}
 fi
 
 # Get needed utilities
