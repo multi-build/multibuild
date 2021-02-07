@@ -4,8 +4,8 @@ set -e
 
 if [ "$PLAT" == "arm64" ] || [ "$PLAT" == "universal2" ]; then
   if [[ "$(xcrun -show-sdk-version)" == 10.*  ]]; then
-    if ([ "$GITHUB_WORKFLOW" != "" ] || [ "$PIPELINE_WORKSPACE" != "" ]) && [ -d /Applications/Xcode_12.2.app ]; then
-      sudo xcode-select -switch /Applications/Xcode_12.2.app
+    if ([ "$GITHUB_WORKFLOW" != "" ] || [ "$PIPELINE_WORKSPACE" != "" ]) && [ $(ls /Applications | grep Xcode_12.*\.app) ]; then
+      sudo xcode-select -switch /Applications/Xcode_12.*.app
     else
       echo "Need SDK>=11 for arm64 builds. Please run xcode-select to select a newer SDK"
       exit 1
