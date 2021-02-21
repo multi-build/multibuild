@@ -12,7 +12,7 @@ function check_sdk_11 {
 }
 
 if [ "$PLAT" == "arm64" ] || [ "$PLAT" == "universal2" ]; then
-  if [[ "$(check_sdk_11)" == "not found"  ]]; then
+  if [[ "$(check_sdk_11)" == "not found" ]]; then
     latestXcode=$(ls /Applications | grep Xcode[_0-9\.]*\.app | sort -V | tail -n 1)
     if ([ "$GITHUB_WORKFLOW" != "" ] || [ "$PIPELINE_WORKSPACE" != "" ]) && [ $latestXcode ]; then
       sudo xcode-select -switch /Applications/$latestXcode.app
