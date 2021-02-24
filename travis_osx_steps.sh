@@ -2,22 +2,13 @@
 # Wheel build, install, run test steps on OSX
 set -e
 
-function check_sdk_11 {
-  ver="$(xcrun -show-sdk-version)"
-  if [[ "${ver}" == "" || "${ver}" == 10.* ]]; then
-    echo "not found"
-  else
-    echo "found"
-  fi
-}
-
 if [ "$PLAT" == "arm64" ] || [ "$PLAT" == "universal2" ]; then
-  if [[ "$(check_sdk_11)" == "not found" ]]; then
+  if [[ "$(xcrun -show-sdk-version | cut -d '.' -f 1)" -lt 11 ]]; then
     latestXcode=$(ls /Applications | grep Xcode[_0-9\.]*\.app | sort -V | tail -n 1)
     if ([ "$GITHUB_WORKFLOW" != "" ] || [ "$PIPELINE_WORKSPACE" != "" ]) && [ $latestXcode ]; then
       sudo xcode-select -switch /Applications/$latestXcode
     fi
-    if [[ "$(check_sdk_11)" == "not found" ]]; then
+    if [[ "$(xcrun -show-sdk-version | cut -d '.' -f 1)" -lt 11 ]]; then
       echo "Need SDK>=11 for arm64 builds. Please run xcode-select to select a newer SDK"
       exit 1
     fi
