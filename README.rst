@@ -125,10 +125,17 @@ variable. The default version is ``1``.  Versions that are currently valid are:
 
 The environment variable specified which Manylinux docker container you are building in.
 
-The ``PLAT`` environment variable can be one of ``x86_64``, ``i686`` ``s390x``,
-``ppc64le``, or ``aarch64``, specifying 64-bit x86, 32-bit x86, 64-bit s390x,
-PowerPC, and ARM builds, respectively.  The default is ``x86_64``. Only ``x86_64``
-and ``i686`` are valid on manylinux1 and manylinux2010.
+The ``PLAT`` environment variable can be one of
+
+* ``x86_64``, for 64-bit x86
+* ``i686``, for 32-bit x86
+* ``s390x``, for 64-bit s390x
+* ``ppc64le``, for PowerPC
+* ``aarch64``, for ARM
+* ``arm64``, for Apple silicon
+* ``universal2``, for both Apple silicon and 64-bit x86
+
+The default is ``x86_64``. Only ``x86_64`` and ``i686`` are valid on manylinux1 and manylinux2010.
 
 ``multibuild/travis_linux_steps.sh`` defines the ``build_wheel`` function,
 which starts up the Manylinux1 Docker container to run a wrapper script
