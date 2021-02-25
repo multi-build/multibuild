@@ -457,7 +457,7 @@ function macos_arm64_cross_build_setup {
     # Setup cross build for single arch arm_64 wheels
     export PLAT="arm64"
     export BUILD_PREFIX=/opt/arm64-builds
-    sudo mkdir -p $BUILD_PREFIX
+    sudo mkdir -p $BUILD_PREFIX/lib $BUILD_PREFIX/include
     sudo chown -R $USER $BUILD_PREFIX
     update_env_for_build_prefix
     export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
