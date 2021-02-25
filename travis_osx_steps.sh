@@ -13,7 +13,7 @@ if [ "$PLAT" == "arm64" ] || [ "$PLAT" == "universal2" ]; then
       exit 1
     fi
   fi
-  export SDKROOT=${SDKROOT:-$(xcrun -show-sdk-path)}
+  export SDKROOT=${SDKROOT:-$(xcrun --sdk macosx --show-sdk-path)}
 fi
 
 # Get needed utilities
