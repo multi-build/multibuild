@@ -143,6 +143,39 @@ function suppress {
     return "$ret"
 }
 
+function expect_return {
+  # Run a command, succeeding (returning 0) only if the commend returns a specified code
+  # Parameters
+  #   retcode   expected return code (which may be zero)
+  #   command   the command called
+  #
+  #   any further arguments are passed to the called command
+  #
+  # Returns 1 if called with less than 2 arguments
+  (( $# < 2 )) && echo "Must have at least 2 arguments" && return 1
+  local retcode=$1
+  local retval
+  ( "${@:2}" ) || retval=$?
+  [[ $retcode == ${retval:-0} ]] && return 0
+  return ${retval:-1}
+}
+
+function cmd_notexit {
+    # wraps a command, capturing its return code and preventing it
+    # from exiting the shell. Handles -e / +e modes.
+    # Parameters
+    #    cmd - command
+    #    any further parameters are passed to the wrapped command
+    # If called without an argument, it will exit the shell with an error
+    local cmd=$1
+    if [ -z "$cmd" ];then echo "no command"; exit 1; fi
+    if [[ $- = *e* ]]; then errexit_set=true; fi
+    set +e
+    ("${@:1}") ; retval=$?
+    [[ -n $errexit_set ]] && set -e
+    return $retval
+}
+
 function rm_mkdir {
     # Remove directory if present, then make directory
     local path=$1

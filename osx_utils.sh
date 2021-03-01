@@ -299,8 +299,15 @@ function install_mac_cpython {
     local py_stripped=$(strip_ver_suffix $py_version)
     local py_inst=$(pyinst_fname_for_version $py_version $py_osx_ver)
     local inst_path=$DOWNLOADS_SDIR/$py_inst
+    local retval=""
     mkdir -p $DOWNLOADS_SDIR
-    curl $MACPYTHON_URL/$py_stripped/${py_inst} > $inst_path
+    # exit early on curl errors, but don't let it exit the shell
+    cmd_notexit curl -f $MACPYTHON_URL/$py_stripped/${py_inst} > $inst_path || retval=$?
+    if [ ${retval:-0} -ne 0 ]; then
+      echo "Python download failed! Check ${py_inst} exists on the server."
+      exit $retval
+    fi
+
     if [ "${py_inst: -3}" == "dmg" ]; then
         hdiutil attach $inst_path -mountpoint /Volumes/Python
         inst_path=/Volumes/Python/Python.mpkg
