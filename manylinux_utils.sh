@@ -1,5 +1,5 @@
 #!/bin/bash
-# Useful utilities common across manylinux1 builds
+# Useful utilities common across manylinux builds
 
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 source $MULTIBUILD_DIR/common_utils.sh
