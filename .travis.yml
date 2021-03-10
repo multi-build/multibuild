@@ -20,7 +20,7 @@ matrix:
       dist: xenial
       env:
         - TEST_BUILDS=1
-    # 64-bit builds,
+    # 64-bit builds
     - os: linux
       dist: xenial
       env:

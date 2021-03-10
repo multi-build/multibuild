@@ -113,7 +113,7 @@ guideline include:
 * setting ``MB_PYTHON_OSX_VER=10.6 and PLAT=x86_64`` to build a 10.6 64-bit
   only wheel (10.6 would normally be 64/32-bit). Such a wheel would still have
   a platform tag of ``macosx_10_6_intel`` , advertising support for both 64 and
-  32-bit, but wouldnt work in 32-bit mode. This may be OK given how unlikely it
+  32-bit, but wouldn't work in 32-bit mode. This may be OK given how unlikely it
   is that there is still anyone actually running Python on macOS in 32-bit
   mode.
 
