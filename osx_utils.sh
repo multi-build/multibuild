@@ -398,7 +398,7 @@ function get_macpython_environment {
     # Python 3.5 no longer compatible with latest pip
     if [ "$(get_py_mm)" == "3.5" ]; then
         # https://stackoverflow.com/a/29751768/1939576
-        curl -LO https://bootstrap.pypa.io/3.5/get-pip.py
+        curl -LO https://bootstrap.pypa.io/pip/3.5/get-pip.py
         $PYTHON_EXE get-pip.py
         rm get-pip.py
     else
