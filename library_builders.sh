@@ -133,7 +133,11 @@ function build_zlib {
     # Gives an old but safe version
     if [ -n "$IS_MACOS" ]; then return; fi  # OSX has zlib already
     if [ -e zlib-stamp ]; then return; fi
-    yum_install zlib-devel
+    if [[ $MB_ML_VER == "_2_24" ]]; then
+        apt-get install -y zlib1g-dev
+    else
+        yum_install zlib-devel
+    fi
     touch zlib-stamp
 }
 
@@ -180,6 +184,8 @@ function get_modern_cmake {
     local cmake=cmake
     if [ -n "$IS_MACOS" ]; then
         brew install cmake > /dev/null
+    elif [[ $MB_ML_VER == "_2_24" ]]; then
+        apt-get install -y cmake
     else
         if [ "`yum search cmake | grep ^cmake28\.`" ]; then
             cmake=cmake28
@@ -396,6 +402,8 @@ function build_suitesparse {
     if [ -e suitesparse-stamp ]; then return; fi
     if [ -n "$IS_MACOS" ]; then
         brew install suite-sparse > /dev/null
+    elif [[ $MB_ML_VER == "_2_24" ]]; then
+        apt-get install -y libsuitesparse-dev > /dev/null
     else
         yum_install suitesparse-devel > /dev/null
     fi

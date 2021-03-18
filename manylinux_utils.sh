@@ -44,7 +44,11 @@ function activate_ccache {
     ln -s /parent-home/.ccache $HOME/.ccache
 
     # Now install ccache
-    suppress yum_install ccache
+    if [[ $MB_ML_VER == "_2_24" ]]; then
+        suppress apt-get install -y ccache
+    else
+        suppress yum_install ccache
+    fi
 
     # Create fake compilers and prepend them to the PATH
     # Note that yum is supposed to create these for us,
@@ -60,6 +64,7 @@ function activate_ccache {
     # Prove to the developer that ccache is activated
     echo "Using C compiler: $(which gcc)"
 }
+
 function yum_install {
     # CentOS 5 yum doesn't fail in some cases, e.g. if package is not found
     # https://serverfault.com/questions/694942/yum-should-error-when-a-package-is-not-available
