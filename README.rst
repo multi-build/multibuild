@@ -2,23 +2,101 @@
 Utilities for building on Travis CI and AppVeyor
 ################################################
 
-*****************************
-Update: Uploads and Rackspace
-*****************************
+************************************
+Update: Uploads, Rackspace, Anaconda
+************************************
 
 The original Multibuild default was to upload wheels to a Rackspace container,
 where Rackspace kindly donated the hosting to the Scikit-learn team.  We had
 a URL pointing to the Rackspace container: `http://wheels.scipy.org`.
 
 Rackspace finally stopped subsidizing this container, and the Rackspace of
-`http://wheels.scipy.org` is no more. Projects using Multibuild have moved to
-using https://anaconda.org/scipy-wheels-nightly/ for weekly uploads and
+`http://wheels.scipy.org` is no more. Some projects using Multibuild have moved
+to using https://anaconda.org/scipy-wheels-nightly/ for weekly uploads and
 https://anaconda.org/multibuild-wheels-staging for staging wheels to PyPI.
 
-Another option is to use GitHub for staging --- as do Cython `for Travis CI
-<https://github.com/MacPython/cython-wheels/blob/master/.travis.yml#L144>`_
-and `for AppVeyor
-<https://github.com/MacPython/cython-wheels/blob/master/appveyor.yml#L118>`_.
+*******************
+Uploads to Anaconda
+*******************
+
+If you want to upload to Anaconda, and you don't need the extra storage space for nightly builds that Anaconda kindly donates to Numpy, Scipy etc, then you can do this with your own Anaconda organization.
+
+See `https://github.com/MacPython/nipy-wheels`_ for a simple example.
+
+* Make an account at Anaconda.org.
+* Make an organization - for example we have used ``nipy``.
+* Navigate to ``https://anaconda.org/nipy`` (but use your organization).
+* Go to your account menu towards the top left. This should be labeled with you
+  organization name.
+* Select "Settings", then "Access".
+* Create an access token.  Give it permission: "Allow write access to the API
+  site", and (not sure if this is necessary) "Allow uploads to PyPI
+  repositories".
+* "View" your token.  It may be of form
+  ``ni-1234abcd-12ab-34dc-1234-d1e1f3a4b5c6``.
+* Encrypt this to your repository, maybe using the ``travis`` command line tool
+  (``gem install travis``).  Your command will be something like::
+
+      travis encrypt -r MacPython/nipy-wheels ANACONDA_SECRET=ni-1234abcd-12ab-34dc-1234-d1e1f3a4b5c6
+
+  Note that ``MacPython/nipy-wheels`` is your Github organization/repository.  The encryption only applies to Travis-CI running against this repository.
+
+* Go to your `.travis.yml` file and add the output ``secure`` key.  This will
+  look something like::
+
+    env:
+      global:
+        # Following generated with
+        # travis encrypt -r MacPython/nipy-wheels ANACONDA_SECRET=<the api key>
+        # where <the api key> has API write access to the anaconda.org
+        # organization named in $ANACONDA_ORG
+        - secure: "IqN7LjXWVBaijggUoB+ohjzFzH6nU0OyxznXEMgWoNxQJRiYXXKAt/Z5c4ldp9LUynefJO306M8foN4Gm8M8PNDlhjElzdOtIkGYtDKUXx7aXtrg8rPk1mzuM1F27er4Dbi7WFtpPClr8z8JKNNV50yeM1o2cXu4HgrPrRKgKk/2D8EQaPQlcOqul0O63D9AjVoW3EIG0aWEnZQQGfuGAPgyr0OS92LX2h1pcD2lNZHhqYmXmm5U0IwZmWL3Y0N7PO3VXcOCeIbiHAlJzhk4C4+86TT7DN+VhmfGyY/s61fOz47K+lEZLVqqeQki+HV75fti0XwYG7rjcSvDanNx+w2J/ogSLQpiNxZ0FZ+W8psXEaFUgFf7oXzRkW9gQ4KAsItEWHifq061ngr5AWLPLh+01LGP1Xg8wT5WEVUzBfD2uJPsy20DLcP9WGYa6cBNwtpqmUkdVgM3ZCPWlro7+v1kqxsKp91uh8SRKVlkD4mwbf0FnWxbNZ9v4Z9gs0pZoRclzL+/YcIcSTYAwiQRqaX7T0tpxaUZ0VYTMwCgpsufUX1idV1HV5+WKr9FUocoq+1RRW/JeXkisX9FRvem8cSGmnxB/hynlxoqzttCVMwtrKWPwxH4dHD+lavouho68Q7iBql1ZBZEhQy0O9NC1wr4Rg2CeDPZuzqVjmSPuXQ="
+
+  When Travis-CI runs, this causes the ``ANACONDA_SECRET`` environment variable
+  to contain the API key above.
+
+  Also add this to your global environment variables::
+
+      - ANACONDA_ORG="nipy"
+
+*  To upload from Travis-CI, add a clause like this to the end of your
+   ``.travis.yml``::
+
+     after_success:
+         # Upload wheels to Anaconda.org
+         - pip install git+https://github.com/Anaconda-Platform/anaconda-project
+         - pip install git+https://github.com/Anaconda-Platform/anaconda-client
+         - anaconda -t ${ANACONDA_SECRET} upload --force -u ${ANACONDA_ORG} ${TRAVIS_BUILD_DIR}/wheelhouse/*.whl
+
+   ``wheelhouse/*.whl`` defines the files you want to upload.
+
+*   You might also want to build and upload from Appveyor.  To encrypt the API
+    key above, go to `https://ci.appveyor.com/account/matthew-brett/settings`_
+    (where ``matthew-brett`` is the account from which your Appveyor job runs.
+    Click on "Encrypt YaML" on the left.  Type in your API key value (e.g.
+    ``ni-1234abcd-12ab-34dc-1234-d1e1f3a4b5c6``) as the value to encrypt. Click "Encrypt" and note the text it suggests.  Now, at the top of your ``appveyor.yml`` file, add something like::
+
+        environment:
+          global:
+            ANACONDA_ORG: "nipy"
+            ANACONDA_SECRET:
+              secure: Ds0PkQD0b/QOfoNoiPuFJb01zg0Mq0dkAxIG2jRXocCAereSXdWw6XYaDrutHWme
+
+    where ``secure:`` is the text suggested from "Encrypt" above, and ``nipy`` is your Anaconda organization.
+
+    Finally, add a clause like the following to the end of your ``appveyor.yml`` file::
+
+      on_success:
+        # Upload the generated wheel package to Anaconda.org
+        - pip install git+https://github.com/Anaconda-Platform/anaconda-project
+        - pip install git+https://github.com/Anaconda-Platform/anaconda-client
+        - anaconda -t %ANACONDA_SECRET% upload --force -u %ANACONDA_ORG% nipy\dist\*.whl
+
+    where ``nipy\dist\*.whl`` finds the files you want to upload.
+
+There's a simple example of these steps applied at
+`https://github.com/MacPython/nipy-wheels`_.
+
 Here is the NumPy code (for running on Travis CI) to upload to Anaconda:
 https://github.com/MacPython/numpy-wheels/blob/master/.travis.yml#L99
 
@@ -27,7 +105,16 @@ Anaconda upload tokens via the "Organization Secrets"
 https://github.com/MacPython/numexpr-wheels/settings/secrets . You can use
 these to move to GitHub Actions (they provide x86 machines for Windows, Linux
 and Mac). Otherwise we (please raise an issue here) will need to negotiate
-getting you tokens.
+getting you tokens, or you can make your own, as above.
+
+**********************
+Use Github for uploads
+**********************
+
+Another option is to use GitHub for staging --- as do Cython `for Travis CI
+<https://github.com/MacPython/cython-wheels/blob/master/.travis.yml#L144>`_ and
+`for AppVeyor
+<https://github.com/MacPython/cython-wheels/blob/master/appveyor.yml#L118>`_.
 
 ************
 Introduction
