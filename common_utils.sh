@@ -205,10 +205,12 @@ function untar {
 }
 
 function install_rsync {
-    if [ -z "$IS_MACOS" ]; then
-        [[ $(type -P rsync) ]] || yum_install rsync
+    if [ -n "$IS_MACOS" ]; then
+        # macOS
     elif [[ $MB_ML_VER == "_2_24" ]]; then
         [[ $(type -P rsync) ]] || apt-get install -y rsync
+    else
+        [[ $(type -P rsync) ]] || yum_install rsync
     fi
 }
 
