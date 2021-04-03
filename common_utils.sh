@@ -206,7 +206,8 @@ function untar {
 
 function install_rsync {
     if [ -n "$IS_MACOS" ]; then
-        # macOS
+        # macOS. The colon in the next line is the null command
+        :
     elif [[ $MB_ML_VER == "_2_24" ]]; then
         [[ $(type -P rsync) ]] || apt-get install -y rsync
     else
