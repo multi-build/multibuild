@@ -54,6 +54,7 @@ else
             yum install -y libtool
         fi
     elif [[ $MB_ML_VER == "_2_24" ]]; then
+        apt update
         if [ "${MB_PYTHON_VERSION:0:4}" == "pypy" ]; then
             apt install -y wget
         fi
