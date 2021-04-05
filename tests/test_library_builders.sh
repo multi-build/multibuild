@@ -37,7 +37,7 @@ suppress build_swig
     build_github wbhart/mpir mpir-3.0.0
     )
 suppress build_flex
-# suppress build_openblas
+suppress build_openblas
 suppress build_tiff
 suppress build_lcms2
 suppress ensure_xz
