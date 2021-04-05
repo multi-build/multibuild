@@ -55,6 +55,12 @@ else
         fi
     elif [[ $MB_ML_VER == "_2_24" ]]; then
         apt update
+        if [ ! -d /usr/local/man ]; then
+            # Fix problem with manylinux_2_24 image
+            # /usr/local/man is a broken symlink
+            rm /usr/local/man
+            ln -s /usr/share/man /usr/local/man
+        fi
         if [ "${MB_PYTHON_VERSION:0:4}" == "pypy" ]; then
             apt install -y wget
         fi
