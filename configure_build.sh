@@ -47,24 +47,19 @@ else
     export CFLAGS="${CFLAGS:-$STRIP_FLAGS}"
     export CXXFLAGS="${CXXFLAGS:-$STRIP_FLAGS}"
     export FFLAGS="${FFLAGS:-$STRIP_FLAGS}"
-    if [[ $MB_ML_VER == "1" ]]; then
-        if [ "${MB_PYTHON_VERSION:0:4}" == "pypy" ]; then
-            yum install -y libtool wget
-        else
-            yum install -y libtool
-        fi
-    elif [[ $MB_ML_VER == "_2_24" ]]; then
+    if [[ $MB_ML_VER == "_2_24" ]]; then
+        # This is the first opportunity to distinguish between manylinux's
         apt update
-        if [ ! -d /usr/local/man ]; then
-            # Fix problem with manylinux_2_24 image
-            # /usr/local/man is a broken symlink
-            rm /usr/local/man
-            ln -s /usr/share/man /usr/local/man
-        fi
         if [ "${MB_PYTHON_VERSION:0:4}" == "pypy" ]; then
+            # debian:9 based distro
             apt install -y wget
         fi
+    elif [[ $MB_ML_VER == "1" ]]; then
+        # Need libtool, and for pypy need wget
+        # centos based distro
+        yum install -y libtool wget
     elif [ "${MB_PYTHON_VERSION:0:4}" == "pypy" ]; then
+        # centos based distro
         yum install -y wget
     fi
 fi

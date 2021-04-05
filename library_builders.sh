@@ -134,8 +134,10 @@ function build_zlib {
     if [ -n "$IS_MACOS" ]; then return; fi  # OSX has zlib already
     if [ -e zlib-stamp ]; then return; fi
     if [[ $MB_ML_VER == "_2_24" ]]; then
+        # debian:9 based distro
         apt-get install -y zlib1g-dev
     else
+        #centos based distro
         yum_install zlib-devel
     fi
     touch zlib-stamp
@@ -185,11 +187,13 @@ function get_modern_cmake {
     if [ -n "$IS_MACOS" ]; then
         brew install cmake > /dev/null
     elif [[ $MB_ML_VER == "_2_24" ]]; then
+        # debian:9 based distro
         apt-get install -y cmake
     else
         if [ "`yum search cmake | grep ^cmake28\.`" ]; then
             cmake=cmake28
         fi
+        # centos based distro
         yum_install $cmake > /dev/null
     fi
     echo $cmake
@@ -403,8 +407,10 @@ function build_suitesparse {
     if [ -n "$IS_MACOS" ]; then
         brew install suite-sparse > /dev/null
     elif [[ $MB_ML_VER == "_2_24" ]]; then
+        # debian:9 based distro
         apt-get install -y libsuitesparse-dev > /dev/null
     else
+        # centos based distro
         yum_install suitesparse-devel > /dev/null
     fi
     touch suitesparse-stamp

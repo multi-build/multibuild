@@ -45,8 +45,10 @@ function activate_ccache {
 
     # Now install ccache
     if [[ $MB_ML_VER == "_2_24" ]]; then
+        # debian:9 based distro
         suppress apt-get install -y ccache
     else
+        # centos based distro
         suppress yum_install ccache
     fi
 
