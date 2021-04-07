@@ -48,7 +48,7 @@ else
     export CXXFLAGS="${CXXFLAGS:-$STRIP_FLAGS}"
     export FFLAGS="${FFLAGS:-$STRIP_FLAGS}"
     if [[ $MB_ML_VER == "_2_24" ]]; then
-        # This is the first opportunity to distinguish between manylinux's
+        # This is the first opportunity to distinguish between manylinuxes
         apt update
         if [ "${MB_PYTHON_VERSION:0:4}" == "pypy" ]; then
             # debian:9 based distro
