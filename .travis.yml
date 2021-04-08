@@ -20,12 +20,18 @@ matrix:
       dist: xenial
       env:
         - TEST_BUILDS=1
-    # 64-bit builds, manylinux2010
+    # 64-bit builds
     - os: linux
       dist: xenial
       env:
         - TEST_BUILDS=1
         - MB_ML_VER=2010
+        - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
+    - os: linux
+      dist: xenial
+      env:
+        - TEST_BUILDS=1
+        - MB_ML_VER=_2_24
         - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
     # 32-bit builds
     - os: linux

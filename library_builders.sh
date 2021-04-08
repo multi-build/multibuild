@@ -14,7 +14,7 @@ OPENBLAS_VERSION="${OPENBLAS_VERSION:-0.3.10}"
 # We use system zlib by default - see build_new_zlib
 ZLIB_VERSION="${ZLIB_VERSION:-1.2.10}"
 LIBPNG_VERSION="${LIBPNG_VERSION:-1.6.21}"
-BZIP2_VERSION="${BZIP2_VERSION:-1.0.6}"
+BZIP2_VERSION="${BZIP2_VERSION:-1.0.7}"
 FREETYPE_VERSION="${FREETYPE_VERSION:-2.6.3}"
 TIFF_VERSION="${TIFF_VERSION:-4.1.0}"
 JPEG_VERSION="${JPEG_VERSION:-9b}"
@@ -133,7 +133,13 @@ function build_zlib {
     # Gives an old but safe version
     if [ -n "$IS_MACOS" ]; then return; fi  # OSX has zlib already
     if [ -e zlib-stamp ]; then return; fi
-    yum_install zlib-devel
+    if [[ $MB_ML_VER == "_2_24" ]]; then
+        # debian:9 based distro
+        apt-get install -y zlib1g-dev
+    else
+        #centos based distro
+        yum_install zlib-devel
+    fi
     touch zlib-stamp
 }
 
@@ -180,10 +186,14 @@ function get_modern_cmake {
     local cmake=cmake
     if [ -n "$IS_MACOS" ]; then
         brew install cmake > /dev/null
+    elif [[ $MB_ML_VER == "_2_24" ]]; then
+        # debian:9 based distro
+        apt-get install -y cmake
     else
         if [ "`yum search cmake | grep ^cmake28\.`" ]; then
             cmake=cmake28
         fi
+        # centos based distro
         yum_install $cmake > /dev/null
     fi
     echo $cmake
@@ -396,7 +406,11 @@ function build_suitesparse {
     if [ -e suitesparse-stamp ]; then return; fi
     if [ -n "$IS_MACOS" ]; then
         brew install suite-sparse > /dev/null
+    elif [[ $MB_ML_VER == "_2_24" ]]; then
+        # debian:9 based distro
+        apt-get install -y libsuitesparse-dev > /dev/null
     else
+        # centos based distro
         yum_install suitesparse-devel > /dev/null
     fi
     touch suitesparse-stamp

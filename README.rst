@@ -41,7 +41,8 @@ The Travis CI scripts are designed to build *and test*:
 
 * 64-bit macOS wheels built for macOS 10.9+
 * 64/32-bit macOS wheels built for macOS 10.6+
-* 64-bit ``manylinuxX_x86_64`` wheels, both narrow and wide Unicode builds, where `X` is any valid Manylinux version, such as `1`, or `2010`
+* 64-bit ``manylinuxX_x86_64`` wheels, both narrow and wide Unicode builds,
+  where `X` is any valid Manylinux version: `1`, `2010`, `2014` or `_2_24`.
 * 32-bit ``manylinuxX_i686`` wheels, both narrow and wide Unicode builds
 
 You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8 and 3.9
@@ -55,7 +56,7 @@ The AppVeyor setup is designed to build *and test*:
 * 64-bit Windows ``win_amd64`` wheels
 * 32-bit Windows ``win32`` wheels
 
-You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8
+You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8, 3.9
 
 *****************
 How does it work?
@@ -91,19 +92,35 @@ shell scripts listed above are available for your build and test.
 Build options are controlled mainly by the following environment
 variables:
 
-* ``MB_PYTHON_VER`` sets the Python version targetted: ``major.minor.patch`` for CPython, or ``pypy-major.minor`` for PyPy.
-* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C extensions. For CPython targets it may be set to 10.6 or 10.9, provided a corresponding Python build is available at `python.org <https://www.python.org/downloads/mac-osx/>`_. It defaults to the highest version available. It's ignored for PyPy targets.
-* ``PLAT`` sets the architectures built for any C extensions: ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. It defaults to the same arches as the target Python version: 64-bit for CPython macOS 10.9 or PyPy, and 64/32-bit for CPython 10.6.
+* ``MB_PYTHON_VER`` sets the Python version targetted: ``major.minor.patch``
+  for CPython, or ``pypy-major.minor`` for PyPy.
+* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C
+  extensions. For CPython targets it may be set to 10.6 or 10.9, provided a
+  corresponding Python build is available at `python.org
+  <https://www.python.org/downloads/mac-osx/>`_. It defaults to the highest
+  version available. It's ignored for PyPy targets.
+* ``PLAT`` sets the architectures built for any C extensions: ``x86_64`` or
+  ``intel`` for 64-bit or 64/32-bit respectively. It defaults to the same
+  arches as the target Python version: 64-bit for CPython macOS 10.9 or PyPy,
+  and 64/32-bit for CPython 10.6.
 
-In most cases it's best to rely on the defaults for ``MB_PYTHON_OSX_VER`` and ``PLAT``, rather than setting them explicitly. Examples of exceptions to this guideline include:
+In most cases it's best to rely on the defaults for ``MB_PYTHON_OSX_VER`` and
+``PLAT``, rather than setting them explicitly. Examples of exceptions to this
+guideline include:
 
-* setting ``MB_PYTHON_OSX_VER=10.6`` to build a 10.6 64/32-bit CPython wheel for Python 2.7 (default for 2.7 is 10.9 64-bit)
-* setting ``MB_PYTHON_OSX_VER=10.6 and PLAT=x86_64`` to build a 10.6 64-bit only wheel (10.6 would normally be 64/32-bit). Such a wheel would still have a platform tag of ``macosx_10_6_intel`` , advertising support for both 64 and 32-bit, but wouldnt work in 32-bit mode. This may be OK given how unlikely it is that there is still anyone actually running Python on macOS in 32-bit mode.
+* setting ``MB_PYTHON_OSX_VER=10.6`` to build a 10.6 64/32-bit CPython wheel
+  for Python 2.7 (default for 2.7 is 10.9 64-bit)
+* setting ``MB_PYTHON_OSX_VER=10.6 and PLAT=x86_64`` to build a 10.6 64-bit
+  only wheel (10.6 would normally be 64/32-bit). Such a wheel would still have
+  a platform tag of ``macosx_10_6_intel`` , advertising support for both 64 and
+  32-bit, but wouldn't work in 32-bit mode. This may be OK given how unlikely it
+  is that there is still anyone actually running Python on macOS in 32-bit
+  mode.
 
 The ``build_wheel`` function builds the wheel, and ``install_run``
 function installs and tests it.  Look in ``multibuild/common_utils.sh`` for
-default definitions of these functions.  See below for more details, many of which are common
-to macOS and Linux.
+default definitions of these functions.  See below for more details, many of
+which are common to macOS and Linux.
 
 Manylinux
 =========
@@ -122,6 +139,7 @@ variable. The default version is ``1``.  Versions that are currently valid are:
 * ``2010``  corresponding to manylinux2010 (see `PEP 571 <https://www.python.org/dev/peps/pep-0571>`_).
 * ``2014`` corresponding to manylinux2014 and adds more architectures to ``PLAT``
   (see `PEP 599 <https://www.python.org/dev/peps/pep-0599>`_).
+* ``_2_24`` corresponding to manylinux_2_24 (see `PEP 600 <https://www.python.org/dev/peps/pep-0600>`_).
 
 The environment variable specified which Manylinux docker container you are building in.
 
