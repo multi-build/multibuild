@@ -277,6 +277,7 @@ function build_hdf5 {
     local short=$(echo $HDF5_VERSION | awk -F "." '{printf "%d.%d", $1, $2}')
     fetch_unpack $hdf5_url/hdf5-$short/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.gz
     (cd hdf5-$HDF5_VERSION \
+        && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$BUILD_PREFIX/lib \
         && ./configure --with-szlib=$BUILD_PREFIX --prefix=$BUILD_PREFIX \
         --enable-threadsafe --enable-unsupported --with-pthread=yes \
         && make -j4 \
