@@ -15,6 +15,7 @@ matrix:
   include:
     - os: linux
       dist: trusty
+      language: python
     # 64-bit builds
     - os: linux
       dist: xenial
