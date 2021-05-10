@@ -37,7 +37,9 @@ suppress build_swig
     build_github wbhart/mpir mpir-3.0.0
     )
 suppress build_flex
-suppress build_openblas
+if [[ $MB_ML_VER != "_2_24" ]]; then
+    suppress build_openblas
+fi
 suppress build_tiff
 suppress build_lcms2
 suppress ensure_xz
