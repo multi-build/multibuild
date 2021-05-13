@@ -21,6 +21,9 @@ source tests/utils.sh
 
 start_spinner
 
+fetch_unpack https://github.com/harfbuzz/harfbuzz/releases/download/2.7.4/harfbuzz-2.7.4.tar.xz
+[ -d harfbuzz-2.7.4 ] || ingest ".tar.xz should have been unpacked"
+
 suppress build_bzip2
 suppress build_openssl
 suppress build_libpng
