@@ -203,6 +203,9 @@ function untar {
         xz) if [ -n "$IS_MACOS" ]; then
               tar -xf $in_fname
             else
+              if [[ ! $(type -P "unxz") ]]; then
+                echo xz must be installed to uncompress file; exit 1
+              fi
               unxz -c $in_fname | tar -xf -
             fi ;;
         *) echo Did not recognize extension $extension; exit 1 ;;
@@ -237,6 +240,12 @@ function fetch_unpack {
     if [ -z "$url" ];then echo "url not defined"; exit 1; fi
     local archive_fname=${2:-$(basename $url)}
     local arch_sdir="${ARCHIVE_SDIR:-archives}"
+    if [ -z "$IS_MACOS" ]; then
+        local extension=${archive_fname##*.}
+        if [ "$extension" == "xz" ]; then
+            ensure_xz
+        fi
+    fi
     # Make the archive directory in case it doesn't exist
     mkdir -p $arch_sdir
     local out_archive="${arch_sdir}/${archive_fname}"
