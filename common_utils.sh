@@ -14,6 +14,8 @@ set -e
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 DOWNLOADS_SDIR=downloads
 PYPY_URL=https://downloads.python.org/pypy
+# For back-compatibility.  We use the "ensurepip" module now
+# instead of get-pip.py
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 
 # Unicode width, default 32. Used here and in travis_linux_steps.sh
@@ -22,7 +24,14 @@ GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 # with, so it is passed in when calling "docker run" for tests.
 UNICODE_WIDTH=${UNICODE_WIDTH:-32}
 
-if [ $(uname) == "Darwin" ]; then IS_OSX=1; fi
+if [ $(uname) == "Darwin" ]; then
+  IS_MACOS=1; IS_OSX=1;
+else
+  # In the manylinux_2_24 image, based on Debian9, "python" is not installed
+  # so link in something for the various system calls before PYTHON_EXE is set
+  which python || export PATH=/opt/python/cp39-cp39/bin:$PATH
+fi
+
 
 # Work round bug in travis xcode image described at
 # https://github.com/direnv/direnv/issues/210
@@ -141,6 +150,39 @@ function suppress {
     return "$ret"
 }
 
+function expect_return {
+  # Run a command, succeeding (returning 0) only if the commend returns a specified code
+  # Parameters
+  #   retcode   expected return code (which may be zero)
+  #   command   the command called
+  #
+  #   any further arguments are passed to the called command
+  #
+  # Returns 1 if called with less than 2 arguments
+  (( $# < 2 )) && echo "Must have at least 2 arguments" && return 1
+  local retcode=$1
+  local retval
+  ( "${@:2}" ) || retval=$?
+  [[ $retcode == ${retval:-0} ]] && return 0
+  return ${retval:-1}
+}
+
+function cmd_notexit {
+    # wraps a command, capturing its return code and preventing it
+    # from exiting the shell. Handles -e / +e modes.
+    # Parameters
+    #    cmd - command
+    #    any further parameters are passed to the wrapped command
+    # If called without an argument, it will exit the shell with an error
+    local cmd=$1
+    if [ -z "$cmd" ];then echo "no command"; exit 1; fi
+    if [[ $- = *e* ]]; then errexit_set=true; fi
+    set +e
+    ("${@:1}") ; retval=$?
+    [[ -n $errexit_set ]] && set -e
+    return $retval
+}
+
 function rm_mkdir {
     # Remove directory if present, then make directory
     local path=$1
@@ -164,7 +206,15 @@ function untar {
 }
 
 function install_rsync {
-    if [ -z "$IS_OSX" ]; then
+    # install rsync via package manager
+    if [ -n "$IS_MACOS" ]; then
+        # macOS. The colon in the next line is the null command
+        :
+    elif [[ $MB_ML_VER == "_2_24" ]]; then
+        # debian:9 based distro
+        [[ $(type -P rsync) ]] || apt-get install -y rsync
+    else
+        # centos based distro
         [[ $(type -P rsync) ]] || yum_install rsync
     fi
 }
@@ -270,22 +320,27 @@ function bdist_wheel_cmd {
     cp dist/*.whl $abs_wheelhouse
 }
 
+function wrap_wheel_builder {
+    # Wrapper for build commands, overwritten by macOS for universal2 or arm64 wheel building
+    $@
+}
+
 function build_pip_wheel {
     # Standard wheel building command with pip wheel
-    build_wheel_cmd "pip_wheel_cmd" $@
+    wrap_wheel_builder build_wheel_cmd "pip_wheel_cmd" $@
 }
 
 function build_bdist_wheel {
     # Wheel building with bdist_wheel. See bdist_wheel_cmd
-    build_wheel_cmd "bdist_wheel_cmd" $@
+    wrap_wheel_builder build_wheel_cmd "bdist_wheel_cmd" $@
 }
 
 function build_wheel {
     # Set default building method to pip
-    build_pip_wheel $@
+    wrap_wheel_builder build_pip_wheel $@
 }
 
-function build_index_wheel {
+function build_index_wheel_cmd {
     # Builds wheel from some index, usually pypi
     #
     # Parameters:
@@ -316,8 +371,18 @@ function build_index_wheel {
     repair_wheelhouse $wheelhouse
 }
 
+function build_index_wheel {
+    wrap_wheel_builder build_index_wheel_cmd $@
+}
+
 function pip_opts {
     [ -n "$MANYLINUX_URL" ] && echo "--find-links $MANYLINUX_URL"
+}
+
+function get_os {
+    # Report OS as given by uname
+    # Use any Python that comes to hand.
+    python -c 'import platform; print(platform.uname()[0])'
 }
 
 function get_platform {
@@ -392,7 +457,7 @@ function fill_submodule {
     (cd "$repo_dir" && git remote set-url origin $origin_url)
 }
 
-# As of 2020-04-14, the latest verions of PyPy.
+# The latest versions of PyPy.
 LATEST_PP_5p0=5.0.1
 LATEST_PP_5p1=5.1.1
 LATEST_PP_5p3=5.3.1
@@ -409,7 +474,7 @@ LATEST_PP_6=$LATEST_PP_6p0
 LATEST_PP_7p0=7.0.0
 LATEST_PP_7p1=7.1.1
 LATEST_PP_7p2=7.2.0
-LATEST_PP_7p3=7.3.1
+LATEST_PP_7p3=7.3.3
 LATEST_PP_7=$LATEST_PP_7p3
 
 function unroll_version {
@@ -441,7 +506,7 @@ function install_pypy {
 
     local version=$1
     case "$PLAT" in
-    "x86_64")  if [ -n "$IS_OSX" ]; then
+    "x86_64")  if [ -n "$IS_MACOS" ]; then
                    suffix="osx64";
                else
                    suffix="linux64";
@@ -533,6 +598,9 @@ retry () {
 
 function install_pip {
     # Generic install pip
+    echo "Deprecated - please see pip installs within the individual"
+    echo "install functions for each Python type."
+    echo "Multibuild itself no longer uses this function."
     # Gets needed version from version implied by $PYTHON_EXE
     # Installs pip into python given by $PYTHON_EXE
     # Assumes pip will be installed into same directory as $PYTHON_EXE

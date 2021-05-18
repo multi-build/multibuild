@@ -1,7 +1,7 @@
 # Test supported wheels script
 PYTHON_EXE=${PYTHON_EXE:-python}
 if [ -z "$PIP_CMD" ]; then
-    pip_install="$PYTHON_EXE -m pip install --user"
+    pip_install="$PYTHON_EXE -m pip install"
 else
     pip_install="$PIP_CMD install"
 fi

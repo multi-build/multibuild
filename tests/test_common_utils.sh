@@ -88,6 +88,17 @@ actual="$(set -e; suppress bad_mid_cmd)"
 # Reset options
 set_opts $ORIG_OPTS
 
+! expect_return 1 || ingest "Too few arguments"
+! expect_return 1 good_cmd || ingest "unexpected success"
+! expect_return 0 bad_cmd || ingest "unexpected failure"
+expect_return 1 bad_cmd || ingest "fail with expected error 1"
+! expect_return 2 bad_cmd || ingest "fail with unexpected error"
+expect_return 0 good_cmd || ingest "succeed as expected"
+
+cmd_notexit good_cmd || ingest
+! cmd_notexit bad_cmd || ingest
+! cmd_notexit exit 1 || ingest
+
 # On Linux docker containers in travis, can be x86_64, i686, s390x, ppc64le, or
 # aarch64
 [ "$(get_platform)" == x86_64 ] || \

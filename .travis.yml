@@ -9,23 +9,30 @@ cache:
 env:
     global:
         # Always set Python version
-        - MB_PYTHON_VERSION=3.7
+        - MB_PYTHON_VERSION=3.9
 
 matrix:
   include:
     - os: linux
       dist: trusty
+      language: python
     # 64-bit builds
     - os: linux
       dist: xenial
       env:
         - TEST_BUILDS=1
-    # 64-bit builds, manylinux2010
+    # 64-bit builds
     - os: linux
       dist: xenial
       env:
         - TEST_BUILDS=1
         - MB_ML_VER=2010
+        - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
+    - os: linux
+      dist: xenial
+      env:
+        - TEST_BUILDS=1
+        - MB_ML_VER=_2_24
         - DOCKER_TEST_IMAGE=multibuild/xenial_{PLAT}
     # 32-bit builds
     - os: linux
@@ -82,6 +89,13 @@ matrix:
       env:
         - MB_PYTHON_VERSION=3.5
         - VENV=venv
+    # this is expected to fail
+    # 3.5 / 10.9 build doesn't exist
+    - os: osx
+      env:
+        - MB_PYTHON_VERSION=3.5
+        - MB_PYTHON_OSX_VER=10.9
+        - OSX_ENV_EXPECT_FAIL=true
     - os: osx
       env:
         - MB_PYTHON_VERSION=3.6
@@ -96,6 +110,7 @@ matrix:
         - MB_PYTHON_VERSION=3.7
         - VENV=venv
     - os: osx
+      osx_image: xcode10.2
       env:
         - MB_PYTHON_VERSION=3.7
         - VENV=venv
@@ -103,6 +118,10 @@ matrix:
     - os: osx
       env:
         - MB_PYTHON_VERSION=3.8
+        - VENV=venv
+    - os: osx
+      env:
+        - MB_PYTHON_VERSION=3.9
         - VENV=venv
     - os: osx
       env:
@@ -130,6 +149,10 @@ matrix:
       osx_image: xcode10
       env:
         - MB_PYTHON_VERSION=3.8
+    - os: osx
+      osx_image: xcode10
+      env:
+        - MB_PYTHON_VERSION=3.9
     - os: osx
       osx_image: xcode10.1
       env:

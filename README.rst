@@ -41,10 +41,11 @@ The Travis CI scripts are designed to build *and test*:
 
 * 64-bit macOS wheels built for macOS 10.9+
 * 64/32-bit macOS wheels built for macOS 10.6+
-* 64-bit ``manylinuxX_x86_64`` wheels, both narrow and wide Unicode builds, where `X` is any valid Manylinux version, such as `1`, or `2010`
+* 64-bit ``manylinuxX_x86_64`` wheels, both narrow and wide Unicode builds,
+  where `X` is any valid Manylinux version: `1`, `2010`, `2014` or `_2_24`.
 * 32-bit ``manylinuxX_i686`` wheels, both narrow and wide Unicode builds
 
-You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7 and 3.8
+You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8 and 3.9
 
 The small innovation here is that you can test against Linux 32-bit builds, both
 wide and narrow Unicode Python 2 builds, which was not easy on the default
@@ -55,7 +56,7 @@ The AppVeyor setup is designed to build *and test*:
 * 64-bit Windows ``win_amd64`` wheels
 * 32-bit Windows ``win32`` wheels
 
-You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8
+You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8, 3.9
 
 *****************
 How does it work?
@@ -91,19 +92,35 @@ shell scripts listed above are available for your build and test.
 Build options are controlled mainly by the following environment
 variables:
 
-* ``MB_PYTHON_VER`` sets the Python version targetted: ``major.minor.patch`` for CPython, or ``pypy-major.minor`` for PyPy.
-* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C extensions. For CPython targets it may be set to 10.6 or 10.9, provided a corresponding Python build is available at `python.org <https://www.python.org/downloads/mac-osx/>`_. It defaults to the highest version available. It's ignored for PyPy targets.
-* ``PLAT`` sets the architectures built for any C extensions: ``x86_64`` or ``intel`` for 64-bit or 64/32-bit respectively. It defaults to the same arches as the target Python version: 64-bit for CPython macOS 10.9 or PyPy, and 64/32-bit for CPython 10.6.
+* ``MB_PYTHON_VER`` sets the Python version targetted: ``major.minor.patch``
+  for CPython, or ``pypy-major.minor`` for PyPy.
+* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C
+  extensions. For CPython targets it may be set to 10.6 or 10.9, provided a
+  corresponding Python build is available at `python.org
+  <https://www.python.org/downloads/mac-osx/>`_. It defaults to the highest
+  version available. It's ignored for PyPy targets.
+* ``PLAT`` sets the architectures built for any C extensions: ``x86_64`` or
+  ``intel`` for 64-bit or 64/32-bit respectively. It defaults to the same
+  arches as the target Python version: 64-bit for CPython macOS 10.9 or PyPy,
+  and 64/32-bit for CPython 10.6.
 
-In most cases it's best to rely on the defaults for ``MB_PYTHON_OSX_VER`` and ``PLAT``, rather than setting them explicitly. Examples of exceptions to this guideline include:
+In most cases it's best to rely on the defaults for ``MB_PYTHON_OSX_VER`` and
+``PLAT``, rather than setting them explicitly. Examples of exceptions to this
+guideline include:
 
-* setting ``MB_PYTHON_OSX_VER=10.6`` to build a 10.6 64/32-bit CPython wheel for Python 2.7 (default for 2.7 is 10.9 64-bit)
-* setting ``MB_PYTHON_OSX_VER=10.6 and PLAT=x86_64`` to build a 10.6 64-bit only wheel (10.6 would normally be 64/32-bit). Such a wheel would still have a platform tag of ``macosx_10_6_intel`` , advertising support for both 64 and 32-bit, but wouldnt work in 32-bit mode. This may be OK given how unlikely it is that there is still anyone actually running Python on macOS in 32-bit mode.
+* setting ``MB_PYTHON_OSX_VER=10.6`` to build a 10.6 64/32-bit CPython wheel
+  for Python 2.7 (default for 2.7 is 10.9 64-bit)
+* setting ``MB_PYTHON_OSX_VER=10.6 and PLAT=x86_64`` to build a 10.6 64-bit
+  only wheel (10.6 would normally be 64/32-bit). Such a wheel would still have
+  a platform tag of ``macosx_10_6_intel`` , advertising support for both 64 and
+  32-bit, but wouldn't work in 32-bit mode. This may be OK given how unlikely it
+  is that there is still anyone actually running Python on macOS in 32-bit
+  mode.
 
 The ``build_wheel`` function builds the wheel, and ``install_run``
 function installs and tests it.  Look in ``multibuild/common_utils.sh`` for
-default definitions of these functions.  See below for more details, many of which are common
-to macOS and Linux.
+default definitions of these functions.  See below for more details, many of
+which are common to macOS and Linux.
 
 Manylinux
 =========
@@ -122,13 +139,21 @@ variable. The default version is ``1``.  Versions that are currently valid are:
 * ``2010``  corresponding to manylinux2010 (see `PEP 571 <https://www.python.org/dev/peps/pep-0571>`_).
 * ``2014`` corresponding to manylinux2014 and adds more architectures to ``PLAT``
   (see `PEP 599 <https://www.python.org/dev/peps/pep-0599>`_).
+* ``_2_24`` corresponding to manylinux_2_24 (see `PEP 600 <https://www.python.org/dev/peps/pep-0600>`_).
 
 The environment variable specified which Manylinux docker container you are building in.
 
-The ``PLAT`` environment variable can be one of ``x86_64``, ``i686`` ``s390x``,
-``ppc64le``, or ``aarch64``, specifying 64-bit x86, 32-bit x86, 64-bit s390x,
-PowerPC, and ARM builds, respectively.  The default is ``x86_64``. Only ``x86_64``
-and ``i686`` are valid on manylinux1 and manylinux2010.
+The ``PLAT`` environment variable can be one of
+
+* ``x86_64``, for 64-bit x86
+* ``i686``, for 32-bit x86
+* ``s390x``, for 64-bit s390x
+* ``ppc64le``, for PowerPC
+* ``aarch64``, for ARM
+* ``arm64``, for Apple silicon
+* ``universal2``, for both Apple silicon and 64-bit x86
+
+The default is ``x86_64``. Only ``x86_64`` and ``i686`` are valid on manylinux1 and manylinux2010.
 
 ``multibuild/travis_linux_steps.sh`` defines the ``build_wheel`` function,
 which starts up the Manylinux1 Docker container to run a wrapper script
@@ -272,6 +297,9 @@ To use these scripts
     # and test containers, via docker.
     dist: xenial
 
+    # osx image that enables building Apple silicon libraries
+    osx_image: xcode12.2
+
     matrix:
       include:
         - os: linux
@@ -327,6 +355,13 @@ To use these scripts
           env:
             - MB_PYTHON_VERSION=3.8
         - os: osx
+          env:
+            - MB_PYTHON_VERSION=3.9
+            - PLAT="universal2"
+        - os: osx
+          env:
+            - MB_PYTHON_VERSION=3.9
+        - os: osx
           language: generic
           env:
             - MB_PYTHON_VERSION=pypy-5.7
@@ -369,7 +404,7 @@ To use these scripts
   You also need this file to specify how to run your tests::
 
     # Define custom utilities
-    # Test for macOS with [ -n "$IS_OSX" ]
+    # Test for macOS with [ -n "$IS_MACOS" ]
 
     function pre_build {
         # Any stuff that you need to do before you start building the wheels
@@ -415,6 +450,37 @@ To use these scripts
 
 * Make sure your project is set up to build on AppVeyor, and you should now
   be ready (for what could be another round of slow debugging).
+
+* For Apple silicon support you can either create an ``arm64`` wheel or
+  a ``universal2`` wheel by supplying ``PLAT`` env variable.
+  ``universal2`` builds work on both ``arm64`` and ``x86_64`` platforms
+  and also make it possible for the wheel code to work when switching the
+  architecture on Apple silicon machines where ``x86_64`` can be run
+  using Rosetta2 emulation.
+
+  There are two ways to build ``universal2`` builds.
+
+  1. Build with ``-arch x86_64 -arch arm64``.
+     These flags instruct the C/C++ compiler to compile twice and create a
+     fat object/executable/library. This is the easiest, but has several
+     drawbacks. If you are using C/C++ libraries that are built using
+     library_builders, it's highly likely that they don't build correctly
+     because most build systems and packages don't support building fat binaries.
+     We could possibly build them separately and fuse them, but the headers might
+     not be identical which is required when building the wheel as a ``universal2``
+     wheel. If you are using Fortran, ``gfortran`` doesn't support fat binaries.
+
+  2. Build ``arm64`` and ``x86_64`` wheels separately and fuse them.
+     For this to work, we need to build the C/C++ libraries twice. Therefore,
+     the library building is once called with ``BUILD_PREFIX=${BUILD_PREFIX:-/usr/local}``
+     for ``x86_64`` and then called again with ``BUILD_PREFIX=/opt/arm64-builds``.
+     Once the two wheels are created, these two are merged. Both the
+     ``arm64`` and ``universal2`` wheels are outputs for this build.
+
+  In multibuild we are going with option 2. You can override this behaviour by
+  overriding the function ``wrap_wheel_builder``.
+  To build Apple silicon builds, you should use a CI service with Xcode 12 with
+  universal build support and make sure that xcode is the default.
 
 If your project depends on NumPy, you will want to build against the earliest
 NumPy that your project supports - see `forward, backward NumPy compatibility
