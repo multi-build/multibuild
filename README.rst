@@ -26,7 +26,7 @@ See `https://github.com/MacPython/nipy-wheels`_ for a simple example.
 * Make an account at Anaconda.org.
 * Make an organization - for example we have used ``nipy``.
 * Navigate to ``https://anaconda.org/nipy`` (but use your organization).
-* Go to your account menu towards the top left. This should be labeled with you
+* Go to your account menu towards the top left. This should be labeled with your
   organization name.
 * Select "Settings", then "Access".
 * Create an access token.  Give it permission: "Allow write access to the API
