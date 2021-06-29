@@ -156,6 +156,9 @@ function pyinst_fname_for_version {
     local py_version=$1
     local py_osx_ver=${2:-$(macpython_sdk_for_version $py_version)}
     local inst_ext=$(pyinst_ext_for_version $py_version)
+    # Use the universal2 installer if we are on arm64
+    # universal2 installer for python 3.8 needs macos 11.0 to run on
+    # and therefore x86_64 builds use the intel only installer.
     if [ "$(uname -m)" == "arm64" ]; then
       if [ "$py_version" == "3.9.1" ]; then
         echo "python-${py_version}-macos11.0.${inst_ext}"
