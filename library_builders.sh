@@ -237,7 +237,11 @@ function build_xz {
 
 function ensure_xz {
 	if [[ ! $(type -P "xz") ]]; then
-		build_xz
+	    if [ -n "$IS_MACOS" ]; then
+	        brew install xz
+	    else
+	        build_xz
+	    fi
 	fi
 }
 
