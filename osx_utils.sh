@@ -102,7 +102,7 @@ function macpython_sdk_list_for_version {
     local _major=${_ver%%.*}
     local _return
 
-    if [ "${PLAT}" = "arm64" ]; then
+    if [ "$(uname -m)" = "arm64" ]; then
         _return="11.0"
     elif [ "$_major" -eq "2" ]; then
         [ $(lex_ver $_ver) -lt $(lex_ver 2.7.18) ] && _return="10.6"
