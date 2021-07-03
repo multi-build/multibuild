@@ -154,7 +154,6 @@ function pyinst_fname_for_version {
     #       built for, eg: "10.6" or "10.9", if not defined, infers
     #       this from $py_version using macpython_sdk_for_version
     local py_version=$1
-    local py_osx_ver=${2:-$(macpython_sdk_for_version $py_version)}
     local inst_ext=$(pyinst_ext_for_version $py_version)
     # Use the universal2 installer if we are on arm64
     # universal2 installer for python 3.8 needs macos 11.0 to run on
@@ -170,6 +169,7 @@ function pyinst_fname_for_version {
         echo "python-${py_version}-macos11.${inst_ext}"
       fi
     else
+      local py_osx_ver=${2:-$(macpython_sdk_for_version $py_version)}
       echo "python-${py_version}-macosx${py_osx_ver}.${inst_ext}"
     fi
 }
