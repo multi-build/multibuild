@@ -21,7 +21,7 @@ Uploads to Anaconda
 
 If you want to upload to Anaconda, and you don't need the extra storage space for nightly builds that Anaconda kindly donates to Numpy, Scipy etc, then you can do this with your own Anaconda organization.
 
-See `https://github.com/MacPython/nipy-wheels`_ for a simple example.
+See https://github.com/MacPython/nipy-wheels for a simple example.
 
 * Make an account at Anaconda.org.
 * Make an organization - for example we have used ``nipy``.
@@ -71,7 +71,7 @@ See `https://github.com/MacPython/nipy-wheels`_ for a simple example.
    ``wheelhouse/*.whl`` defines the files you want to upload.
 
 *   You might also want to build and upload from Appveyor.  To encrypt the API
-    key above, go to `https://ci.appveyor.com/account/matthew-brett/settings`_
+    key above, go to https://ci.appveyor.com/account/matthew-brett/settings
     (where ``matthew-brett`` is the account from which your Appveyor job runs.
     Click on "Encrypt YaML" on the left.  Type in your API key value (e.g.
     ``ni-1234abcd-12ab-34dc-1234-d1e1f3a4b5c6``) as the value to encrypt. Click "Encrypt" and note the text it suggests.  Now, at the top of your ``appveyor.yml`` file, add something like::
@@ -95,7 +95,7 @@ See `https://github.com/MacPython/nipy-wheels`_ for a simple example.
     where ``nipy\dist\*.whl`` finds the files you want to upload.
 
 There's a simple example of these steps applied at
-`https://github.com/MacPython/nipy-wheels`_.
+https://github.com/MacPython/nipy-wheels.
 
 Here is the NumPy code (for running on Travis CI) to upload to Anaconda:
 https://github.com/MacPython/numpy-wheels/blob/master/.travis.yml#L99
