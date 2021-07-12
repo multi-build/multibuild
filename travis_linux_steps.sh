@@ -133,6 +133,7 @@ function install_run {
         -e MB_PYTHON_VERSION="$MB_PYTHON_VERSION" \
         -e UNICODE_WIDTH="$UNICODE_WIDTH" \
         -e CONFIG_PATH="$CONFIG_PATH" \
+        -e ENV_VARS_PATH="$ENV_VARS_PATH" \
         -e WHEEL_SDIR="$WHEEL_SDIR" \
         -e MANYLINUX_URL="$MANYLINUX_URL" \
         -e TEST_DEPENDS="$TEST_DEPENDS" \
