@@ -323,7 +323,7 @@ function install_mac_cpython {
         inst_path=/Volumes/Python/Python.mpkg
     fi
     sudo installer -pkg $inst_path -target /
-    local py_mm=${py_version:0:3}
+    local py_mm=${py_version%.*}
     PYTHON_EXE=$MACPYTHON_PY_PREFIX/$py_mm/bin/python$py_mm
     # Install certificates for Python 3.6
     local inst_cmd="/Applications/Python ${py_mm}/Install Certificates.command"
