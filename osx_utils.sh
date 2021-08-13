@@ -165,7 +165,7 @@ function pyinst_fname_for_version {
     # creates intel only wheels by default. When PLAT=universal2
     # we set the env variable _PYTHON_HOST_PLATFORM to change this
     # default.
-    if [ "$(uname -m)" == "arm64" ]; then
+    if [ "$(uname -m)" == "arm64" ] || [ $(lex_ver $py_version) -ge $(lex_ver 3.10.0) ]; then
       if [ "$py_version" == "3.9.1" ]; then
         echo "python-${py_version}-macos11.0.${inst_ext}"
       else
