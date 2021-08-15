@@ -19,6 +19,7 @@ LATEST_3p6=3.6.8
 LATEST_3p7=3.7.9
 LATEST_3p8=3.8.10
 LATEST_3p9=3.9.6
+LATEST_3p10=3.10.0rc1
 
 
 function check_python {
@@ -75,7 +76,9 @@ function fill_pyver {
         echo $ver
     elif [ $ver == 2 ] || [ $ver == "2.7" ]; then
         echo $LATEST_2p7
-    elif [ $ver == 3 ] || [ $ver == "3.9" ]; then
+    elif [ $ver == 3 ] || [ $ver == "3.10" ]; then
+        echo $LATEST_3p10
+    elif [ $ver == "3.9" ]; then
         echo $LATEST_3p9
     elif [ $ver == "3.8" ]; then
         echo $LATEST_3p8
@@ -162,7 +165,7 @@ function pyinst_fname_for_version {
     # creates intel only wheels by default. When PLAT=universal2
     # we set the env variable _PYTHON_HOST_PLATFORM to change this
     # default.
-    if [ "$(uname -m)" == "arm64" ]; then
+    if [ "$(uname -m)" == "arm64" ] || [ $(lex_ver $py_version) -ge $(lex_ver 3.10.0) ]; then
       if [ "$py_version" == "3.9.1" ]; then
         echo "python-${py_version}-macos11.0.${inst_ext}"
       else
@@ -320,7 +323,7 @@ function install_mac_cpython {
         inst_path=/Volumes/Python/Python.mpkg
     fi
     sudo installer -pkg $inst_path -target /
-    local py_mm=${py_version:0:3}
+    local py_mm=${py_version%.*}
     PYTHON_EXE=$MACPYTHON_PY_PREFIX/$py_mm/bin/python$py_mm
     # Install certificates for Python 3.6
     local inst_cmd="/Applications/Python ${py_mm}/Install Certificates.command"
