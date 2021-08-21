@@ -11,11 +11,6 @@
 #  install_run
 set -e
 
-# Default Manylinux version
-# Warning: ignored if DOCKER_IMAGE variable is set.
-# See build_multilinux function.
-MB_ML_VER=${MB_ML_VER:-2014}
-
 # Get our own location on this filesystem
 MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 
