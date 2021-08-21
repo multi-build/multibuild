@@ -10,7 +10,6 @@ fi
 CONFIGURE_BUILD_SOURCED=1
 
 BUILD_PREFIX="${BUILD_PREFIX:-/usr/local}"
-MB_ML_VER=${MB_ML_VER:-1}
 
 # IS_MACOS is defined in common_utils.sh
 if [ -n "$IS_MACOS" ]; then
