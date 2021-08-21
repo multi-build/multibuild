@@ -99,7 +99,7 @@ function openblas_get {
     # qual could be 64 to get a 64-bit version
     local qual=$2
     local prefix=openblas${qual}-v$OPENBLAS_VERSION
-    local manylinux=manylinux${MB_ML_VER:-1}
+    local manylinux=manylinux${MB_ML_VER:-2014}
     local fname="$prefix-${manylinux}_${plat}.tar.gz"
     local out_fname="${ARCHIVE_SDIR}/$fname"
     if [ ! -e "$out_fname" ]; then
