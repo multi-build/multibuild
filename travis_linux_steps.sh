@@ -131,6 +131,7 @@ function install_run {
         -e WHEEL_SDIR="$WHEEL_SDIR" \
         -e MANYLINUX_URL="$MANYLINUX_URL" \
         -e TEST_DEPENDS="$TEST_DEPENDS" \
+        -e PLAT="$PLAT" \
         -v $PWD:/io \
         $docker_image /io/$MULTIBUILD_DIR/docker_test_wrap.sh
 }
