@@ -31,6 +31,12 @@ environment:
     - PYTHON: "C:\\Miniconda37-x64"
       PYTHON_VERSION: "3.7"
       PYTHON_ARCH: "64"
+    - PYTHON: "C:\\Miniconda39"
+      PYTHON_VERSION: "3.9"
+      PYTHON_ARCH: "32"
+    - PYTHON: "C:\\Miniconda39-x64"
+      PYTHON_VERSION: "3.9"
+      PYTHON_ARCH: "64"
 
 # We always use a 64-bit machine, but can build x86 distributions
 # with the TARGET_ARCH variable.
@@ -85,7 +91,11 @@ test_script:
     - ps: .\install_python.ps1
     - set PYTHON=C:\Python38
     - ps: .\install_python.ps1
-    - set PYTHON=C:\Python39rc1-x64
+    - set PYTHON=C:\Python39-x64
     - ps: .\install_python.ps1
-    - set PYTHON=C:\Python39rc1
+    - set PYTHON=C:\Python39
+    - ps: .\install_python.ps1
+    - set PYTHON=C:\Python310rc2-x64
+    - ps: .\install_python.ps1
+    - set PYTHON=C:\Python310rc2
     - ps: .\install_python.ps1
