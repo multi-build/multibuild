@@ -35,7 +35,7 @@ else
   which python || export PATH=/opt/python/cp39-cp39/bin:$PATH
 fi
 
-if [ $MB_ML_LIBC == "musllinux" ]; then
+if [ "$MB_ML_LIBC" == "musllinux" ]; then
   IS_ALPINE=1;
 fi
 
