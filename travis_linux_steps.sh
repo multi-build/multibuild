@@ -69,6 +69,7 @@ function build_multilinux {
     # Depends on
     #     MB_PYTHON_VERSION
     #     MB_ML_VER
+    #     MB_ML_LIBC (optional)
     #     UNICODE_WIDTH (optional)
     #     BUILD_DEPENDS (optional)
     #     DOCKER_IMAGE (optional)
@@ -77,7 +78,8 @@ function build_multilinux {
     local plat=$1
     [ -z "$plat" ] && echo "plat not defined" && exit 1
     local build_cmds="$2"
-    local docker_image=${DOCKER_IMAGE:-quay.io/pypa/manylinux${MB_ML_VER}_\$plat}
+    local libc=${MB_ML_LIBC:-manylinux}
+    local docker_image=${DOCKER_IMAGE:-quay.io/pypa/${libc}${MB_ML_VER}_\$plat}
     docker_image=$(eval echo "$docker_image")
     retry docker pull $docker_image
     docker run --rm \
@@ -95,6 +97,7 @@ function build_multilinux {
         -e REPO_DIR="$repo_dir" \
         -e PLAT="$PLAT" \
         -e MB_ML_VER="$MB_ML_VER" \
+        -e MB_ML_LIBC="$libc" \
         -v $PWD:/io \
         -v $HOME:/parent-home \
         $docker_image /io/$MULTIBUILD_DIR/docker_build_wrap.sh

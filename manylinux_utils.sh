@@ -44,24 +44,29 @@ function activate_ccache {
     ln -s /parent-home/.ccache $HOME/.ccache
 
     # Now install ccache
-    if [[ $MB_ML_VER == "_2_24" ]]; then
-        # debian:9 based distro
-        suppress apt-get install -y ccache
+    if [ -n "$IS_ALPINE" ]; then 
+        supress apk add ccache
+        export PATH="/usr/lib/ccache/bin:$PATH"
     else
-        # centos based distro
-        suppress yum_install ccache
-    fi
+        if [[ $MB_ML_VER == "_2_24" ]]; then
+            # debian:9 based distro
+            suppress apt-get install -y ccache
+        else
+            # centos based distro
+            suppress yum_install ccache
+        fi
 
-    # Create fake compilers and prepend them to the PATH
-    # Note that yum is supposed to create these for us,
-    # but I had trouble finding them
-    local ccache_dir=/usr/lib/ccache/compilers
-    mkdir -p $ccache_dir
-    ln -s /usr/bin/ccache $ccache_dir/gcc
-    ln -s /usr/bin/ccache $ccache_dir/g++
-    ln -s /usr/bin/ccache $ccache_dir/cc
-    ln -s /usr/bin/ccache $ccache_dir/c++
-    export PATH=$ccache_dir:$PATH
+        # Create fake compilers and prepend them to the PATH
+        # Note that yum is supposed to create these for us,
+        # but I had trouble finding them
+        local ccache_dir=/usr/lib/ccache/compilers
+        mkdir -p $ccache_dir
+        ln -s /usr/bin/ccache $ccache_dir/gcc
+        ln -s /usr/bin/ccache $ccache_dir/g++
+        ln -s /usr/bin/ccache $ccache_dir/cc
+        ln -s /usr/bin/ccache $ccache_dir/c++
+        export PATH=$ccache_dir:$PATH
+    fi
 
     # Prove to the developer that ccache is activated
     echo "Using C compiler: $(which gcc)"
