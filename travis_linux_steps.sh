@@ -111,6 +111,7 @@ function install_run {
     # Depends on
     #  PLAT (can be passed in as argument)
     #  MB_PYTHON_VERSION
+    #  MB_ML_LIBC (optional)
     #  UNICODE_WIDTH (optional)
     #  WHEEL_SDIR (optional)
     #  MANYLINUX_URL (optional)
@@ -118,8 +119,12 @@ function install_run {
     #  MB_TEST_VER (optional)
     local plat=${1:-${PLAT:-x86_64}}
     if [ -z "$DOCKER_TEST_IMAGE" ]; then
-        local bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
-        local docker_image="matthewbrett/trusty:$bitness"
+        if [ "$MB_ML_LIBC" == "musllinux" ]; then
+          local docker_image="python:$MB_PYTHON_VERSION-alpine"
+        else
+          local bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
+          local docker_image="matthewbrett/trusty:$bitness"
+        fi
     else
         # aarch64 is called arm64v8 in Ubuntu
         local plat_subst=$([ "$plat" == aarch64 ] && echo arm64v8 || echo $plat)
@@ -135,5 +140,6 @@ function install_run {
         -e MANYLINUX_URL="$MANYLINUX_URL" \
         -e TEST_DEPENDS="$TEST_DEPENDS" \
         -v $PWD:/io \
+        --entrypoint sh \
         $docker_image /io/$MULTIBUILD_DIR/docker_test_wrap.sh
 }

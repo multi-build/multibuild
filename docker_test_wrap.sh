@@ -2,6 +2,17 @@
 # Install and test steps on Linux
 set -e
 
+# shim for python:alpine not having bash
+if [ -f "/etc/alpine-release" ]; then
+  apk update
+  apk add bash
+fi
+
+if [ -z "$BASH" ]; then
+  bash $0 $@
+  exit $?
+fi
+
 # "python" and "pip" are already on the path as part of the docker
 # startup code in choose_python.sh, but the following are required and not
 # necessarily already set
@@ -10,7 +21,7 @@ PYTHON_EXE=${PYTHON_EXE:-python}
 PIP_CMD=${PIP_CMD:-pip}
 
 # Get needed utilities
-MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
+MULTIBUILD_DIR=$(dirname "$0")
 source $MULTIBUILD_DIR/common_utils.sh
 
 # Change into root directory of repo
