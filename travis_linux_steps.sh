@@ -116,7 +116,11 @@ function install_run {
     local plat=${1:-${PLAT:-x86_64}}
     if [ -z "$DOCKER_TEST_IMAGE" ]; then
         local bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
-        local docker_image="matthewbrett/trusty:$bitness"
+        if [ "$bitness" == "32" ]; then
+            local docker_image="matthewbrett/trusty:$bitness"
+        else
+            local docker_image="multibuild/focal_x86_64"
+        fi
     else
         # aarch64 is called arm64v8 in Ubuntu
         local plat_subst=$([ "$plat" == aarch64 ] && echo arm64v8 || echo $plat)
