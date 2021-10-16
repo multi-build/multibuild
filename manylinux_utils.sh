@@ -44,9 +44,10 @@ function activate_ccache {
     ln -s /parent-home/.ccache $HOME/.ccache
 
     # Now install ccache
+    local ccache_dir
     if [ -n "$IS_ALPINE" ]; then 
         supress apk add ccache
-        export PATH="/usr/lib/ccache/bin:$PATH"
+        ccache_dir='/usr/lib/ccache/bin'
     else
         if [[ $MB_ML_VER == "_2_24" ]]; then
             # debian:9 based distro
@@ -59,14 +60,14 @@ function activate_ccache {
         # Create fake compilers and prepend them to the PATH
         # Note that yum is supposed to create these for us,
         # but I had trouble finding them
-        local ccache_dir=/usr/lib/ccache/compilers
+        ccache_dir='/usr/lib/ccache/compilers'
         mkdir -p $ccache_dir
         ln -s /usr/bin/ccache $ccache_dir/gcc
         ln -s /usr/bin/ccache $ccache_dir/g++
         ln -s /usr/bin/ccache $ccache_dir/cc
         ln -s /usr/bin/ccache $ccache_dir/c++
-        export PATH=$ccache_dir:$PATH
     fi
+    export PATH="$ccache_dir:$PATH"
 
     # Prove to the developer that ccache is activated
     echo "Using C compiler: $(which gcc)"
