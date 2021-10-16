@@ -21,7 +21,7 @@ PYTHON_EXE=${PYTHON_EXE:-python}
 PIP_CMD=${PIP_CMD:-pip}
 
 # Get needed utilities
-MULTIBUILD_DIR=$(dirname "$0")
+MULTIBUILD_DIR=$(dirname "${BASH_SOURCE[0]}")
 source $MULTIBUILD_DIR/common_utils.sh
 
 # Change into root directory of repo
