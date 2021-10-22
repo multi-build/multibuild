@@ -120,7 +120,7 @@ function install_run {
     local plat=${1:-${PLAT:-x86_64}}
     if [ -z "$DOCKER_TEST_IMAGE" ]; then
         if [ "$MB_ML_LIBC" == "musllinux" ]; then
-          local docker_image="python:$MB_PYTHON_VERSION-alpine"
+          local docker_image="multibuild/alpine3.14_$plat"
         else
           local bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
           local docker_image="matthewbrett/trusty:$bitness"
@@ -140,6 +140,5 @@ function install_run {
         -e MANYLINUX_URL="$MANYLINUX_URL" \
         -e TEST_DEPENDS="$TEST_DEPENDS" \
         -v $PWD:/io \
-        --entrypoint sh \
         $docker_image /io/$MULTIBUILD_DIR/docker_test_wrap.sh
 }

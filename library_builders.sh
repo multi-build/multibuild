@@ -416,7 +416,7 @@ function build_suitesparse {
     if [ -n "$IS_MACOS" ]; then
         brew install suite-sparse > /dev/null
     elif [ -n "$IS_ALPINE" ]; then
-        apk add suitesparse-dev 
+        apk add suitesparse-dev
     elif [[ $MB_ML_VER == "_2_24" ]]; then
         # debian:9 based distro
         apt-get install -y libsuitesparse-dev > /dev/null

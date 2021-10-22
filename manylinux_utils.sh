@@ -45,7 +45,7 @@ function activate_ccache {
 
     # Now install ccache
     local ccache_dir
-    if [ -n "$IS_ALPINE" ]; then 
+    if [ -n "$IS_ALPINE" ]; then
         supress apk add ccache
         ccache_dir='/usr/lib/ccache/bin'
     else

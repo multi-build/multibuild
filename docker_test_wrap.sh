@@ -2,17 +2,6 @@
 # Install and test steps on Linux
 set -e
 
-# shim for python:alpine not having bash
-if [ -f "/etc/alpine-release" ]; then
-  apk update
-  apk add bash
-fi
-
-if [ -z "$BASH" ]; then
-  bash $0 $@
-  exit $?
-fi
-
 # "python" and "pip" are already on the path as part of the docker
 # startup code in choose_python.sh, but the following are required and not
 # necessarily already set
