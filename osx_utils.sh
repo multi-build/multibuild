@@ -539,11 +539,13 @@ function wrap_wheel_builder {
         else
             (macos_arm64_cross_build_setup && $@)
         fi
-    else
+    elif [[ "${PLAT:-}" == "x86_64" ]]; then
         if [[ "$(uname -m)" == "x86_64" ]]; then
             (macos_intel_native_build_setup && $@)
         else
             (macos_intel_cross_build_setup && $@)
         fi
+    else
+        $@
     fi
 }
