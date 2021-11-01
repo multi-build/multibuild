@@ -68,3 +68,10 @@
 
 # Test pkg-config install
 install_pkg_config
+
+function echo_host_platform {
+    echo $_PYTHON_HOST_PLATFORM
+}
+
+# Make sure `_PYTHON_HOST_PLATFORM` is set when building x86_64 thin wheel
+(PLAT="x86_64"; MB_PYTHON_OSX_VER="10.9"; [ "$(wrap_wheel_builder echo_host_platform)" == "macosx-10.9-x86_64" ])
