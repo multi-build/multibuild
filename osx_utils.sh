@@ -489,6 +489,8 @@ function macos_arm64_cross_build_setup {
     # we only overwrite the MACOSX_DEPLOYMENT_TARGET
     # for versions starting with 10.x
     if [[ ${MACOSX_DEPLOYMENT_TARGET:-10.0} =~ "10." ]]; then
+        # version should be at least 11.0, with the option
+        # to override if version > 11.0 specified
         export MACOSX_DEPLOYMENT_TARGET="11.0"
     fi
     export CROSS_COMPILING=1
