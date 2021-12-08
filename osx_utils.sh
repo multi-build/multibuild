@@ -486,7 +486,11 @@ function macos_arm64_cross_build_setup {
     export FC=$FC_ARM64
     export F90=${F90_ARM64:-${FC}}
     export F77=${F77_ARM64:-${FC}}
-    export MACOSX_DEPLOYMENT_TARGET="11.0"
+    # we only overwrite the MACOSX_DEPLOYMENT_TARGET
+    # for versions starting with 10.x
+    if [[ $MACOSX_DEPLOYMENT_TARGET =~ "10." ]]; then
+        export MACOSX_DEPLOYMENT_TARGET="11.0"
+    fi
     export CROSS_COMPILING=1
     export LDFLAGS+=" -arch arm64 -L$BUILD_PREFIX/lib -Wl,-rpath,$BUILD_PREFIX/lib ${FC_ARM64_LDFLAGS:-}"
     # This would automatically let autoconf know that we are cross compiling for arm64 darwin
