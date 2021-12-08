@@ -488,7 +488,7 @@ function macos_arm64_cross_build_setup {
     export F77=${F77_ARM64:-${FC}}
     # we only overwrite the MACOSX_DEPLOYMENT_TARGET
     # for versions starting with 10.x
-    if [[ $MACOSX_DEPLOYMENT_TARGET =~ "10." ]]; then
+    if [[ ${MACOSX_DEPLOYMENT_TARGET:-10.0} =~ "10." ]]; then
         export MACOSX_DEPLOYMENT_TARGET="11.0"
     fi
     export CROSS_COMPILING=1
