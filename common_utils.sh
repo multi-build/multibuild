@@ -539,7 +539,11 @@ function install_pypy {
     # since prefix is pypy3.6v7.2 or pypy2.7v7.2, grab the 4th (0-index) letter
     local major=${prefix:4:1}
     # get the pypy version 7.2.0
-    local py_version=$(fill_pypy_ver $(echo $version | cut -f2 -d-))
+    if [[ $version =~ pypy([0-9]+)\.([0-9]+)-([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+        local py_version=${BASH_REMATCH[3]}.${BASH_REMATCH[4]}.${BASH_REMATCH[5]}
+    else
+        local py_version=$(fill_pypy_ver $(echo $version | cut -f2 -d-))
+    fi
 
     local py_build=$prefix$py_version-$suffix
     local py_zip=$py_build.tar.bz2
