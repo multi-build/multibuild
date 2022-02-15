@@ -43,8 +43,8 @@ environment:
 platform:
     - x64
 
-# matrix:
-#    fast_finish: true
+matrix:
+    fast_finish: false
 
 install:
     # Install miniconda and fix headers
