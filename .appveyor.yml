@@ -7,24 +7,24 @@ environment:
     TEST_DEPENDS: "nose"
 
   matrix:
-    - PYTHON: "C:\\Miniconda"
-      PYTHON_VERSION: "2.7"
-      PYTHON_ARCH: "32"
-    - PYTHON: "C:\\Miniconda-x64"
-      PYTHON_VERSION: "2.7"
-      PYTHON_ARCH: "64"
-    - PYTHON: "C:\\Miniconda35"
-      PYTHON_VERSION: "3.5"
-      PYTHON_ARCH: "32"
-    - PYTHON: "C:\\Miniconda35-x64"
-      PYTHON_VERSION: "3.5"
-      PYTHON_ARCH: "64"
-    - PYTHON: "C:\\Miniconda36"
-      PYTHON_VERSION: "3.6"
-      PYTHON_ARCH: "32"
-    - PYTHON: "C:\\Miniconda36-x64"
-      PYTHON_VERSION: "3.6"
-      PYTHON_ARCH: "64"
+    #- PYTHON: "C:\\Miniconda"
+    #  PYTHON_VERSION: "2.7"
+    #  PYTHON_ARCH: "32"
+    #- PYTHON: "C:\\Miniconda-x64"
+    #  PYTHON_VERSION: "2.7"
+    #  PYTHON_ARCH: "64"
+    #- PYTHON: "C:\\Miniconda35"
+    #  PYTHON_VERSION: "3.5"
+    #  PYTHON_ARCH: "32"
+    #- PYTHON: "C:\\Miniconda35-x64"
+    #  PYTHON_VERSION: "3.5"
+    #  PYTHON_ARCH: "64"
+    #- PYTHON: "C:\\Miniconda36"
+    #  PYTHON_VERSION: "3.6"
+    #  PYTHON_ARCH: "32"
+    #- PYTHON: "C:\\Miniconda36-x64"
+    #  PYTHON_VERSION: "3.6"
+    #  PYTHON_ARCH: "64"
     - PYTHON: "C:\\Miniconda37"
       PYTHON_VERSION: "3.7"
       PYTHON_ARCH: "32"
@@ -38,7 +38,7 @@ platform:
     - x64
 
 matrix:
-    fast_finish: true
+    fast_finish: false
 
 install:
     # Install miniconda and fix headers
@@ -85,7 +85,11 @@ test_script:
     - ps: .\install_python.ps1
     - set PYTHON=C:\Python38
     - ps: .\install_python.ps1
-    - set PYTHON=C:\Python39rc1-x64
+    - set PYTHON=C:\Python39-x64
     - ps: .\install_python.ps1
-    - set PYTHON=C:\Python39rc1
+    - set PYTHON=C:\Python39
+    - ps: .\install_python.ps1
+    - set PYTHON=C:\Python310-x64
+    - ps: .\install_python.ps1
+    - set PYTHON=C:\Python310
     - ps: .\install_python.ps1
