@@ -133,7 +133,9 @@ function build_zlib {
     # Gives an old but safe version
     if [ -n "$IS_MACOS" ]; then return; fi  # OSX has zlib already
     if [ -e zlib-stamp ]; then return; fi
-    if [[ $MB_ML_VER == "_2_24" ]]; then
+    if [ -n "$IS_ALPINE" ]; then
+        apk add zlib-dev
+    elif [[ $MB_ML_VER == "_2_24" ]]; then
         # debian:9 based distro
         apt-get install -y zlib1g-dev
     else
@@ -186,6 +188,8 @@ function get_modern_cmake {
     local cmake=cmake
     if [ -n "$IS_MACOS" ]; then
         brew install cmake > /dev/null
+    elif [ -n "$IS_ALPINE" ]; then
+        apk add cmake
     elif [[ $MB_ML_VER == "_2_24" ]]; then
         # debian:9 based distro
         apt-get install -y cmake
@@ -411,6 +415,8 @@ function build_suitesparse {
     if [ -e suitesparse-stamp ]; then return; fi
     if [ -n "$IS_MACOS" ]; then
         brew install suite-sparse > /dev/null
+    elif [ -n "$IS_ALPINE" ]; then
+        apk add suitesparse-dev
     elif [[ $MB_ML_VER == "_2_24" ]]; then
         # debian:9 based distro
         apt-get install -y libsuitesparse-dev > /dev/null

@@ -35,6 +35,9 @@ else
   which python || export PATH=/opt/python/cp39-cp39/bin:$PATH
 fi
 
+if [ "$MB_ML_LIBC" == "musllinux" ]; then
+  IS_ALPINE=1;
+fi
 
 # Work round bug in travis xcode image described at
 # https://github.com/direnv/direnv/issues/210
@@ -220,6 +223,8 @@ function install_rsync {
     if [ -n "$IS_MACOS" ]; then
         # macOS. The colon in the next line is the null command
         :
+    elif [ -n "$IS_ALPINE" ]; then
+        [[ $(type -P rsync) ]] || apk add rsync
     elif [[ $MB_ML_VER == "_2_24" ]]; then
         # debian:9 based distro
         [[ $(type -P rsync) ]] || apt-get install -y rsync
@@ -308,6 +313,7 @@ function build_wheel_cmd {
     local repo_dir=${2:-$REPO_DIR}
     [ -z "$repo_dir" ] && echo "repo_dir not defined" && exit 1
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
+    mkdir -p "$wheelhouse"
     start_spinner
     if [ -n "$(is_function "pre_build")" ]; then pre_build; fi
     stop_spinner
