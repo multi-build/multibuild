@@ -17,23 +17,8 @@ environment:
     - PYTHON: "C:\\Miniconda37-x64"
       PYTHON_VERSION: "3.7"
       PYTHON_ARCH: "64"
-    - PYTHON: "C:\\Miniconda38"
-      PYTHON_VERSION: "3.8"
-      PYTHON_ARCH: "32"
     - PYTHON: "C:\\Miniconda38-x64"
       PYTHON_VERSION: "3.8"
-      PYTHON_ARCH: "64"
-    - PYTHON: "C:\\Miniconda39"
-      PYTHON_VERSION: "3.9"
-      PYTHON_ARCH: "32"
-    - PYTHON: "C:\\Miniconda39-x64"
-      PYTHON_VERSION: "3.9"
-      PYTHON_ARCH: "64"
-    - PYTHON: "C:\\Miniconda310"
-      PYTHON_VERSION: "3.10"
-      PYTHON_ARCH: "32"
-    - PYTHON: "C:\\Miniconda310-x64"
-      PYTHON_VERSION: "3.10"
       PYTHON_ARCH: "64"
 
 # We always use a 64-bit machine, but can build x86 distributions
@@ -47,11 +32,11 @@ matrix:
 install:
     # Install miniconda and fix headers
     - where python
-    - where py
-    - py --list
+    - where py  # On Windows, py might be a better way to find and run CPython
+    - py --list  # py run -2.6-32, -2.6-64, -2.7-32, -2.7-64, -3.3-32, -3.3-64, ... -3.10-32, -3.10-64
     - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PYTHON%\Library\bin;%PATH%
     - echo %PATH%
-    - where conda || true
+    - where conda
     - conda info
 
     # Check that we have the expected version and architecture for Python
