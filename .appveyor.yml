@@ -47,17 +47,18 @@ matrix:
 install:
     # Install miniconda and fix headers
     - where python
-    - where python3 || true
-    - where py || true
+    - where py
+    - py --list
     - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PYTHON%\Library\bin;%PATH%
-    - where conda
-    - SET CONDA_PATH=$(where conda)
-    - echo %CONDA_PATH%
+    - echo %PATH%
+    - where conda || true
     - conda info
 
     # Check that we have the expected version and architecture for Python
     - python --version
     - python -c "import struct; print(struct.calcsize('P') * 8)"
+    - py --version
+    - py -c "import struct; print(struct.calcsize('P') * 8)"
 
     # clone a origsel/python-appveyor-demo
     # this repo includes a simple package to test appveyor
