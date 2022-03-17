@@ -189,7 +189,7 @@ function get_modern_cmake {
     if [ -n "$IS_MACOS" ]; then
         brew install cmake > /dev/null
     elif [ -n "$IS_ALPINE" ]; then
-        apk add cmake
+        apk add cmake > /dev/null
     elif [[ $MB_ML_VER == "_2_24" ]]; then
         # debian:9 based distro
         apt-get install -y cmake
