@@ -179,7 +179,7 @@ shell scripts listed above are available for your build and test.
 Build options are controlled mainly by the following environment
 variables:
 
-* ``MB_PYTHON_VER`` sets the Python version targetted: ``major.minor.patch``
+* ``MB_PYTHON_VER`` sets the Python version targeted: ``major.minor.patch``
   for CPython, or ``pypy-major.minor`` for PyPy.
 * ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C
   extensions. For CPython targets it may be set to 10.6 or 10.9, provided a

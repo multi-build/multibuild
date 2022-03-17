@@ -26,13 +26,14 @@ def tags_for(fname):
 
 
 def main():
-    supported = {(tag.interpreter, tag.abi, tag.platform)
-                 for tag in sys_tags()
+    supported = {
+        (tag.interpreter, tag.abi, tag.platform) for tag in sys_tags()
     }
     for fname in sys.argv[1:]:
         tags = set(tags_for(fname))
         if supported.intersection(tags):
             print(fname)
+
 
 if __name__ == '__main__':
     main()
