@@ -33,7 +33,7 @@ install:
     # Install miniconda and fix headers
     - where python
     - where py  # On Windows, py might be a better way to find and run CPython
-    - py --list  # py run -2.6-32, -2.6-64, -2.7-32, -2.7-64, -3.3-32, -3.3-64, ... -3.10-32, -3.10-64
+    - py --list  # py -3.10-32, -3.10-64 with same syntax for 3.{9-3}, 2.{7,6}
     - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PYTHON%\Library\bin;%PATH%
     - echo %PATH%
     - where conda
