@@ -42,6 +42,10 @@ matrix:
 
 install:
     # Install miniconda and fix headers
+    - where python
+    - where conda
+    - SET CONDA_PATH=$(where conda)
+    - echo %CONDA_PATH%
     - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PYTHON%\Library\bin;%PATH%
     - conda info
 
