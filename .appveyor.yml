@@ -7,11 +7,11 @@ environment:
     TEST_DEPENDS: "nose"
 
   matrix:
-    - PYTHON: "C:\\Miniconda310"
-      PYTHON_VERSION: "3.10"
+    - PYTHON: "C:\\Miniconda37"
+      PYTHON_VERSION: "3.7"
       PYTHON_ARCH: "32"
-    - PYTHON: "C:\\Miniconda310-x64"
-      PYTHON_VERSION: "3.10"
+    - PYTHON: "C:\\Miniconda37-x64"
+      PYTHON_VERSION: "3.7"
       PYTHON_ARCH: "64"
 
 # We always use a 64-bit machine, but can build x86 distributions
