@@ -7,29 +7,11 @@ environment:
     TEST_DEPENDS: "nose"
 
   matrix:
-    #- PYTHON: "C:\\Miniconda"
-    #  PYTHON_VERSION: "2.7"
-    #  PYTHON_ARCH: "32"
-    #- PYTHON: "C:\\Miniconda-x64"
-    #  PYTHON_VERSION: "2.7"
-    #  PYTHON_ARCH: "64"
-    #- PYTHON: "C:\\Miniconda35"
-    #  PYTHON_VERSION: "3.5"
-    #  PYTHON_ARCH: "32"
-    #- PYTHON: "C:\\Miniconda35-x64"
-    #  PYTHON_VERSION: "3.5"
-    #  PYTHON_ARCH: "64"
-    #- PYTHON: "C:\\Miniconda36"
-    #  PYTHON_VERSION: "3.6"
-    #  PYTHON_ARCH: "32"
-    #- PYTHON: "C:\\Miniconda36-x64"
-    #  PYTHON_VERSION: "3.6"
-    #  PYTHON_ARCH: "64"
-    - PYTHON: "C:\\Miniconda37"
-      PYTHON_VERSION: "3.7"
+    - PYTHON: "C:\\Miniconda310"
+      PYTHON_VERSION: "3.10"
       PYTHON_ARCH: "32"
-    - PYTHON: "C:\\Miniconda37-x64"
-      PYTHON_VERSION: "3.7"
+    - PYTHON: "C:\\Miniconda310-x64"
+      PYTHON_VERSION: "3.10"
       PYTHON_ARCH: "64"
 
 # We always use a 64-bit machine, but can build x86 distributions
@@ -51,7 +33,7 @@ install:
 
     # clone a origsel/python-appveyor-demo
     # this repo includes a simple package to test appveyor
-    - git clone git://github.com/ogrisel/python-appveyor-demo.git
+    - git clone https://github.com/ogrisel/python-appveyor-demo.git
 
 build_script:
     # Install build requirements
