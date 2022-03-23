@@ -1,3 +1,7 @@
+# https://www.appveyor.com/docs/windows-images-software
+
+image: Visual Studio 2022
+
 environment:
   global:
     REPO_DIR: python-appveyor-demo
@@ -13,6 +17,9 @@ environment:
     - PYTHON: "C:\\Miniconda37-x64"
       PYTHON_VERSION: "3.7"
       PYTHON_ARCH: "64"
+    - PYTHON: "C:\\Miniconda38-x64"
+      PYTHON_VERSION: "3.8"
+      PYTHON_ARCH: "64"
 
 # We always use a 64-bit machine, but can build x86 distributions
 # with the TARGET_ARCH variable.
@@ -24,12 +31,19 @@ matrix:
 
 install:
     # Install miniconda and fix headers
+    - where python
+    - where py  # On Windows, py might be a better way to find and run CPython
+    - py --list  # py -3.10-32, -3.10-64 with same syntax for 3.{9-3}, 2.{7,6}
     - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PYTHON%\Library\bin;%PATH%
+    - echo %PATH%
+    - where conda
     - conda info
 
     # Check that we have the expected version and architecture for Python
     - python --version
     - python -c "import struct; print(struct.calcsize('P') * 8)"
+    - py --version
+    - py -c "import struct; print(struct.calcsize('P') * 8)"
 
     # clone a origsel/python-appveyor-demo
     # this repo includes a simple package to test appveyor
