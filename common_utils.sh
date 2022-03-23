@@ -24,9 +24,6 @@ GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 # with, so it is passed in when calling "docker run" for tests.
 UNICODE_WIDTH=${UNICODE_WIDTH:-32}
 
-# Default Manylinux version
-MB_ML_VER=${MB_ML_VER:-2014}
-
 if [ $(uname) == "Darwin" ]; then
   IS_MACOS=1; IS_OSX=1;
 else
@@ -37,6 +34,10 @@ fi
 
 if [ "$MB_ML_LIBC" == "musllinux" ]; then
   IS_ALPINE=1;
+  MB_ML_VER=${MB_ML_VER:-"_1_1"}
+else
+  # Default Manylinux version
+  MB_ML_VER=${MB_ML_VER:-2014}
 fi
 
 # Work round bug in travis xcode image described at
