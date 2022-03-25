@@ -10,16 +10,16 @@ MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
 WORKING_SDIR=working
 
-# As of 29 June 2021 - latest Python of each version with binary download
+# As of 24 March 2022 - latest Python of each version with binary download
 # available.
-# See: https://www.python.org/downloads/mac-osx/
+# See: https://www.python.org/downloads/macos/
 LATEST_2p7=2.7.18
 LATEST_3p5=3.5.4
 LATEST_3p6=3.6.8
 LATEST_3p7=3.7.9
 LATEST_3p8=3.8.10
-LATEST_3p9=3.9.6
-LATEST_3p10=3.10.0rc1
+LATEST_3p9=3.9.12
+LATEST_3p10=3.10.3
 
 
 function check_python {
@@ -440,7 +440,7 @@ function repair_wheelhouse {
 function install_pkg_config {
     # Install pkg-config avoiding error from homebrew
     # See :
-    # https://github.com/matthew-brett/multibuild/issues/24#issue-221951587
+    # https://github.com/multi-build/multibuild/issues/24#issue-221951587
     command -v pkg-config > /dev/null 2>&1 || brew install pkg-config
 }
 
@@ -484,6 +484,8 @@ function macos_arm64_cross_build_setup {
     export ARCHFLAGS+=" -arch arm64"
     export FCFLAGS+=" -arch arm64"
     export FC=$FC_ARM64
+    export F90=${F90_ARM64:-${FC}}
+    export F77=${F77_ARM64:-${FC}}
     export MACOSX_DEPLOYMENT_TARGET="11.0"
     export CROSS_COMPILING=1
     export LDFLAGS+=" -arch arm64 -L$BUILD_PREFIX/lib -Wl,-rpath,$BUILD_PREFIX/lib ${FC_ARM64_LDFLAGS:-}"
@@ -536,6 +538,12 @@ function wrap_wheel_builder {
             (macos_arm64_native_build_setup && $@)
         else
             (macos_arm64_cross_build_setup && $@)
+        fi
+    elif [[ "${PLAT:-}" == "x86_64" ]]; then
+        if [[ "$(uname -m)" == "x86_64" ]]; then
+            (macos_intel_native_build_setup && $@)
+        else
+            (macos_intel_cross_build_setup && $@)
         fi
     else
         $@

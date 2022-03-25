@@ -70,9 +70,9 @@ See https://github.com/MacPython/nipy-wheels for a simple example.
 
    ``wheelhouse/*.whl`` defines the files you want to upload.
 
-*   You might also want to build and upload from Appveyor.  To encrypt the API
+*   You might also want to build and upload from AppVeyor.  To encrypt the API
     key above, go to https://ci.appveyor.com/account/matthew-brett/settings
-    (where ``matthew-brett`` is the account from which your Appveyor job runs.
+    (where ``matthew-brett`` is the account from which your AppVeyor job runs.
     Click on "Encrypt YaML" on the left.  Type in your API key value (e.g.
     ``ni-1234abcd-12ab-34dc-1234-d1e1f3a4b5c6``) as the value to encrypt. Click "Encrypt" and note the text it suggests.  Now, at the top of your ``appveyor.yml`` file, add something like::
 
@@ -179,7 +179,7 @@ shell scripts listed above are available for your build and test.
 Build options are controlled mainly by the following environment
 variables:
 
-* ``MB_PYTHON_VER`` sets the Python version targetted: ``major.minor.patch``
+* ``MB_PYTHON_VER`` sets the Python version targeted: ``major.minor.patch``
   for CPython, or ``pypy-major.minor`` for PyPy.
 * ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C
   extensions. For CPython targets it may be set to 10.6 or 10.9, provided a
@@ -220,7 +220,7 @@ Build phase
 -----------
 
 Specify the Manylinux version to build for with the ``MB_ML_VER`` environment
-variable. The default version is ``1``.  Versions that are currently valid are:
+variable. The default version is ``2014``.  Versions that are currently valid are:
 
 * ``1`` corresponding to manylinux1 (see `PEP 513 <https://www.python.org/dev/peps/pep-0513>`_).
 * ``2010``  corresponding to manylinux2010 (see `PEP 571 <https://www.python.org/dev/peps/pep-0571>`_).
@@ -338,7 +338,7 @@ To use these scripts
 
 * Add this (here) repository as a submodule::
 
-    git submodule add https://github.com/matthew-brett/multibuild.git
+    git submodule add https://github.com/multi-build/multibuild.git
 
 * Add your own project repository as another submodule::
 
@@ -595,7 +595,7 @@ Multibuild development
 **********************
 
 The main multibuild repository is always at
-https://github.com/matthew-brett/multibuild
+https://github.com/multi-build/multibuild
 
 We try to keep the ``master`` branch stable and do testing and development
 in the ``devel`` branch.  From time to time we merge ``devel`` into ``master``.

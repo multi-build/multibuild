@@ -69,6 +69,7 @@ function build_multilinux {
     # Depends on
     #     MB_PYTHON_VERSION
     #     MB_ML_VER
+    #     MB_ML_LIBC (optional)
     #     UNICODE_WIDTH (optional)
     #     BUILD_DEPENDS (optional)
     #     DOCKER_IMAGE (optional)
@@ -77,7 +78,8 @@ function build_multilinux {
     local plat=$1
     [ -z "$plat" ] && echo "plat not defined" && exit 1
     local build_cmds="$2"
-    local docker_image=${DOCKER_IMAGE:-quay.io/pypa/manylinux${MB_ML_VER}_\$plat}
+    local libc=${MB_ML_LIBC:-manylinux}
+    local docker_image=${DOCKER_IMAGE:-quay.io/pypa/${libc}${MB_ML_VER}_\$plat}
     docker_image=$(eval echo "$docker_image")
     retry docker pull $docker_image
     docker run --rm \
@@ -95,6 +97,7 @@ function build_multilinux {
         -e REPO_DIR="$repo_dir" \
         -e PLAT="$PLAT" \
         -e MB_ML_VER="$MB_ML_VER" \
+        -e MB_ML_LIBC="$libc" \
         -v $PWD:/io \
         -v $HOME:/parent-home \
         $docker_image /io/$MULTIBUILD_DIR/docker_build_wrap.sh
@@ -108,6 +111,7 @@ function install_run {
     # Depends on
     #  PLAT (can be passed in as argument)
     #  MB_PYTHON_VERSION
+    #  MB_ML_LIBC (optional)
     #  UNICODE_WIDTH (optional)
     #  WHEEL_SDIR (optional)
     #  MANYLINUX_URL (optional)
@@ -115,11 +119,15 @@ function install_run {
     #  MB_TEST_VER (optional)
     local plat=${1:-${PLAT:-x86_64}}
     if [ -z "$DOCKER_TEST_IMAGE" ]; then
-        local bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
-        if [ "$bitness" == "32" ]; then
-            local docker_image="matthewbrett/trusty:$bitness"
+        if [ "$MB_ML_LIBC" == "musllinux" ]; then
+            local docker_image="multibuild/alpine3.14_$plat"
         else
-            local docker_image="multibuild/focal_x86_64"
+            local bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
+            if [ "$bitness" == "32" ]; then
+                local docker_image="matthewbrett/trusty:$bitness"
+            else
+                local docker_image="multibuild/focal_x86_64"
+            fi
         fi
     else
         # aarch64 is called arm64v8 in Ubuntu

@@ -24,9 +24,6 @@ GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 # with, so it is passed in when calling "docker run" for tests.
 UNICODE_WIDTH=${UNICODE_WIDTH:-32}
 
-# Default Manylinux version
-MB_ML_VER=${MB_ML_VER:-2014}
-
 if [ $(uname) == "Darwin" ]; then
   IS_MACOS=1; IS_OSX=1;
 else
@@ -35,6 +32,13 @@ else
   which python || export PATH=/opt/python/cp39-cp39/bin:$PATH
 fi
 
+if [ "$MB_ML_LIBC" == "musllinux" ]; then
+  IS_ALPINE=1;
+  MB_ML_VER=${MB_ML_VER:-"_1_1"}
+else
+  # Default Manylinux version
+  MB_ML_VER=${MB_ML_VER:-2014}
+fi
 
 # Work round bug in travis xcode image described at
 # https://github.com/direnv/direnv/issues/210
@@ -220,6 +224,8 @@ function install_rsync {
     if [ -n "$IS_MACOS" ]; then
         # macOS. The colon in the next line is the null command
         :
+    elif [ -n "$IS_ALPINE" ]; then
+        [[ $(type -P rsync) ]] || apk add rsync
     elif [[ $MB_ML_VER == "_2_24" ]]; then
         # debian:9 based distro
         [[ $(type -P rsync) ]] || apt-get install -y rsync
@@ -308,6 +314,7 @@ function build_wheel_cmd {
     local repo_dir=${2:-$REPO_DIR}
     [ -z "$repo_dir" ] && echo "repo_dir not defined" && exit 1
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
+    mkdir -p "$wheelhouse"
     start_spinner
     if [ -n "$(is_function "pre_build")" ]; then pre_build; fi
     stop_spinner

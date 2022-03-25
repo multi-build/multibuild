@@ -1,3 +1,7 @@
+# https://www.appveyor.com/docs/windows-images-software
+
+image: Visual Studio 2022
+
 environment:
   global:
     REPO_DIR: python-appveyor-demo
@@ -7,29 +11,14 @@ environment:
     TEST_DEPENDS: "nose"
 
   matrix:
-    - PYTHON: "C:\\Miniconda"
-      PYTHON_VERSION: "2.7"
-      PYTHON_ARCH: "32"
-    - PYTHON: "C:\\Miniconda-x64"
-      PYTHON_VERSION: "2.7"
-      PYTHON_ARCH: "64"
-    - PYTHON: "C:\\Miniconda35"
-      PYTHON_VERSION: "3.5"
-      PYTHON_ARCH: "32"
-    - PYTHON: "C:\\Miniconda35-x64"
-      PYTHON_VERSION: "3.5"
-      PYTHON_ARCH: "64"
-    - PYTHON: "C:\\Miniconda36"
-      PYTHON_VERSION: "3.6"
-      PYTHON_ARCH: "32"
-    - PYTHON: "C:\\Miniconda36-x64"
-      PYTHON_VERSION: "3.6"
-      PYTHON_ARCH: "64"
     - PYTHON: "C:\\Miniconda37"
       PYTHON_VERSION: "3.7"
       PYTHON_ARCH: "32"
     - PYTHON: "C:\\Miniconda37-x64"
       PYTHON_VERSION: "3.7"
+      PYTHON_ARCH: "64"
+    - PYTHON: "C:\\Miniconda38-x64"
+      PYTHON_VERSION: "3.8"
       PYTHON_ARCH: "64"
 
 # We always use a 64-bit machine, but can build x86 distributions
@@ -38,20 +27,27 @@ platform:
     - x64
 
 matrix:
-    fast_finish: true
+    fast_finish: false
 
 install:
     # Install miniconda and fix headers
+    - where python
+    - where py  # On Windows, py might be a better way to find and run CPython
+    - py --list  # py -3.10-32, -3.10-64 with same syntax for 3.{9-3}, 2.{7,6}
     - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PYTHON%\Library\bin;%PATH%
+    - echo %PATH%
+    - where conda
     - conda info
 
     # Check that we have the expected version and architecture for Python
     - python --version
     - python -c "import struct; print(struct.calcsize('P') * 8)"
+    - py --version
+    - py -c "import struct; print(struct.calcsize('P') * 8)"
 
     # clone a origsel/python-appveyor-demo
     # this repo includes a simple package to test appveyor
-    - git clone git://github.com/ogrisel/python-appveyor-demo.git
+    - git clone https://github.com/ogrisel/python-appveyor-demo.git
 
 build_script:
     # Install build requirements
@@ -85,7 +81,11 @@ test_script:
     - ps: .\install_python.ps1
     - set PYTHON=C:\Python38
     - ps: .\install_python.ps1
-    - set PYTHON=C:\Python39rc1-x64
+    - set PYTHON=C:\Python39-x64
     - ps: .\install_python.ps1
-    - set PYTHON=C:\Python39rc1
+    - set PYTHON=C:\Python39
+    - ps: .\install_python.ps1
+    - set PYTHON=C:\Python310-x64
+    - ps: .\install_python.ps1
+    - set PYTHON=C:\Python310
     - ps: .\install_python.ps1
