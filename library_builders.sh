@@ -161,6 +161,18 @@ function build_jpeg {
     touch jpeg-stamp
 }
 
+function build_libjpeg_turbo {
+    if [ -e jpeg-stamp ]; then return; fi
+    local cmake=$(get_modern_cmake)
+    fetch_unpack https://download.sourceforge.net/libjpeg-turbo/libjpeg-turbo-${JPEGTURBO_VERSION}.tar.gz
+    (cd libjpeg-turbo-${JPEGTURBO_VERSION} \
+        && $cmake -G"Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_INSTALL_LIBDIR=/usr/local/lib . \
+        && make install)
+
+    # Prevent build_jpeg
+    touch jpeg-stamp
+}
+
 function build_libpng {
     build_zlib
     build_simple libpng $LIBPNG_VERSION https://download.sourceforge.net/libpng

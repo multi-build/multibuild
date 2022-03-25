@@ -61,6 +61,8 @@ if [ -z "$IS_MACOS" ]; then
 fi
 suppress build_new_zlib
 suppress build_hdf5
+rm jpeg-stamp
+suppress build_libjpeg_turbo
 suppress get_modern_cmake
 
 [ ${MB_PYTHON_VERSION+x} ] || ingest "\$MB_PYTHON_VERSION is not set"
