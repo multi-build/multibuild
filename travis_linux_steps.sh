@@ -142,6 +142,7 @@ function install_run {
         -e CONFIG_PATH="$CONFIG_PATH" \
         -e WHEEL_SDIR="$WHEEL_SDIR" \
         -e MANYLINUX_URL="$MANYLINUX_URL" \
+        -e MB_ML_LIBC="$MB_ML_LIBC" \
         -e TEST_DEPENDS="$TEST_DEPENDS" \
         -v $PWD:/io \
         $docker_image /io/$MULTIBUILD_DIR/docker_test_wrap.sh
