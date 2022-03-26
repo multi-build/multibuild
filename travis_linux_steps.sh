@@ -120,10 +120,14 @@ function install_run {
     local plat=${1:-${PLAT:-x86_64}}
     if [ -z "$DOCKER_TEST_IMAGE" ]; then
         if [ "$MB_ML_LIBC" == "musllinux" ]; then
-          local docker_image="multibuild/alpine3.14_$plat"
+            local docker_image="multibuild/alpine3.14_$plat"
         else
-          local bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
-          local docker_image="matthewbrett/trusty:$bitness"
+            local bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
+            if [ "$bitness" == "32" ]; then
+                local docker_image="matthewbrett/trusty:$bitness"
+            else
+                local docker_image="multibuild/focal_x86_64"
+            fi
         fi
     else
         # aarch64 is called arm64v8 in Ubuntu

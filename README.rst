@@ -270,8 +270,8 @@ Test phase
 Specify the version to test with the ``DOCKER_TEST_IMAGE`` environment
 variable. The default version is dependent on ``PLAT``:
 
-* ``matthewbrett/trusty:64``, for ``x86_64``
-* ``matthewbrett/trusty:32`` for ``i686``
+* ``multibuild/focal_x86_64``, for ``x86_64``
+* ``matthewbrett/trusty:32`` for ``i686`` (Yes, an older image for 32-bit)
 * ``multibuild/xenial_arm64v8`` for ``aarch64``
 * ``multibuild/xenial_ppc64le`` for ``ppc64le``
 * ``mutlibuild/xenial_s390x`` for ``s390x``
