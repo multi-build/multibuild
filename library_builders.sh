@@ -182,7 +182,7 @@ function build_libpng {
 function build_bzip2 {
     if [ -n "$IS_MACOS" ]; then return; fi  # OSX has bzip2 libs already
     if [ -e bzip2-stamp ]; then return; fi
-    fetch_unpack https://sourceware.org/pub/bzip2/bzip2-${BZIP2_VERSION}.tar.gz
+    fetch_unpack https://mirrors.kernel.org/sourceware/bzip2/bzip2-${BZIP2_VERSION}.tar.gz
     (cd bzip2-${BZIP2_VERSION} \
         && make -f Makefile-libbz2_so \
         && make install PREFIX=$BUILD_PREFIX)
