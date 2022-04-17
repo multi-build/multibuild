@@ -121,19 +121,17 @@ function install_run {
     if [ -z "$DOCKER_TEST_IMAGE" ]; then
         if [ "$MB_ML_LIBC" == "musllinux" ]; then
             local docker_image="multibuild/alpine3.15_$plat"
+        elif [ "$plat" == i686 ]; then
+            local docker_image="matthewbrett/trusty:32"
         else
-            local bitness=$([ "$plat" == i686 ] && echo 32 || echo 64)
-            if [ "$bitness" == "32" ]; then
-                local docker_image="matthewbrett/trusty:$bitness"
-            else
-                local docker_image="multibuild/focal_x86_64"
-            fi
+            local docker_image="multibuild/focal_$plat"
         fi
     else
-        # aarch64 is called arm64v8 in Ubuntu
-        local plat_subst=$([ "$plat" == aarch64 ] && echo arm64v8 || echo $plat)
-        local docker_image="${DOCKER_TEST_IMAGE/\{PLAT\}/$plat_subst}"
+        local docker_image="$DOCKER_TEST_IMAGE"
     fi
+    # aarch64 is called arm64v8 in Ubuntu
+    local plat_subst=$([ "$plat" == aarch64 ] && echo arm64v8 || echo $plat)
+    docker_image="${docker_image/\{PLAT\}/$plat_subst}"
     docker pull $docker_image
     docker run --rm \
         -e PYTHON_VERSION="$MB_PYTHON_VERSION" \
