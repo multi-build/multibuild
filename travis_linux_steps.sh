@@ -124,7 +124,7 @@ function install_run {
         elif [ "$plat" == i686 ]; then
             local docker_image="matthewbrett/trusty:32"
         else
-            local docker_image="multibuild/focal_$plat"
+            local docker_image="multibuild/focal_{PLAT}"
         fi
     else
         local docker_image="$DOCKER_TEST_IMAGE"
