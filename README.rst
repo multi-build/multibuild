@@ -129,7 +129,7 @@ The Travis CI scripts are designed to build *and test*:
 * 64-bit macOS wheels built for macOS 10.9+
 * 64/32-bit macOS wheels built for macOS 10.6+
 * 64-bit ``manylinuxX_x86_64`` wheels, both narrow and wide Unicode builds,
-  where `X` is any valid Manylinux version: `1`, `2010`, `2014` or `_2_24`.
+  where `X` is any valid Manylinux version: `1`, `2010`, `2014`, `_2_24` or `_2_28`.
 * 32-bit ``manylinuxX_i686`` wheels, both narrow and wide Unicode builds
 
 You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8 and 3.9
@@ -227,6 +227,7 @@ variable. The default version is ``2014``.  Versions that are currently valid ar
 * ``2014`` corresponding to manylinux2014 and adds more architectures to ``PLAT``
   (see `PEP 599 <https://www.python.org/dev/peps/pep-0599>`_).
 * ``_2_24`` corresponding to manylinux_2_24 (see `PEP 600 <https://www.python.org/dev/peps/pep-0600>`_).
+* ``_2_28`` corresponding to manylinux_2_28 (see `PEP 600 <https://www.python.org/dev/peps/pep-0600>`_).
 
 The environment variable specified which Manylinux docker container you are building in.
 
