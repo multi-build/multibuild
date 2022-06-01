@@ -274,7 +274,7 @@ variable. The default version is dependent on ``PLAT``:
 * ``matthewbrett/trusty:32`` for ``i686`` (Yes, an older image for 32-bit)
 * ``multibuild/xenial_arm64v8`` for ``aarch64``
 * ``multibuild/xenial_ppc64le`` for ``ppc64le``
-* ``mutlibuild/xenial_s390x`` for ``s390x``
+* ``multibuild/xenial_s390x`` for ``s390x``
 
 Other valid values are any in https://hub.docker.com/orgs/multibuild/repositories,
 using the correct platform code. Alternatively, you can use the substitution
