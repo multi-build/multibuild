@@ -268,17 +268,23 @@ Test phase
 ----------
 
 Specify the version to test with the ``DOCKER_TEST_IMAGE`` environment
-variable. The default version is dependent on ``PLAT``:
+variable. The default version is dependent on ``MB_ML_LIBC`` and ``PLAT``.
 
-* ``multibuild/focal_x86_64``, for ``x86_64``
-* ``matthewbrett/trusty:32`` for ``i686`` (Yes, an older image for 32-bit)
-* ``multibuild/xenial_arm64v8`` for ``aarch64``
-* ``multibuild/xenial_ppc64le`` for ``ppc64le``
-* ``mutlibuild/xenial_s390x`` for ``s390x``
+When ``MB_ML_LIBC`` is ``musllinux``:
+
+* ``multibuild/alpine3.15_x86_64``,  when ``PLAT`` is ``x86_64``
+
+Otherwise:
+
+* ``multibuild/focal_x86_64``, when ``PLAT`` is ``x86_64``
+* ``matthewbrett/trusty:32`` when ``PLAT`` is ``i686`` (Yes, an older image for 32-bit)
+* ``multibuild/focal_arm64v8`` when ``PLAT`` is ``aarch64``
+* ``multibuild/focal_ppc64le`` when ``PLAT`` is ``ppc64le``
+* ``multibuild/focal_s390x`` when ``PLAT`` is ``s390x``
 
 Other valid values are any in https://hub.docker.com/orgs/multibuild/repositories,
 using the correct platform code. Alternatively, you can use the substitution
-pattern ``multibuild/xenial_{PLAT}`` in the ``.travis.yml`` file.
+pattern ``multibuild/focal_{PLAT}`` in the ``.travis.yml`` file.
 
 See ``multibuild/docker_test_wrap.sh``.
 
