@@ -19,7 +19,7 @@ https://anaconda.org/multibuild-wheels-staging for staging wheels to PyPI.
 Uploads to Anaconda
 *******************
 
-If you want to upload to Anaconda, and you don't need the extra storage space for nightly builds that Anaconda kindly donates to Numpy, Scipy etc, then you can do this with your own Anaconda organization.
+If you want to upload to Anaconda, and you don't need the extra storage space for nightly builds that Anaconda kindly donates to NumPy, SciPy etc, then you can do this with your own Anaconda organization.
 
 See https://github.com/MacPython/nipy-wheels for a simple example.
 
@@ -39,7 +39,7 @@ See https://github.com/MacPython/nipy-wheels for a simple example.
 
       travis encrypt -r MacPython/nipy-wheels ANACONDA_SECRET=ni-1234abcd-12ab-34dc-1234-d1e1f3a4b5c6
 
-  Note that ``MacPython/nipy-wheels`` is your Github organization/repository.  The encryption only applies to Travis-CI running against this repository.
+  Note that ``MacPython/nipy-wheels`` is your Github organization/repository.  The encryption only applies to Travis CI running against this repository.
 
 * Go to your `.travis.yml` file and add the output ``secure`` key.  This will
   look something like::
@@ -52,14 +52,14 @@ See https://github.com/MacPython/nipy-wheels for a simple example.
         # organization named in $ANACONDA_ORG
         - secure: "IqN7LjXWVBaijggUoB+ohjzFzH6nU0OyxznXEMgWoNxQJRiYXXKAt/Z5c4ldp9LUynefJO306M8foN4Gm8M8PNDlhjElzdOtIkGYtDKUXx7aXtrg8rPk1mzuM1F27er4Dbi7WFtpPClr8z8JKNNV50yeM1o2cXu4HgrPrRKgKk/2D8EQaPQlcOqul0O63D9AjVoW3EIG0aWEnZQQGfuGAPgyr0OS92LX2h1pcD2lNZHhqYmXmm5U0IwZmWL3Y0N7PO3VXcOCeIbiHAlJzhk4C4+86TT7DN+VhmfGyY/s61fOz47K+lEZLVqqeQki+HV75fti0XwYG7rjcSvDanNx+w2J/ogSLQpiNxZ0FZ+W8psXEaFUgFf7oXzRkW9gQ4KAsItEWHifq061ngr5AWLPLh+01LGP1Xg8wT5WEVUzBfD2uJPsy20DLcP9WGYa6cBNwtpqmUkdVgM3ZCPWlro7+v1kqxsKp91uh8SRKVlkD4mwbf0FnWxbNZ9v4Z9gs0pZoRclzL+/YcIcSTYAwiQRqaX7T0tpxaUZ0VYTMwCgpsufUX1idV1HV5+WKr9FUocoq+1RRW/JeXkisX9FRvem8cSGmnxB/hynlxoqzttCVMwtrKWPwxH4dHD+lavouho68Q7iBql1ZBZEhQy0O9NC1wr4Rg2CeDPZuzqVjmSPuXQ="
 
-  When Travis-CI runs, this causes the ``ANACONDA_SECRET`` environment variable
+  When Travis CI runs, this causes the ``ANACONDA_SECRET`` environment variable
   to contain the API key above.
 
   Also add this to your global environment variables::
 
       - ANACONDA_ORG="nipy"
 
-*  To upload from Travis-CI, add a clause like this to the end of your
+*  To upload from Travis CI, add a clause like this to the end of your
    ``.travis.yml``::
 
      after_success:
@@ -132,7 +132,7 @@ The Travis CI scripts are designed to build *and test*:
   where `X` is any valid Manylinux version: `1`, `2010`, `2014` or `_2_24`.
 * 32-bit ``manylinuxX_i686`` wheels, both narrow and wide Unicode builds
 
-You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8 and 3.9
+You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8, 3.9 and 3.10.
 
 The small innovation here is that you can test against Linux 32-bit builds, both
 wide and narrow Unicode Python 2 builds, which was not easy on the default
@@ -143,7 +143,7 @@ The AppVeyor setup is designed to build *and test*:
 * 64-bit Windows ``win_amd64`` wheels
 * 32-bit Windows ``win32`` wheels
 
-You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8, 3.9
+You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8, 3.9 and 3.10.
 
 *****************
 How does it work?
