@@ -20,6 +20,7 @@ LATEST_3p7=3.7.9
 LATEST_3p8=3.8.10
 LATEST_3p9=3.9.13
 LATEST_3p10=3.10.5
+LATEST_3p11=3.11.0b3
 
 
 function check_python {
@@ -78,6 +79,8 @@ function fill_pyver {
         echo $LATEST_2p7
     elif [ $ver == 3 ] || [ $ver == "3.10" ]; then
         echo $LATEST_3p10
+    elif [ $ver == "3.11" ]; then
+        echo $LATEST_3p11
     elif [ $ver == "3.9" ]; then
         echo $LATEST_3p9
     elif [ $ver == "3.8" ]; then
