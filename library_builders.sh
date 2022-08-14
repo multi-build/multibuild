@@ -245,7 +245,24 @@ function build_lcms2 {
 }
 
 function build_giflib {
-    build_simple giflib $GIFLIB_VERSION https://downloads.sourceforge.net/project/giflib
+    local name=giflib
+    local version=$GIFLIB_VERSION
+    local url=https://downloads.sourceforge.net/project/giflib
+    if [ $(lex_ver $GIFLIB_VERSION) -lt $(lex_ver 5.1.5) ]; then
+        build_simple $name $version $url
+    else
+        local ext=tar.gz
+        if [ -e "${name}-stamp" ]; then
+            return
+        fi
+        local name_version="${name}-${version}"
+        local archive=${name_version}.${ext}
+        fetch_unpack $url/$archive
+        (cd $name_version \
+            && make -j4 \
+            && make install)
+        touch "${name}-stamp"
+    fi
 }
 
 function build_xz {
