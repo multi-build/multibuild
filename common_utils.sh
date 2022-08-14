@@ -290,7 +290,7 @@ function clean_code {
     # to determine the version.  Give submodule proper git directory
     fill_submodule "$repo_dir"
     (cd $repo_dir \
-        && git fetch origin \
+        && git fetch origin --tags \
         && git checkout $build_commit \
         && git clean -fxd \
         && git reset --hard \
