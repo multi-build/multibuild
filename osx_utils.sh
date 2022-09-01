@@ -10,7 +10,7 @@ MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
 WORKING_SDIR=working
 
-# As of 2 Aug 2022 - latest Python of each version with binary download
+# As of 1 Sep 2022 - latest Python of each version with binary download
 # available.
 # See: https://www.python.org/downloads/macos/
 LATEST_2p7=2.7.18
@@ -20,7 +20,7 @@ LATEST_3p7=3.7.9
 LATEST_3p8=3.8.10
 LATEST_3p9=3.9.13
 LATEST_3p10=3.10.6
-LATEST_3p11=3.11.0b5
+LATEST_3p11=3.11.0rc1
 
 
 function check_python {

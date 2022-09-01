@@ -132,7 +132,8 @@ The Travis CI scripts are designed to build *and test*:
   where `X` is any valid Manylinux version: `1`, `2010`, `2014`, `_2_24` or `_2_28`.
 * 32-bit ``manylinuxX_i686`` wheels, both narrow and wide Unicode builds
 
-You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8, 3.9 and 3.10.
+You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8, 3.9, 3.10
+and 3.11.
 
 The small innovation here is that you can test against Linux 32-bit builds, both
 wide and narrow Unicode Python 2 builds, which was not easy on the default
@@ -143,7 +144,8 @@ The AppVeyor setup is designed to build *and test*:
 * 64-bit Windows ``win_amd64`` wheels
 * 32-bit Windows ``win32`` wheels
 
-You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8, 3.9 and 3.10.
+You can currently build and test against Pythons 2.7, 3.5, 3.6, 3.7, 3.8, 3.9, 3.10
+and 3.11.
 
 *****************
 How does it work?
