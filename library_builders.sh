@@ -424,6 +424,7 @@ function build_netcdf {
         && make -j4 \
         && make install)
     touch netcdf-stamp
+}
 
 function build_pcre {
     build_simple pcre $PCRE_VERSION https://sourceforge.net/projects/pcre/files/pcre/${PCRE_VERSION}
