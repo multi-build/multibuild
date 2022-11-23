@@ -120,7 +120,7 @@ function install_run {
     local plat=${1:-${PLAT:-x86_64}}
     if [ -z "$DOCKER_TEST_IMAGE" ]; then
         if [ "$MB_ML_LIBC" == "musllinux" ]; then
-            local docker_image="multibuild/alpine3.16_$plat"
+            local docker_image="multibuild/alpine3.17_$plat"
         elif [ "$plat" == i686 ]; then
             local docker_image="matthewbrett/trusty:32"
         else
