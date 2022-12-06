@@ -497,7 +497,7 @@ LATEST_PP_6=$LATEST_PP_6p0
 LATEST_PP_7p0=7.0.0
 LATEST_PP_7p1=7.1.1
 LATEST_PP_7p2=7.2.0
-LATEST_PP_7p3=7.3.9
+LATEST_PP_7p3=7.3.10
 LATEST_PP_7=$LATEST_PP_7p3
 
 function unroll_version {
@@ -528,9 +528,20 @@ function install_pypy {
     # sets $PYTHON_EXE variable to python executable
 
     local version=$1
+    # Need to convert pypy-7.2 to pypy2.7-v7.2.0 and pypy3.6-7.3 to pypy3.6-v7.3.0
+    local prefix=$(get_pypy_build_prefix $version)
+    # since prefix is pypy3.6v7.2 or pypy2.7v7.2, grab the 4th (0-index) letter
+    local major=${prefix:4:1}
+    # get the pypy version 7.2.0
+    local py_version=$(fill_pypy_ver $(echo $version | cut -f2 -d-))
+
     case "$PLAT" in
     "x86_64")  if [ -n "$IS_MACOS" ]; then
-                   suffix="osx64";
+                   if [ $(lex_ver $py_version) -ge $(lex_ver 7.3.10) ]; then
+                       suffix="macos_x86_64";
+                   else
+                       suffix="osx64";
+                   fi
                else
                    suffix="linux64";
                fi;;
@@ -540,13 +551,6 @@ function install_pypy {
     "aarch64")  suffix="aarch64";;
     *) echo unknown platform "$PLAT"; exit 1;;
     esac
-
-    # Need to convert pypy-7.2 to pypy2.7-v7.2.0 and pypy3.6-7.3 to pypy3.6-v7.3.0
-    local prefix=$(get_pypy_build_prefix $version)
-    # since prefix is pypy3.6v7.2 or pypy2.7v7.2, grab the 4th (0-index) letter
-    local major=${prefix:4:1}
-    # get the pypy version 7.2.0
-    local py_version=$(fill_pypy_ver $(echo $version | cut -f2 -d-))
 
     local py_build=$prefix$py_version-$suffix
     local py_zip=$py_build.tar.bz2
