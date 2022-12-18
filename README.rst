@@ -275,7 +275,7 @@ variable. The default version is dependent on ``MB_ML_LIBC`` and ``PLAT``.
 
 When ``MB_ML_LIBC`` is ``musllinux``:
 
-* ``multibuild/alpine3.15_x86_64``,  when ``PLAT`` is ``x86_64``
+* ``multibuild/alpine3.17_x86_64``,  when ``PLAT`` is ``x86_64``
 
 Otherwise:
 
