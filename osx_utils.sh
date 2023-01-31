@@ -501,7 +501,7 @@ function macos_arm64_native_build_setup {
     export PLAT="arm64"
     # We don't want universal2 builds and only want an arm64 build
     export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
-    export ARCHFLAGS+="-arch arm64"
+    export ARCHFLAGS+=" -arch arm64"
     $@
 }
 
