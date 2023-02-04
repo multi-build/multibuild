@@ -476,6 +476,7 @@ function macos_intel_cross_build_setup {
 function macos_arm64_cross_build_setup {
     # Setup cross build for single arch arm_64 wheels
     export PLAT="arm64"
+    export NATIVE_PREFIX=$BUILD_PREFIX
     export BUILD_PREFIX=/opt/arm64-builds
     sudo mkdir -p $BUILD_PREFIX/lib $BUILD_PREFIX/include
     sudo chown -R $USER $BUILD_PREFIX
@@ -492,6 +493,7 @@ function macos_arm64_cross_build_setup {
     export MACOSX_DEPLOYMENT_TARGET="11.0"
     export CROSS_COMPILING=1
     export LDFLAGS+=" -arch arm64 -L$BUILD_PREFIX/lib -Wl,-rpath,$BUILD_PREFIX/lib ${FC_ARM64_LDFLAGS:-}"
+    export PATH="$NATIVE_PREFIX/bin:$PATH"
     # This would automatically let autoconf know that we are cross compiling for arm64 darwin
     export host_alias="aarch64-apple-darwin20.0.0"
 }
