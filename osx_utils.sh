@@ -507,7 +507,7 @@ function macos_arm64_native_build_setup {
 
 function fuse_macos_intel_arm64 {
     local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
-    local py_osx_ver=$(echo ${MB_PYTHON_OSX_VER} | sed "s/\./_/g")
+    local py_osx_ver=$(echo ${MACOSX_DEPLOYMENT_TARGET} | sed "s/\./_/g")
     mkdir -p tmp_fused_wheelhouse
     for whl in $wheelhouse/*.whl; do
        if [[ "$whl" == *macosx_${py_osx_ver}_x86_64.whl ]]; then
