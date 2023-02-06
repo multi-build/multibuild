@@ -167,7 +167,7 @@ function build_libjpeg_turbo {
     local cmake=$(get_modern_cmake)
     fetch_unpack https://download.sourceforge.net/libjpeg-turbo/libjpeg-turbo-${JPEGTURBO_VERSION}.tar.gz
     (cd libjpeg-turbo-${JPEGTURBO_VERSION} \
-        && $cmake -G"Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_INSTALL_LIBDIR=/usr/local/lib . \
+        && $cmake -G"Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX -DCMAKE_INSTALL_LIBDIR=$BUILD_PREFIX/lib . \
         && make install)
 
     # Prevent build_jpeg
