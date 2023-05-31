@@ -444,7 +444,7 @@ function install_wheel {
     check_python
     check_pip
 
-    $PIP_CMD install packaging
+    $PIP_CMD install packaging wheel
     local supported_wheels=$($PYTHON_EXE $MULTIBUILD_DIR/supported_wheels.py $wheelhouse/*.whl)
     if [ -z "$supported_wheels" ]; then
         echo "ERROR: no supported wheels found"
