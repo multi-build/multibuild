@@ -39,9 +39,9 @@ rm testfile
 
 rm_mkdir tmp_dir
 [ -d tmp_dir ] || ingest "tmp_dir does not exist"
-touch tmp_dir/afile
+touch tmp_dir/tmp_file
 rm_mkdir tmp_dir
-[ -e tmp_dir/afile ] && ingest "tmp_dir/afile should have been deleted"
+[ -e tmp_dir/tmp_file ] && ingest "tmp_dir/tmp_file should have been deleted"
 rmdir tmp_dir
 
 # Test suppress command
