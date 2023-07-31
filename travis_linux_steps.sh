@@ -94,7 +94,7 @@ function build_multilinux {
         -e MANYLINUX_URL="$MANYLINUX_URL" \
         -e BUILD_DEPENDS="$BUILD_DEPENDS" \
         -e USE_CCACHE="$USE_CCACHE" \
-        -e REPO_DIR="$repo_dir" \
+        -e REPO_DIR="$REPO_DIR" \
         -e PLAT="$PLAT" \
         -e MB_ML_VER="$MB_ML_VER" \
         -e MB_ML_LIBC="$libc" \
