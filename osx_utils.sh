@@ -466,7 +466,7 @@ function macos_intel_native_build_setup {
     export _PYTHON_HOST_PLATFORM="macosx-${MB_PYTHON_OSX_VER}-x86_64"
     export CFLAGS+=" -arch x86_64"
     export CXXFLAGS+=" -arch x86_64"
-    export ARCHFLAGS+=" -arch x86_64"
+    [[ $ARCHFLAGS =~ "-arch x86_64" ]] || export ARCHFLAGS+=" -arch x86_64"
     export CPPFLAGS+=" -arch x86_64"
     export LDFLAGS+=" -arch x86_64"
 }
@@ -487,7 +487,7 @@ function macos_arm64_cross_build_setup {
     export CFLAGS+=" -arch arm64"
     export CXXFLAGS+=" -arch arm64"
     export CPPFLAGS+=" -arch arm64"
-    export ARCHFLAGS+=" -arch arm64"
+    [[ $ARCHFLAGS =~ "-arch arm64" ]] || export ARCHFLAGS+=" -arch arm64"
     export FCFLAGS+=" -arch arm64"
     export FC=$FC_ARM64
     export F90=${F90_ARM64:-${FC}}
