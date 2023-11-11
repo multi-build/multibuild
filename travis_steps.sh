@@ -1,4 +1,10 @@
 #!/bin/bash
+# Despite the name, this file is not specific to Travis-CI.
+# It sets up the local environment for wheel building and testing.
+# For Mac, configure xcode, and set up before_install and other
+# functions to wrap builds.
+# For linux, set up before_install to work in virtualenv, and set up wrapping
+# to run build and tests in docker containers.
 
 WHEEL_SDIR=${WHEEL_SDIR:-wheelhouse}
 
