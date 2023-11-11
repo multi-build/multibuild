@@ -19,10 +19,13 @@ MB_PYTHON_VERSION=${MB_PYTHON_VERSION:-$TRAVIS_PYTHON_VERSION}
 
 function before_install {
     # Install a virtualenv to work in.
+    # Virtualenv package may not be installed on host Python.
+    python -m pip install virtualenv
     virtualenv --python=$PYTHON_EXE venv
     source venv/bin/activate
     python --version # just to check
-    pip install --upgrade pip wheel
+    # Tomli for pyproject.toml parsing, to get dependencies.
+    pip install --upgrade pip wheel tomli
 }
 
 function build_wheel {

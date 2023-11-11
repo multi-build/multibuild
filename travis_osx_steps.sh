@@ -39,7 +39,8 @@ function before_install {
 
     get_macpython_environment $MB_PYTHON_VERSION venv
     source venv/bin/activate
-    pip install --upgrade pip wheel
+    # Tomli for pyproject.toml parsing, to get dependencies.
+    pip install --upgrade pip wheel tomli
 }
 
 # build_wheel function defined in common_utils (via osx_utils)
