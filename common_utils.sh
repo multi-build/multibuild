@@ -1,6 +1,6 @@
 #!/bin/bash
 # Utilities for both OSX and Docker Linux
-# Python should be on the PATH
+# python or python3 should be on the PATH
 
 # Only source common_utils once
 if [ -n "$COMMON_UTILS_SOURCED" ]; then
@@ -78,20 +78,31 @@ function stop_spinner {
     >&2 echo "Building libraries finished."
 }
 
+function any_python {
+    for cmd in $PYTHON_EXE python3 python; do
+        if [ -n "$(type -t $cmd)" ]; then
+            echo $cmd
+            return
+        fi
+    done
+    echo "Could not find python or python3"
+    exit 1
+}
+
 function abspath {
     # Can work with any Python; need not be our installed Python.
-    python -c "import os.path; print(os.path.abspath('$1'))"
+    $(any_python) -c "import os.path; print(os.path.abspath('$1'))"
 }
 
 function relpath {
     # Path of first input relative to second (or $PWD if not specified)
     # Can work with any Python; need not be our installed Python.
-    python -c "import os.path; print(os.path.relpath('$1','${2:-$PWD}'))"
+    $(any_python) -c "import os.path; print(os.path.relpath('$1','${2:-$PWD}'))"
 }
 
 function realpath {
     # Can work with any Python; need not be our installed Python.
-    python -c "import os; print(os.path.realpath('$1'))"
+    $(any_python) -c "import os; print(os.path.realpath('$1'))"
 }
 
 function lex_ver {
@@ -405,13 +416,13 @@ function pip_opts {
 function get_os {
     # Report OS as given by uname
     # Use any Python that comes to hand.
-    python -c 'import platform; print(platform.uname()[0])'
+    $(any_python) -c 'import platform; print(platform.uname()[0])'
 }
 
 function get_platform {
     # Report platform as given by uname
     # Use any Python that comes to hand.
-    python -c 'import platform; print(platform.uname()[4])'
+    $(any_python) -c 'import platform; print(platform.uname()[4])'
 }
 
 if [ "$(get_platform)" == x86_64 ] || \
