@@ -22,6 +22,7 @@ LATEST_3p9=3.9.13
 LATEST_3p10=3.10.11
 LATEST_3p11=3.11.6
 LATEST_3p12=3.12.0
+LATEST_3p13=3.13.0rc1
 
 
 function check_python {
@@ -80,6 +81,8 @@ function fill_pyver {
         echo $LATEST_2p7
     elif [ $ver == 3 ] || [ $ver == "3.12" ]; then
         echo $LATEST_3p12
+    elif [ $ver == "3.13" ]; then
+        echo $LATEST_3p13
     elif [ $ver == "3.11" ]; then
         echo $LATEST_3p11
     elif [ $ver == "3.10" ]; then
