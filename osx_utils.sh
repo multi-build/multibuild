@@ -10,7 +10,7 @@ MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
 WORKING_SDIR=working
 
-# As of 22 Aug 2024 - latest Python of each version with binary download
+# As of 8 Oct 2024 - latest Python of each version with binary download
 # available.
 # See: https://www.python.org/downloads/macos/
 LATEST_2p7=2.7.18
@@ -21,8 +21,8 @@ LATEST_3p8=3.8.10
 LATEST_3p9=3.9.13
 LATEST_3p10=3.10.11
 LATEST_3p11=3.11.9
-LATEST_3p12=3.12.5
-LATEST_3p13=3.13.0rc1
+LATEST_3p12=3.12.7
+LATEST_3p13=3.13.0
 
 
 function check_python {
@@ -79,10 +79,10 @@ function fill_pyver {
         echo $ver
     elif [ $ver == 2 ] || [ $ver == "2.7" ]; then
         echo $LATEST_2p7
-    elif [ $ver == 3 ] || [ $ver == "3.12" ]; then
-        echo $LATEST_3p12
-    elif [ $ver == "3.13" ]; then
+    elif [ $ver == 3 ] || [ $ver == "3.13" ]; then
         echo $LATEST_3p13
+    elif [ $ver == "3.12" ]; then
+        echo $LATEST_3p12
     elif [ $ver == "3.11" ]; then
         echo $LATEST_3p11
     elif [ $ver == "3.10" ]; then
