@@ -125,7 +125,7 @@ function install_run {
         if [ "$MB_ML_LIBC" == "musllinux" ]; then
         	# PLAT is the same as $plat,
         	# unless $plat is "aarch64", in which case it becomes "arm64v8"
-            local docker_image="multibuild/alpine3.18_{PLAT}"
+            local docker_image="multibuild/alpine3.20_{PLAT}"
         elif [ "$plat" == i686 ]; then
             local docker_image="matthewbrett/trusty:32"
         else
