@@ -78,4 +78,6 @@ function echo_host_platform {
 }
 
 # Make sure `_PYTHON_HOST_PLATFORM` is set when building x86_64 thin wheel
-(PLAT="x86_64"; MB_PYTHON_OSX_VER="10.9"; [ "$(wrap_wheel_builder echo_host_platform)" == "macosx-10.9-x86_64" ])
+if [ "$(uname -m)" != "arm64" ]; then
+  (PLAT="x86_64"; MB_PYTHON_OSX_VER="10.9"; [ "$(wrap_wheel_builder echo_host_platform)" == "macosx-10.9-x86_64" ])
+fi
