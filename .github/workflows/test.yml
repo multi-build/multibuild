@@ -42,4 +42,6 @@ jobs:
 
       # Runs a single command using the runner's Python
       - name: Test
-        run: source tests/test_multibuild.sh
+        run: |
+          pip install setuptools  # for distutils
+          source tests/test_multibuild.sh
