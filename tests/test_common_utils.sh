@@ -99,13 +99,12 @@ cmd_notexit good_cmd || ingest
 ! cmd_notexit bad_cmd || ingest
 ! cmd_notexit exit 1 || ingest
 
-# On Linux docker containers in travis, can be x86_64, i686, s390x, ppc64le, or
-# aarch64
 [ "$(get_platform)" == x86_64 ] || \
     [ "$(get_platform)" == i686 ] || \
     [ "$(get_platform)" == aarch64 ] || \
     [ "$(get_platform)" == ppc64le ] || \
     [ "$(get_platform)" == s390x ] || \
+    [ "$(get_platform)" == arm64 ] || \
     exit 1
 
 # Crudest possible check for get_distutils_platform
