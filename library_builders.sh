@@ -260,7 +260,7 @@ function build_giflib {
         fetch_unpack $url/$archive
         (cd $name_version \
             && make -j4 \
-            && make install)
+            && make install PREFIX=$BUILD_PREFIX)
         touch "${name}-stamp"
     fi
 }
