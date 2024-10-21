@@ -26,10 +26,10 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ${{ matrix.os }}
     env:
-      MB_PYTHON_VERSION=3.13
-      TEST_BUILDS=1
-      MB_PYTHON_OSX_VER=10.9
-      ENV_VARS_PATH="test/env_vars.sh
+      MB_PYTHON_VERSION: 3.13
+      TEST_BUILDS: 1
+      MB_PYTHON_OSX_VER: 10.9
+      ENV_VARS_PATH: "test/env_vars.sh"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
