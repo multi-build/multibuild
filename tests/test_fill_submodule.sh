@@ -13,7 +13,7 @@ mkdir project
 mkdir superproject
 cd superproject
 git init
-git submodule add ../project
+git -c protocol.file.allow=always submodule add ../project
 local_author
 git commit -m "first superproject"
 # Check the submodule is working correctly before intervention

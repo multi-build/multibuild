@@ -20,11 +20,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]       # [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.12"]  # ["2.7", "3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "pypy3"]
+        os: [ubuntu-latest, macos-latest] #, windows-latest]
+        python-version: ["3.13"]  # ["2.7", "3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "pypy3"]
 
     # The type of runner that the job will run on
     runs-on: ${{ matrix.os }}
+    env:
+      MB_PYTHON_VERSION: 3.13
+      TEST_BUILDS: 1
+      MB_PYTHON_OSX_VER: 10.9
+      ENV_VARS_PATH: "test/env_vars.sh"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -36,12 +41,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       # Runs a single command using the runner's Python
-      - name: Run a one-line script
-        shell: python
-        run: print("Hello, world!")
-
-      # Runs a set of commands using the runner's shell
-      - name: Run a multi-line script
+      - name: Test
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          pip install setuptools  # for distutils
+          source tests/test_multibuild.sh

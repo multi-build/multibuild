@@ -40,7 +40,9 @@ suppress build_swig
     )
 suppress build_flex
 if [[ $MB_ML_VER != "_2_24" ]]; then
+    (set +e ;
     suppress build_openblas
+    )
 fi
 suppress ensure_xz
 suppress build_tiff

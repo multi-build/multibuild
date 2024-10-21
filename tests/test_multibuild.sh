@@ -63,5 +63,3 @@ source tests/test_supported_wheels.sh
 
 # Exit 1 if any test errors
 barf
-# Don't need Travis' machinery trace
-set +x
