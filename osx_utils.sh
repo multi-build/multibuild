@@ -223,7 +223,7 @@ function get_macpython_osx_ver {
 }
 
 function macpython_arch_for_version {
-    # echo arch (intel or x86_64) that a version of Python is expected
+    # echo arch (intel, x86_64 or arm64) that a version of Python is expected
     # to be built for
     # Parameters
     #   $py_ver     Python version, in the format (major.minor.patch) for
@@ -238,8 +238,10 @@ function macpython_arch_for_version {
             echo "intel"
         elif [[ "$py_osx_ver" == "10.9" ]]; then
             echo "x86_64"
+        elif [[ "$py_osx_ver" == "11.0" ]]; then
+            echo "arm64"
         else
-            echo "Unexpected CPython macOS version: ${py_osx_ver}, supported values: 10.6 and 10.9"
+            echo "Unexpected CPython macOS version: ${py_osx_ver}, supported values: 10.6, 10.9, 11.0"
             exit 1
         fi
     else

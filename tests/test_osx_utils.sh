@@ -32,6 +32,7 @@
 [ "$(macpython_arch_for_version 2.7 10.6)" == "intel" ] || ingest
 [ "$(macpython_arch_for_version 2.7 10.9)" == "x86_64" ] || ingest
 [ "$(macpython_arch_for_version pypy-2.7)" == "x86_64" ] || ingest
+[ "$(macpython_arch_for_version 3.10 11.0)" == "arm64" ] || ingest
 
 # test lookup of arch / min macOS versions from installed Python distutils tag
 [ "$(get_macpython_arch macosx-10.6-intel)" == "intel" ] || ingest

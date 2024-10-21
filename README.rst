@@ -181,17 +181,17 @@ shell scripts listed above are available for your build and test.
 Build options are controlled mainly by the following environment
 variables:
 
-* ``MB_PYTHON_VER`` sets the Python version targeted: ``major.minor.patch``
+* ``MB_PYTHON_VERSION`` sets the Python version targeted: ``major.minor.patch``
   for CPython, or ``pypy-major.minor`` for PyPy.
-* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C
-  extensions. For CPython targets it may be set to 10.6 or 10.9, provided a
+* ``MB_PYTHON_OSX_VER`` sets the minimum macOS SDK version for any C extensions.
+  For CPython targets it may be set to 10.6, 10.9 or 11.0, provided a
   corresponding Python build is available at `python.org
   <https://www.python.org/downloads/mac-osx/>`_. It defaults to the highest
   version available. It's ignored for PyPy targets.
 * ``PLAT`` sets the architectures built for any C extensions: ``x86_64`` or
-  ``intel`` for 64-bit or 64/32-bit respectively. It defaults to the same
-  arches as the target Python version: 64-bit for CPython macOS 10.9 or PyPy,
-  and 64/32-bit for CPython 10.6.
+  ``intel`` for 64-bit or 64/32-bit respectively. It defaults to the same arches
+  as the target Python version: arm64 for macOS 11.0; x86_64 for CPython
+  macOS 10.9 or PyPy; and 64/32-bit for CPython 10.6.
 
 In most cases it's best to rely on the defaults for ``MB_PYTHON_OSX_VER`` and
 ``PLAT``, rather than setting them explicitly. Examples of exceptions to this
