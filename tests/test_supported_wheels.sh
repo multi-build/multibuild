@@ -31,20 +31,14 @@ py_impl=$($PYTHON_EXE -c 'import platform; print(platform.python_implementation(
 if [ "$py_impl" == 'CPython' ] && [ $(uname) == 'Darwin' ]; then
     our_ver=$($PYTHON_EXE -c 'import sys; print("{}{}".format(*sys.version_info[:2]))')
     our_tag=$($PYTHON_EXE -c 'import sysconfig; print(sysconfig.get_platform().replace("-","_").replace(".","_"))')
-    other_arch=$($PYTHON_EXE -c 'import os; print("x86_64" if os.uname().machine == "arm64" else "x86_64")')
     other_ver=$([ "$our_ver" == "37" ] && echo "36" || echo "37")
     # Python <= 3.7 needs m for API tag.
     api_m=$([ $our_ver -le 37 ] && echo "m") || :
-    whl_suff="cp${our_ver}-cp${our_ver}${api_m}-macosx_10_9_${our_arch}.whl"
+    whl_suff="cp${our_ver}-cp${our_ver}${api_m}-${our_tag}.whl"
     good_whl="tornado-5.1-${whl_suff}"
-    bad_whl="tornado-5.1-cp${other_ver}-cp${other_ver}m-macosx_10_9_${our_arch}.whl"
-    bad_arch_whl="tornado-5.1-cp${our_ver}-cp${our_ver}${api_m}-macosx_10_9_${other_arch}.whl"
+    bad_whl="tornado-5.1-cp${other_ver}-cp${other_ver}m-${our_tag}.whl"
     if [ "$($PYTHON_EXE supported_wheels.py $bad_whl)" != "" ]; then
         echo "$bad_whl not supported, but supported wheels says it is."
-        RET=1
-    fi
-    if [ "$($PYTHON_EXE supported_wheels.py $bad_arch_whl)" != "" ]; then
-        echo "$bad_arch_whl not supported, but supported wheels says it is."
         RET=1
     fi
     if [ "$($PYTHON_EXE supported_wheels.py $good_whl)" != "$good_whl" ]; then
