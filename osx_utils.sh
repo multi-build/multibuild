@@ -177,10 +177,13 @@ function pyinst_fname_for_version {
     # we set the env variable _PYTHON_HOST_PLATFORM to change this
     # default.
     if [ -z "$2" ]; then
-        if [ $(uname -m) == "arm64" ] \
-            && [ $(lex_ver $_ver) -ge $(lex_ver 3.8.10) ] \
+        if [ $(lex_ver $_ver) -ge $(lex_ver 3.8.10) ] \
             && [ $(lex_ver $_ver) -lt $(lex_ver 3.10.0) ]; then
-            py_osx_ver="10.9"
+            if [ $(uname -m) == "x86_64" ]; then
+                py_osx_ver="10.9"
+            else
+                py_osx_ver="11.0"
+            fi
         else
             py_osx_ver=$(macpython_sdk_for_version $py_version)
         fi
