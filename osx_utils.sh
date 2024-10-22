@@ -176,13 +176,16 @@ function pyinst_fname_for_version {
     # creates intel only wheels by default. When PLAT=universal2
     # we set the env variable _PYTHON_HOST_PLATFORM to change this
     # default.
-    if [ -z "$2" ] \
-        && [ $(uname -m) == "arm64" ] \
-        && [ $(lex_ver $_ver) -ge $(lex_ver 3.8.10) ] \
-        && [ $(lex_ver $_ver) -lt $(lex_ver 3.10.0) ]; then
-        py_osx_ver="10.9"
+    if [ -z "$2" ]; then
+        if [ $(uname -m) == "arm64" ] \
+            && [ $(lex_ver $_ver) -ge $(lex_ver 3.8.10) ] \
+            && [ $(lex_ver $_ver) -lt $(lex_ver 3.10.0) ]; then
+            py_osx_ver="10.9"
+        else
+            py_osx_ver=$(macpython_sdk_for_version $py_version)
+        fi
     else
-        py_osx_ver=$(macpython_sdk_for_version $py_version)
+        py_osx_ver=$2
     fi
 
     if [ "$py_osx_ver" == "11.0" ]; then
