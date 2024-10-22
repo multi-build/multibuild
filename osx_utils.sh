@@ -120,10 +120,8 @@ function macpython_sdk_list_for_version {
     elif [ "$_major" -eq "3" ]; then
         [ $(lex_ver $_ver) -lt $(lex_ver 3.8)    ] && _return="10.6"
         [ $(lex_ver $_ver) -ge $(lex_ver 3.6.5)  ] && _return="$_return 10.9"
-        if [ "$(uname -m)" == "arm64" ]; then
-            [ $(lex_ver $_ver) -ge $(lex_ver 3.8.10) ] && [ "$_ver" != "3.9.0" ] && _return="$_return 11.0"
-        fi
-        [ $(lex_ver $_ver) -ge $(lex_ver 3.10.0) ] && _return="11.0"
+        [ $(lex_ver $_ver) -ge $(lex_ver 3.8.10) ] && [ "$_ver" != "3.9.0" ] && _return="$_return 11.0"
+        [ $(lex_ver $_ver) -ge $(lex_ver 3.10)   ] && _return="11.0"
     else
         echo "Error version=${_ver}, expecting 2.x or 3.x" 1>&2
         exit 1
@@ -168,6 +166,7 @@ function pyinst_fname_for_version {
     #       built for, eg: "10.6" or "10.9", if not defined, infers
     #       this from $py_version using macpython_sdk_for_version
     local py_version=$1
+    local py_osx_ver
     local inst_ext=$(pyinst_ext_for_version $py_version)
     # macOS 3.8.10 and 3.9.1 introduced a second universal2 installer release.
     # (3.9.0 did *not* have a universal2 installer)
@@ -177,16 +176,23 @@ function pyinst_fname_for_version {
     # creates intel only wheels by default. When PLAT=universal2
     # we set the env variable _PYTHON_HOST_PLATFORM to change this
     # default.
-    if [ "$py_version" == "3.9.1" ]; then
-        # 3.9.1 used "macos11.0" rather than "macos11" in the installer name.
-        echo "python-${py_version}-macos11.0.${inst_ext}"
+    if [ -z "$2" ] \
+        && [ $(uname -m) == "arm64" ] \
+        && [ $(lex_ver $_ver) -ge $(lex_ver 3.8.10) ] \
+        && [ $(lex_ver $_ver) -lt $(lex_ver 3.10.0) ]; then
+        py_osx_ver="10.9"
     else
-        local py_osx_ver=${2:-$(macpython_sdk_for_version $py_version)}
-        if [ "$py_osx_ver" == "11.0" ]; then
-            echo "python-${py_version}-macos11.${inst_ext}"
+        py_osx_ver=$(macpython_sdk_for_version $py_version)
+    fi
+
+    if [ "$py_osx_ver" == "11.0" ]; then
+        if [ "$py_version" == "3.9.1" ]; then
+            echo "python-${py_version}-macos11.0.${inst_ext}"
         else
-            echo "python-${py_version}-macosx${py_osx_ver}.${inst_ext}"
+            echo "python-${py_version}-macos11.${inst_ext}"
         fi
+    else
+        echo "python-${py_version}-macosx${py_osx_ver}.${inst_ext}"
     fi
 }
 

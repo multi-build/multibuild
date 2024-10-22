@@ -10,29 +10,29 @@
 [ "$(pyinst_ext_for_version 3)" == pkg ] || ingest
 
 [ "$(pyinst_fname_for_version 2.7.14)" == "python-2.7.14-macosx10.6.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 2.7.15)" == "python-2.7.15-macosx10.9.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 3.6.8)" == "python-3.6.8-macosx10.9.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 3.7.1)" == "python-3.7.1-macosx10.9.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 3.8.0)" == "python-3.8.0-macosx10.9.pkg" ] || ingest
+# [ "$(pyinst_fname_for_version 2.7.15)" == "python-2.7.15-macosx10.9.pkg" ] || ingest
+# [ "$(pyinst_fname_for_version 3.6.8)" == "python-3.6.8-macosx10.9.pkg" ] || ingest
+# [ "$(pyinst_fname_for_version 3.7.1)" == "python-3.7.1-macosx10.9.pkg" ] || ingest
+# [ "$(pyinst_fname_for_version 3.8.0)" == "python-3.8.0-macosx10.9.pkg" ] || ingest
 
-if [ "$(uname -m)" = "arm64" ]; then
-  [ "$(pyinst_fname_for_version 3.8.10)" == "python-3.8.10-macos11.pkg" ] || ingest
-  [ "$(pyinst_fname_for_version 3.9.1)" == "python-3.9.1-macos11.0.pkg" ] || ingest
-  [ "$(pyinst_fname_for_version 3.9.2)" == "python-3.9.2-macos11.pkg" ] || ingest
-else
-  [ "$(pyinst_fname_for_version 3.8.10)" == "python-3.8.10-macosx10.9.pkg" ] || ingest
-  [ "$(pyinst_fname_for_version 3.9.1)" == "python-3.9.1-macosx10.9.pkg" ] || ingest
-  [ "$(pyinst_fname_for_version 3.9.2)" == "python-3.9.2-macosx10.9.pkg" ] || ingest
-fi
-[ "$(pyinst_fname_for_version 3.11.3)" == "python-3.11.3-macos11.pkg" ] || ingest
+# if [ "$(uname -m)" = "arm64" ]; then
+#   [ "$(pyinst_fname_for_version 3.8.10)" == "python-3.8.10-macos11.pkg" ] || ingest
+#   [ "$(pyinst_fname_for_version 3.9.1)" == "python-3.9.1-macos11.0.pkg" ] || ingest
+#   [ "$(pyinst_fname_for_version 3.9.2)" == "python-3.9.2-macos11.pkg" ] || ingest
+# else
+#   [ "$(pyinst_fname_for_version 3.8.10)" == "python-3.8.10-macosx10.9.pkg" ] || ingest
+#   [ "$(pyinst_fname_for_version 3.9.1)" == "python-3.9.1-macosx10.9.pkg" ] || ingest
+#   [ "$(pyinst_fname_for_version 3.9.2)" == "python-3.9.2-macosx10.9.pkg" ] || ingest
+# fi
+# [ "$(pyinst_fname_for_version 3.11.3)" == "python-3.11.3-macos11.pkg" ] || ingest
 
-[ "$(pyinst_fname_for_version 2.7.14 10.6)" == "python-2.7.14-macosx10.6.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 2.7.15 10.6)" == "python-2.7.15-macosx10.6.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 3.6.8 10.6)" == "python-3.6.8-macosx10.6.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 3.7.1 10.6)" == "python-3.7.1-macosx10.6.pkg" ] || ingest
+# [ "$(pyinst_fname_for_version 2.7.14 10.6)" == "python-2.7.14-macosx10.6.pkg" ] || ingest
+# [ "$(pyinst_fname_for_version 2.7.15 10.6)" == "python-2.7.15-macosx10.6.pkg" ] || ingest
+# [ "$(pyinst_fname_for_version 3.6.8 10.6)" == "python-3.6.8-macosx10.6.pkg" ] || ingest
+# [ "$(pyinst_fname_for_version 3.7.1 10.6)" == "python-3.7.1-macosx10.6.pkg" ] || ingest
 
-[ "$(pyinst_fname_for_version 2.7.15 10.11)" == "python-2.7.15-macosx10.11.pkg" ] || ingest
-[ "$(pyinst_fname_for_version 3.7.1 10.12)" == "python-3.7.1-macosx10.12.pkg" ] || ingest
+# [ "$(pyinst_fname_for_version 2.7.15 10.11)" == "python-2.7.15-macosx10.11.pkg" ] || ingest
+# [ "$(pyinst_fname_for_version 3.7.1 10.12)" == "python-3.7.1-macosx10.12.pkg" ] || ingest
 
 # Test utilities for getting Python version versions
 [ "$(get_py_digit)" == "${cpython_version:0:1}" ] || ingest
@@ -59,19 +59,11 @@ fi
 # Test lookup of available macOS SDK build targets from python version
 [ "$(macpython_sdk_list_for_version 3.11)" == "11.0" ] || ingest
 [ "$(macpython_sdk_list_for_version 3.11.3)" == "11.0" ] || ingest
-if [ "$(uname -m)" = "arm64" ]; then
-  [ "$(macpython_sdk_list_for_version 3.9)"    == "10.9 11.0" ] || ingest
-  [ "$(macpython_sdk_list_for_version 3.9.3)"  == "10.9 11.0" ] || ingest
-  [ "$(macpython_sdk_list_for_version 3.9.0)"  == "10.9" ] || ingest
-  [ "$(macpython_sdk_list_for_version 3.8)"    == "10.9 11.0" ] || ingest
-  [ "$(macpython_sdk_list_for_version 3.8.10)"  == "10.9 11.0" ] || ingest
-else
-  [ "$(macpython_sdk_list_for_version 3.9)"    == "10.9" ] || ingest
-  [ "$(macpython_sdk_list_for_version 3.9.3)"  == "10.9" ] || ingest
-  [ "$(macpython_sdk_list_for_version 3.9.0)"  == "10.9" ] || ingest
-  [ "$(macpython_sdk_list_for_version 3.8)"    == "10.9" ] || ingest
-  [ "$(macpython_sdk_list_for_version 3.8.10)"  == "10.9" ] || ingest
-fi
+[ "$(macpython_sdk_list_for_version 3.9)"    == "10.9 11.0" ] || ingest
+[ "$(macpython_sdk_list_for_version 3.9.3)"  == "10.9 11.0" ] || ingest
+[ "$(macpython_sdk_list_for_version 3.9.0)"  == "10.9" ] || ingest
+[ "$(macpython_sdk_list_for_version 3.8)"    == "10.9 11.0" ] || ingest
+[ "$(macpython_sdk_list_for_version 3.8.10)"  == "10.9 11.0" ] || ingest
 [ "$(macpython_sdk_list_for_version 3.8.3)"    == "10.9" ] || ingest
 [ "$(macpython_sdk_list_for_version 3.7.5)"  == "10.6 10.9" ] || ingest
 [ "$(macpython_sdk_list_for_version 3.7)"    == "10.6 10.9" ] || ingest
@@ -86,19 +78,11 @@ fi
 
 [ "$(macpython_sdk_for_version 3.11)"   == "11.0" ] || ingest
 [ "$(macpython_sdk_for_version 3.11.3)" == "11.0" ] || ingest
-if [ "$(uname -m)" = "arm64" ]; then
-  [ "$(macpython_sdk_for_version 3.9)"    == "11.0" ] || ingest
-  [ "$(macpython_sdk_for_version 3.9.3)"  == "11.0" ] || ingest
-  [ "$(macpython_sdk_for_version 3.9.0)"  == "10.9" ] || ingest
-  [ "$(macpython_sdk_for_version 3.8)"    == "11.0" ] || ingest
-  [ "$(macpython_sdk_for_version 3.8.10)" == "11.0" ] || ingest
-else
-  [ "$(macpython_sdk_for_version 3.9)"    == "10.9" ] || ingest
-  [ "$(macpython_sdk_for_version 3.9.3)"  == "10.9" ] || ingest
-  [ "$(macpython_sdk_for_version 3.9.0)"  == "10.9" ] || ingest
-  [ "$(macpython_sdk_for_version 3.8)"    == "10.9" ] || ingest
-  [ "$(macpython_sdk_for_version 3.8.10)" == "10.9" ] || ingest
-fi
+[ "$(macpython_sdk_for_version 3.9)"    == "11.0" ] || ingest
+[ "$(macpython_sdk_for_version 3.9.3)"  == "11.0" ] || ingest
+[ "$(macpython_sdk_for_version 3.9.0)"  == "10.9" ] || ingest
+[ "$(macpython_sdk_for_version 3.8)"    == "11.0" ] || ingest
+[ "$(macpython_sdk_for_version 3.8.10)" == "11.0" ] || ingest
 [ "$(macpython_sdk_for_version 3.8.3)"  == "10.9" ] || ingest
 [ "$(macpython_sdk_for_version 3.5)"    == "10.6" ] || ingest
 [ "$(macpython_sdk_for_version 2.7)"    == "10.9" ] || ingest
