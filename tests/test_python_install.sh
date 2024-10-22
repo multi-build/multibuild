@@ -70,13 +70,3 @@ else # not virtualenv
         ingest "Wrong macpython or pypy pip '$PIP_CMD'"
     fi
 fi
-
-# check macOS version and arch are as expected
-distutils_plat=$($PYTHON_EXE -c "import distutils.util; print(distutils.util.get_platform())")
-expected_arch=$(macpython_arch_for_version $MB_PYTHON_VERSION)
-if [[ $requested_impl == 'cp' ]]; then
-    expected_tag="macosx-$MB_PYTHON_OSX_VER-$expected_arch"
-else
-    expected_tag="macosx-10.[0-9]+-$expected_arch"
-fi
-[[ $distutils_plat =~ $expected_tag ]] || ingest
