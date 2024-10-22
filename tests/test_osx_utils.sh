@@ -63,8 +63,8 @@ fi
 [ "$(macpython_sdk_list_for_version 3.9.3)"  == "10.9 11.0" ] || ingest
 [ "$(macpython_sdk_list_for_version 3.9.0)"  == "10.9" ] || ingest
 [ "$(macpython_sdk_list_for_version 3.8)"    == "10.9 11.0" ] || ingest
-[ "$(macpython_sdk_list_for_version 3.8.10)"  == "10.9 11.0" ] || ingest
-[ "$(macpython_sdk_list_for_version 3.8.3)"    == "10.9" ] || ingest
+[ "$(macpython_sdk_list_for_version 3.8.10)" == "10.9 11.0" ] || ingest
+[ "$(macpython_sdk_list_for_version 3.8.3)"  == "10.9" ] || ingest
 [ "$(macpython_sdk_list_for_version 3.7.5)"  == "10.6 10.9" ] || ingest
 [ "$(macpython_sdk_list_for_version 3.7)"    == "10.6 10.9" ] || ingest
 [ "$(macpython_sdk_list_for_version 3.6.5)"  == "10.6 10.9" ] || ingest
