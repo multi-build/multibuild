@@ -24,7 +24,7 @@ jobs:
         python-version: ["3.13"]  # ["2.7", "3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "pypy3"]
 
         include:
-          # By default, specify an OSX_VER of 11.0, triggering ARM64 buildf.
+          # By default, specify an OSX_VER of 11.0, triggering ARM64 build.
           - python-osx-ver: "11.0"
 
           # macos-13 is the last remaining x86-64 runner;
