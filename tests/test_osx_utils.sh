@@ -14,6 +14,8 @@
 [ "$(pyinst_fname_for_version 3.6.8)" == "python-3.6.8-macosx10.9.pkg" ] || ingest
 [ "$(pyinst_fname_for_version 3.7.1)" == "python-3.7.1-macosx10.9.pkg" ] || ingest
 [ "$(pyinst_fname_for_version 3.8.0)" == "python-3.8.0-macosx10.9.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 3.9.3)" == "python-3.9.3-macosx11.pkg" ] || ingest
+[ "$(pyinst_fname_for_version 3.11.3)" == "python-3.11.3-macosx11.pkg" ] || ingest
 
 [ "$(pyinst_fname_for_version 2.7.14 10.6)" == "python-2.7.14-macosx10.6.pkg" ] || ingest
 [ "$(pyinst_fname_for_version 2.7.15 10.6)" == "python-2.7.15-macosx10.6.pkg" ] || ingest
@@ -25,8 +27,8 @@
 
 # Test utilities for getting Python version versions
 [ "$(get_py_digit)" == "${cpython_version:0:1}" ] || ingest
-[ "$(get_py_mm)" == "${cpython_version:0:3}" ] || ingest
-[ "$(get_py_mm_nodot)" == $(echo "${cpython_version:0:3}" | tr -d .) ] || ingest
+[ "$(get_py_mm)" == "$(echo $cpython_version | awk -F "." '{printf "%d.%d", $1, $2}')" ] || ingest
+[ "$(get_py_mm_nodot)" == $(echo "$(echo $cpython_version | awk -F "." '{printf "%d%d", $1, $2}')" | tr -d .) ] || ingest
 
 # test lookup of arch from Python macOS target build
 [ "$(macpython_arch_for_version 2.7 10.6)" == "intel" ] || ingest
@@ -47,6 +49,8 @@
 
 # Test lookup of available macOS SDK build targets from python version
 if [ "$(uname -m)" != "arm64" ]; then
+  [ "$(macpython_sdk_list_for_version 3.11.3)"    == "11.0" ] || ingest
+  [ "$(macpython_sdk_list_for_version 3.9.3)"    == "10.9 11.0" ] || ingest
   [ "$(macpython_sdk_list_for_version 3.8)"    == "10.9" ] || ingest
   [ "$(macpython_sdk_list_for_version 3.7.5)"  == "10.6 10.9" ] || ingest
   [ "$(macpython_sdk_list_for_version 3.7)"    == "10.6 10.9" ] || ingest
@@ -59,8 +63,13 @@ if [ "$(uname -m)" != "arm64" ]; then
   [ "$(macpython_sdk_list_for_version 2.7.17)" == "10.6 10.9" ] || ingest
   [ "$(macpython_sdk_list_for_version 2.7.18)" == "10.9" ] || ingest
 fi
+
+(PLAT="arm64";      [ "$(macpython_sdk_for_version 3.11)" == "11.0" ] || ingest)
+(PLAT="universal2"; [ "$(macpython_sdk_for_version 3.11)" == "11.0" ] || ingest)
+(PLAT="x86_64";     [ "$(macpython_sdk_for_version 3.11)" == "11.0" ] || ingest)
+
 (PLAT="arm64";      [ "$(macpython_sdk_for_version 3.9)" == "11.0" ] || ingest)
-(PLAT="universal2"; [ "$(macpython_sdk_for_version 3.9)" == "10.9" ] || ingest)
+(PLAT="universal2"; [ "$(macpython_sdk_for_version 3.9)" == "11.0" ] || ingest)
 (PLAT="x86_64";     [ "$(macpython_sdk_for_version 3.9)" == "10.9" ] || ingest)
 if [ "$(uname -m)" != "arm64" ]; then
   [ "$(macpython_sdk_for_version 3.9)"    == "10.9" ] || ingest
