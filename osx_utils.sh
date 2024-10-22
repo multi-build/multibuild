@@ -409,9 +409,6 @@ function get_macpython_environment {
     #     $venv_dir : {directory_name|not defined}
     #         If defined - make virtualenv in this directory, set python / pip
     #         commands accordingly
-    #     $py_osx_ver: {major.minor | not defined}
-    #         if defined, the macOS version that Python is built for, e.g.
-    #         "10.6" or "10.9", if not defined, use the version from MB_PYTHON_OSX_VER
     #
     # Installs Python
     # Sets $PYTHON_EXE to path to Python executable
@@ -420,14 +417,13 @@ function get_macpython_environment {
     # Puts directory of $PYTHON_EXE on $PATH
     local version=$1
     local venv_dir=$2
-    local py_osx_ver=${3:-$MB_PYTHON_OSX_VER}
 
     if [ "$USE_CCACHE" == "1" ]; then
         activate_ccache
     fi
 
     remove_travis_ve_pip
-    install_macpython $version $py_osx_ver
+    install_macpython $version
     PIP_CMD="$PYTHON_EXE -m pip"
     # Python 3.5 no longer compatible with latest pip
     if [ "$(get_py_mm)" == "3.5" ]; then
