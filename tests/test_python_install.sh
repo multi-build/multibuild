@@ -20,7 +20,7 @@ then
     # CPython/PyPy version
     implementer_version=${BASH_REMATCH[2]:-$cpython_version}
 fi
-python_mm="${cpython_version:0:1}.${cpython_version:2:1}"
+python_mm=$(echo $cpython_version | awk -F "." '{printf "%d.%d", $1, $2}')
 
 # extract implementation prefix and version
 if [[ "$MB_PYTHON_VERSION" =~ (pypy[0-9\.]*-)?([0-9\.]+) ]]; then
