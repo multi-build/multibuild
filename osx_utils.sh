@@ -114,14 +114,14 @@ function macpython_sdk_list_for_version {
     local _major=${_ver%%.*}
     local _return
 
-    if [ "$(uname -m)" = "arm64" ]; then
-        _return="11.0"
-    elif [ "$_major" -eq "2" ]; then
+    if [ "$_major" -eq "2" ]; then
         [ $(lex_ver $_ver) -lt $(lex_ver 2.7.18) ] && _return="10.6"
         [ $(lex_ver $_ver) -ge $(lex_ver 2.7.15) ] && _return="$_return 10.9"
     elif [ "$_major" -eq "3" ]; then
         [ $(lex_ver $_ver) -lt $(lex_ver 3.8)    ] && _return="10.6"
         [ $(lex_ver $_ver) -ge $(lex_ver 3.6.5)  ] && _return="$_return 10.9"
+        [ $(lex_ver $_ver) -ge $(lex_ver 3.8.10) ] && [ "$_ver" != "3.9.0" ] && _return="$_return 11.0"
+        [ $(lex_ver $_ver) -ge $(lex_ver 3.10)   ] && _return="11.0"
     else
         echo "Error version=${_ver}, expecting 2.x or 3.x" 1>&2
         exit 1
@@ -166,23 +166,39 @@ function pyinst_fname_for_version {
     #       built for, eg: "10.6" or "10.9", if not defined, infers
     #       this from $py_version using macpython_sdk_for_version
     local py_version=$1
+    local py_osx_ver
     local inst_ext=$(pyinst_ext_for_version $py_version)
-    # Use the universal2 installer if we are on arm64
+    # macOS 3.8.10 and 3.9.1 introduced a second universal2 installer release.
+    # (3.9.0 did *not* have a universal2 installer)
     # universal2 installer for python 3.8 needs macos 11.0 to run on
     # and therefore x86_64 builds use the intel only installer.
     # Note that intel only installer can create universal2 wheels, but
     # creates intel only wheels by default. When PLAT=universal2
     # we set the env variable _PYTHON_HOST_PLATFORM to change this
     # default.
-    if [ "$(uname -m)" == "arm64" ] || [ $(lex_ver $py_version) -ge $(lex_ver 3.10.0) ]; then
-      if [ "$py_version" == "3.9.1" ]; then
-        echo "python-${py_version}-macos11.0.${inst_ext}"
-      else
-        echo "python-${py_version}-macos11.${inst_ext}"
-      fi
+    if [ -z "$2" ]; then
+        if [ $(lex_ver $py_version) -ge $(lex_ver 3.8.10) ] \
+            && [ $(lex_ver $py_version) -lt $(lex_ver 3.10.0) ]; then
+            if [ $(uname -m) == "x86_64" ]; then
+                py_osx_ver="10.9"
+            else
+                py_osx_ver="11.0"
+            fi
+        else
+            py_osx_ver=$(macpython_sdk_for_version $py_version)
+        fi
     else
-      local py_osx_ver=${2:-$(macpython_sdk_for_version $py_version)}
-      echo "python-${py_version}-macosx${py_osx_ver}.${inst_ext}"
+        py_osx_ver=$2
+    fi
+
+    if [ "$py_osx_ver" == "11.0" ]; then
+        if [ "$py_version" == "3.9.1" ]; then
+            echo "python-${py_version}-macos11.0.${inst_ext}"
+        else
+            echo "python-${py_version}-macos11.${inst_ext}"
+        fi
+    else
+        echo "python-${py_version}-macosx${py_osx_ver}.${inst_ext}"
     fi
 }
 
@@ -223,7 +239,7 @@ function get_macpython_osx_ver {
 }
 
 function macpython_arch_for_version {
-    # echo arch (intel or x86_64) that a version of Python is expected
+    # echo arch (intel, x86_64 or arm64) that a version of Python is expected
     # to be built for
     # Parameters
     #   $py_ver     Python version, in the format (major.minor.patch) for
@@ -238,8 +254,10 @@ function macpython_arch_for_version {
             echo "intel"
         elif [[ "$py_osx_ver" == "10.9" ]]; then
             echo "x86_64"
+        elif [[ "$py_osx_ver" == "11.0" ]]; then
+            echo "arm64"
         else
-            echo "Unexpected CPython macOS version: ${py_osx_ver}, supported values: 10.6 and 10.9"
+            echo "Unexpected CPython macOS version: ${py_osx_ver}, supported values: 10.6, 10.9, 11.0"
             exit 1
         fi
     else
@@ -394,9 +412,6 @@ function get_macpython_environment {
     #     $venv_dir : {directory_name|not defined}
     #         If defined - make virtualenv in this directory, set python / pip
     #         commands accordingly
-    #     $py_osx_ver: {major.minor | not defined}
-    #         if defined, the macOS version that Python is built for, e.g.
-    #         "10.6" or "10.9", if not defined, use the version from MB_PYTHON_OSX_VER
     #
     # Installs Python
     # Sets $PYTHON_EXE to path to Python executable
@@ -405,14 +420,13 @@ function get_macpython_environment {
     # Puts directory of $PYTHON_EXE on $PATH
     local version=$1
     local venv_dir=$2
-    local py_osx_ver=${3:-$MB_PYTHON_OSX_VER}
 
     if [ "$USE_CCACHE" == "1" ]; then
         activate_ccache
     fi
 
     remove_travis_ve_pip
-    install_macpython $version $py_osx_ver
+    install_macpython $version
     PIP_CMD="$PYTHON_EXE -m pip"
     # Python 3.5 no longer compatible with latest pip
     if [ "$(get_py_mm)" == "3.5" ]; then

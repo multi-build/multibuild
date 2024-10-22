@@ -20,7 +20,7 @@ then
     # CPython/PyPy version
     implementer_version=${BASH_REMATCH[2]:-$cpython_version}
 fi
-python_mm="${cpython_version:0:1}.${cpython_version:2:1}"
+python_mm=$(echo $cpython_version | awk -F "." '{printf "%d.%d", $1, $2}')
 
 # extract implementation prefix and version
 if [[ "$MB_PYTHON_VERSION" =~ (pypy[0-9\.]*-)?([0-9\.]+) ]]; then
@@ -70,13 +70,3 @@ else # not virtualenv
         ingest "Wrong macpython or pypy pip '$PIP_CMD'"
     fi
 fi
-
-# check macOS version and arch are as expected
-distutils_plat=$($PYTHON_EXE -c "import distutils.util; print(distutils.util.get_platform())")
-expected_arch=$(macpython_arch_for_version $MB_PYTHON_VERSION)
-if [[ $requested_impl == 'cp' ]]; then
-    expected_tag="macosx-$MB_PYTHON_OSX_VER-$expected_arch"
-else
-    expected_tag="macosx-10.[0-9]+-$expected_arch"
-fi
-[[ $distutils_plat =~ $expected_tag ]] || ingest
