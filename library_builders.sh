@@ -344,12 +344,6 @@ function build_blosc {
     (cd c-blosc-${BLOSC_VERSION} \
         && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX -DCMAKE_INSTALL_NAME_DIR=$BUILD_PREFIX/lib . \
         && make install)
-    if [ -n "$IS_MACOS" ]; then
-        # Fix blosc library id bug
-        for lib in $(ls ${BUILD_PREFIX}/lib/libblosc*.dylib); do
-            install_name_tool -id $lib $lib
-        done
-    fi
     touch blosc-stamp
 }
 
