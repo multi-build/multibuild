@@ -34,7 +34,7 @@ fi
 
 if [ "$MB_ML_LIBC" == "musllinux" ]; then
   IS_ALPINE=1;
-  MB_ML_VER=${MB_ML_VER:-"_1_1"}
+  MB_ML_VER=${MB_ML_VER:-"_1_2"}
 else
   # Default Manylinux version
   MB_ML_VER=${MB_ML_VER:-2014}
