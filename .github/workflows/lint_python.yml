@@ -12,7 +12,7 @@ jobs:
       - run: pipx run codespell --ignore-words-list="commend"
       - run: pip install mypy pytest ruff
       - run: ruff format --check --config "format.quote-style = 'single'"
-      - run: ruff check --output-format=github --select=ALL --ignore=Q000
+      - run: ruff check --output-format=github --select=ALL --ignore=D203,D212,Q000
       - run: pip install -r requirements.txt || pip install --editable . || true
       - run: mkdir --parents --verbose .mypy_cache
       - run: mypy --ignore-missing-imports --install-types --non-interactive .
