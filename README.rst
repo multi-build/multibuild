@@ -56,7 +56,7 @@ The following bash scripts are sourced in this order::
 
 See ``multibuild/travis_osx_steps.sh``
 
-The macOS build / test phases run on theVM started by CI.
+The macOS build / test phases run on the VM started by CI.
 Therefore any environment variable defined in the CI script or the bash
 shell scripts listed above are available for your build and test.
 
