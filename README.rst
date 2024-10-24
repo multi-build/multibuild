@@ -27,7 +27,7 @@ The CI scripts are designed to build *and test*:
 * 64-bit macOS arm64 wheels built for macOS 10.6+
 * ``manylinux`` wheels in all the variations
 
-You can build and test against all released version of CPython and PyPy.
+You can build and test against all released versions of CPython and PyPy.
 
 *****************
 How does it work?
