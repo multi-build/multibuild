@@ -232,7 +232,7 @@ To use these scripts
 
     git submodule add https://github.com/your-org/your-project.git
 
-* For TravisCI Create a ``.travis.yml`` file, something like this::
+* For Travis CI, create a ``.travis.yml`` file, something like this::
 
     env:
         global:
