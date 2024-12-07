@@ -30,14 +30,14 @@ else
   # In the manylinux_2_24 image, based on Debian9, "python" is not installed
   # so link in something for the various system calls before PYTHON_EXE is set
   which python || export PATH=/opt/python/cp39-cp39/bin:$PATH
-fi
 
-if [ "$MB_ML_LIBC" == "musllinux" ]; then
-  IS_ALPINE=1;
-  MB_ML_VER=${MB_ML_VER:-"_1_2"}
-else
-  # Default Manylinux version
-  MB_ML_VER=${MB_ML_VER:-2014}
+  if [ "$MB_ML_LIBC" == "musllinux" ]; then
+    IS_ALPINE=1;
+    MB_ML_VER=${MB_ML_VER:-"_1_2"}
+  else
+    # Default Manylinux version
+    MB_ML_VER=${MB_ML_VER:-2014}
+  fi
 fi
 
 # Work round bug in travis xcode image described at
