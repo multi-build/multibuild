@@ -1,0 +1,11 @@
+# This is a completely cosmetic patch to validate that source patching works as expected.
+#
+diff -ur harfbuzz-2.7.4-orig/README harfbuzz-2.7.4/README
+--- harfbuzz-2.7.4-orig/README	2024-12-12 09:23:15
++++ harfbuzz-2.7.4/README	2024-12-12 09:23:02
+@@ -13,3 +13,5 @@
+ For test execution, see https://github.com/harfbuzz/harfbuzz/blob/master/TESTING.md
+
+ Documentation: https://harfbuzz.github.io
++
++Harfbuzz has been patched by multibuild

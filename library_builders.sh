@@ -68,7 +68,7 @@ function build_simple {
     local archive=${name_version}.${ext}
     fetch_unpack $url/$archive
     (cd $name_version \
-        && ./configure --prefix=$BUILD_PREFIX $configure_args \
+        && ./configure --prefix=$BUILD_PREFIX $HOST_CONFIGURE_FLAGS $configure_args \
         && make -j4 \
         && make install)
     touch "${name}-stamp"
@@ -85,7 +85,7 @@ function build_github {
     fi
     local out_dir=$(fetch_unpack "https://github.com/${path}/archive/${tag_name}.tar.gz")
     (cd $out_dir \
-        && ./configure --prefix=$BUILD_PREFIX $configure_args \
+        && ./configure --prefix=$BUILD_PREFIX $HOST_CONFIGURE_FLAGS $configure_args \
         && make -j4 \
         && make install)
     touch "${name}-stamp"
@@ -156,7 +156,7 @@ function build_jpeg {
     if [ -e jpeg-stamp ]; then return; fi
     fetch_unpack http://ijg.org/files/jpegsrc.v${JPEG_VERSION}.tar.gz
     (cd jpeg-${JPEG_VERSION} \
-        && ./configure --prefix=$BUILD_PREFIX \
+        && ./configure --prefix=$BUILD_PREFIX $HOST_CONFIGURE_FLAGS \
         && make -j4 \
         && make install)
     touch jpeg-stamp
@@ -167,7 +167,9 @@ function build_libjpeg_turbo {
     local cmake=$(get_modern_cmake)
     fetch_unpack https://download.sourceforge.net/libjpeg-turbo/libjpeg-turbo-${JPEGTURBO_VERSION}.tar.gz
     (cd libjpeg-turbo-${JPEGTURBO_VERSION} \
-        && $cmake -G"Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX -DCMAKE_INSTALL_LIBDIR=$BUILD_PREFIX/lib -DCMAKE_INSTALL_NAME_DIR=$BUILD_PREFIX/lib . \
+        && $cmake -G"Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX \
+            -DCMAKE_INSTALL_LIBDIR=$BUILD_PREFIX/lib -DCMAKE_INSTALL_NAME_DIR=$BUILD_PREFIX/lib \
+            $HOST_CMAKE_FLAGS . \
         && make install)
 
     # Prevent build_jpeg
@@ -197,21 +199,23 @@ function build_tiff {
 }
 
 function get_modern_cmake {
-    # Install cmake >= 2.8
+    # Install cmake >= 2.8 if it isn't installed
     local cmake=cmake
-    if [ -n "$IS_MACOS" ]; then
-        brew install cmake > /dev/null
-    elif [ -n "$IS_ALPINE" ]; then
-        apk add cmake > /dev/null
-    elif [[ $MB_ML_VER == "_2_24" ]]; then
-        # debian:9 based distro
-        apt-get install -y cmake
-    else
-        if [ "`yum search cmake | grep ^cmake28\.`" ]; then
-            cmake=cmake28
+    if ! which $cmake > /dev/null; then
+        if [ -n "$IS_MACOS" ]; then
+            brew install cmake > /dev/null
+        elif [ -n "$IS_ALPINE" ]; then
+            apk add cmake > /dev/null
+        elif [[ $MB_ML_VER == "_2_24" ]]; then
+            # debian:9 based distro
+            apt-get install -y cmake
+        else
+            if [ "`yum search cmake | grep ^cmake28\.`" ]; then
+                cmake=cmake28
+            fi
+            # centos based distro
+            yum_install $cmake > /dev/null
         fi
-        # centos based distro
-        yum_install $cmake > /dev/null
     fi
     echo $cmake
 }
@@ -234,7 +238,7 @@ function build_openjpeg {
     fi
     local out_dir=$(fetch_unpack https://github.com/uclouvain/openjpeg/archive/${archive_prefix}${OPENJPEG_VERSION}.tar.gz)
     (cd $out_dir \
-        && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX -DCMAKE_INSTALL_LIBDIR=$BUILD_PREFIX/lib -DCMAKE_INSTALL_NAME_DIR=$BUILD_PREFIX/lib . \
+        && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX -DCMAKE_INSTALL_LIBDIR=$BUILD_PREFIX/lib -DCMAKE_INSTALL_NAME_DIR=$BUILD_PREFIX/lib $HOST_CMAKE_FLAGS . \
         && make install)
     touch openjpeg-stamp
 }
@@ -318,7 +322,7 @@ function build_hdf5 {
     (cd hdf5-$HDF5_VERSION \
         && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$BUILD_PREFIX/lib \
         && ./configure --with-szlib=$BUILD_PREFIX --prefix=$BUILD_PREFIX \
-        --enable-threadsafe --enable-unsupported --with-pthread=yes \
+        --enable-threadsafe --enable-unsupported --with-pthread=yes $HOST_CONFIGURE_FLAGS \
         && make -j4 \
         && make install)
     touch hdf5-stamp
@@ -331,7 +335,7 @@ function build_libaec {
     # Note URL will change for each version
     fetch_unpack https://gitlab.dkrz.de/k202009/libaec/uploads/ea0b7d197a950b0c110da8dfdecbb71f/${tar_name}
     (cd $root_name \
-        && ./configure --prefix=$BUILD_PREFIX \
+        && ./configure --prefix=$BUILD_PREFIX $HOST_CONFIGURE_FLAGS \
         && make \
         && make install)
     touch libaec-stamp
@@ -342,7 +346,7 @@ function build_blosc {
     local cmake=$(get_modern_cmake)
     fetch_unpack https://github.com/Blosc/c-blosc/archive/v${BLOSC_VERSION}.tar.gz
     (cd c-blosc-${BLOSC_VERSION} \
-        && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX -DCMAKE_INSTALL_LIBDIR=$BUILD_PREFIX/lib -DCMAKE_INSTALL_NAME_DIR=$BUILD_PREFIX/lib . \
+        && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX -DCMAKE_INSTALL_LIBDIR=$BUILD_PREFIX/lib -DCMAKE_INSTALL_NAME_DIR=$BUILD_PREFIX/lib $HOST_CMAKE_FLAGS . \
         && make install)
     touch blosc-stamp
 }
@@ -355,7 +359,7 @@ function build_lzo {
     if [ -e lzo-stamp ]; then return; fi
     fetch_unpack https://www.oberhumer.com/opensource/lzo/download/lzo-${LZO_VERSION}.tar.gz
     (cd lzo-${LZO_VERSION} \
-        && ./configure --prefix=$BUILD_PREFIX --enable-shared \
+        && ./configure --prefix=$BUILD_PREFIX --enable-shared $HOST_CONFIGURE_FLAGS \
         && make \
         && make install)
     touch lzo-stamp
@@ -415,7 +419,7 @@ function build_netcdf {
     build_curl
     fetch_unpack https://github.com/Unidata/netcdf-c/archive/v${NETCDF_VERSION}.tar.gz
     (cd netcdf-c-${NETCDF_VERSION} \
-        && ./configure --prefix=$BUILD_PREFIX --enable-dap \
+        && ./configure --prefix=$BUILD_PREFIX --enable-dap $HOST_CONFIGURE_FLAGS \
         && make -j4 \
         && make install)
     touch netcdf-stamp
@@ -538,7 +542,7 @@ function build_cfitsio {
         local cfitsio_name_ver=cfitsio${CFITSIO_VERSION}
         fetch_unpack https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/${cfitsio_name_ver}.tar.gz
         (cd cfitsio \
-            && ./configure --prefix=$BUILD_PREFIX \
+            && ./configure --prefix=$BUILD_PREFIX $HOST_CONFIGURE_FLAGS \
             && make shared && make install)
     fi
     touch cfitsio-stamp

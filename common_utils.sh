@@ -288,6 +288,14 @@ function fetch_unpack {
         untar ../$out_archive && \
         ls -1d * &&
         rsync --delete -ah * ..)
+
+    # If a patch exists, apply it
+    if [ -e "${PATCH_DIR}/${archive_fname}.patch" ]; then
+        # The arch_tmp folder will contain the name of folder that was just
+        # unpacked from the archive. Apply the patch in that directory.
+        local package_dir=$(ls -1c arch_tmp)
+        patch --force -i "${PATCH_DIR}/${archive_fname}.patch" -d $package_dir
+    fi
 }
 
 function clean_code {
