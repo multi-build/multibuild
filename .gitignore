@@ -2,15 +2,19 @@ downloads/
 archives/
 *.orig
 *.swp
+venv*/
+.venv/
 
 # lib_check downloads these
 *-stamp
+arch_tmp/
 arb*/
 bzip2*/
 cfitsio/
 flex*/
 freetype*/
 giflib*/
+harfbuzz*/
 hdf5*/
 jpeg*/
 lcms2*/
