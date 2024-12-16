@@ -165,7 +165,7 @@ function build_jpeg {
 function build_libjpeg_turbo {
     if [ -e jpeg-stamp ]; then return; fi
     local cmake=$(get_modern_cmake)
-    fetch_unpack https://download.sourceforge.net/libjpeg-turbo/libjpeg-turbo-${JPEGTURBO_VERSION}.tar.gz
+    fetch_unpack https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/${JPEGTURBO_VERSION}/libjpeg-turbo-${JPEGTURBO_VERSION}.tar.gz
     (cd libjpeg-turbo-${JPEGTURBO_VERSION} \
         && $cmake -G"Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX \
             -DCMAKE_INSTALL_LIBDIR=$BUILD_PREFIX/lib -DCMAKE_INSTALL_NAME_DIR=$BUILD_PREFIX/lib \
