@@ -270,7 +270,7 @@ function build_giflib {
 }
 
 function build_xz {
-    build_simple xz $XZ_VERSION https://tukaani.org/xz
+    build_simple xz $XZ_VERSION https://github.com/tukaani-project/xz/releases/download/v$XZ_VERSION
 }
 
 function ensure_xz {
