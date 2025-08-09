@@ -170,6 +170,7 @@ function build_libjpeg_turbo {
         && $cmake -G"Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX \
             -DCMAKE_INSTALL_LIBDIR=$BUILD_PREFIX/lib -DCMAKE_INSTALL_NAME_DIR=$BUILD_PREFIX/lib \
             $HOST_CMAKE_FLAGS . \
+        && make -j4 \
         && make install)
 
     # Prevent build_jpeg
@@ -239,6 +240,7 @@ function build_openjpeg {
     local out_dir=$(fetch_unpack https://github.com/uclouvain/openjpeg/archive/${archive_prefix}${OPENJPEG_VERSION}.tar.gz)
     (cd $out_dir \
         && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX -DCMAKE_INSTALL_LIBDIR=$BUILD_PREFIX/lib -DCMAKE_INSTALL_NAME_DIR=$BUILD_PREFIX/lib $HOST_CMAKE_FLAGS . \
+        && make -j4 \
         && make install)
     touch openjpeg-stamp
 }
@@ -336,7 +338,7 @@ function build_libaec {
     fetch_unpack https://gitlab.dkrz.de/k202009/libaec/uploads/ea0b7d197a950b0c110da8dfdecbb71f/${tar_name}
     (cd $root_name \
         && ./configure --prefix=$BUILD_PREFIX $HOST_CONFIGURE_FLAGS \
-        && make \
+        && make -j4 \
         && make install)
     touch libaec-stamp
 }
@@ -347,6 +349,7 @@ function build_blosc {
     fetch_unpack https://github.com/Blosc/c-blosc/archive/v${BLOSC_VERSION}.tar.gz
     (cd c-blosc-${BLOSC_VERSION} \
         && $cmake -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX -DCMAKE_INSTALL_LIBDIR=$BUILD_PREFIX/lib -DCMAKE_INSTALL_NAME_DIR=$BUILD_PREFIX/lib $HOST_CMAKE_FLAGS . \
+        && make -j4 \
         && make install)
     touch blosc-stamp
 }
@@ -360,7 +363,7 @@ function build_lzo {
     fetch_unpack https://www.oberhumer.com/opensource/lzo/download/lzo-${LZO_VERSION}.tar.gz
     (cd lzo-${LZO_VERSION} \
         && ./configure --prefix=$BUILD_PREFIX --enable-shared $HOST_CONFIGURE_FLAGS \
-        && make \
+        && make -j4 \
         && make install)
     touch lzo-stamp
 }
