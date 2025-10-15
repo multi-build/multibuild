@@ -12,8 +12,8 @@ OPENBLAS_LIB_URL="https://anaconda.org/multibuild-wheels-staging/openblas-libs"
 # Recipes for building some libraries
 OPENBLAS_VERSION="${OPENBLAS_VERSION:-0.3.10}"
 # We use system zlib by default - see build_new_zlib
-ZLIB_VERSION="${ZLIB_VERSION:-1.2.10}"
-LIBPNG_VERSION="${LIBPNG_VERSION:-1.6.37}"
+ZLIB_VERSION="${ZLIB_VERSION:-1.3.1}"
+LIBPNG_VERSION="${LIBPNG_VERSION:-1.6.50}"
 BZIP2_VERSION="${BZIP2_VERSION:-1.0.7}"
 FREETYPE_VERSION="${FREETYPE_VERSION:-2.11.0}"
 TIFF_VERSION="${TIFF_VERSION:-4.1.0}"
