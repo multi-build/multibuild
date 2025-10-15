@@ -20,16 +20,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-13, macos-latest ] #, windows-latest]
+        os: [ubuntu-latest, macos-15-intel, macos-latest ] #, windows-latest]
         python-version: ["3.13"]  # ["2.7", "3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "pypy3"]
 
         include:
           # By default, specify an OSX_VER of 11.0, triggering ARM64 build.
           - python-osx-ver: "11.0"
 
-          # macos-13 is the last remaining x86-64 runner;
+          # macos-15-intel is the last remaining x86-64 runner;
           # set OSX_VER to 10.9 trigger x86_64 builds by default.
-          - os: macos-13
+          - os: macos-15-intel
             python-osx-ver: "10.9"
 
     # The type of runner that the job will run on
