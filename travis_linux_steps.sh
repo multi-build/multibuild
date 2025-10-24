@@ -131,7 +131,7 @@ function install_run {
         else
         	# PLAT is the same as $plat,
         	# unless $plat is "aarch64", in which case it becomes "arm64v8"
-            local docker_image="multibuild/noble{PLAT}"
+            local docker_image="multibuild/noble_{PLAT}"
         fi
     else
         local docker_image="$DOCKER_TEST_IMAGE"
