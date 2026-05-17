@@ -1,11 +1,13 @@
 # This is a completely cosmetic patch to validate that source patching works as expected.
 #
-diff -ur harfbuzz-2.7.4-orig/README harfbuzz-2.7.4/README
---- harfbuzz-2.7.4-orig/README	2024-12-12 09:23:15
-+++ harfbuzz-2.7.4/README	2024-12-12 09:23:02
-@@ -13,3 +13,5 @@
- For test execution, see https://github.com/harfbuzz/harfbuzz/blob/master/TESTING.md
-
- Documentation: https://harfbuzz.github.io
-+
-+Harfbuzz has been patched by multibuild
+diff -ur harfbuzz-2.7.4-orig/src/gen-def.py harfbuzz-2.7.4/src/gen-def.py | sed 's/^--- harfbuzz-2.7.4-orig\//--- /; s/^+++ harfbuzz-2.7.4\//+++ /'
+--- src/gen-def.py	2020-12-27 11:01:18
++++ src/gen-def.py	2026-05-17 15:58:28
+@@ -18,6 +18,7 @@
+ symbols = sorted (re.findall (r"^hb_\w+(?= \()", "\n".join (headers_content), re.M))
+ if '--experimental-api' not in sys.argv:
+ 	# Move these to harfbuzz-sections.txt when got stable
++	# Harfbuzz has been patched by multibuild
+ 	experimental_symbols = \
+ """hb_font_draw_glyph
+ hb_draw_funcs_t

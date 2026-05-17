@@ -24,7 +24,7 @@ start_spinner
 PATCH_DIR=$(pwd)/tests/patches
 fetch_unpack https://github.com/harfbuzz/harfbuzz/releases/download/2.7.4/harfbuzz-2.7.4.tar.xz
 [ -d harfbuzz-2.7.4 ] || ingest ".tar.xz should have been unpacked"
-[ -n "$(grep 'Harfbuzz has been patched by multibuild' harfbuzz-2.7.4/README)" ] || ingest "Harfbuzz should have been patched"
+[ -n "$(grep 'Harfbuzz has been patched by multibuild' harfbuzz-2.7.4/src/gen-def.py)" ] || ingest "Harfbuzz should have been patched"
 
 suppress build_bzip2
 suppress build_openssl

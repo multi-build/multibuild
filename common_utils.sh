@@ -294,7 +294,7 @@ function fetch_unpack {
         # The arch_tmp folder will contain the name of folder that was just
         # unpacked from the archive. Apply the patch in that directory.
         local package_dir=$(ls -1c arch_tmp)
-        patch --force -i "${PATCH_DIR}/${archive_fname}.patch" -d $package_dir
+        patch --force -i "${PATCH_DIR}/${archive_fname}.patch" -p0 -d $package_dir
     fi
 }
 
