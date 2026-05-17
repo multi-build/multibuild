@@ -21,7 +21,7 @@ JPEG_VERSION="${JPEG_VERSION:-9b}"
 JPEGTURBO_VERSION="${JPEGTURBO_VERSION:-3.1.0}"
 OPENJPEG_VERSION="${OPENJPEG_VERSION:-2.1}"
 LCMS2_VERSION="${LCMS2_VERSION:-2.9}"
-GIFLIB_VERSION="${GIFLIB_VERSION:-5.1.3}"
+GIFLIB_VERSION="${GIFLIB_VERSION:-5.1.4}"
 LIBWEBP_VERSION="${LIBWEBP_VERSION:-1.4.0}"
 XZ_VERSION="${XZ_VERSION:-5.8.1}"
 LIBYAML_VERSION="${LIBYAML_VERSION:-0.2.2}"
@@ -253,7 +253,7 @@ function build_lcms2 {
 function build_giflib {
     local name=giflib
     local version=$GIFLIB_VERSION
-    local url=https://downloads.sourceforge.net/project/giflib
+    local url=https://sourceforge.net/projects/giflib/files
     if [ $(lex_ver $GIFLIB_VERSION) -lt $(lex_ver 5.1.5) ]; then
         build_simple $name $version $url
     else
