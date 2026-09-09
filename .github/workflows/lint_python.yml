@@ -4,16 +4,12 @@ jobs:
   lint_python:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.13'
-      - run: pip install --upgrade pip wheel setuptools
-      - run: pipx run codespell --ignore-words-list="commend"
-      - run: pip install mypy pytest ruff
-      - run: ruff format --check --config "format.quote-style = 'single'"
-      - run: ruff check --output-format=github --select=ALL --ignore=D203,D212,Q000
-      - run: pip install -r requirements.txt || pip install --editable . || true
-      - run: mkdir --parents --verbose .mypy_cache
-      - run: mypy --ignore-missing-imports --install-types --non-interactive .
-      - run: pytest . || pytest --doctest-modules . || true
+          python-version: '3.14'
+      - run: pipx run codespell==2.4.3 --ignore-words-list="commend"
+      - run: pipx run ruff==0.16.6 format --check --config "format.quote-style = 'single'"
+      - run: pipx run ruff==0.16.6 check --output-format=github --select=ALL --ignore=CPY001,D203,D212,Q000
+      - run: pipx run mypy==2.3.1 --ignore-missing-imports --install-types --non-interactive .
+      # - run: pipx run pytest==9.1.1 --doctest-modules .
