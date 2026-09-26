@@ -29,11 +29,14 @@ if [ -n "$IS_MACOS" ]; then
         echo "Invalid platform = '$PLAT'. Supported values are 'intel', 'x86_64', 'arm64' or 'universal2'"
         exit 1
     fi
+    ARCH_FLAGS="-O2 $ARCH_FLAGS"
     # Only set CFLAGS, FFLAGS if they are not already defined.  Build functions
     # can override the arch flags by setting CFLAGS, FFLAGS
+    export FFLAGS="${FFLAGS:-$ARCH_FLAGS}"
+
+    STRIP_FLAGS="-O2 $ARCH_FLAGS"
     export CFLAGS="${CFLAGS:-$ARCH_FLAGS}"
     export CXXFLAGS="${CXXFLAGS:-$ARCH_FLAGS}"
-    export FFLAGS="${FFLAGS:-$ARCH_FLAGS}"
 
     # Disable homebrew auto-update
     export HOMEBREW_NO_AUTO_UPDATE=1
@@ -42,10 +45,11 @@ else
     PLAT="${PLAT:-x86_64}"
     # Strip all binaries after compilation.
     STRIP_FLAGS=${STRIP_FLAGS:-"-Wl,-strip-all"}
+    export FFLAGS="${FFLAGS:-$STRIP_FLAGS}"
 
+    STRIP_FLAGS="-O2 $STRIP_FLAGS"
     export CFLAGS="${CFLAGS:-$STRIP_FLAGS}"
     export CXXFLAGS="${CXXFLAGS:-$STRIP_FLAGS}"
-    export FFLAGS="${FFLAGS:-$STRIP_FLAGS}"
     if [[ $MB_ML_VER == "_2_24" ]]; then
         # This is the first opportunity to distinguish between manylinuxes
         apt update
